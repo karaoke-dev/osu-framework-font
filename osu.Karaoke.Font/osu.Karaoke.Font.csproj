@@ -1,8 +1,33 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+  <PropertyGroup Label="Project">
+    <OutputType>Library</OutputType>
+    <TargetFramework>netstandard2.1</TargetFramework>
   </PropertyGroup>
+  <PropertyGroup Label="Nuget">
+    <GenerateProgramFile>false</GenerateProgramFile>
+    <AssemblyName>osu.Framework.Font</AssemblyName>
+    <RootNamespace>osu.Framework</RootNamespace>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <IsPackable>true</IsPackable>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Version>1.0.0</Version>
+    <Description>Unofficial support extra font effect for osu!framework.</Description>
+    <Copyright>https://github.com/karaoke-dev/osu-framework-fontk</Copyright>
+    <PackageProjectUrl>https://github.com/karaoke-dev/osu-framework-font</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/karaoke-dev/osu-framework-font</PackageLicenseUrl>
+    <RepositoryUrl>https://github.com/karaoke-dev/osu-framework-font.git</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
+    <PackageTags>osu-framework karaoke andy840119</PackageTags>
+    <Authors>andy840119</Authors>
+    <Company>karaoke!</Company>
+    <Product>karaoke!</Product>
+    <PackageReleaseNotes>喵</PackageReleaseNotes>
+    <PackageId>osu.Karaoke.font</PackageId>
+    <NeutralLanguage>en</NeutralLanguage>
+  </PropertyGroup>
+  <ItemGroup Label="Package References">
+    <PackageReference Include="ppy.osu.Framework" Version="2020.623.0" />
+  </ItemGroup>
 
 </Project>
