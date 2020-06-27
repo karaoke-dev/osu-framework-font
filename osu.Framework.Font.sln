@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29609.76
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "osu.Karaoke.Font", "osu.Karaoke.Font\osu.Karaoke.Font.csproj", "{5EE8EF44-AC46-4E42-A003-50B4494AD5DB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "osu.Framework.Font", "osu.Framework.Font\osu.Framework.Font.csproj", "{5EE8EF44-AC46-4E42-A003-50B4494AD5DB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "osu.Karaoke.Font.Tests", "osu.Karaoke.Font.Tests\osu.Karaoke.Font.Tests.csproj", "{8BBA8482-AF75-40AD-8A6A-DDE982AB4387}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "osu.Framework.Font.Tests", "osu.Framework.Font.Tests\osu.Framework.Font.Tests.csproj", "{8BBA8482-AF75-40AD-8A6A-DDE982AB4387}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

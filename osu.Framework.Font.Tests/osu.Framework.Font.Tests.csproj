@@ -16,6 +16,6 @@
     <PackageReference Include="ppy.osu.Game.Resources" Version="2019.1010.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\osu.Karaoke.Font\osu.Karaoke.Font.csproj" />
+    <ProjectReference Include="..\osu.Framework.Font\osu.Framework.Font.csproj" />
   </ItemGroup>
 </Project>
