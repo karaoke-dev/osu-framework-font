@@ -10,7 +10,7 @@ using osuTK.Graphics;
 
 namespace osu.Framework.Graphics.Sprites
 {
-    public class LyricSpriteText : SpriteText
+    public class LyricSpriteText : StyledSpriteText
     {
         public LyricSpriteText()
         {
@@ -256,7 +256,7 @@ namespace osu.Framework.Graphics.Sprites
         protected TextBuilderGlyph[] Characters;
 
         /// <summary>
-        /// Creates a <see cref="TextBuilder"/> to generate the character layout for this <see cref="SpriteText"/>.
+        /// Creates a <see cref="TextBuilder"/> to generate the character layout for this <see cref="StyledSpriteText"/>.
         /// </summary>
         /// <param name="store">The <see cref="ITexturedGlyphLookupStore"/> where characters should be retrieved from.</param>
         /// <returns>The <see cref="TextBuilder"/>.</returns>
