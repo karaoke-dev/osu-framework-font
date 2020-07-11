@@ -48,6 +48,7 @@ namespace osu.Framework.Graphics.Sprites
             AddLayout(parentScreenSpaceCache);
             AddLayout(localScreenSpaceCache);
             AddLayout(shadowOffsetCache);
+            AddLayout(outlineOffsetCache);
         }
 
         [BackgroundDependencyLoader]
@@ -130,6 +131,7 @@ namespace osu.Framework.Graphics.Sprites
 
                 invalidate(true);
                 shadowOffsetCache.Invalidate();
+                outlineOffsetCache.Invalidate();
             }
         }
 
@@ -213,6 +215,45 @@ namespace osu.Framework.Graphics.Sprites
 
                 invalidate(true);
                 shadowOffsetCache.Invalidate();
+            }
+        }
+
+        private bool outline;
+
+        /// <summary>
+        /// True if a outline should be displayed around the text.
+        /// </summary>
+        public bool Outline
+        {
+            get => outline;
+            set
+            {
+                if (outline == value)
+                    return;
+
+                outline = value;
+
+                Invalidate(Invalidation.DrawNode);
+            }
+        }
+
+        private float outlineRadius;
+
+        /// <summary>
+        /// The offset of the outline displayed around the text. A outline will only be displayed if the <see cref="Outline"/> property is set to true.
+        /// </summary>
+        public float OutlineRadius
+        {
+            get => outlineRadius;
+            set
+            {
+                if (outlineRadius == value)
+                    return;
+
+                outlineRadius = value;
+
+                invalidate(true);
+                outlineOffsetCache.Invalidate();
             }
         }
 
@@ -526,6 +567,11 @@ namespace osu.Framework.Graphics.Sprites
 
         private Vector2 premultipliedShadowOffset =>
             shadowOffsetCache.IsValid ? shadowOffsetCache.Value : shadowOffsetCache.Value = ToScreenSpace(shadowOffset * Font.Size) - ToScreenSpace(Vector2.Zero);
+
+        private readonly LayoutValue<Vector2> outlineOffsetCache = new LayoutValue<Vector2>(Invalidation.DrawInfo, InvalidationSource.Parent);
+
+        private Vector2 premultipliedOutlineOffset =>
+            outlineOffsetCache.IsValid ? outlineOffsetCache.Value : outlineOffsetCache.Value = ToScreenSpace(shadowOffset * Font.Size) - ToScreenSpace(Vector2.Zero);
 
         #endregion
 

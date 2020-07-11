@@ -22,6 +22,9 @@ namespace osu.Framework.Graphics.Sprites
             private ColourInfo shadowColour;
             private Vector2 shadowOffset;
 
+            private bool outline;
+            private float outlineRadius;
+
             private readonly List<ScreenSpaceCharacterPart> parts = new List<ScreenSpaceCharacterPart>();
 
             public SpriteTextDrawNode(StyledSpriteText source)
@@ -36,11 +39,17 @@ namespace osu.Framework.Graphics.Sprites
                 parts.Clear();
                 parts.AddRange(Source.screenSpaceCharacters);
                 shadow = Source.Shadow;
+                outline = Source.Outline;
 
                 if (shadow)
                 {
                     shadowColour = Source.ShadowColour;
                     shadowOffset = Source.premultipliedShadowOffset;
+                }
+
+                if (outline)
+                {
+                    outlineRadius = Source.outlineRadius;
                 }
             }
 

@@ -131,6 +131,8 @@ namespace osu.Framework.Tests.Visual.Sprites
                 Margin = new MarginPadding(30),
                 Shadow = true,
                 ShadowOffset = new Vector2(3),
+                Outline = true,
+                OutlineRadius = 3f,
                 ShadowTexture = new SolidTexture { SolidColor = Color4.Red },
                 TextTexture = new SolidTexture { SolidColor = Color4.White }
             };

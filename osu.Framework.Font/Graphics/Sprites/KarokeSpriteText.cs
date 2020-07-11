@@ -262,23 +262,23 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
-        public float BorderRadius
+        public bool Outline
         {
-            get => frontLyricText.BorderRadius;
+            get => frontLyricText.Outline;
             set
             {
-                frontLyricText.BorderRadius = value;
-                backLyricText.BorderRadius = value;
+                frontLyricText.Outline = value;
+                backLyricText.Outline = value;
             }
         }
 
-        public bool Border
+        public float OutlineRadius
         {
-            get => frontLyricText.Border;
+            get => frontLyricText.OutlineRadius;
             set
             {
-                frontLyricText.Border = value;
-                backLyricText.Border = value;
+                frontLyricText.OutlineRadius = value;
+                backLyricText.OutlineRadius = value;
             }
         }
 

@@ -216,36 +216,6 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
-        private float borderRadius;
-
-        public float BorderRadius
-        {
-            get => borderRadius;
-            set
-            {
-                if (borderRadius == value)
-                    return;
-
-                borderRadius = value;
-                Invalidate(Invalidation.All);
-            }
-        }
-
-        private bool border;
-
-        public bool Border
-        {
-            get => border;
-            set
-            {
-                if (border == value)
-                    return;
-
-                border = value;
-                Invalidate(Invalidation.All);
-            }
-        }
-
         public new Vector2 ShadowOffset
         {
             get => base.ShadowOffset * Font.Size;
