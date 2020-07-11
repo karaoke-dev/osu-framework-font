@@ -69,6 +69,11 @@ namespace osu.Framework.Graphics.Sprites
 
                 for (int i = 0; i < parts.Count; i++)
                 {
+                    if (outline)
+                    { 
+                        
+                    }
+
                     if (shadow)
                     {
                         var shadowQuad = parts[i].DrawQuad;

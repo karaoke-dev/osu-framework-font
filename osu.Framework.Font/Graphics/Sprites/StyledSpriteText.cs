@@ -70,7 +70,7 @@ namespace osu.Framework.Graphics.Sprites
             }, true);
 
             TextureShader = shaders.Load(VertexShaderDescriptor.TEXTURE_2, FragmentShaderDescriptor.TEXTURE);
-            RoundedTextureShader = shaders.Load(VertexShaderDescriptor.TEXTURE_2, FragmentShaderDescriptor.TEXTURE_ROUNDED);
+            RoundedTextureShader = shaders.Load(VertexShaderDescriptor.TEXTURE_2, "Outline");
 
             // Pre-cache the characters in the texture store
             foreach (var character in displayedText)
