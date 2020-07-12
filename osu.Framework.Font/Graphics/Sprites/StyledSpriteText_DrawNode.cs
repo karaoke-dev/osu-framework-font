@@ -6,7 +6,9 @@ using System.Collections.Generic;
 using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.OpenGL.Vertices;
 using osu.Framework.Graphics.Primitives;
+using osu.Framework.Graphics.Shaders;
 using osu.Framework.Graphics.Textures;
+using osu.Framework.Utils;
 using osuTK;
 using osuTK.Graphics;
 
@@ -23,7 +25,10 @@ namespace osu.Framework.Graphics.Sprites
             private Vector2 shadowOffset;
 
             private bool outline;
-            private float outlineRadius;
+            private int outlineRadius;
+            private float outlineSigma = 10;
+
+            private IShader outlineShader;
 
             private readonly List<ScreenSpaceCharacterPart> parts = new List<ScreenSpaceCharacterPart>();
 
@@ -49,7 +54,8 @@ namespace osu.Framework.Graphics.Sprites
 
                 if (outline)
                 {
-                    outlineRadius = Source.outlineRadius;
+                    outlineRadius = (int)Source.outlineRadius;
+                    outlineShader = Source.outlineShader;
                 }
             }
 
@@ -57,7 +63,8 @@ namespace osu.Framework.Graphics.Sprites
             {
                 base.Draw(vertexAction);
 
-                Shader.Bind();
+                outlineSigma = 100;
+
 
                 var avgColour = (Color4)DrawColourInfo.Colour.AverageColour;
                 float shadowAlpha = MathF.Pow(Math.Max(Math.Max(avgColour.R, avgColour.G), avgColour.B), 2);
@@ -67,30 +74,51 @@ namespace osu.Framework.Graphics.Sprites
                 var finalShadowColour = DrawColourInfo.Colour;
                 finalShadowColour.ApplyChild(shadowColour.MultiplyAlpha(shadowAlpha));
 
-                for (int i = 0; i < parts.Count; i++)
-                {
-                    if (outline)
-                    { 
-                        
-                    }
+                Shader.Bind();
 
+                foreach (var current in parts)
+                {
                     if (shadow)
                     {
-                        var shadowQuad = parts[i].DrawQuad;
+                        var shadowQuad = current.DrawQuad;
 
-                        DrawQuad(parts[i].Texture,
+                        DrawQuad(current.Texture,
                             new Quad(
                                 shadowQuad.TopLeft + shadowOffset,
                                 shadowQuad.TopRight + shadowOffset,
                                 shadowQuad.BottomLeft + shadowOffset,
                                 shadowQuad.BottomRight + shadowOffset),
-                            finalShadowColour, vertexAction: vertexAction, inflationPercentage: parts[i].InflationPercentage);
+                            finalShadowColour, vertexAction: vertexAction, inflationPercentage: current.InflationPercentage);
                     }
 
-                    DrawQuad(parts[i].Texture, parts[i].DrawQuad, DrawColourInfo.Colour, vertexAction: vertexAction, inflationPercentage: parts[i].InflationPercentage);
+                    DrawQuad(current.Texture, current.DrawQuad, DrawColourInfo.Colour, vertexAction: vertexAction, inflationPercentage: current.InflationPercentage);
                 }
-
+                
                 Shader.Unbind();
+
+                if (outline)
+                {
+                    outlineShader.Bind();
+
+                    foreach (var current in parts)
+                    {
+                        /*
+                        outlineShader.GetUniform<int>(@"g_Radius").UpdateValue(ref outlineRadius);
+                        outlineShader.GetUniform<float>(@"g_Sigma").UpdateValue(ref outlineSigma);
+
+                        Vector2 size = current.DrawQuad.Size;
+                        outlineShader.GetUniform<Vector2>(@"g_TexSize").UpdateValue(ref size);
+
+                        float radians = -MathUtils.DegreesToRadians(0);
+                        Vector2 blur = new Vector2(-0.1f, -0.1f);
+                        outlineShader.GetUniform<Vector2>(@"g_BlurDirection").UpdateValue(ref blur);
+                        */
+
+                        DrawQuad(current.Texture, current.DrawQuad, Color4.Blue, vertexAction: vertexAction, inflationPercentage: current.InflationPercentage);
+                    }
+
+                    outlineShader.Unbind();
+                }
             }
         }
 

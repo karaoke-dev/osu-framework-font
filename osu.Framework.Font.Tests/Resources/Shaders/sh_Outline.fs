@@ -1,38 +1,21 @@
-﻿precision highp float;
-uniform sampler2D texture;
-uniform vec2 pixelSize;
-uniform vec4 color;
-varying vec2 texCoord;
-void main()
+﻿varying mediump vec2 v_TexCoord;
+uniform lowp sampler2D m_Sampler;
+
+const float offset = 1.0 / 256.0;
+
+void main(void)
 {
-    const int WIDTH = 5;
-    bool isInside = false;
-    int count = 0;
-    float coverage = 0.0;
-    float dist = 1e6;
-    for (int y = -WIDTH;  y <= WIDTH;  ++y) {
-        for (int x = -WIDTH;  x <= WIDTH;  ++x) {
-            vec2 dUV = vec2(float(x) * pixelSize.x, float(y) * pixelSize.y);
-            float mask = texture2D(texture, texCoord + dUV).r;
-            coverage += mask;
-            if (mask >= 0.5) {
-                dist = min(dist, sqrt(float(x * x + y * y)));
-            }
-            if (x == 0 && y == 0) {
-                isInside = (mask > 0.5);
-            }
-            count += 1;
-        }
-    }
-    coverage /= float(count);
-    float a;
-    if (isInside) {
-        a = min(1.0, (1.0 - coverage) / 0.75);
-    } else {
-        const float solid = 0.3 * float(WIDTH);
-        const float fuzzy = float(WIDTH) - solid;
-        a = 1.0 - min(1.0, max(0.0, dist - solid) / fuzzy);
-    }
-    gl_FragColor = color;
-    gl_FragColor.a = a;
+	vec4 col = texture2D(m_Sampler, v_TexCoord);
+	if (col.a > 0.5)
+		gl_FragColor = col;
+	else {
+		float a = texture2D(m_Sampler, vec2(v_TexCoord.x + offset, v_TexCoord.y)).a +
+			texture2D(m_Sampler, vec2(v_TexCoord.x, v_TexCoord.y - offset)).a +
+			texture2D(m_Sampler, vec2(v_TexCoord.x - offset, v_TexCoord.y)).a +
+			texture2D(m_Sampler, vec2(v_TexCoord.x, v_TexCoord.y + offset)).a;
+		if (col.a < 1.0 && a > 0.0)
+			gl_FragColor = vec4(0.0, 0.0, 1.0, 0.8);
+		else
+			gl_FragColor = col;
+	}
 }

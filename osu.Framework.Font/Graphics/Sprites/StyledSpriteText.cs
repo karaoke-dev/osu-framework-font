@@ -40,6 +40,8 @@ namespace osu.Framework.Graphics.Sprites
         public IShader TextureShader { get; private set; }
         public IShader RoundedTextureShader { get; private set; }
 
+        private IShader outlineShader;
+
         public StyledSpriteText()
         {
             current.BindValueChanged(text => Text = text.NewValue);
@@ -70,7 +72,8 @@ namespace osu.Framework.Graphics.Sprites
             }, true);
 
             TextureShader = shaders.Load(VertexShaderDescriptor.TEXTURE_2, FragmentShaderDescriptor.TEXTURE);
-            RoundedTextureShader = shaders.Load(VertexShaderDescriptor.TEXTURE_2, "Outline");
+            RoundedTextureShader = shaders.Load(VertexShaderDescriptor.TEXTURE_2, FragmentShaderDescriptor.TEXTURE_ROUNDED);
+            outlineShader = shaders.Load(VertexShaderDescriptor.TEXTURE_2, "Outline");
 
             // Pre-cache the characters in the texture store
             foreach (var character in displayedText)
