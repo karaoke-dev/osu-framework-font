@@ -240,6 +240,25 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
+        private Color4 outlineColour = new Color4(0, 0, 0, 0.2f);
+
+        /// <summary>
+        /// The colour of the outline displayed around the text. A outline will only be displayed if the <see cref="Outline"/> property is set to true.
+        /// </summary>
+        public Color4 OutlineColour
+        {
+            get => outlineColour;
+            set
+            {
+                if (outlineColour == value)
+                    return;
+
+                outlineColour = value;
+
+                Invalidate(Invalidation.DrawNode);
+            }
+        }
+
         private float outlineRadius;
 
         /// <summary>
@@ -434,6 +453,8 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
+        protected Vector2 CalculatedSpacing => Outline ? Spacing + new Vector2(OutlineRadius) : Spacing;
+
         private MarginPadding padding;
 
         /// <summary>
@@ -623,17 +644,17 @@ namespace osu.Framework.Graphics.Sprites
 
             if (AllowMultiline)
             {
-                return new MultilineTextBuilder(store, Font, builderMaxWidth, UseFullGlyphHeight, new Vector2(Padding.Left, Padding.Top), Spacing, charactersBacking,
+                return new MultilineTextBuilder(store, Font, builderMaxWidth, UseFullGlyphHeight, new Vector2(Padding.Left, Padding.Top), CalculatedSpacing, charactersBacking,
                     excludeCharacters, FallbackCharacter);
             }
 
             if (Truncate)
             {
-                return new TruncatingTextBuilder(store, Font, builderMaxWidth, ellipsisString, UseFullGlyphHeight, new Vector2(Padding.Left, Padding.Top), Spacing, charactersBacking,
+                return new TruncatingTextBuilder(store, Font, builderMaxWidth, ellipsisString, UseFullGlyphHeight, new Vector2(Padding.Left, Padding.Top), CalculatedSpacing, charactersBacking,
                     excludeCharacters, FallbackCharacter);
             }
 
-            return new TextBuilder(store, Font, builderMaxWidth, UseFullGlyphHeight, new Vector2(Padding.Left, Padding.Top), Spacing, charactersBacking,
+            return new TextBuilder(store, Font, builderMaxWidth, UseFullGlyphHeight, new Vector2(Padding.Left, Padding.Top), CalculatedSpacing, charactersBacking,
                 excludeCharacters, FallbackCharacter);
         }
 

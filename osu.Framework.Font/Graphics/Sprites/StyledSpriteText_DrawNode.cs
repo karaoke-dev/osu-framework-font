@@ -25,9 +25,8 @@ namespace osu.Framework.Graphics.Sprites
             private Vector2 shadowOffset;
 
             private bool outline;
+            private ColourInfo outlineColour;
             private int outlineRadius;
-            private float outlineSigma = 10;
-
             private IShader outlineShader;
 
             private readonly List<ScreenSpaceCharacterPart> parts = new List<ScreenSpaceCharacterPart>();
@@ -54,6 +53,7 @@ namespace osu.Framework.Graphics.Sprites
 
                 if (outline)
                 {
+                    outlineColour = Source.OutlineColour;
                     outlineRadius = (int)Source.outlineRadius;
                     outlineShader = Source.outlineShader;
                 }
@@ -62,9 +62,6 @@ namespace osu.Framework.Graphics.Sprites
             public override void Draw(Action<TexturedVertex2D> vertexAction)
             {
                 base.Draw(vertexAction);
-
-                outlineSigma = 100;
-
 
                 var avgColour = (Color4)DrawColourInfo.Colour.AverageColour;
                 float shadowAlpha = MathF.Pow(Math.Max(Math.Max(avgColour.R, avgColour.G), avgColour.B), 2);
@@ -114,7 +111,7 @@ namespace osu.Framework.Graphics.Sprites
                         outlineShader.GetUniform<Vector2>(@"g_BlurDirection").UpdateValue(ref blur);
                         */
 
-                        DrawQuad(current.Texture, current.DrawQuad, Color4.Blue, vertexAction: vertexAction, inflationPercentage: current.InflationPercentage);
+                        DrawQuad(current.Texture, current.DrawQuad, outlineColour, vertexAction: vertexAction, inflationPercentage: current.InflationPercentage);
                     }
 
                     outlineShader.Unbind();

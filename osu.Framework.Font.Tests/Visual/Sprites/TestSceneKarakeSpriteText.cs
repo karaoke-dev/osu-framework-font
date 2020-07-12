@@ -118,8 +118,9 @@ namespace osu.Framework.Tests.Visual.Sprites
                 ShadowOffset = new Vector2(3),
                 Outline = true,
                 OutlineRadius = 3f,
-                FrontTextShadowTexture = new SolidTexture { SolidColor = Color4.Green },
                 FrontTextTexture = new SolidTexture { SolidColor = Color4.LightBlue },
+                FrontBorderTexture = new SolidTexture { SolidColor = Color4.White },
+                FrontTextShadowTexture = new SolidTexture { SolidColor = Color4.Green },
                 BackTextShadowTexture = new SolidTexture { SolidColor = Color4.Red },
             };
         }

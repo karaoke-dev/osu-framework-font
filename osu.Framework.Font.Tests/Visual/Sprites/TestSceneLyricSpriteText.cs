@@ -129,12 +129,13 @@ namespace osu.Framework.Tests.Visual.Sprites
                 Rubies = rubies?.ToArray(),
                 Romajies = romajies?.ToArray(),
                 Margin = new MarginPadding(30),
-                Shadow = true,
+                Shadow = false,
                 ShadowOffset = new Vector2(3),
                 Outline = true,
                 OutlineRadius = 3f,
+                TextTexture = new SolidTexture { SolidColor = Color4.Blue },
                 ShadowTexture = new SolidTexture { SolidColor = Color4.Red },
-                TextTexture = new SolidTexture { SolidColor = Color4.White }
+                BorderTexture = new SolidTexture { SolidColor = Color4.White }
             };
         }
     }
