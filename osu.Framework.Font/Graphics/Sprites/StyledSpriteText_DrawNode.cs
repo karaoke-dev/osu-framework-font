@@ -3,12 +3,9 @@
 
 using System;
 using System.Collections.Generic;
-using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.OpenGL.Vertices;
 using osu.Framework.Graphics.Primitives;
-using osu.Framework.Graphics.Shaders;
 using osu.Framework.Graphics.Textures;
-using osu.Framework.Utils;
 using osuTK;
 using osuTK.Graphics;
 
@@ -21,13 +18,15 @@ namespace osu.Framework.Graphics.Sprites
             protected new StyledSpriteText Source => (StyledSpriteText)base.Source;
 
             private bool shadow;
-            private ColourInfo shadowColour;
+            private Vector4 shadowOutlineColour;
+            private Colour4 shadowColour;
             private Vector2 shadowOffset;
 
             private bool outline;
-            private ColourInfo outlineColour;
-            private int outlineRadius;
-            private IShader outlineShader;
+            private Colour4 outlineColour;
+            private float outlineRadius;
+
+            private Vector4 textColour;
 
             private readonly List<ScreenSpaceCharacterPart> parts = new List<ScreenSpaceCharacterPart>();
 
@@ -45,17 +44,20 @@ namespace osu.Framework.Graphics.Sprites
                 shadow = Source.Shadow;
                 outline = Source.Outline;
 
+                var color4 = DrawColourInfo.Colour.AverageColour.Linear;
+                textColour = new Vector4(color4.R, color4.G, color4.B, color4.A);
+
                 if (shadow)
                 {
                     shadowColour = Source.ShadowColour;
+                    shadowOutlineColour = new Vector4(Source.ShadowColour.R, Source.ShadowColour.G, Source.ShadowColour.B, Source.ShadowColour.A);
                     shadowOffset = Source.premultipliedShadowOffset;
                 }
 
                 if (outline)
                 {
                     outlineColour = Source.OutlineColour;
-                    outlineRadius = (int)Source.outlineRadius;
-                    outlineShader = Source.outlineShader;
+                    outlineRadius = Source.outlineRadius / 512;
                 }
             }
 
@@ -68,15 +70,17 @@ namespace osu.Framework.Graphics.Sprites
 
                 //adjust shadow alpha based on highest component intensity to avoid muddy display of darker text.
                 //squared result for quadratic fall-off seems to give the best result.
-                var finalShadowColour = DrawColourInfo.Colour;
-                finalShadowColour.ApplyChild(shadowColour.MultiplyAlpha(shadowAlpha));
+                //var finalShadowColour = DrawColourInfo.Colour;
+                //finalShadowColour.ApplyChild(shadowColour.MultiplyAlpha(shadowAlpha));
 
                 Shader.Bind();
+                Shader.GetUniform<float>(@"g_outlineRadius").UpdateValue(ref outlineRadius);
 
                 foreach (var current in parts)
                 {
                     if (shadow)
                     {
+                        Shader.GetUniform<Vector4>(@"g_outlineColour").UpdateValue(ref shadowOutlineColour);
                         var shadowQuad = current.DrawQuad;
 
                         DrawQuad(current.Texture,
@@ -85,37 +89,15 @@ namespace osu.Framework.Graphics.Sprites
                                 shadowQuad.TopRight + shadowOffset,
                                 shadowQuad.BottomLeft + shadowOffset,
                                 shadowQuad.BottomRight + shadowOffset),
-                            finalShadowColour, vertexAction: vertexAction, inflationPercentage: current.InflationPercentage);
+                            shadowColour, vertexAction: vertexAction, inflationPercentage: current.InflationPercentage);
                     }
 
-                    DrawQuad(current.Texture, current.DrawQuad, DrawColourInfo.Colour, vertexAction: vertexAction, inflationPercentage: current.InflationPercentage);
+                    Shader.GetUniform<Vector4>(@"g_outlineColour").UpdateValue(ref textColour);
+
+                    DrawQuad(current.Texture, current.DrawQuad, outlineColour, vertexAction: vertexAction, inflationPercentage: current.InflationPercentage);
                 }
                 
                 Shader.Unbind();
-
-                if (outline)
-                {
-                    outlineShader.Bind();
-
-                    foreach (var current in parts)
-                    {
-                        /*
-                        outlineShader.GetUniform<int>(@"g_Radius").UpdateValue(ref outlineRadius);
-                        outlineShader.GetUniform<float>(@"g_Sigma").UpdateValue(ref outlineSigma);
-
-                        Vector2 size = current.DrawQuad.Size;
-                        outlineShader.GetUniform<Vector2>(@"g_TexSize").UpdateValue(ref size);
-
-                        float radians = -MathUtils.DegreesToRadians(0);
-                        Vector2 blur = new Vector2(-0.1f, -0.1f);
-                        outlineShader.GetUniform<Vector2>(@"g_BlurDirection").UpdateValue(ref blur);
-                        */
-
-                        DrawQuad(current.Texture, current.DrawQuad, outlineColour, vertexAction: vertexAction, inflationPercentage: current.InflationPercentage);
-                    }
-
-                    outlineShader.Unbind();
-                }
             }
         }
 

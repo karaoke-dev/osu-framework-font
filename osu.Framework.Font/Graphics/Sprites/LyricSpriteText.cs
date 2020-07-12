@@ -186,6 +186,7 @@ namespace osu.Framework.Graphics.Sprites
                     return;
 
                 borderTexture = value;
+                OutlineColour = (borderTexture as SolidTexture)?.SolidColor ?? Color4.White;
                 Invalidate(Invalidation.All);
             }
         }

@@ -129,7 +129,7 @@ namespace osu.Framework.Tests.Visual.Sprites
                 Rubies = rubies?.ToArray(),
                 Romajies = romajies?.ToArray(),
                 Margin = new MarginPadding(30),
-                Shadow = false,
+                Shadow = true,
                 ShadowOffset = new Vector2(3),
                 Outline = true,
                 OutlineRadius = 3f,

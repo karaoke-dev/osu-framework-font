@@ -1,7 +1,7 @@
 ﻿varying mediump vec2 v_TexCoord;
 uniform lowp sampler2D m_Sampler;
-
-const float offset = 1.0 / 256.0;
+uniform float g_outlineRadius;
+uniform vec4 g_outlineColour;
 
 void main(void)
 {
@@ -9,12 +9,12 @@ void main(void)
 	if (col.a > 0.5)
 		gl_FragColor = col;
 	else {
-		float a = texture2D(m_Sampler, vec2(v_TexCoord.x + offset, v_TexCoord.y)).a +
-			texture2D(m_Sampler, vec2(v_TexCoord.x, v_TexCoord.y - offset)).a +
-			texture2D(m_Sampler, vec2(v_TexCoord.x - offset, v_TexCoord.y)).a +
-			texture2D(m_Sampler, vec2(v_TexCoord.x, v_TexCoord.y + offset)).a;
+		float a = texture2D(m_Sampler, vec2(v_TexCoord.x + g_outlineRadius, v_TexCoord.y)).a +
+			texture2D(m_Sampler, vec2(v_TexCoord.x, v_TexCoord.y - g_outlineRadius)).a +
+			texture2D(m_Sampler, vec2(v_TexCoord.x - g_outlineRadius, v_TexCoord.y)).a +
+			texture2D(m_Sampler, vec2(v_TexCoord.x, v_TexCoord.y + g_outlineRadius)).a;
 		if (col.a < 1.0 && a > 0.0)
-			gl_FragColor = vec4(0.0, 0.0, 1.0, 0.8);
+			gl_FragColor = g_outlineColour;
 		else
 			gl_FragColor = col;
 	}
