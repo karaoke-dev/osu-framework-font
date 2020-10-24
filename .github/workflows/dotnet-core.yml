@@ -15,11 +15,15 @@ jobs:
         dotnet-version: 3.1.200
     - name: Install dependencies
       run: dotnet restore
+    - name: Get current tag
+      run: echo "::set-env name=CURRENT_TAG::$(git describe --abbrev=0 --tags $(git rev-list --tags --max-count=1))"
     - name: Build
       run: dotnet build --configuration Release --no-restore
+    - name: Test
+      run: dotnet test --no-restore --verbosity normal
     - name: Publish osu.Framework.Font
       uses: brandedoutcast/publish-nuget@v2.5.5
       with:
           PROJECT_FILE_PATH: osu.Framework.Font/osu.Framework.Font.csproj
           NUGET_KEY: ${{secrets.NUGET_API_KEY}}
-          TAG_FORMAT: v*
+          VERSION_STATIC: ${{env.CURRENT_TAG}}
