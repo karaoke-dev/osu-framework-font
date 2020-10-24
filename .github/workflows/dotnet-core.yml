@@ -23,4 +23,4 @@ jobs:
       with:
           PROJECT_FILE_PATH: osu.Framework.Font/osu.Framework.Font.csproj
           NUGET_KEY: ${{secrets.NUGET_API_KEY}}
-          TAG_FORMAT: *
+          TAG_FORMAT: v*
