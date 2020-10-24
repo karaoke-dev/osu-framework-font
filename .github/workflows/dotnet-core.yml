@@ -18,8 +18,9 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --configuration Release --no-restore
-    - name: Publish FluentEmail.Core
+    - name: Publish osu.Framework.Font
       uses: brandedoutcast/publish-nuget@v2.5.2
       with:
           PROJECT_FILE_PATH: osu.Framework.Font/osu.Framework.Font.csproj
           NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+          TAG_FORMAT: *
