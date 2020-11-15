@@ -29,9 +29,9 @@ namespace osu.Framework.Graphics.Sprites
                 return 0;
 
             if (State == IndexState.Start)
-                return 1;
+                return -1;
 
-            return -1;
+            return 1;
         }
 
         public bool Equals(TimeTagIndex other)
@@ -72,9 +72,9 @@ namespace osu.Framework.Graphics.Sprites
 
         public enum IndexState
         {
-            Start = 1,
+            Start = 0,
 
-            End = 0
+            End = 1
         }
     }
 }
