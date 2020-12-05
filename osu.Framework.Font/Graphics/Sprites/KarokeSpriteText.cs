@@ -9,7 +9,7 @@ using osuTK;
 
 namespace osu.Framework.Graphics.Sprites
 {
-    public class KarakeSpriteText : CompositeDrawable
+    public class KarakeSpriteText : CompositeDrawable, IHasRuby, IHasRomaji
     {
         private readonly Container frontLyricTextContainer;
         private readonly LyricSpriteText frontLyricText;
