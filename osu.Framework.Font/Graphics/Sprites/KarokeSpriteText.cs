@@ -328,7 +328,7 @@ namespace osu.Framework.Graphics.Sprites
             frontLyricTextContainer.Width = maskWidth;
         }
 
-        public float GetPercentageWidth(int startIndex, int endIndex, float percentage = 0)
+        public float GetPercentageWidth(TimeTagIndex startIndex, TimeTagIndex endIndex, float percentage = 0)
             => backLyricText.GetPercentageWidth(startIndex, endIndex, percentage);
 
         private DisplayPercentage getPercentageByTime(double time)
@@ -351,19 +351,19 @@ namespace osu.Framework.Graphics.Sprites
             var endTagTime = availableTimeTags.FirstOrDefault(x => x.Value > time);
 
             var percentage = Math.Min((time - startTagTime.Value) / (endTagTime.Value - startTagTime.Value), 1);
-            return new DisplayPercentage(startTagTime.Key.Index, endTagTime.Key.Index, (float)percentage);
+            return new DisplayPercentage(startTagTime.Key, endTagTime.Key, (float)percentage);
         }
 
         internal readonly struct DisplayPercentage
         {
             public DisplayPercentage(DisplayStatus status)
             {
-                StartIndex = EndIndex = 0;
+                StartIndex = EndIndex = new TimeTagIndex();
 
                 if (status == DisplayStatus.Exceed)
-                    StartIndex = EndIndex = int.MaxValue;
+                    StartIndex = EndIndex = new TimeTagIndex(int.MaxValue);
                 else if (status == DisplayStatus.NotYet)
-                    StartIndex = EndIndex = int.MinValue;
+                    StartIndex = EndIndex = new TimeTagIndex(int.MinValue);
                 else if (status == DisplayStatus.Available)
                     throw new ArgumentOutOfRangeException($"Cannot accept type {nameof(DisplayStatus.Available)}");
 
@@ -371,7 +371,7 @@ namespace osu.Framework.Graphics.Sprites
                 TextPercentage = 0;
             }
 
-            public DisplayPercentage(int startTime, int endTime, float textPercentage)
+            public DisplayPercentage(TimeTagIndex startTime, TimeTagIndex endTime, float textPercentage)
             {
                 StartIndex = startTime;
                 EndIndex = endTime;
@@ -379,9 +379,9 @@ namespace osu.Framework.Graphics.Sprites
                 Status = DisplayStatus.Available;
             }
 
-            public int StartIndex { get; }
+            public TimeTagIndex StartIndex { get; }
 
-            public int EndIndex { get; }
+            public TimeTagIndex EndIndex { get; }
 
             public float TextPercentage { get; }
 
