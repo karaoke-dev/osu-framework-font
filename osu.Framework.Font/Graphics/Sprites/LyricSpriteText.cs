@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using osu.Framework.Text;
+using osu.Framework.Utils;
 using osuTK;
 using osuTK.Graphics;
 
@@ -334,19 +335,36 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
-        public float GetPercentageWidth(int startIndex, int endIndex, float percentage = 0)
+        public float GetPercentageWidth(TimeTagIndex startIndex, TimeTagIndex endIndex, float percentage = 0)
         {
-            if (Characters == null || !Characters.Any())
+            if (Characters == null)
                 return 0;
 
-            if (endIndex <= 0)
+            var charLength = Characters.Length;
+            if (charLength == 0)
                 return 0;
 
-            var left = Characters[Math.Max(startIndex, 0)].DrawRectangle.Left;
-            var right = Characters[Math.Min(endIndex - 1, Characters.Length + 1)].DrawRectangle.Right;
+            startIndex = TimeTagIndexUtils.Clamp(startIndex, 0, charLength - 1);
+            endIndex = TimeTagIndexUtils.Clamp(endIndex, 0, charLength - 1);
+
+            var left = getWidth(startIndex);
+            var right = getWidth(endIndex);
 
             var width = left * (1 - percentage) + right * percentage;
             return width + Margin.Left;
+
+            float getWidth(TimeTagIndex timeTagIndex)
+            {
+                switch (timeTagIndex.State)
+                {
+                    case TimeTagIndex.IndexState.Start:
+                        return Characters[timeTagIndex.Index].DrawRectangle.Left;
+                    case TimeTagIndex.IndexState.End:
+                        return Characters[timeTagIndex.Index].DrawRectangle.Right;
+                    default:
+                        throw new InvalidOperationException(nameof(timeTagIndex.State));
+                }
+            }
         }
     }
 }
