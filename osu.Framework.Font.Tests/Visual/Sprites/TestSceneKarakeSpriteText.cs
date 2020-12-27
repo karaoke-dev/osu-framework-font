@@ -35,19 +35,19 @@ namespace osu.Framework.Tests.Visual.Sprites
                 {
                     // カ
                     { new TimeTagIndex(0), starttime + 0 },
-                    { new TimeTagIndex(1, TimeTagIndex.IndexState.End), starttime + 100 },
+                    { new TimeTagIndex(0, TimeTagIndex.IndexState.End), starttime + 100 },
                     // ラ
                     { new TimeTagIndex(1), starttime + 1000 },
-                    { new TimeTagIndex(2, TimeTagIndex.IndexState.End), starttime + 1100 },
+                    { new TimeTagIndex(1, TimeTagIndex.IndexState.End), starttime + 1100 },
                     // オ
                     { new TimeTagIndex(2), starttime + 2000 },
-                    { new TimeTagIndex(3, TimeTagIndex.IndexState.End), starttime + 2100 },
+                    { new TimeTagIndex(2, TimeTagIndex.IndexState.End), starttime + 2100 },
                     // ケ
                     { new TimeTagIndex(3), starttime + 3000 },
-                    { new TimeTagIndex(4, TimeTagIndex.IndexState.End), starttime + 3100 },
+                    { new TimeTagIndex(3, TimeTagIndex.IndexState.End), starttime + 3100 },
                     // !
                     { new TimeTagIndex(4), starttime + 4000 },
-                    { new TimeTagIndex(5, TimeTagIndex.IndexState.End), starttime + 4100 },
+                    { new TimeTagIndex(4, TimeTagIndex.IndexState.End), starttime + 4100 },
                 });
             });
             AddStep("Timetag with wrong order", () =>

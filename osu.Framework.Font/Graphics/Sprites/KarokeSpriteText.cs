@@ -9,7 +9,7 @@ using osuTK;
 
 namespace osu.Framework.Graphics.Sprites
 {
-    public class KarakeSpriteText : CompositeDrawable
+    public class KarakeSpriteText : CompositeDrawable, IHasRuby, IHasRomaji
     {
         private readonly Container frontLyricTextContainer;
         private readonly LyricSpriteText frontLyricText;
@@ -320,13 +320,16 @@ namespace osu.Framework.Graphics.Sprites
                     resetAfterOutOfRange = false;
 
                     // Calculate mask width
-                    maskWidth = backLyricText.GetPercentageWidth(percentage.StartIndex, percentage.EndIndex, percentage.TextPercentage);
+                    maskWidth = GetPercentageWidth(percentage.StartIndex, percentage.EndIndex, percentage.TextPercentage);
                     break;
             }
 
             // Update front karaoke text's width
             frontLyricTextContainer.Width = maskWidth;
         }
+
+        public float GetPercentageWidth(int startIndex, int endIndex, float percentage = 0) 
+            => backLyricText.GetPercentageWidth(startIndex, endIndex, percentage);
 
         private DisplayPercentage getPercentageByTime(double time)
         {

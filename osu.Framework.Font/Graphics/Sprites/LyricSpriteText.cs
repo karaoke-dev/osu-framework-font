@@ -10,7 +10,7 @@ using osuTK.Graphics;
 
 namespace osu.Framework.Graphics.Sprites
 {
-    public class LyricSpriteText : SpriteText
+    public class LyricSpriteText : SpriteText, IHasRuby, IHasRomaji, IHasTexture
     {
         public LyricSpriteText()
         {
