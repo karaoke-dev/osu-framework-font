@@ -11,7 +11,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <IsPackable>true</IsPackable>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <Version>1.4.1</Version>
+    <Version>1.4.2</Version>
     <Description>Unofficial support extra font effect for osu!framework.</Description>
     <Copyright>https://github.com/karaoke-dev/osu-framework-fontk</Copyright>
     <PackageProjectUrl>https://github.com/karaoke-dev/osu-framework-font</PackageProjectUrl>
