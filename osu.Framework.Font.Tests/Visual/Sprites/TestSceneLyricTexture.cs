@@ -1,4 +1,4 @@
-﻿// Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
+﻿// Copyright (c) andy840119 <andy840119@gmail.com>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
 using System.Collections.Generic;
@@ -15,8 +15,8 @@ namespace osu.Framework.Tests.Visual.Sprites
     {
         public TestSceneLyricTexture()
         {
-            AddStep("Test SolidTexture", () => Child = createKaroakeText(new SolidTexture { SolidColor = Color4.Blue }));
-            AddStep("Test Mixedexture(Gradient)", () => Child = createKaroakeText(new Mixedexture
+            AddStep("Test SolidTexture", () => Child = createKaraokeText(new SolidTexture { SolidColor = Color4.Blue }));
+            AddStep("Test MixedTexture(Gradient)", () => Child = createKaraokeText(new Mixedexture
             {
                 Colors = new Dictionary<float, SRGBColour>
                 {
@@ -27,7 +27,7 @@ namespace osu.Framework.Tests.Visual.Sprites
                 },
                 Type = Mixedexture.MixedType.Gradient
             }));
-            AddStep("Test Mixedexture(MilleFeuille)", () => Child = createKaroakeText(new Mixedexture
+            AddStep("Test MixedTexture(MilleFeuille)", () => Child = createKaraokeText(new Mixedexture
             {
                 Colors = new Dictionary<float, SRGBColour>
                 {
@@ -40,7 +40,7 @@ namespace osu.Framework.Tests.Visual.Sprites
             }));
         }
 
-        private Drawable createKaroakeText(ILyricTexture lyricTexture)
+        private Drawable createKaraokeText(ILyricTexture lyricTexture)
         {
             return new Sprite
             {

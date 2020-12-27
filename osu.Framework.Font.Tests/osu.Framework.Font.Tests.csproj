@@ -1,19 +1,19 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup Label="Project">
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <OutputType>WinExe</OutputType>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateProgramFile>false</GenerateProgramFile>
-    <AssemblyName>osu.Karaoke.Font.Tests</AssemblyName>
-    <RootNamespace>osu.Karaoke.Font.Tests</RootNamespace>
+    <AssemblyName>osu.Framework.Tests</AssemblyName>
+    <RootNamespace>osu.Framework.Tests</RootNamespace>
   </PropertyGroup>
   <ItemGroup Label="Package References">
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
     <PackageReference Include="NUnit" Version="3.12.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
     <PackageReference Include="Appveyor.TestLogger" Version="2.0.0" />
-    <PackageReference Include="ppy.osu.Game.Resources" Version="2020.1030.0" />
+    <PackageReference Include="ppy.osu.Game.Resources" Version="2020.1202.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\osu.Framework.Font\osu.Framework.Font.csproj" />

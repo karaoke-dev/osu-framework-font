@@ -1,4 +1,4 @@
-﻿// Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
+﻿// Copyright (c) andy840119 <andy840119@gmail.com>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
@@ -266,12 +266,12 @@ namespace osu.Framework.Graphics.Sprites
 
             var excludeCharacters = FixedWidthExcludeCharacters;
 
-            // Calculate position 
+            // Calculate position
             var rubyYPosition = Padding.Top;
             var contentPosition = rubyYPosition + RubyFont.Size / 2 + RubyMargin;
 
             // Print and save main texts
-            var charactersBacking = createMainTexts(Text,Font, contentPosition, Spacing);
+            var charactersBacking = createMainTexts(Text, Font, contentPosition, Spacing);
             Characters = charactersBacking.ToArray();
 
             // Print ruby texts
