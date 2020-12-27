@@ -9,20 +9,20 @@ using osuTK;
 
 namespace osu.Framework.Graphics.Sprites
 {
-    public class KarakeSpriteText : CompositeDrawable, IHasRuby, IHasRomaji
+    public class KaraokeSpriteText : CompositeDrawable, IHasRuby, IHasRomaji
     {
         private readonly Container frontLyricTextContainer;
         private readonly LyricSpriteText frontLyricText;
 
-        private readonly Container backlyricTextContainer;
+        private readonly Container backLyricTextContainer;
         private readonly LyricSpriteText backLyricText;
 
-        public KarakeSpriteText()
+        public KaraokeSpriteText()
         {
             AutoSizeAxes = Axes.Both;
             InternalChildren = new Drawable[]
             {
-                backlyricTextContainer = new Container
+                backLyricTextContainer = new Container
                 {
                     AutoSizeAxes = Axes.Both,
                     Masking = true,
@@ -147,11 +147,11 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
-        private IReadOnlyDictionary<TimeTagIndex, double> timetags = new Dictionary<TimeTagIndex, double>();
+        private IReadOnlyDictionary<TimeTagIndex, double> timeTags = new Dictionary<TimeTagIndex, double>();
 
         public IReadOnlyDictionary<TimeTagIndex, double> TimeTags
         {
-            get => timetags;
+            get => timeTags;
             set
             {
                 // Check timetag's index and time is ordered.
@@ -160,7 +160,7 @@ namespace osu.Framework.Graphics.Sprites
                 if (!orderedByIndexDictionary.SequenceEqual(orderedByTimeDictionary))
                     throw new Exception($"{nameof(value)} should be ordered.");
 
-                timetags = orderedByIndexDictionary;
+                timeTags = orderedByIndexDictionary;
             }
         }
 
@@ -313,7 +313,7 @@ namespace osu.Framework.Graphics.Sprites
                 case DisplayPercentage.DisplayStatus.NotYet:
                     resetAfterOutOfRange = true;
 
-                    maskWidth = percentage.Status == DisplayPercentage.DisplayStatus.Exceed ? backlyricTextContainer.Width : 0;
+                    maskWidth = percentage.Status == DisplayPercentage.DisplayStatus.Exceed ? backLyricTextContainer.Width : 0;
                     break;
 
                 default:
@@ -328,27 +328,27 @@ namespace osu.Framework.Graphics.Sprites
             frontLyricTextContainer.Width = maskWidth;
         }
 
-        public float GetPercentageWidth(int startIndex, int endIndex, float percentage = 0) 
+        public float GetPercentageWidth(int startIndex, int endIndex, float percentage = 0)
             => backLyricText.GetPercentageWidth(startIndex, endIndex, percentage);
 
         private DisplayPercentage getPercentageByTime(double time)
         {
-            var availableTimetags = TimeTags.Where(x => x.Key.Index >= 0 && x.Key.Index <= Text.Length)
+            var availableTimeTags = TimeTags.Where(x => x.Key.Index >= 0 && x.Key.Index <= Text.Length)
                     .ToDictionary(d => d.Key, d => d.Value);
 
-            if (!availableTimetags.Any())
+            if (!availableTimeTags.Any())
                 return new DisplayPercentage(DisplayPercentage.DisplayStatus.NotYet);
 
             // Less than start time
-            if (time < availableTimetags.FirstOrDefault().Value)
+            if (time < availableTimeTags.FirstOrDefault().Value)
                 return new DisplayPercentage(DisplayPercentage.DisplayStatus.NotYet);
 
             // More the end time
-            if (time > availableTimetags.LastOrDefault().Value)
+            if (time > availableTimeTags.LastOrDefault().Value)
                 return new DisplayPercentage(DisplayPercentage.DisplayStatus.Exceed);
 
-            var startTagTime = availableTimetags.LastOrDefault(x => x.Value < time);
-            var endTagTime = availableTimetags.FirstOrDefault(x => x.Value > time);
+            var startTagTime = availableTimeTags.LastOrDefault(x => x.Value < time);
+            var endTagTime = availableTimeTags.FirstOrDefault(x => x.Value > time);
 
             var percentage = Math.Min((time - startTagTime.Value) / (endTagTime.Value - startTagTime.Value), 1);
             return new DisplayPercentage(startTagTime.Key.Index, endTagTime.Key.Index, (float)percentage);

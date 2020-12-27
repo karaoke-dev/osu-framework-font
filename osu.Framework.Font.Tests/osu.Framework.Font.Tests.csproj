@@ -1,12 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup Label="Project">
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <OutputType>WinExe</OutputType>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateProgramFile>false</GenerateProgramFile>
-    <AssemblyName>osu.Karaoke.Font.Tests</AssemblyName>
-    <RootNamespace>osu.Karaoke.Font.Tests</RootNamespace>
+    <AssemblyName>osu.Framework.Tests</AssemblyName>
+    <RootNamespace>osu.Framework.Tests</RootNamespace>
   </PropertyGroup>
   <ItemGroup Label="Package References">
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.0" />

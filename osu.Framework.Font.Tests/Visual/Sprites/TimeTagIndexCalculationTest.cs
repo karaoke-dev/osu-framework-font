@@ -35,7 +35,7 @@ namespace osu.Framework.Tests.Visual.Sprites
         }
 
         [Test]
-        public void TestToneComparsion()
+        public void TestToneComparison()
         {
             var index1 = new TimeTagIndex
             {

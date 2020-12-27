@@ -1,11 +1,11 @@
 ﻿// Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
+using System;
 using NUnit.Framework;
 using osu.Framework.Graphics.Sprites;
-using System;
 
-namespace osu.Karaoke.Font.Tests.Graphics
+namespace osu.Framework.Tests.Graphics
 {
     [TestFixture]
     public class TimeTagIndexTest
@@ -71,6 +71,5 @@ namespace osu.Karaoke.Font.Tests.Graphics
             var scale = tone < 0 ? (int)tone - (half ? 1 : 0) : (int)tone;
             return new TimeTagIndex(scale, half ? TimeTagIndex.IndexState.End : TimeTagIndex.IndexState.Start);
         }
-
     }
 }

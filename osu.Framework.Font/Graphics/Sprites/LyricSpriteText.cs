@@ -266,12 +266,12 @@ namespace osu.Framework.Graphics.Sprites
 
             var excludeCharacters = FixedWidthExcludeCharacters;
 
-            // Calculate position 
+            // Calculate position
             var rubyYPosition = Padding.Top;
             var contentPosition = rubyYPosition + RubyFont.Size / 2 + RubyMargin;
 
             // Print and save main texts
-            var charactersBacking = createMainTexts(Text,Font, contentPosition, Spacing);
+            var charactersBacking = createMainTexts(Text, Font, contentPosition, Spacing);
             Characters = charactersBacking.ToArray();
 
             // Print ruby texts
