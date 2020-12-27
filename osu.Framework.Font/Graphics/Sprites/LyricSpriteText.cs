@@ -343,7 +343,7 @@ namespace osu.Framework.Graphics.Sprites
                 return 0;
 
             var left = Characters[Math.Max(startIndex, 0)].DrawRectangle.Left;
-            var right = Characters[Math.Min(endIndex - 1, Characters.Length + 1)].DrawRectangle.Right;
+            var right = Characters[Math.Min(endIndex - 1, Characters.Length - 1)].DrawRectangle.Right;
 
             var width = left * (1 - percentage) + right * percentage;
             return width + Margin.Left;

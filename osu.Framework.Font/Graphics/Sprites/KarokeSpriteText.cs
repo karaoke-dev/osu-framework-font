@@ -333,7 +333,7 @@ namespace osu.Framework.Graphics.Sprites
 
         private DisplayPercentage getPercentageByTime(double time)
         {
-            var availableTimeTags = TimeTags.Where(x => x.Key.Index >= 0 && x.Key.Index <= Text.Length)
+            var availableTimeTags = TimeTags.Where(x => x.Key.Index >= 0 && x.Key.Index < Text.Length)
                                             .ToDictionary(d => d.Key, d => d.Value);
 
             if (!availableTimeTags.Any())
