@@ -1,4 +1,4 @@
-﻿// Copyright (c) ppy Pty Ltd <contact@ppy.sh>. Licensed under the MIT Licence.
+﻿// Copyright (c) andy840119 <andy840119@gmail.com>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
 using System.Collections.Generic;
@@ -6,6 +6,7 @@ using System.Linq;
 using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Textures;
 using osuTK.Graphics;
+using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 
@@ -31,7 +32,7 @@ namespace osu.Framework.Graphics.Sprites
             var rawData = new[] { r, g, b, a };
 
             // Create image and convert to sample
-            var image = SixLabors.ImageSharp.Image.LoadPixelData<Rgba32>(rawData, 1, 1);
+            var image = Image.LoadPixelData<Rgba32>(rawData, 1, 1);
             image.Mutate(x => x.Resize(width, height));
             var texture = new Texture(width, height);
             texture.SetData(new TextureUpload(image));
@@ -55,7 +56,7 @@ namespace osu.Framework.Graphics.Sprites
             // create a texture is targetSize*1
             var singleLineSample = createSingaleLineSample(targetSize);
 
-            var image = SixLabors.ImageSharp.Image.LoadPixelData<Rgba32>(singleLineSample, targetSize, 1);
+            var image = Image.LoadPixelData<Rgba32>(singleLineSample, targetSize, 1);
             image.Mutate(x => x.Resize(targetSize, direction == Direction.Horizontal ? height : width));
 
             // Rotate the image if is vertical
