@@ -17,16 +17,16 @@ namespace osu.Framework.Tests.Utils
         [TestCase(0, TextIndex.IndexState.Start, 3, 1, null)] // test switch value.
         public void TestClamp(int index, TextIndex.IndexState state, int minIndex, int maxIndex, int? actualIndex)
         {
-            var timeTagIndex = new TextIndex(index, state);
+            var textIndex = new TextIndex(index, state);
 
             if (actualIndex != null)
             {
-                var actualTimeTagindex = new TextIndex(actualIndex.Value, state);
-                Assert.AreEqual(TimeTagIndexUtils.Clamp(timeTagIndex, minIndex, maxIndex), actualTimeTagindex);
+                var actualTextIndex = new TextIndex(actualIndex.Value, state);
+                Assert.AreEqual(TextIndexUtils.Clamp(textIndex, minIndex, maxIndex), actualTextIndex);
             }
             else
             {
-                Assert.Throws<ArgumentException>(() => TimeTagIndexUtils.Clamp(timeTagIndex, minIndex, maxIndex));
+                Assert.Throws<ArgumentException>(() => TextIndexUtils.Clamp(textIndex, minIndex, maxIndex));
             }
         }
     }

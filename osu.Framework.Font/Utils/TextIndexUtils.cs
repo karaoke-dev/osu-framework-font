@@ -6,7 +6,7 @@ using osu.Framework.Graphics.Sprites;
 
 namespace osu.Framework.Utils
 {
-    public static class TimeTagIndexUtils
+    public static class TextIndexUtils
     {
         public static TextIndex Clamp(TextIndex value, int minValue, int maxValue)
         {
