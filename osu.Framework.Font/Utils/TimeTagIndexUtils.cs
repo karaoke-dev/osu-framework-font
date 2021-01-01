@@ -8,9 +8,9 @@ namespace osu.Framework.Utils
 {
     public static class TimeTagIndexUtils
     {
-        public static TimeTagIndex Clamp(TimeTagIndex value, int minValue, int maxValue)
+        public static TextIndex Clamp(TextIndex value, int minValue, int maxValue)
         {
-            return new TimeTagIndex(Math.Clamp(value.Index, minValue, maxValue), value.State);
+            return new TextIndex(Math.Clamp(value.Index, minValue, maxValue), value.State);
         }
     }
 }

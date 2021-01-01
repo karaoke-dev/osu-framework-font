@@ -18,66 +18,66 @@ namespace osu.Framework.Tests.Visual.Sprites
             AddStep("Default time tag", () =>
             {
                 var startTime = Time.Current;
-                Child = createCustomizeTimeTagKaraokeText(new Dictionary<TimeTagIndex, double>
+                Child = createCustomizeTimeTagKaraokeText(new Dictionary<TextIndex, double>
                 {
-                    { new TimeTagIndex(0), startTime + 500 },
-                    { new TimeTagIndex(1), startTime + 600 },
-                    { new TimeTagIndex(2), startTime + 1000 },
-                    { new TimeTagIndex(3), startTime + 1500 },
-                    { new TimeTagIndex(4), startTime + 2000 },
+                    { new TextIndex(0), startTime + 500 },
+                    { new TextIndex(1), startTime + 600 },
+                    { new TextIndex(2), startTime + 1000 },
+                    { new TextIndex(3), startTime + 1500 },
+                    { new TextIndex(4), startTime + 2000 },
                 });
             });
             AddStep("Time tag with end state", () =>
             {
                 var startTime = Time.Current;
-                Child = createCustomizeTimeTagKaraokeText(new Dictionary<TimeTagIndex, double>
+                Child = createCustomizeTimeTagKaraokeText(new Dictionary<TextIndex, double>
                 {
                     // カ
-                    { new TimeTagIndex(0), startTime + 0 },
-                    { new TimeTagIndex(0, TimeTagIndex.IndexState.End), startTime + 100 },
+                    { new TextIndex(0), startTime + 0 },
+                    { new TextIndex(0, TextIndex.IndexState.End), startTime + 100 },
                     // ラ
-                    { new TimeTagIndex(1), startTime + 1000 },
-                    { new TimeTagIndex(1, TimeTagIndex.IndexState.End), startTime + 1100 },
+                    { new TextIndex(1), startTime + 1000 },
+                    { new TextIndex(1, TextIndex.IndexState.End), startTime + 1100 },
                     // オ
-                    { new TimeTagIndex(2), startTime + 2000 },
-                    { new TimeTagIndex(2, TimeTagIndex.IndexState.End), startTime + 2100 },
+                    { new TextIndex(2), startTime + 2000 },
+                    { new TextIndex(2, TextIndex.IndexState.End), startTime + 2100 },
                     // ケ
-                    { new TimeTagIndex(3), startTime + 3000 },
-                    { new TimeTagIndex(3, TimeTagIndex.IndexState.End), startTime + 3100 },
+                    { new TextIndex(3), startTime + 3000 },
+                    { new TextIndex(3, TextIndex.IndexState.End), startTime + 3100 },
                     // !
-                    { new TimeTagIndex(4), startTime + 4000 },
-                    { new TimeTagIndex(4, TimeTagIndex.IndexState.End), startTime + 4100 },
+                    { new TextIndex(4), startTime + 4000 },
+                    { new TextIndex(4, TextIndex.IndexState.End), startTime + 4100 },
                 });
             });
             AddStep("Time tag with wrong order", () =>
             {
                 var startTime = Time.Current;
-                Child = createCustomizeTimeTagKaraokeText(new Dictionary<TimeTagIndex, double>
+                Child = createCustomizeTimeTagKaraokeText(new Dictionary<TextIndex, double>
                 {
-                    { new TimeTagIndex(4), startTime + 2000 },
-                    { new TimeTagIndex(3), startTime + 1500 },
-                    { new TimeTagIndex(2), startTime + 1000 },
-                    { new TimeTagIndex(1), startTime + 600 },
-                    { new TimeTagIndex(0), startTime + 500 },
+                    { new TextIndex(4), startTime + 2000 },
+                    { new TextIndex(3), startTime + 1500 },
+                    { new TextIndex(2), startTime + 1000 },
+                    { new TextIndex(1), startTime + 600 },
+                    { new TextIndex(0), startTime + 500 },
                 });
             });
             AddStep("Time tag with out of range", () =>
             {
                 var startTime = Time.Current;
-                Child = createCustomizeTimeTagKaraokeText(new Dictionary<TimeTagIndex, double>
+                Child = createCustomizeTimeTagKaraokeText(new Dictionary<TextIndex, double>
                 {
-                    { new TimeTagIndex(-1), startTime + 0 },
-                    { new TimeTagIndex(0), startTime + 500 },
-                    { new TimeTagIndex(1), startTime + 600 },
-                    { new TimeTagIndex(2), startTime + 1000 },
-                    { new TimeTagIndex(3), startTime + 1500 },
-                    { new TimeTagIndex(4), startTime + 2000 },
-                    { new TimeTagIndex(8), startTime + 2500 },
+                    { new TextIndex(-1), startTime + 0 },
+                    { new TextIndex(0), startTime + 500 },
+                    { new TextIndex(1), startTime + 600 },
+                    { new TextIndex(2), startTime + 1000 },
+                    { new TextIndex(3), startTime + 1500 },
+                    { new TextIndex(4), startTime + 2000 },
+                    { new TextIndex(8), startTime + 2500 },
                 });
             });
         }
 
-        private Drawable createCustomizeTimeTagKaraokeText(Dictionary<TimeTagIndex, double> timeTags)
+        private Drawable createCustomizeTimeTagKaraokeText(Dictionary<TextIndex, double> timeTags)
         {
             return new KaraokeSpriteText
             {

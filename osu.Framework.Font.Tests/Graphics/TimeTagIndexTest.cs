@@ -65,11 +65,11 @@ namespace osu.Framework.Tests.Graphics
             Assert.AreEqual(numberToTimeTagIndex(tone1) <= numberToTimeTagIndex(tone2), match);
         }
 
-        private TimeTagIndex numberToTimeTagIndex(double tone)
+        private TextIndex numberToTimeTagIndex(double tone)
         {
             var half = Math.Abs(tone) % 1 == 0.5;
             var scale = tone < 0 ? (int)tone - (half ? 1 : 0) : (int)tone;
-            return new TimeTagIndex(scale, half ? TimeTagIndex.IndexState.End : TimeTagIndex.IndexState.Start);
+            return new TextIndex(scale, half ? TextIndex.IndexState.End : TextIndex.IndexState.Start);
         }
     }
 }

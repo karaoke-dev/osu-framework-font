@@ -335,7 +335,7 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
-        public float GetPercentageWidth(TimeTagIndex startIndex, TimeTagIndex endIndex, float percentage = 0)
+        public float GetPercentageWidth(TextIndex startIndex, TextIndex endIndex, float percentage = 0)
         {
             if (Characters == null)
                 return 0;
@@ -353,13 +353,13 @@ namespace osu.Framework.Graphics.Sprites
             var width = left * (1 - percentage) + right * percentage;
             return width + Margin.Left;
 
-            float getWidth(TimeTagIndex timeTagIndex)
+            float getWidth(TextIndex timeTagIndex)
             {
                 switch (timeTagIndex.State)
                 {
-                    case TimeTagIndex.IndexState.Start:
+                    case TextIndex.IndexState.Start:
                         return Characters[timeTagIndex.Index].DrawRectangle.Left;
-                    case TimeTagIndex.IndexState.End:
+                    case TextIndex.IndexState.End:
                         return Characters[timeTagIndex.Index].DrawRectangle.Right;
                     default:
                         throw new InvalidOperationException(nameof(timeTagIndex.State));

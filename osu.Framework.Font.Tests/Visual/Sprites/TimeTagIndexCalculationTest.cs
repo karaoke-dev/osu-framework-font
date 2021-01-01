@@ -12,16 +12,16 @@ namespace osu.Framework.Tests.Visual.Sprites
         [Test]
         public void TestToneCalculation()
         {
-            var index1 = new TimeTagIndex
+            var index1 = new TextIndex
             {
                 Index = 3,
-                State = TimeTagIndex.IndexState.Start,
+                State = TextIndex.IndexState.Start,
             };
 
-            var index2 = new TimeTagIndex
+            var index2 = new TextIndex
             {
                 Index = 1,
-                State = TimeTagIndex.IndexState.Start
+                State = TextIndex.IndexState.Start
             };
 
             Assert.AreEqual(index1 == index2, false);
@@ -37,16 +37,16 @@ namespace osu.Framework.Tests.Visual.Sprites
         [Test]
         public void TestToneComparison()
         {
-            var index1 = new TimeTagIndex
+            var index1 = new TextIndex
             {
                 Index = 0,
-                State = TimeTagIndex.IndexState.Start,
+                State = TextIndex.IndexState.Start,
             };
 
-            var index2 = new TimeTagIndex
+            var index2 = new TextIndex
             {
                 Index = -1,
-                State = TimeTagIndex.IndexState.Start
+                State = TextIndex.IndexState.Start
             };
 
             Assert.AreEqual(index1 > index2, true);
