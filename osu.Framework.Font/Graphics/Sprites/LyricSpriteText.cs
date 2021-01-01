@@ -335,7 +335,7 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
-        public float GetPercentageWidth(TimeTagIndex startIndex, TimeTagIndex endIndex, float percentage = 0)
+        public float GetPercentageWidth(TextIndex startIndex, TextIndex endIndex, float percentage = 0)
         {
             if (Characters == null)
                 return 0;
@@ -344,8 +344,8 @@ namespace osu.Framework.Graphics.Sprites
             if (charLength == 0)
                 return 0;
 
-            startIndex = TimeTagIndexUtils.Clamp(startIndex, 0, charLength - 1);
-            endIndex = TimeTagIndexUtils.Clamp(endIndex, 0, charLength - 1);
+            startIndex = TextIndexUtils.Clamp(startIndex, 0, charLength - 1);
+            endIndex = TextIndexUtils.Clamp(endIndex, 0, charLength - 1);
 
             var left = getWidth(startIndex);
             var right = getWidth(endIndex);
@@ -353,16 +353,16 @@ namespace osu.Framework.Graphics.Sprites
             var width = left * (1 - percentage) + right * percentage;
             return width + Margin.Left;
 
-            float getWidth(TimeTagIndex timeTagIndex)
+            float getWidth(TextIndex index)
             {
-                switch (timeTagIndex.State)
+                switch (index.State)
                 {
-                    case TimeTagIndex.IndexState.Start:
-                        return Characters[timeTagIndex.Index].DrawRectangle.Left;
-                    case TimeTagIndex.IndexState.End:
-                        return Characters[timeTagIndex.Index].DrawRectangle.Right;
+                    case TextIndex.IndexState.Start:
+                        return Characters[index.Index].DrawRectangle.Left;
+                    case TextIndex.IndexState.End:
+                        return Characters[index.Index].DrawRectangle.Right;
                     default:
-                        throw new InvalidOperationException(nameof(timeTagIndex.State));
+                        throw new InvalidOperationException(nameof(index.State));
                 }
             }
         }

@@ -147,9 +147,9 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
-        private IReadOnlyDictionary<TimeTagIndex, double> timeTags = new Dictionary<TimeTagIndex, double>();
+        private IReadOnlyDictionary<TextIndex, double> timeTags = new Dictionary<TextIndex, double>();
 
-        public IReadOnlyDictionary<TimeTagIndex, double> TimeTags
+        public IReadOnlyDictionary<TextIndex, double> TimeTags
         {
             get => timeTags;
             set
@@ -328,7 +328,7 @@ namespace osu.Framework.Graphics.Sprites
             frontLyricTextContainer.Width = maskWidth;
         }
 
-        public float GetPercentageWidth(TimeTagIndex startIndex, TimeTagIndex endIndex, float percentage = 0)
+        public float GetPercentageWidth(TextIndex startIndex, TextIndex endIndex, float percentage = 0)
             => backLyricText.GetPercentageWidth(startIndex, endIndex, percentage);
 
         private DisplayPercentage getPercentageByTime(double time)
@@ -358,12 +358,12 @@ namespace osu.Framework.Graphics.Sprites
         {
             public DisplayPercentage(DisplayStatus status)
             {
-                StartIndex = EndIndex = new TimeTagIndex();
+                StartIndex = EndIndex = new TextIndex();
 
                 if (status == DisplayStatus.Exceed)
-                    StartIndex = EndIndex = new TimeTagIndex(int.MaxValue);
+                    StartIndex = EndIndex = new TextIndex(int.MaxValue);
                 else if (status == DisplayStatus.NotYet)
-                    StartIndex = EndIndex = new TimeTagIndex(int.MinValue);
+                    StartIndex = EndIndex = new TextIndex(int.MinValue);
                 else if (status == DisplayStatus.Available)
                     throw new ArgumentOutOfRangeException($"Cannot accept type {nameof(DisplayStatus.Available)}");
 
@@ -371,7 +371,7 @@ namespace osu.Framework.Graphics.Sprites
                 TextPercentage = 0;
             }
 
-            public DisplayPercentage(TimeTagIndex startTime, TimeTagIndex endTime, float textPercentage)
+            public DisplayPercentage(TextIndex startTime, TextIndex endTime, float textPercentage)
             {
                 StartIndex = startTime;
                 EndIndex = endTime;
@@ -379,9 +379,9 @@ namespace osu.Framework.Graphics.Sprites
                 Status = DisplayStatus.Available;
             }
 
-            public TimeTagIndex StartIndex { get; }
+            public TextIndex StartIndex { get; }
 
-            public TimeTagIndex EndIndex { get; }
+            public TextIndex EndIndex { get; }
 
             public float TextPercentage { get; }
 
