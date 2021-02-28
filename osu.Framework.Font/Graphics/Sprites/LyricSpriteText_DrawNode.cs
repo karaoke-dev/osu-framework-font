@@ -12,11 +12,11 @@ using osuTK.Graphics;
 
 namespace osu.Framework.Graphics.Sprites
 {
-    public partial class SpriteText
+    public partial class LyricSpriteText
     {
-        internal class SpriteTextDrawNode : TexturedShaderDrawNode
+        internal class LyricSpriteTextDrawNode : TexturedShaderDrawNode
         {
-            protected new SpriteText Source => (SpriteText)base.Source;
+            protected new LyricSpriteText Source => (LyricSpriteText)base.Source;
 
             private bool shadow;
             private ColourInfo shadowColour;
@@ -24,7 +24,7 @@ namespace osu.Framework.Graphics.Sprites
 
             private readonly List<ScreenSpaceCharacterPart> parts = new List<ScreenSpaceCharacterPart>();
 
-            public SpriteTextDrawNode(SpriteText source)
+            public LyricSpriteTextDrawNode(LyricSpriteText source)
                 : base(source)
             {
             }
@@ -81,7 +81,7 @@ namespace osu.Framework.Graphics.Sprites
         }
 
         /// <summary>
-        /// A character of a <see cref="SpriteText"/> provided with screen space draw coordinates.
+        /// A character of a <see cref="LyricSpriteText"/> provided with screen space draw coordinates.
         /// </summary>
         internal struct ScreenSpaceCharacterPart
         {
