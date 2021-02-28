@@ -11,28 +11,38 @@ using osuTK.Graphics;
 
 namespace osu.Framework.Graphics.Sprites
 {
-    public partial class LyricSpriteText
+    public partial class LyricSpriteText 
     {
         private PositionText[] rubies;
 
+        /// <summary>
+        /// Gets or sets the ruby text to be displayed.
+        /// </summary>
         public PositionText[] Rubies
         {
             get => rubies;
             set
             {
                 rubies = filterValidValues(value);
+
+                invalidate(true);
                 Invalidate(Invalidation.All);
             }
         }
 
         private PositionText[] romajies;
 
+        /// <summary>
+        /// Gets or sets the romaji text to be displayed.
+        /// </summary>
         public PositionText[] Romajies
         {
             get => romajies;
             set
             {
                 romajies = filterValidValues(value);
+
+                invalidate(true);
                 Invalidate(Invalidation.All);
             }
         }
@@ -56,7 +66,9 @@ namespace osu.Framework.Graphics.Sprites
             set
             {
                 rubyFont = value;
-                Invalidate(Invalidation.All);
+
+                invalidate(true);
+                shadowOffsetCache.Invalidate();
             }
         }
 
@@ -71,12 +83,17 @@ namespace osu.Framework.Graphics.Sprites
             set
             {
                 romajiFont = value;
-                Invalidate(Invalidation.All);
+
+                invalidate(true);
+                shadowOffsetCache.Invalidate();
             }
         }
 
         private int rubyMargin;
 
+        /// <summary>
+        /// Shrinks the space between ruby and main text.
+        /// </summary>
         public int RubyMargin
         {
             get => rubyMargin;
@@ -86,12 +103,16 @@ namespace osu.Framework.Graphics.Sprites
                     return;
 
                 rubyMargin = value;
-                Invalidate(Invalidation.All);
+
+                invalidate(true);
             }
         }
 
         private int romajiMargin;
 
+        /// <summary>
+        /// Shrinks the space between romaji and main text.
+        /// </summary>
         public int RomajiMargin
         {
             get => romajiMargin;
@@ -101,12 +122,16 @@ namespace osu.Framework.Graphics.Sprites
                     return;
 
                 romajiMargin = value;
-                Invalidate(Invalidation.All);
+
+                invalidate(true);
             }
         }
 
         private Vector2 rubySpacing;
 
+        /// <summary>
+        /// Gets or sets the spacing between characters of ruby text.
+        /// </summary>
         public Vector2 RubySpacing
         {
             get => rubySpacing;
@@ -116,12 +141,16 @@ namespace osu.Framework.Graphics.Sprites
                     return;
 
                 rubySpacing = value;
-                Invalidate(Invalidation.All);
+
+                invalidate(true);
             }
         }
 
         private Vector2 romajiSpacing;
 
+        /// <summary>
+        /// Gets or sets the spacing between characters of romaji text.
+        /// </summary>
         public Vector2 RomajiSpacing
         {
             get => romajiSpacing;
@@ -131,7 +160,8 @@ namespace osu.Framework.Graphics.Sprites
                     return;
 
                 romajiSpacing = value;
-                Invalidate(Invalidation.All);
+
+                invalidate(true);
             }
         }
 
@@ -147,6 +177,7 @@ namespace osu.Framework.Graphics.Sprites
 
                 textTexture = value;
                 Colour = (textTexture as SolidTexture)?.SolidColor ?? Color4.White;
+
                 Invalidate(Invalidation.All);
             }
         }
@@ -184,6 +215,9 @@ namespace osu.Framework.Graphics.Sprites
 
         private LyricTextAlignment rubyAlignment;
 
+        /// <summary>
+        /// Gets or sets the ruby alignment.
+        /// </summary>
         public LyricTextAlignment RubyAlignment
         {
             get => rubyAlignment;
@@ -193,12 +227,15 @@ namespace osu.Framework.Graphics.Sprites
                     return;
 
                 rubyAlignment = value;
-                Invalidate(Invalidation.All);
+                invalidate(true);
             }
         }
 
         private LyricTextAlignment romajiAlignment;
 
+        /// <summary>
+        /// Gets or sets the romaji alignment.
+        /// </summary>
         public LyricTextAlignment RomajiAlignment
         {
             get => romajiAlignment;
@@ -208,12 +245,15 @@ namespace osu.Framework.Graphics.Sprites
                     return;
 
                 romajiAlignment = value;
-                Invalidate(Invalidation.All);
+                invalidate(true);
             }
         }
 
         private float borderRadius;
 
+        /// <summary>
+        /// Gets or sets the border redius
+        /// </summary>
         public float BorderRadius
         {
             get => borderRadius;
@@ -223,12 +263,16 @@ namespace osu.Framework.Graphics.Sprites
                     return;
 
                 borderRadius = value;
-                Invalidate(Invalidation.All);
+
+                invalidate(true);
             }
         }
 
         private bool border;
 
+        /// <summary>
+        /// Gets or sets the border
+        /// </summary>
         public bool Border
         {
             get => border;
@@ -238,7 +282,8 @@ namespace osu.Framework.Graphics.Sprites
                     return;
 
                 border = value;
-                Invalidate(Invalidation.All);
+
+                invalidate(true);
             }
         }
 
