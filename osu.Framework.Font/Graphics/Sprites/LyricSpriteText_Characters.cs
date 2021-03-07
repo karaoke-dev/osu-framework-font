@@ -8,6 +8,7 @@ using System.Linq;
 using osu.Framework.Extensions.IEnumerableExtensions;
 using osu.Framework.Layout;
 using osu.Framework.Text;
+using osu.Framework.Utils;
 using osuTK;
 
 namespace osu.Framework.Graphics.Sprites
@@ -24,7 +25,7 @@ namespace osu.Framework.Graphics.Sprites
         /// <summary>
         /// The characters in local space.
         /// </summary>
-        private List<TextBuilderGlyph> characters
+        private List<TextBuilderGlyph> Characters
         {
             get
             {
@@ -152,7 +153,7 @@ namespace osu.Framework.Graphics.Sprites
 
             Vector2 inflationAmount = DrawInfo.MatrixInverse.ExtractScale().Xy;
 
-            foreach (var character in characters)
+            foreach (var character in Characters)
             {
                 screenSpaceCharactersBacking.Add(new ScreenSpaceCharacterPart
                 {
@@ -172,10 +173,10 @@ namespace osu.Framework.Graphics.Sprites
 
         public float GetPercentageWidth(TextIndex startIndex, TextIndex endIndex, float percentage = 0)
         {
-            if (characters == null)
+            if (Characters == null)
                 return 0;
 
-            var charLength = characters.Count();
+            var charLength = Characters.Count();
             if (charLength == 0)
                 return 0;
 
@@ -193,9 +194,9 @@ namespace osu.Framework.Graphics.Sprites
                 switch (index.State)
                 {
                     case TextIndex.IndexState.Start:
-                        return characters[index.Index].DrawRectangle.Left;
+                        return Characters[index.Index].DrawRectangle.Left;
                     case TextIndex.IndexState.End:
-                        return characters[index.Index].DrawRectangle.Right;
+                        return Characters[index.Index].DrawRectangle.Right;
                     default:
                         throw new InvalidOperationException(nameof(index.State));
                 }
