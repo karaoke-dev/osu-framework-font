@@ -16,6 +16,7 @@ using osu.Framework.Utils;
 using osu.Framework.Text;
 using osuTK;
 using osuTK.Graphics;
+using System.Linq;
 
 namespace osu.Framework.Graphics.Sprites
 {
@@ -435,8 +436,20 @@ namespace osu.Framework.Graphics.Sprites
                 if (string.IsNullOrEmpty(displayedText))
                     return;
 
-                textBuilder = CreateExtraTextBuilder(store);
+                textBuilder = CreateTextBuilder(store);
                 textBuilder.AddText(displayedText);
+
+                // Get main text position and main text array.
+                var existCharacter = textBuilder.Characters.ToArray();
+
+                // Print ruby texts
+                var rubyYPosition = Padding.Top - RubyMargin;
+                createPositionTexts(existCharacter, Rubies, rubyYPosition, true);
+
+                // Calculate position and print romaji texts
+                var textHeight = existCharacter.FirstOrDefault().Height + existCharacter.FirstOrDefault().YOffset;
+                var romajiYPosition = textHeight + RomajiMargin;
+                createPositionTexts(existCharacter, Romajies, romajiYPosition, false);
             }
             finally
             {
@@ -449,6 +462,35 @@ namespace osu.Framework.Graphics.Sprites
 
                 isComputingCharacters = false;
                 charactersCache.Validate();
+            }
+
+            // Create ruby and romaji texts
+            void createPositionTexts(TextBuilderGlyph[] mainTexts, PositionText[] positionTexts, float yPosition, bool ruby)
+            {
+                positionTexts?.ForEach(p =>
+                {
+                    var text = p.Text;
+                    if (string.IsNullOrEmpty(text))
+                        return;
+
+                    // Get text position
+                    var spacing = ruby ? rubySpacing : romajiSpacing;
+                    var textPosition = new Vector2(getTextPosition(p, spacing.X), yPosition);
+
+                    // create ruby or romaji builder
+                    var builder = ruby ? CreateRubyTextBuilder(store, textPosition) : CreateRomajiTextBuilder(store, textPosition);
+                    builder.AddText(text);
+                });
+
+                // Convert
+                float getTextPosition(PositionText text, float textSpacing)
+                {
+                    //It's magic number to let text in the center
+                    const float size_multiple = 1.4f;
+                    var centerPosition = (mainTexts[text.StartIndex].DrawRectangle.Left + mainTexts[text.EndIndex - 1].DrawRectangle.Right) / 2;
+                    var textWidth = text.Text.Sum(c => (store.Get(font.FontName, c)?.Width ?? 0) * font.Size * size_multiple) - (text.Text.Length) * textSpacing;
+                    return centerPosition - textWidth / 2;
+                }
             }
         }
 
@@ -566,6 +608,20 @@ namespace osu.Framework.Graphics.Sprites
 
             return new TextBuilder(store, Font, builderMaxWidth, UseFullGlyphHeight, new Vector2(Padding.Left, Padding.Top), Spacing, charactersBacking,
                 excludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter);
+        }
+
+        protected virtual TextBuilder CreateRubyTextBuilder(ITexturedGlyphLookupStore store, Vector2 position)
+        {
+            const int builder_max_width = int.MaxValue;
+            return new TextBuilder(store, rubyFont, builder_max_width, UseFullGlyphHeight,
+                            position, rubySpacing, charactersBacking, FixedWidthExcludeCharacters, FallbackCharacter);
+        }
+
+        protected virtual TextBuilder CreateRomajiTextBuilder(ITexturedGlyphLookupStore store, Vector2 position)
+        {
+            const int builder_max_width = int.MaxValue;
+            return new TextBuilder(store, romajiFont, builder_max_width, UseFullGlyphHeight,
+                            position, romajiSpacing, charactersBacking, FixedWidthExcludeCharacters, FallbackCharacter);
         }
 
         public override string ToString() => $@"""{displayedText}"" " + base.ToString();
