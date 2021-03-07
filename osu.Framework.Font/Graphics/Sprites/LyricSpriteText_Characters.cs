@@ -25,7 +25,7 @@ namespace osu.Framework.Graphics.Sprites
         /// <summary>
         /// The characters in local space.
         /// </summary>
-        private List<TextBuilderGlyph> Characters
+        protected List<TextBuilderGlyph> Characters
         {
             get
             {
