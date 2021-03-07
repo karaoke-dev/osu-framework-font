@@ -12,7 +12,6 @@ using osu.Framework.Graphics.Shaders;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.IO.Stores;
 using osu.Framework.Layout;
-using osu.Framework.Localisation;
 using osu.Framework.Utils;
 using osu.Framework.Text;
 using osuTK;
@@ -25,21 +24,18 @@ namespace osu.Framework.Graphics.Sprites
     /// </summary>
     public partial class LyricSpriteText : Drawable, IHasLineBaseHeight, ITexturedShaderDrawable, IHasFilterTerms, IFillFlowContainer, IHasCurrentValue<string>, IHasRuby, IHasRomaji, IHasTexture
     {
-        private const float default_text_size = 20;
+        private const float default_text_size = 48;
         private static readonly char[] default_never_fixed_width_characters = { '.', ',', ':', ' ' };
 
         [Resolved]
         private FontStore store { get; set; }
-
-        [Resolved]
-        private LocalisationManager localisation { get; set; }
 
         public IShader TextureShader { get; private set; }
         public IShader RoundedTextureShader { get; private set; }
 
         public LyricSpriteText()
         {
-            Font = new FontUsage(null, 48);
+            Font = new FontUsage(null, default_text_size);
             current.BindValueChanged(text => Text = text.NewValue);
 
             AddLayout(charactersCache);
