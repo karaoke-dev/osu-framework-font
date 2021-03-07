@@ -9,13 +9,17 @@ using osuTK;
 
 namespace osu.Framework.Graphics.Sprites
 {
-    public class KaraokeSpriteText : CompositeDrawable, IHasRuby, IHasRomaji
+    public class KaraokeSpriteText : KaraokeSpriteText<LyricSpriteText>
+    {
+    }
+
+    public class KaraokeSpriteText<T> : CompositeDrawable, IHasRuby, IHasRomaji where T : LyricSpriteText, new()
     {
         private readonly Container frontLyricTextContainer;
-        private readonly LyricSpriteText frontLyricText;
+        private readonly T frontLyricText;
 
         private readonly Container backLyricTextContainer;
-        private readonly LyricSpriteText backLyricText;
+        private readonly T backLyricText;
 
         public KaraokeSpriteText()
         {
@@ -26,13 +30,13 @@ namespace osu.Framework.Graphics.Sprites
                 {
                     AutoSizeAxes = Axes.Both,
                     Masking = true,
-                    Child = backLyricText = new LyricSpriteText()
+                    Child = backLyricText = new T()
                 },
                 frontLyricTextContainer = new Container
                 {
                     AutoSizeAxes = Axes.Y,
                     Masking = true,
-                    Child = frontLyricText = new LyricSpriteText()
+                    Child = frontLyricText = new T()
                 }
             };
         }
