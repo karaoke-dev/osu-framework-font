@@ -77,7 +77,7 @@ namespace osu.Framework.Graphics.Sprites
 
                 if (romajies?.Any() ?? false)
                 {
-                    var romajiTextBuilder = CreateRubyTextBuilder(store);
+                    var romajiTextBuilder = CreateRomajiTextBuilder(store);
                     romajies.ForEach(x => romajiTextBuilder.AddText(x));
                 }
             }

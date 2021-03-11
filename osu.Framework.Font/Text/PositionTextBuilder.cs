@@ -62,7 +62,8 @@ namespace osu.Framework.Text
             // calculate start position
             var canterPosition = getCenterPosition(positionText.StartIndex, positionText.EndIndex);
             var textWidth = getTextWidth(positionText.Text);
-            var position = new Vector2(canterPosition.X - textWidth / 2, canterPosition.Y);
+            var textHeight = getTextHeight(positionText.Text);
+            var position = new Vector2(canterPosition.X - textWidth / 2, canterPosition.Y - textHeight);
             setCurrentPosition(position + startOffset);
 
             foreach (var c in text)
@@ -99,6 +100,14 @@ namespace osu.Framework.Text
                 return 0;
 
             return text.Sum(c => (getTexturedGlyph(c)?.Width ?? 0) * font.Size) + spacing.X * text.Length - 1;
+        }
+
+        private float getTextHeight(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+                return 0;
+
+            return getTexturedGlyph(text[0]).Height * font.Size;
         }
 
         private ITexturedCharacterGlyph getTexturedGlyph(char character)
