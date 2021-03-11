@@ -640,7 +640,7 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
-        private int rubyMargin = 5;
+        private int rubyMargin = 10;
 
         /// <summary>
         /// Shrinks the space between ruby and main text.
@@ -659,7 +659,7 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
-        private int romajiMargin;
+        private int romajiMargin = 10;
 
         /// <summary>
         /// Shrinks the space between romaji and main text.

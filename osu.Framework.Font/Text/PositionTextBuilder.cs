@@ -88,7 +88,6 @@ namespace osu.Framework.Text
             var endCharacterRectangle = Characters[endCharIndex - 1].DrawRectangle;
 
             // todo : should deal with multi-line issue.
-            // todo : should deal with ruby/romaji case, or pass in outside?
             var x = (startCharacterRectangle.Left + endCharacterRectangle.Right) / 2;
             var y = relativePosition == RelativePosition.Top ? startCharacterRectangle.Top : startCharacterRectangle.Bottom;
             return new Vector2(x, y);
