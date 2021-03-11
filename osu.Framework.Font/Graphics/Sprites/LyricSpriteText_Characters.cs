@@ -71,15 +71,13 @@ namespace osu.Framework.Graphics.Sprites
 
                 if (rubies?.Any() ?? false)
                 {
-                    var rubyYPosition = Padding.Top - RubyMargin;
-                    var rubyTextBuilder = CreateRubyTextBuilder(store, new Vector2());
+                    var rubyTextBuilder = CreateRubyTextBuilder(store);
                     rubies.ForEach(x => rubyTextBuilder.AddText(x));
                 }
 
                 if (romajies?.Any() ?? false)
                 {
-                    var romajiYPosition = textHeight + RomajiMargin;
-                    var romajiTextBuilder = CreateRubyTextBuilder(store, new Vector2());
+                    var romajiTextBuilder = CreateRubyTextBuilder(store);
                     romajies.ForEach(x => romajiTextBuilder.AddText(x));
                 }
             }
@@ -131,10 +129,6 @@ namespace osu.Framework.Graphics.Sprites
 
             foreach (var character in Characters)
             {
-                var a = new TextBuilderGlyph()
-                {
-
-                };
                 screenSpaceCharactersBacking.Add(new ScreenSpaceCharacterPart
                 {
                     DrawQuad = ToScreenSpace(character.DrawRectangle.Inflate(inflationAmount)),

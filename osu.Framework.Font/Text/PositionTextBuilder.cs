@@ -15,7 +15,11 @@ namespace osu.Framework.Text
         private readonly char fallbackCharacter;
         private readonly ITexturedGlyphLookupStore store;
         private readonly FontUsage font;
+        private readonly Vector2 startOffset;
         private readonly Vector2 spacing;
+
+        private readonly RelativePosition relativePosition;
+        private readonly LyricTextAlignment alignment;
 
         /// <summary>
         /// Creates a new <see cref="TextBuilder"/>.
@@ -32,13 +36,17 @@ namespace osu.Framework.Text
         /// <param name="fixedWidthReferenceCharacter">The character to use to calculate the fixed width width. Defaults to 'm'.</param>
         public PositionTextBuilder(ITexturedGlyphLookupStore store, FontUsage font, float maxWidth, bool useFontSizeAsHeight = true, Vector2 startOffset = default,
                                      Vector2 spacing = default, List<TextBuilderGlyph> characterList = null, char[] neverFixedWidthCharacters = null,
-                                     char fallbackCharacter = '?', char fixedWidthReferenceCharacter = 'm', LyricTextAlignment alignment = LyricTextAlignment.Auto)
+                                     char fallbackCharacter = '?', char fixedWidthReferenceCharacter = 'm', RelativePosition relativePosition = RelativePosition.Top, LyricTextAlignment alignment = LyricTextAlignment.Auto)
             : base(store, font, maxWidth, useFontSizeAsHeight, startOffset, spacing, characterList, neverFixedWidthCharacters, fallbackCharacter, fixedWidthReferenceCharacter)
         {
             this.store = store;
             this.font = font;
+            this.startOffset = startOffset;
             this.spacing = spacing;
             this.fallbackCharacter = fallbackCharacter;
+
+            this.relativePosition = relativePosition;
+            this.alignment = alignment;
         }
 
         /// <summary>
@@ -55,7 +63,7 @@ namespace osu.Framework.Text
             var canterPosition = getCenterPosition(positionText.StartIndex, positionText.EndIndex);
             var textWidth = getTextWidth(positionText.Text);
             var position = new Vector2(canterPosition.X - textWidth / 2, canterPosition.Y);
-            setCurrentPosition(position);
+            setCurrentPosition(position + startOffset);
 
             foreach (var c in text)
             {
@@ -75,14 +83,13 @@ namespace osu.Framework.Text
 
         private Vector2 getCenterPosition(int startCharIndex, int endCharIndex)
         {
-            
-            var startCharacter = Characters[startCharIndex];
-            var endCharacter = Characters[endCharIndex - 1];
+            var startCharacterRectangle = Characters[startCharIndex].DrawRectangle;
+            var endCharacterRectangle = Characters[endCharIndex - 1].DrawRectangle;
 
             // todo : should deal with multi-line issue.
             // todo : should deal with ruby/romaji case, or pass in outside?
-            var x = (startCharacter.DrawRectangle.Left + endCharacter.DrawRectangle.Right) / 2;
-            var y = startCharacter.DrawRectangle.Top;
+            var x = (startCharacterRectangle.Left + endCharacterRectangle.Right) / 2;
+            var y = relativePosition == RelativePosition.Top ? startCharacterRectangle.Top : startCharacterRectangle.Bottom;
             return new Vector2(x, y);
         }
 
@@ -101,5 +108,12 @@ namespace osu.Framework.Text
                    ?? store.Get(font.FontName, fallbackCharacter)
                    ?? store.Get(null, fallbackCharacter);
         }
+    }
+
+    public enum RelativePosition
+    {
+        Top,
+
+        Bottom
     }
 }
