@@ -69,14 +69,19 @@ namespace osu.Framework.Graphics.Sprites
                 // Get main text position and main text array.
                 var existCharacter = textBuilder.Characters.ToArray();
 
-                // Print ruby texts
-                var rubyYPosition = Padding.Top - RubyMargin;
-                createPositionTexts(existCharacter, Rubies, rubyYPosition, true);
+                if (rubies?.Any() ?? false)
+                {
+                    var rubyYPosition = Padding.Top - RubyMargin;
+                    var rubyTextBuilder = CreateRubyTextBuilder(store, new Vector2());
+                    rubies.ForEach(x => rubyTextBuilder.AddText(x));
+                }
 
-                // Calculate position and print romaji texts
-                var textHeight = existCharacter.FirstOrDefault().Height + existCharacter.FirstOrDefault().YOffset;
-                var romajiYPosition = textHeight + RomajiMargin;
-                createPositionTexts(existCharacter, Romajies, romajiYPosition, false);
+                if (romajies?.Any() ?? false)
+                {
+                    var romajiYPosition = textHeight + RomajiMargin;
+                    var romajiTextBuilder = CreateRubyTextBuilder(store, new Vector2());
+                    romajies.ForEach(x => romajiTextBuilder.AddText(x));
+                }
             }
             finally
             {
@@ -89,35 +94,6 @@ namespace osu.Framework.Graphics.Sprites
 
                 isComputingCharacters = false;
                 charactersCache.Validate();
-            }
-
-            // Create ruby and romaji texts
-            void createPositionTexts(TextBuilderGlyph[] mainTexts, PositionText[] positionTexts, float yPosition, bool ruby)
-            {
-                positionTexts?.ForEach(p =>
-                {
-                    var text = p.Text;
-                    if (string.IsNullOrEmpty(text))
-                        return;
-
-                    // Get text position
-                    var spacing = ruby ? rubySpacing : romajiSpacing;
-                    var textPosition = new Vector2(getTextPosition(p, spacing.X), yPosition);
-
-                    // create ruby or romaji builder
-                    var builder = ruby ? CreateRubyTextBuilder(store, textPosition) : CreateRomajiTextBuilder(store, textPosition);
-                    builder.AddText(text);
-                });
-
-                // Convert
-                float getTextPosition(PositionText text, float textSpacing)
-                {
-                    //It's magic number to let text in the center
-                    const float size_multiple = 1.4f;
-                    var centerPosition = (mainTexts[text.StartIndex].DrawRectangle.Left + mainTexts[text.EndIndex - 1].DrawRectangle.Right) / 2;
-                    var textWidth = text.Text.Sum(c => (store.Get(font.FontName, c)?.Width ?? 0) * font.Size * size_multiple) - (text.Text.Length) * textSpacing;
-                    return centerPosition - textWidth / 2;
-                }
             }
         }
 
@@ -155,6 +131,10 @@ namespace osu.Framework.Graphics.Sprites
 
             foreach (var character in Characters)
             {
+                var a = new TextBuilderGlyph()
+                {
+
+                };
                 screenSpaceCharactersBacking.Add(new ScreenSpaceCharacterPart
                 {
                     DrawQuad = ToScreenSpace(character.DrawRectangle.Inflate(inflationAmount)),

@@ -740,18 +740,18 @@ namespace osu.Framework.Graphics.Sprites
                 excludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter);
         }
 
-        protected virtual TextBuilder CreateRubyTextBuilder(ITexturedGlyphLookupStore store, Vector2 position)
+        protected virtual PositionTextBuilder CreateRubyTextBuilder(ITexturedGlyphLookupStore store, Vector2 position)
         {
             const int builder_max_width = int.MaxValue;
-            return new TextBuilder(store, rubyFont, builder_max_width, UseFullGlyphHeight,
-                            position, rubySpacing, charactersBacking, FixedWidthExcludeCharacters, FallbackCharacter);
+            return new PositionTextBuilder(store, rubyFont, builder_max_width, UseFullGlyphHeight,
+                            position, rubySpacing, charactersBacking, FixedWidthExcludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter, rubyAlignment);
         }
 
-        protected virtual TextBuilder CreateRomajiTextBuilder(ITexturedGlyphLookupStore store, Vector2 position)
+        protected virtual PositionTextBuilder CreateRomajiTextBuilder(ITexturedGlyphLookupStore store, Vector2 position)
         {
             const int builder_max_width = int.MaxValue;
-            return new TextBuilder(store, romajiFont, builder_max_width, UseFullGlyphHeight,
-                            position, romajiSpacing, charactersBacking, FixedWidthExcludeCharacters, FallbackCharacter);
+            return new PositionTextBuilder(store, romajiFont, builder_max_width, UseFullGlyphHeight,
+                            position, romajiSpacing, charactersBacking, FixedWidthExcludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter, romajiAlignment);
         }
 
         public override string ToString() => $@"""{displayedText}"" " + base.ToString();
