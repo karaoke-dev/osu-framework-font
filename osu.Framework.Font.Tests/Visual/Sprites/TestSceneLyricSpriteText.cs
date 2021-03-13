@@ -219,8 +219,6 @@ namespace osu.Framework.Tests.Visual.Sprites
         {
             public DefaultLyricSpriteText(bool ruby = true, bool romaji = true)
             {
-                Anchor = Anchor.Centre;
-                Origin = Anchor.Centre;
                 Text = "カラオケ";
 
                 if (ruby)

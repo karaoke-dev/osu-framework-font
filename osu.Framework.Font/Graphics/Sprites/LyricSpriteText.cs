@@ -719,6 +719,7 @@ namespace osu.Framework.Graphics.Sprites
         protected virtual TextBuilder CreateTextBuilder(ITexturedGlyphLookupStore store)
         {
             var excludeCharacters = FixedWidthExcludeCharacters ?? default_never_fixed_width_characters;
+            var startOffset = new Vector2(Padding.Left, Padding.Top + RubyFont.Size); // todo : should have option to force apply that or not
 
             float builderMaxWidth = requiresAutoSizedWidth
                 ? MaxWidth
@@ -726,17 +727,17 @@ namespace osu.Framework.Graphics.Sprites
 
             if (AllowMultiline)
             {
-                return new MultilineTextBuilder(store, Font, builderMaxWidth, UseFullGlyphHeight, new Vector2(Padding.Left, Padding.Top), Spacing, charactersBacking,
+                return new MultilineTextBuilder(store, Font, builderMaxWidth, UseFullGlyphHeight, startOffset, Spacing, charactersBacking,
                     excludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter);
             }
 
             if (Truncate)
             {
-                return new TruncatingTextBuilder(store, Font, builderMaxWidth, ellipsisString, UseFullGlyphHeight, new Vector2(Padding.Left, Padding.Top), Spacing, charactersBacking,
+                return new TruncatingTextBuilder(store, Font, builderMaxWidth, ellipsisString, UseFullGlyphHeight, startOffset, Spacing, charactersBacking,
                     excludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter);
             }
 
-            return new TextBuilder(store, Font, builderMaxWidth, UseFullGlyphHeight, new Vector2(Padding.Left, Padding.Top), Spacing, charactersBacking,
+            return new TextBuilder(store, Font, builderMaxWidth, UseFullGlyphHeight, startOffset, Spacing, charactersBacking,
                 excludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter);
         }
 
