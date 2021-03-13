@@ -8,7 +8,6 @@ using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Testing;
 using osu.Framework.Tests.Helper;
-using osu.Framework.Graphics;
 
 namespace osu.Framework.Tests.Visual.Sprites
 {
@@ -16,7 +15,7 @@ namespace osu.Framework.Tests.Visual.Sprites
     {
         [TestCase("karaoke", null, null)]
         [TestCase("カラオケ", new[] { "[0,1]:か", "[1,2]:ら", "[2,3]:お", "[3,4]:け" }, null)]
-        [TestCase("カラオケ", null, new[] { "[0,2]:ka", "[2,4]:ra", "[4,5]:o", "[5,7]:ke" })]
+        [TestCase("カラオケ", null, new[] { "[0,1]:ka", "[1,2]:ra", "[2,3]:o", "[3,4]:ke" })]
         public void TestText(string text, string[] rubyTags, string[] romajiTags)
         {
             AddStep("Create lyric", () => setContents(() => new LyricSpriteText
@@ -45,7 +44,6 @@ namespace osu.Framework.Tests.Visual.Sprites
         [TestCase(50)]
         public void TestMultiline(int width)
         {
-            // todo : should fix style in style if change multi line
             AddStep("Create lyric with text", () => setContents(() => new DefaultLyricSpriteText(false, false)
             {
                 AllowMultiline = true,
@@ -172,7 +170,7 @@ namespace osu.Framework.Tests.Visual.Sprites
         }
 
         [TestCase(null, null, null)]
-        [TestCase("(10,10)", null, null)]
+        [TestCase("(10,0)", null, null)]
         [TestCase(null, "(10,0)", null)]
         [TestCase(null, null, "(10,0)")]
         public void TestSpacing(string spacing, string rubySpacing, string romajiSpacing)
@@ -195,6 +193,49 @@ namespace osu.Framework.Tests.Visual.Sprites
             {
                 RubyMargin = rubyMargin,
                 RomajiMargin = romajiMargin,
+            }));
+        }
+
+        [TestCase(false, false, false)]
+        [TestCase(true, true, false)]
+        [TestCase(false, true, false)]
+        [TestCase(true, true, false)]
+        [TestCase(false, false, true)]
+        [TestCase(true, true, true)]
+        [TestCase(false, true, true)]
+        [TestCase(true, true, true)]
+        public void TestReserveHeight(bool reserveRubyHeight, bool reserveRomajiHeight, bool multiLine)
+        {
+            AddStep("Create lyric with text", () => setContents(() => new DefaultLyricSpriteText(false, false)
+            {
+                Width = multiLine ? 50 : 200,
+                AllowMultiline = multiLine,
+                ReserveRubyHeight = reserveRubyHeight,
+                ReserveRomajiHeight = reserveRomajiHeight,
+            }));
+
+            AddStep("Create lyric with ruby", () => setContents(() => new DefaultLyricSpriteText(true)
+            {
+                Width = multiLine ? 50 : 200,
+                AllowMultiline = multiLine,
+                ReserveRubyHeight = reserveRubyHeight,
+                ReserveRomajiHeight = reserveRomajiHeight,
+            }));
+
+            AddStep("Create lyric with romaji", () => setContents(() => new DefaultLyricSpriteText(false, true)
+            {
+                Width = multiLine ? 50 : 200,
+                AllowMultiline = multiLine,
+                ReserveRubyHeight = reserveRubyHeight,
+                ReserveRomajiHeight = reserveRomajiHeight,
+            }));
+
+            AddStep("Create lyric with ruby and romaji.", () => setContents(() => new DefaultLyricSpriteText
+            {
+                Width = multiLine ? 50 : 200,
+                AllowMultiline = multiLine,
+                ReserveRubyHeight = reserveRubyHeight,
+                ReserveRomajiHeight = reserveRomajiHeight,
             }));
         }
 
@@ -228,7 +269,7 @@ namespace osu.Framework.Tests.Visual.Sprites
 
                 if (romaji)
                 {
-                    Romajies = TestCaseTagHelper.ParseParsePositionTexts(new[] { "[0,2]:ka", "[2,4]:ra", "[4,5]:o", "[5,7]:ke" });
+                    Romajies = TestCaseTagHelper.ParseParsePositionTexts(new[] { "[0,1]:ka", "[1,2]:ra", "[2,3]:o", "[3,4]:ke" });
                 }
             }
         }

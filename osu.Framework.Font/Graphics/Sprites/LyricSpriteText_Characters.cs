@@ -86,7 +86,11 @@ namespace osu.Framework.Graphics.Sprites
                 if (requiresAutoSizedWidth)
                     base.Width = (textBuilder?.Bounds.X ?? 0) + Padding.Right;
                 if (requiresAutoSizedHeight)
-                    base.Height = (textBuilder?.Bounds.Y ?? 0) + Padding.Bottom;
+                {
+                    var romajiHeight = (ReserveRomajiHeight || (Romajies?.Any() ?? false)) ? RomajiFont.Size : 0;
+                    base.Height = (textBuilder?.Bounds.Y ?? 0) + romajiHeight + Padding.Bottom;
+                }
+                    
 
                 base.Width = Math.Min(base.Width, MaxWidth);
 

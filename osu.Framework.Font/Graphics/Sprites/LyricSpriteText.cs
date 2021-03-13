@@ -678,6 +678,44 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
+        private bool reserveRubyHeight;
+
+        /// <summary>
+        /// Reserve ruby height even contains no ruby.
+        /// </summary>
+        public bool ReserveRubyHeight
+        {
+            get => reserveRubyHeight;
+            set
+            {
+                if (reserveRubyHeight == value)
+                    return;
+
+                reserveRubyHeight = value;
+
+                invalidate(true);
+            }
+        }
+
+        private bool reserveRomajiHeight;
+
+        /// <summary>
+        /// Reserve romaji height even contains no ruby.
+        /// </summary>
+        public bool ReserveRomajiHeight
+        {
+            get => reserveRomajiHeight;
+            set
+            {
+                if (reserveRomajiHeight == value)
+                    return;
+
+                reserveRomajiHeight = value;
+
+                invalidate(true);
+            }
+        }
+
         #endregion
 
         public override bool IsPresent => base.IsPresent && (AlwaysPresent || !string.IsNullOrEmpty(displayedText));
@@ -719,7 +757,11 @@ namespace osu.Framework.Graphics.Sprites
         protected virtual TextBuilder CreateTextBuilder(ITexturedGlyphLookupStore store)
         {
             var excludeCharacters = FixedWidthExcludeCharacters ?? default_never_fixed_width_characters;
-            var startOffset = new Vector2(Padding.Left, Padding.Top + RubyFont.Size); // todo : should have option to force apply that or not
+
+            var rubyHeight = (ReserveRubyHeight || (Rubies?.Any() ?? false)) ? RubyFont.Size : 0;
+            var romajiHeight = (ReserveRomajiHeight || (Romajies?.Any() ?? false)) ? RomajiFont.Size : 0;
+            var startOffset = new Vector2(Padding.Left, Padding.Top + rubyHeight);
+            var spacing = Spacing + new Vector2(0, rubyHeight + romajiHeight);
 
             float builderMaxWidth = requiresAutoSizedWidth
                 ? MaxWidth
@@ -727,17 +769,17 @@ namespace osu.Framework.Graphics.Sprites
 
             if (AllowMultiline)
             {
-                return new MultilineTextBuilder(store, Font, builderMaxWidth, UseFullGlyphHeight, startOffset, Spacing, charactersBacking,
+                return new MultilineTextBuilder(store, Font, builderMaxWidth, UseFullGlyphHeight, startOffset, spacing, charactersBacking,
                     excludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter);
             }
 
             if (Truncate)
             {
-                return new TruncatingTextBuilder(store, Font, builderMaxWidth, ellipsisString, UseFullGlyphHeight, startOffset, Spacing, charactersBacking,
+                return new TruncatingTextBuilder(store, Font, builderMaxWidth, ellipsisString, UseFullGlyphHeight, startOffset, spacing, charactersBacking,
                     excludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter);
             }
 
-            return new TextBuilder(store, Font, builderMaxWidth, UseFullGlyphHeight, startOffset, Spacing, charactersBacking,
+            return new TextBuilder(store, Font, builderMaxWidth, UseFullGlyphHeight, startOffset, spacing, charactersBacking,
                 excludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter);
         }
 
