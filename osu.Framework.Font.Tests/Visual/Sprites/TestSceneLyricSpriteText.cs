@@ -44,7 +44,6 @@ namespace osu.Framework.Tests.Visual.Sprites
         [TestCase(50)]
         public void TestMultiline(int width)
         {
-            // todo : should fix style in style if change multi line
             AddStep("Create lyric with text", () => setContents(() => new DefaultLyricSpriteText(false, false)
             {
                 AllowMultiline = true,
@@ -171,7 +170,7 @@ namespace osu.Framework.Tests.Visual.Sprites
         }
 
         [TestCase(null, null, null)]
-        [TestCase("(10,10)", null, null)]
+        [TestCase("(10,0)", null, null)]
         [TestCase(null, "(10,0)", null)]
         [TestCase(null, null, "(10,0)")]
         public void TestSpacing(string spacing, string rubySpacing, string romajiSpacing)

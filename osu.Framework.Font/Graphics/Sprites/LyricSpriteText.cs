@@ -761,7 +761,7 @@ namespace osu.Framework.Graphics.Sprites
             var rubyHeight = (ReserveRubyHeight || (Rubies?.Any() ?? false)) ? RubyFont.Size : 0;
             var romajiHeight = (ReserveRomajiHeight || (Romajies?.Any() ?? false)) ? RomajiFont.Size : 0;
             var startOffset = new Vector2(Padding.Left, Padding.Top + rubyHeight);
-            var spacing = Spacing = new Vector2(0, rubyHeight + romajiHeight);
+            var spacing = Spacing + new Vector2(0, rubyHeight + romajiHeight);
 
             float builderMaxWidth = requiresAutoSizedWidth
                 ? MaxWidth
