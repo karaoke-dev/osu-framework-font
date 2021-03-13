@@ -14,6 +14,8 @@ namespace osu.Framework.Graphics.Sprites
 {
     public partial class LyricSpriteText
     {
+        protected override DrawNode CreateDrawNode() => new LyricSpriteTextDrawNode(this);
+
         internal class LyricSpriteTextDrawNode : TexturedShaderDrawNode
         {
             protected new LyricSpriteText Source => (LyricSpriteText)base.Source;

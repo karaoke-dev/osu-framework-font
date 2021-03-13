@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Extensions.IEnumerableExtensions;
@@ -11,12 +10,11 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shaders;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.IO.Stores;
-using osu.Framework.Layout;
-using osu.Framework.Localisation;
 using osu.Framework.Utils;
 using osu.Framework.Text;
 using osuTK;
 using osuTK.Graphics;
+using System.Linq;
 
 namespace osu.Framework.Graphics.Sprites
 {
@@ -25,21 +23,18 @@ namespace osu.Framework.Graphics.Sprites
     /// </summary>
     public partial class LyricSpriteText : Drawable, IHasLineBaseHeight, ITexturedShaderDrawable, IHasFilterTerms, IFillFlowContainer, IHasCurrentValue<string>, IHasRuby, IHasRomaji, IHasTexture
     {
-        private const float default_text_size = 20;
+        private const float default_text_size = 48;
         private static readonly char[] default_never_fixed_width_characters = { '.', ',', ':', ' ' };
 
         [Resolved]
         private FontStore store { get; set; }
-
-        [Resolved]
-        private LocalisationManager localisation { get; set; }
 
         public IShader TextureShader { get; private set; }
         public IShader RoundedTextureShader { get; private set; }
 
         public LyricSpriteText()
         {
-            Font = new FontUsage(null, 48);
+            Font = new FontUsage(null, default_text_size);
             current.BindValueChanged(text => Text = text.NewValue);
 
             AddLayout(charactersCache);
@@ -60,6 +55,8 @@ namespace osu.Framework.Graphics.Sprites
                 var unused = store.Get(font.FontName, character) ?? store.Get(null, character);
             }
         }
+
+        #region text
 
         private string text = string.Empty;
 
@@ -90,6 +87,52 @@ namespace osu.Framework.Graphics.Sprites
 
         private string displayedText => Text;
 
+        private PositionText[] rubies;
+
+        /// <summary>
+        /// Gets or sets the ruby text to be displayed.
+        /// </summary>
+        public PositionText[] Rubies
+        {
+            get => rubies;
+            set
+            {
+                rubies = filterValidValues(value);
+
+                invalidate(true);
+                Invalidate(Invalidation.All);
+            }
+        }
+
+        private PositionText[] romajies;
+
+        /// <summary>
+        /// Gets or sets the romaji text to be displayed.
+        /// </summary>
+        public PositionText[] Romajies
+        {
+            get => romajies;
+            set
+            {
+                romajies = filterValidValues(value);
+
+                invalidate(true);
+                Invalidate(Invalidation.All);
+            }
+        }
+
+        private PositionText[] filterValidValues(PositionText[] texts)
+        {
+            string text = Text;
+            return texts?.Where(positionText => Math.Min(positionText.StartIndex, positionText.EndIndex) >= 0
+                                                && Math.Max(positionText.StartIndex, positionText.EndIndex) <= text.Length
+                                                && positionText.EndIndex > positionText.StartIndex).ToArray();
+        }
+
+        #endregion
+
+        #region font
+
         private FontUsage font = FontUsage.Default;
 
         /// <summary>
@@ -106,6 +149,44 @@ namespace osu.Framework.Graphics.Sprites
                 shadowOffsetCache.Invalidate();
             }
         }
+
+        private FontUsage rubyFont = FontUsage.Default;
+
+        /// <summary>
+        /// Contains information on the font used to display the text.
+        /// </summary>
+        public FontUsage RubyFont
+        {
+            get => rubyFont;
+            set
+            {
+                rubyFont = value;
+
+                invalidate(true);
+                shadowOffsetCache.Invalidate();
+            }
+        }
+
+        private FontUsage romajiFont = FontUsage.Default;
+
+        /// <summary>
+        /// Contains information on the font used to display the text.
+        /// </summary>
+        public FontUsage RomajiFont
+        {
+            get => romajiFont;
+            set
+            {
+                romajiFont = value;
+
+                invalidate(true);
+                shadowOffsetCache.Invalidate();
+            }
+        }
+
+        #endregion
+
+        #region style
 
         private bool allowMultiline = true;
 
@@ -212,6 +293,128 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
+        private ILyricTexture textTexture;
+
+        public ILyricTexture TextTexture
+        {
+            get => textTexture;
+            set
+            {
+                if (textTexture == value)
+                    return;
+
+                textTexture = value;
+                Colour = (textTexture as SolidTexture)?.SolidColor ?? Color4.White;
+
+                Invalidate(Invalidation.All);
+            }
+        }
+
+        private ILyricTexture shadowTexture;
+
+        public ILyricTexture ShadowTexture
+        {
+            get => shadowTexture;
+            set
+            {
+                if (shadowTexture == value)
+                    return;
+
+                shadowTexture = value;
+                ShadowColour = (shadowTexture as SolidTexture)?.SolidColor ?? Color4.White;
+                Invalidate(Invalidation.All);
+            }
+        }
+
+        private ILyricTexture borderTexture;
+
+        public ILyricTexture BorderTexture
+        {
+            get => borderTexture;
+            set
+            {
+                if (borderTexture == value)
+                    return;
+
+                borderTexture = value;
+                Invalidate(Invalidation.All);
+            }
+        }
+
+        private LyricTextAlignment rubyAlignment;
+
+        /// <summary>
+        /// Gets or sets the ruby alignment.
+        /// </summary>
+        public LyricTextAlignment RubyAlignment
+        {
+            get => rubyAlignment;
+            set
+            {
+                if (rubyAlignment == value)
+                    return;
+
+                rubyAlignment = value;
+                invalidate(true);
+            }
+        }
+
+        private LyricTextAlignment romajiAlignment;
+
+        /// <summary>
+        /// Gets or sets the romaji alignment.
+        /// </summary>
+        public LyricTextAlignment RomajiAlignment
+        {
+            get => romajiAlignment;
+            set
+            {
+                if (romajiAlignment == value)
+                    return;
+
+                romajiAlignment = value;
+                invalidate(true);
+            }
+        }
+
+        private float borderRadius;
+
+        /// <summary>
+        /// Gets or sets the border redius
+        /// </summary>
+        public float BorderRadius
+        {
+            get => borderRadius;
+            set
+            {
+                if (borderRadius == value)
+                    return;
+
+                borderRadius = value;
+
+                invalidate(true);
+            }
+        }
+
+        private bool border;
+
+        /// <summary>
+        /// Gets or sets the border
+        /// </summary>
+        public bool Border
+        {
+            get => border;
+            set
+            {
+                if (border == value)
+                    return;
+
+                border = value;
+
+                invalidate(true);
+            }
+        }
+
         private bool truncate;
 
         /// <summary>
@@ -253,6 +456,10 @@ namespace osu.Framework.Graphics.Sprites
                 invalidate(true);
             }
         }
+
+        #endregion
+
+        #region size
 
         private bool requiresAutoSizedWidth => explicitWidth == null && (RelativeSizeAxes & Axes.X) == 0;
 
@@ -347,6 +554,10 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
+        #endregion
+
+        #region text spacing
+
         private Vector2 spacing;
 
         /// <summary>
@@ -365,6 +576,48 @@ namespace osu.Framework.Graphics.Sprites
                 invalidate(true);
             }
         }
+
+        private Vector2 rubySpacing;
+
+        /// <summary>
+        /// Gets or sets the spacing between characters of ruby text.
+        /// </summary>
+        public Vector2 RubySpacing
+        {
+            get => rubySpacing;
+            set
+            {
+                if (rubySpacing == value)
+                    return;
+
+                rubySpacing = value;
+
+                invalidate(true);
+            }
+        }
+
+        private Vector2 romajiSpacing;
+
+        /// <summary>
+        /// Gets or sets the spacing between characters of romaji text.
+        /// </summary>
+        public Vector2 RomajiSpacing
+        {
+            get => romajiSpacing;
+            set
+            {
+                if (romajiSpacing == value)
+                    return;
+
+                romajiSpacing = value;
+
+                invalidate(true);
+            }
+        }
+
+        #endregion
+
+        #region margin/padding
 
         private MarginPadding padding;
 
@@ -387,126 +640,47 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
-        public override bool IsPresent => base.IsPresent && (AlwaysPresent || !string.IsNullOrEmpty(displayedText));
-
-        #region Characters
-
-        private readonly LayoutValue charactersCache = new LayoutValue(Invalidation.DrawSize | Invalidation.Presence, InvalidationSource.Parent);
+        private int rubyMargin;
 
         /// <summary>
-        /// Glyph list to be passed to <see cref="TextBuilder"/>.
+        /// Shrinks the space between ruby and main text.
         /// </summary>
-        private readonly List<TextBuilderGlyph> charactersBacking = new List<TextBuilderGlyph>();
-
-        /// <summary>
-        /// The characters in local space.
-        /// </summary>
-        private List<TextBuilderGlyph> characters
+        public int RubyMargin
         {
-            get
+            get => rubyMargin;
+            set
             {
-                computeCharacters();
-                return charactersBacking;
-            }
-        }
-
-        private bool isComputingCharacters;
-
-        /// <summary>
-        /// Compute character textures and positions.
-        /// </summary>
-        private void computeCharacters()
-        {
-            // Note : this feature can only use in osu-framework
-            // if (LoadState >= LoadState.Loaded)
-            //     ThreadSafety.EnsureUpdateThread();
-
-            if (store == null)
-                return;
-
-            if (charactersCache.IsValid)
-                return;
-
-            charactersBacking.Clear();
-
-            Debug.Assert(!isComputingCharacters, "Cyclic invocation of computeCharacters()!");
-            isComputingCharacters = true;
-
-            TextBuilder textBuilder = null;
-
-            try
-            {
-                if (string.IsNullOrEmpty(displayedText))
+                if (rubyMargin == value)
                     return;
 
-                textBuilder = CreateExtraTextBuilder(store);
-                textBuilder.AddText(displayedText);
-            }
-            finally
-            {
-                if (requiresAutoSizedWidth)
-                    base.Width = (textBuilder?.Bounds.X ?? 0) + Padding.Right;
-                if (requiresAutoSizedHeight)
-                    base.Height = (textBuilder?.Bounds.Y ?? 0) + Padding.Bottom;
+                rubyMargin = value;
 
-                base.Width = Math.Min(base.Width, MaxWidth);
-
-                isComputingCharacters = false;
-                charactersCache.Validate();
+                invalidate(true);
             }
         }
 
-        private readonly LayoutValue parentScreenSpaceCache = new LayoutValue(Invalidation.DrawSize | Invalidation.Presence | Invalidation.DrawInfo, InvalidationSource.Parent);
-        private readonly LayoutValue localScreenSpaceCache = new LayoutValue(Invalidation.MiscGeometry, InvalidationSource.Self);
-
-        private readonly List<ScreenSpaceCharacterPart> screenSpaceCharactersBacking = new List<ScreenSpaceCharacterPart>();
+        private int romajiMargin;
 
         /// <summary>
-        /// The characters in screen space. These are ready to be drawn.
+        /// Shrinks the space between romaji and main text.
         /// </summary>
-        private List<ScreenSpaceCharacterPart> screenSpaceCharacters
+        public int RomajiMargin
         {
-            get
+            get => romajiMargin;
+            set
             {
-                computeScreenSpaceCharacters();
-                return screenSpaceCharactersBacking;
+                if (romajiMargin == value)
+                    return;
+
+                romajiMargin = value;
+
+                invalidate(true);
             }
         }
-
-        private void computeScreenSpaceCharacters()
-        {
-            if (!parentScreenSpaceCache.IsValid)
-            {
-                localScreenSpaceCache.Invalidate();
-                parentScreenSpaceCache.Validate();
-            }
-
-            if (localScreenSpaceCache.IsValid)
-                return;
-
-            screenSpaceCharactersBacking.Clear();
-
-            Vector2 inflationAmount = DrawInfo.MatrixInverse.ExtractScale().Xy;
-
-            foreach (var character in characters)
-            {
-                screenSpaceCharactersBacking.Add(new ScreenSpaceCharacterPart
-                {
-                    DrawQuad = ToScreenSpace(character.DrawRectangle.Inflate(inflationAmount)),
-                    InflationPercentage = Vector2.Divide(inflationAmount, character.DrawRectangle.Size),
-                    Texture = character.Texture
-                });
-            }
-
-            localScreenSpaceCache.Validate();
-        }
-
-        private readonly LayoutValue<Vector2> shadowOffsetCache = new LayoutValue<Vector2>(Invalidation.DrawInfo, InvalidationSource.Parent);
-
-        private Vector2 premultipliedShadowOffset =>
-            shadowOffsetCache.IsValid ? shadowOffsetCache.Value : shadowOffsetCache.Value = ToScreenSpace(shadowOffset * Font.Size) - ToScreenSpace(Vector2.Zero);
 
         #endregion
+
+        public override bool IsPresent => base.IsPresent && (AlwaysPresent || !string.IsNullOrEmpty(displayedText));
 
         #region Invalidation
 
@@ -519,12 +693,6 @@ namespace osu.Framework.Graphics.Sprites
 
             Invalidate(Invalidation.DrawNode);
         }
-
-        #endregion
-
-        #region DrawNode
-
-        protected override DrawNode CreateDrawNode() => new LyricSpriteTextDrawNode(this);
 
         #endregion
 
@@ -551,6 +719,7 @@ namespace osu.Framework.Graphics.Sprites
         protected virtual TextBuilder CreateTextBuilder(ITexturedGlyphLookupStore store)
         {
             var excludeCharacters = FixedWidthExcludeCharacters ?? default_never_fixed_width_characters;
+            var startOffset = new Vector2(Padding.Left, Padding.Top + RubyFont.Size); // todo : should have option to force apply that or not
 
             float builderMaxWidth = requiresAutoSizedWidth
                 ? MaxWidth
@@ -558,18 +727,32 @@ namespace osu.Framework.Graphics.Sprites
 
             if (AllowMultiline)
             {
-                return new MultilineTextBuilder(store, Font, builderMaxWidth, UseFullGlyphHeight, new Vector2(Padding.Left, Padding.Top), Spacing, charactersBacking,
+                return new MultilineTextBuilder(store, Font, builderMaxWidth, UseFullGlyphHeight, startOffset, Spacing, charactersBacking,
                     excludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter);
             }
 
             if (Truncate)
             {
-                return new TruncatingTextBuilder(store, Font, builderMaxWidth, ellipsisString, UseFullGlyphHeight, new Vector2(Padding.Left, Padding.Top), Spacing, charactersBacking,
+                return new TruncatingTextBuilder(store, Font, builderMaxWidth, ellipsisString, UseFullGlyphHeight, startOffset, Spacing, charactersBacking,
                     excludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter);
             }
 
-            return new TextBuilder(store, Font, builderMaxWidth, UseFullGlyphHeight, new Vector2(Padding.Left, Padding.Top), Spacing, charactersBacking,
+            return new TextBuilder(store, Font, builderMaxWidth, UseFullGlyphHeight, startOffset, Spacing, charactersBacking,
                 excludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter);
+        }
+
+        protected virtual PositionTextBuilder CreateRubyTextBuilder(ITexturedGlyphLookupStore store)
+        {
+            const int builder_max_width = int.MaxValue;
+            return new PositionTextBuilder(store, Font, RubyFont, builder_max_width, UseFullGlyphHeight,
+                            new Vector2(0, -rubyMargin), rubySpacing, charactersBacking, FixedWidthExcludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter, RelativePosition.Top, rubyAlignment);
+        }
+
+        protected virtual PositionTextBuilder CreateRomajiTextBuilder(ITexturedGlyphLookupStore store)
+        {
+            const int builder_max_width = int.MaxValue;
+            return new PositionTextBuilder(store, Font, RomajiFont, builder_max_width, UseFullGlyphHeight,
+                            new Vector2(0, romajiMargin), romajiSpacing, charactersBacking, FixedWidthExcludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter, RelativePosition.Bottom, romajiAlignment);
         }
 
         public override string ToString() => $@"""{displayedText}"" " + base.ToString();
