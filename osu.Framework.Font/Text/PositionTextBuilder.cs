@@ -14,6 +14,7 @@ namespace osu.Framework.Text
     {
         private readonly char fallbackCharacter;
         private readonly ITexturedGlyphLookupStore store;
+        private readonly FontUsage mainTextFont;
         private readonly FontUsage font;
         private readonly Vector2 startOffset;
         private readonly Vector2 spacing;
@@ -25,6 +26,7 @@ namespace osu.Framework.Text
         /// Creates a new <see cref="TextBuilder"/>.
         /// </summary>
         /// <param name="store">The store from which glyphs are to be retrieved from.</param>
+        /// <param name="mainTextFont">The main text's font.<paramref name="store"/>.</param>
         /// <param name="font">The font to use for glyph lookups from <paramref name="store"/>.</param>
         /// <param name="useFontSizeAsHeight">True to use the provided <see cref="font"/> size as the height for each line. False if the height of each individual glyph should be used.</param>
         /// <param name="startOffset">The offset at which characters should begin being added at.</param>
@@ -34,12 +36,13 @@ namespace osu.Framework.Text
         /// <param name="neverFixedWidthCharacters">The characters for which fixed width should never be applied.</param>
         /// <param name="fallbackCharacter">The character to use if a glyph lookup fails.</param>
         /// <param name="fixedWidthReferenceCharacter">The character to use to calculate the fixed width width. Defaults to 'm'.</param>
-        public PositionTextBuilder(ITexturedGlyphLookupStore store, FontUsage font, float maxWidth, bool useFontSizeAsHeight = true, Vector2 startOffset = default,
+        public PositionTextBuilder(ITexturedGlyphLookupStore store, FontUsage mainTextFont, FontUsage font, float maxWidth, bool useFontSizeAsHeight = true, Vector2 startOffset = default,
                                      Vector2 spacing = default, List<TextBuilderGlyph> characterList = null, char[] neverFixedWidthCharacters = null,
                                      char fallbackCharacter = '?', char fixedWidthReferenceCharacter = 'm', RelativePosition relativePosition = RelativePosition.Top, LyricTextAlignment alignment = LyricTextAlignment.Auto)
             : base(store, font, maxWidth, useFontSizeAsHeight, startOffset, spacing, characterList, neverFixedWidthCharacters, fallbackCharacter, fixedWidthReferenceCharacter)
         {
             this.store = store;
+            this.mainTextFont = mainTextFont;
             this.font = font;
             this.startOffset = startOffset;
             this.spacing = spacing;
@@ -89,7 +92,8 @@ namespace osu.Framework.Text
 
             // todo : should deal with multi-line issue.
             var x = (startCharacterRectangle.Left + endCharacterRectangle.Right) / 2;
-            var y = relativePosition == RelativePosition.Top ? startCharacterRectangle.Top : startCharacterRectangle.Bottom;
+            // should use main font's size
+            var y = startCharacterRectangle.Centre.Y + (relativePosition == RelativePosition.Top ? -mainTextFont.Size / 2 : mainTextFont.Size / 2);
             return new Vector2(x, y);
         }
 

@@ -640,7 +640,7 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
-        private int rubyMargin = 10;
+        private int rubyMargin;
 
         /// <summary>
         /// Shrinks the space between ruby and main text.
@@ -659,7 +659,7 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
-        private int romajiMargin = 10;
+        private int romajiMargin;
 
         /// <summary>
         /// Shrinks the space between romaji and main text.
@@ -743,14 +743,14 @@ namespace osu.Framework.Graphics.Sprites
         protected virtual PositionTextBuilder CreateRubyTextBuilder(ITexturedGlyphLookupStore store)
         {
             const int builder_max_width = int.MaxValue;
-            return new PositionTextBuilder(store, rubyFont, builder_max_width, UseFullGlyphHeight,
+            return new PositionTextBuilder(store, Font, RubyFont, builder_max_width, UseFullGlyphHeight,
                             new Vector2(0, -rubyMargin), rubySpacing, charactersBacking, FixedWidthExcludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter, RelativePosition.Top, rubyAlignment);
         }
 
         protected virtual PositionTextBuilder CreateRomajiTextBuilder(ITexturedGlyphLookupStore store)
         {
             const int builder_max_width = int.MaxValue;
-            return new PositionTextBuilder(store, romajiFont, builder_max_width, UseFullGlyphHeight,
+            return new PositionTextBuilder(store, Font, RomajiFont, builder_max_width, UseFullGlyphHeight,
                             new Vector2(0, romajiMargin), romajiSpacing, charactersBacking, FixedWidthExcludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter, RelativePosition.Bottom, romajiAlignment);
         }
 
