@@ -50,6 +50,9 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: "5.0.x"
+          
+      - name: Build (Framework)
+        run: dotnet build -c Release osu.Framework.Font /p:Version=${{needs.check-if-tag.outputs.version}}
 
       - name: Pack (Framework)
         run: dotnet pack -c Release osu.Framework.Font /p:Version=${{needs.check-if-tag.outputs.version}} /p:GenerateDocumentationFile=true  -o ${{steps.artifactsPath.outputs.nuget_artifacts}}
