@@ -66,9 +66,6 @@ namespace osu.Framework.Graphics.Sprites
                 textBuilder = CreateTextBuilder(store);
                 textBuilder.AddText(displayedText);
 
-                // Get main text position and main text array.
-                var existCharacter = textBuilder.Characters.ToArray();
-
                 if (rubies?.Any() ?? false)
                 {
                     var rubyTextBuilder = CreateRubyTextBuilder(store);
@@ -85,12 +82,12 @@ namespace osu.Framework.Graphics.Sprites
             {
                 if (requiresAutoSizedWidth)
                     base.Width = (textBuilder?.Bounds.X ?? 0) + Padding.Right;
+
                 if (requiresAutoSizedHeight)
                 {
                     var romajiHeight = (ReserveRomajiHeight || (Romajies?.Any() ?? false)) ? RomajiFont.Size : 0;
                     base.Height = (textBuilder?.Bounds.Y ?? 0) + romajiHeight + Padding.Bottom;
                 }
-                    
 
                 base.Width = Math.Min(base.Width, MaxWidth);
 
@@ -154,7 +151,7 @@ namespace osu.Framework.Graphics.Sprites
             if (Characters == null)
                 return 0;
 
-            var charLength = Characters.Count();
+            var charLength = Characters.Count;
             if (charLength == 0)
                 return 0;
 
@@ -173,8 +170,10 @@ namespace osu.Framework.Graphics.Sprites
                 {
                     case TextIndex.IndexState.Start:
                         return Characters[index.Index].DrawRectangle.Left;
+
                     case TextIndex.IndexState.End:
                         return Characters[index.Index].DrawRectangle.Right;
+
                     default:
                         throw new InvalidOperationException(nameof(index.State));
                 }

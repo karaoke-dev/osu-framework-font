@@ -17,7 +17,7 @@ namespace osu.Framework.Tests.Helper
         /// (10m 10)
         /// </example>
         /// <param name="str">Vector2 string format</param>
-        /// <returns><see cref="RubyTag"/>Vector2 object</returns>
+        /// <returns><see cref="Vector2"/>Vector2 object</returns>
         public static Vector2 ParseVector2(string str)
         {
             if (string.IsNullOrEmpty(str))

@@ -137,7 +137,7 @@ namespace osu.Framework.Tests.Visual.Sprites
         [Ignore("This feature will be removed")]
         public void TestBorder()
         {
-            // todo : will be replaced by rander effect.
+            // todo : will be replaced by render effect.
         }
 
         [TestCase(false, "")]
@@ -166,7 +166,6 @@ namespace osu.Framework.Tests.Visual.Sprites
         [Ignore("This property not need to be tested.")]
         public void TestSizing()
         {
-
         }
 
         [TestCase(null, null, null)]
