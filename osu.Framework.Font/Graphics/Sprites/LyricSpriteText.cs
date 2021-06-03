@@ -123,7 +123,6 @@ namespace osu.Framework.Graphics.Sprites
 
         private PositionText[] filterValidValues(PositionText[] texts)
         {
-            string text = Text;
             return texts?.Where(positionText => Math.Min(positionText.StartIndex, positionText.EndIndex) >= 0
                                                 && Math.Max(positionText.StartIndex, positionText.EndIndex) <= text.Length
                                                 && positionText.EndIndex > positionText.StartIndex).ToArray();
@@ -787,14 +786,14 @@ namespace osu.Framework.Graphics.Sprites
         {
             const int builder_max_width = int.MaxValue;
             return new PositionTextBuilder(store, Font, RubyFont, builder_max_width, UseFullGlyphHeight,
-                            new Vector2(0, -rubyMargin), rubySpacing, charactersBacking, FixedWidthExcludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter, RelativePosition.Top, rubyAlignment);
+                new Vector2(0, -rubyMargin), rubySpacing, charactersBacking, FixedWidthExcludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter, RelativePosition.Top, rubyAlignment);
         }
 
         protected virtual PositionTextBuilder CreateRomajiTextBuilder(ITexturedGlyphLookupStore store)
         {
             const int builder_max_width = int.MaxValue;
             return new PositionTextBuilder(store, Font, RomajiFont, builder_max_width, UseFullGlyphHeight,
-                            new Vector2(0, romajiMargin), romajiSpacing, charactersBacking, FixedWidthExcludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter, RelativePosition.Bottom, romajiAlignment);
+                new Vector2(0, romajiMargin), romajiSpacing, charactersBacking, FixedWidthExcludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter, RelativePosition.Bottom, romajiAlignment);
         }
 
         public override string ToString() => $@"""{displayedText}"" " + base.ToString();

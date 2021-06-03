@@ -17,8 +17,8 @@ namespace osu.Framework.Tests.Helper
         /// [0,3]:ruby
         /// [0,3]:romaji
         /// </example>
-        /// <param name="str">Ruby tag string format</param>
-        /// <returns><see cref="RubyTag"/>Ruby tag object</returns>
+        /// <param name="str">Position text string format</param>
+        /// <returns><see cref="PositionText"/>Position text object</returns>
         public static PositionText ParsePositionText(string str)
         {
             if (string.IsNullOrEmpty(str))

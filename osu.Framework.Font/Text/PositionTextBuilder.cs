@@ -36,9 +36,11 @@ namespace osu.Framework.Text
         /// <param name="neverFixedWidthCharacters">The characters for which fixed width should never be applied.</param>
         /// <param name="fallbackCharacter">The character to use if a glyph lookup fails.</param>
         /// <param name="fixedWidthReferenceCharacter">The character to use to calculate the fixed width width. Defaults to 'm'.</param>
+        /// <param name="relativePosition">Should be added into top or bottom.</param>
+        /// <param name="alignment">Lyric text alignment.</param>
         public PositionTextBuilder(ITexturedGlyphLookupStore store, FontUsage mainTextFont, FontUsage font, float maxWidth, bool useFontSizeAsHeight = true, Vector2 startOffset = default,
-                                     Vector2 spacing = default, List<TextBuilderGlyph> characterList = null, char[] neverFixedWidthCharacters = null,
-                                     char fallbackCharacter = '?', char fixedWidthReferenceCharacter = 'm', RelativePosition relativePosition = RelativePosition.Top, LyricTextAlignment alignment = LyricTextAlignment.Auto)
+                                   Vector2 spacing = default, List<TextBuilderGlyph> characterList = null, char[] neverFixedWidthCharacters = null,
+                                   char fallbackCharacter = '?', char fixedWidthReferenceCharacter = 'm', RelativePosition relativePosition = RelativePosition.Top, LyricTextAlignment alignment = LyricTextAlignment.Auto)
             : base(store, font, maxWidth, useFontSizeAsHeight, startOffset, spacing, characterList, neverFixedWidthCharacters, fallbackCharacter, fixedWidthReferenceCharacter)
         {
             this.store = store;
@@ -55,7 +57,7 @@ namespace osu.Framework.Text
         /// <summary>
         /// Appends text to this <see cref="TextBuilder"/>.
         /// </summary>
-        /// <param name="text">The text to append.</param>
+        /// <param name="positionText">The text to append.</param>
         public void AddText(PositionText positionText)
         {
             var text = positionText.Text;
