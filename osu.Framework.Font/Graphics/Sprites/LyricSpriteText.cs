@@ -74,6 +74,8 @@ namespace osu.Framework.Graphics.Sprites
                 text = value;
 
                 current.Value = text;
+
+                invalidate(true);
             }
         }
 
@@ -100,7 +102,6 @@ namespace osu.Framework.Graphics.Sprites
                 rubies = filterValidValues(value);
 
                 invalidate(true);
-                Invalidate(Invalidation.All);
             }
         }
 
@@ -117,7 +118,6 @@ namespace osu.Framework.Graphics.Sprites
                 romajies = filterValidValues(value);
 
                 invalidate(true);
-                Invalidate(Invalidation.All);
             }
         }
 
