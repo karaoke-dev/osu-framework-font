@@ -8,7 +8,6 @@ using System.Linq;
 using osu.Framework.Extensions.IEnumerableExtensions;
 using osu.Framework.Layout;
 using osu.Framework.Text;
-using osu.Framework.Utils;
 using osuTK;
 
 namespace osu.Framework.Graphics.Sprites
@@ -25,7 +24,7 @@ namespace osu.Framework.Graphics.Sprites
         /// <summary>
         /// The characters in local space.
         /// </summary>
-        protected List<TextBuilderGlyph> Characters
+        public List<TextBuilderGlyph> Characters
         {
             get
             {
@@ -145,39 +144,5 @@ namespace osu.Framework.Graphics.Sprites
 
         private Vector2 premultipliedShadowOffset =>
             shadowOffsetCache.IsValid ? shadowOffsetCache.Value : shadowOffsetCache.Value = ToScreenSpace(shadowOffset * Font.Size) - ToScreenSpace(Vector2.Zero);
-
-        public float GetPercentageWidth(TextIndex startIndex, TextIndex endIndex, float percentage = 0)
-        {
-            if (Characters == null)
-                return 0;
-
-            var charLength = Characters.Count;
-            if (charLength == 0)
-                return 0;
-
-            startIndex = TextIndexUtils.Clamp(startIndex, 0, charLength - 1);
-            endIndex = TextIndexUtils.Clamp(endIndex, 0, charLength - 1);
-
-            var left = getWidth(startIndex);
-            var right = getWidth(endIndex);
-
-            var width = left * (1 - percentage) + right * percentage;
-            return width + Margin.Left;
-
-            float getWidth(TextIndex index)
-            {
-                switch (index.State)
-                {
-                    case TextIndex.IndexState.Start:
-                        return Characters[index.Index].DrawRectangle.Left;
-
-                    case TextIndex.IndexState.End:
-                        return Characters[index.Index].DrawRectangle.Right;
-
-                    default:
-                        throw new InvalidOperationException(nameof(index.State));
-                }
-            }
-        }
     }
 }

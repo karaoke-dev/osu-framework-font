@@ -3,8 +3,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Layout;
+using osu.Framework.Utils;
 using osuTK;
 
 namespace osu.Framework.Graphics.Sprites
@@ -151,22 +152,7 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
-        private IReadOnlyDictionary<TextIndex, double> timeTags = new Dictionary<TextIndex, double>();
-
-        public IReadOnlyDictionary<TextIndex, double> TimeTags
-        {
-            get => timeTags;
-            set
-            {
-                // Check timetag's index and time is ordered.
-                var orderedByIndexDictionary = value?.OrderBy(x => x.Key).ToDictionary(d => d.Key, d => d.Value);
-                var orderedByTimeDictionary = value?.OrderBy(x => x.Value).ToDictionary(d => d.Key, d => d.Value);
-                if (!orderedByIndexDictionary.SequenceEqual(orderedByTimeDictionary))
-                    throw new Exception($"{nameof(value)} should be ordered.");
-
-                timeTags = orderedByIndexDictionary;
-            }
-        }
+        public IReadOnlyDictionary<TextIndex, double> TimeTags { get; set; } = new Dictionary<TextIndex, double>();
 
         public ILyricTexture FrontTextTexture
         {
@@ -292,113 +278,32 @@ namespace osu.Framework.Graphics.Sprites
         // TODO : implement
         public KaraokeTextSmartHorizon KaraokeTextSmartHorizon { get; set; }
 
-        protected override void Update()
+        protected override bool OnInvalidate(Invalidation invalidation, InvalidationSource source)
         {
-            if (Time.Current < LifetimeStart || Time.Current > LifetimeEnd)
-                return;
+            var result = base.OnInvalidate(invalidation, source);
 
-            updateMask();
-            base.Update();
-        }
+            var hasTimeTag = TimeTags != null;
+            var hasText = !string.IsNullOrEmpty(Text);
+            if (!invalidation.HasFlag(Invalidation.Presence) || !hasTimeTag || !hasText)
+                return result;
 
-        private bool resetAfterOutOfRange;
+            // reset masking transform.
+            frontLyricTextContainer.ClearTransforms();
 
-        private void updateMask()
-        {
-            var percentage = getPercentageByTime(Time.Current);
-            if (percentage.Status != DisplayPercentage.DisplayStatus.Available && resetAfterOutOfRange)
-                return;
+            // process time-tag should in the text-range
+            var characters = frontLyricText.Characters;
 
-            float maskWidth;
-
-            switch (percentage.Status)
+            foreach (var (textIndex, time) in TimeTags)
             {
-                case DisplayPercentage.DisplayStatus.Exceed:
-                case DisplayPercentage.DisplayStatus.NotYet:
-                    resetAfterOutOfRange = true;
-
-                    maskWidth = percentage.Status == DisplayPercentage.DisplayStatus.Exceed ? backLyricTextContainer.Width : 0;
-                    break;
-
-                default:
-                    resetAfterOutOfRange = false;
-
-                    // Calculate mask width
-                    maskWidth = GetPercentageWidth(percentage.StartIndex, percentage.EndIndex, percentage.TextPercentage);
-                    break;
+                // text-index should be in the range.
+                var validTextIndex = TextIndexUtils.Clamp(textIndex, 0, Text.Length);
+                var characterRectangle = characters[validTextIndex.Index].DrawRectangle;
+                var position = validTextIndex.State == TextIndex.IndexState.Start ? characterRectangle.Left : characterRectangle.Right;
+                var duration = Math.Max(time - Time.Current, 0);
+                frontLyricTextContainer.ResizeWidthTo(position, duration);
             }
 
-            // Update front karaoke text's width
-            frontLyricTextContainer.Width = maskWidth;
-        }
-
-        public float GetPercentageWidth(TextIndex startIndex, TextIndex endIndex, float percentage = 0)
-            => backLyricText.GetPercentageWidth(startIndex, endIndex, percentage);
-
-        private DisplayPercentage getPercentageByTime(double time)
-        {
-            var availableTimeTags = TimeTags.Where(x => x.Key.Index >= 0 && x.Key.Index < Text.Length)
-                                            .ToDictionary(d => d.Key, d => d.Value);
-
-            if (!availableTimeTags.Any())
-                return new DisplayPercentage(DisplayPercentage.DisplayStatus.NotYet);
-
-            // Less than start time
-            if (time < availableTimeTags.FirstOrDefault().Value)
-                return new DisplayPercentage(DisplayPercentage.DisplayStatus.NotYet);
-
-            // More the end time
-            if (time > availableTimeTags.LastOrDefault().Value)
-                return new DisplayPercentage(DisplayPercentage.DisplayStatus.Exceed);
-
-            var startTagTime = availableTimeTags.LastOrDefault(x => x.Value < time);
-            var endTagTime = availableTimeTags.FirstOrDefault(x => x.Value > time);
-
-            var percentage = Math.Min((time - startTagTime.Value) / (endTagTime.Value - startTagTime.Value), 1);
-            return new DisplayPercentage(startTagTime.Key, endTagTime.Key, (float)percentage);
-        }
-
-        internal readonly struct DisplayPercentage
-        {
-            public DisplayPercentage(DisplayStatus status)
-            {
-                StartIndex = EndIndex = new TextIndex();
-
-                if (status == DisplayStatus.Exceed)
-                    StartIndex = EndIndex = new TextIndex(int.MaxValue);
-                else if (status == DisplayStatus.NotYet)
-                    StartIndex = EndIndex = new TextIndex(int.MinValue);
-                else if (status == DisplayStatus.Available)
-                    throw new ArgumentOutOfRangeException($"Cannot accept type {nameof(DisplayStatus.Available)}");
-
-                Status = status;
-                TextPercentage = 0;
-            }
-
-            public DisplayPercentage(TextIndex startTime, TextIndex endTime, float textPercentage)
-            {
-                StartIndex = startTime;
-                EndIndex = endTime;
-                TextPercentage = textPercentage;
-                Status = DisplayStatus.Available;
-            }
-
-            public TextIndex StartIndex { get; }
-
-            public TextIndex EndIndex { get; }
-
-            public float TextPercentage { get; }
-
-            public DisplayStatus Status { get; }
-
-            public enum DisplayStatus
-            {
-                Available,
-
-                Exceed,
-
-                NotYet
-            }
+            return true;
         }
     }
 }
