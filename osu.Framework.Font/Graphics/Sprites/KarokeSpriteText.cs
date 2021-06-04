@@ -296,7 +296,7 @@ namespace osu.Framework.Graphics.Sprites
             foreach (var (textIndex, time) in TimeTags)
             {
                 // text-index should be in the range.
-                var validTextIndex = TextIndexUtils.Clamp(textIndex, 0, Text.Length);
+                var validTextIndex = TextIndexUtils.Clamp(textIndex, 0, Text.Length - 1);
                 var characterRectangle = characters[validTextIndex.Index].DrawRectangle;
                 var position = validTextIndex.State == TextIndex.IndexState.Start ? characterRectangle.Left : characterRectangle.Right;
                 var duration = Math.Max(time - Time.Current, 0);
