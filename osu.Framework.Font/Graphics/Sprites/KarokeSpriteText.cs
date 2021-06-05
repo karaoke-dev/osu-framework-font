@@ -3,9 +3,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Layout;
-using osu.Framework.Utils;
 using osuTK;
 
 namespace osu.Framework.Graphics.Sprites
@@ -292,18 +292,31 @@ namespace osu.Framework.Graphics.Sprites
 
             // process time-tag should in the text-range
             var characters = frontLyricText.Characters;
+            var validTimeTag = TimeTags
+                               .Where(x => x.Key.Index >= 0 && x.Key.Index < Text.Length)
+                               .OrderBy(x => x.Value);
 
-            foreach (var (textIndex, time) in TimeTags)
+            var startTime = validTimeTag.FirstOrDefault().Value;
+
+            // get transform sequence and set initial delay time.
+            var transformSequence = frontLyricTextContainer.Delay(startTime - Time.Current).Then();
+
+            var previousTime = startTime;
+
+            foreach (var (textIndex, time) in validTimeTag)
             {
                 // text-index should be in the range.
-                var validTextIndex = TextIndexUtils.Clamp(textIndex, 0, Text.Length);
-                var characterRectangle = characters[validTextIndex.Index].DrawRectangle;
-                var position = validTextIndex.State == TextIndex.IndexState.Start ? characterRectangle.Left : characterRectangle.Right;
-                var duration = Math.Max(time - Time.Current, 0);
-                frontLyricTextContainer.ResizeWidthTo(position, duration);
+                var characterRectangle = characters[textIndex.Index].DrawRectangle;
+                var position = textIndex.State == TextIndex.IndexState.Start ? characterRectangle.Left : characterRectangle.Right;
+                var duration = Math.Max(time - previousTime, 0);
+                transformSequence.ResizeWidthTo(position, duration).Then();
+
+                previousTime = time;
             }
 
             return true;
         }
+
+        public override bool RemoveCompletedTransforms => false;
     }
 }
