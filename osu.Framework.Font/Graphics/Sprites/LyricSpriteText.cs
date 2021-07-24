@@ -757,8 +757,8 @@ namespace osu.Framework.Graphics.Sprites
         {
             var excludeCharacters = FixedWidthExcludeCharacters ?? default_never_fixed_width_characters;
 
-            var rubyHeight = (ReserveRubyHeight || (Rubies?.Any() ?? false)) ? RubyFont.Size : 0;
-            var romajiHeight = (ReserveRomajiHeight || (Romajies?.Any() ?? false)) ? RomajiFont.Size : 0;
+            var rubyHeight = ReserveRubyHeight || (Rubies?.Any() ?? false) ? RubyFont.Size : 0;
+            var romajiHeight = ReserveRomajiHeight || (Romajies?.Any() ?? false) ? RomajiFont.Size : 0;
             var startOffset = new Vector2(Padding.Left, Padding.Top + rubyHeight);
             var spacing = Spacing + new Vector2(0, rubyHeight + romajiHeight);
 
