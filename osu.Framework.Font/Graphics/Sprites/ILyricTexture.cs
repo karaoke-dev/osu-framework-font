@@ -54,7 +54,7 @@ namespace osu.Framework.Graphics.Sprites
             var targetSize = direction == Direction.Horizontal ? width : height;
 
             // create a texture is targetSize*1
-            var singleLineSample = createSingaleLineSample(targetSize);
+            var singleLineSample = createSingleLineSample(targetSize);
 
             var image = Image.LoadPixelData<Rgba32>(singleLineSample, targetSize, 1);
             image.Mutate(x => x.Resize(targetSize, direction == Direction.Horizontal ? height : width));
@@ -68,7 +68,7 @@ namespace osu.Framework.Graphics.Sprites
             return texture;
         }
 
-        private byte[] createSingaleLineSample(int size)
+        private byte[] createSingleLineSample(int size)
         {
             var rawData = new byte[size * sizeof(int)];
             var colors = Colors.ToDictionary(k => (int)(k.Key * size), v => v.Value);

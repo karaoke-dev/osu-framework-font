@@ -50,13 +50,13 @@ namespace osu.Framework.Tests.Visual.Sprites
                 Width = width
             }));
 
-            AddStep("Create lyric with ruby", () => setContents(() => new DefaultLyricSpriteText(true)
+            AddStep("Create lyric with ruby", () => setContents(() => new DefaultLyricSpriteText()
             {
                 AllowMultiline = true,
                 Width = width
             }));
 
-            AddStep("Create lyric with romaji", () => setContents(() => new DefaultLyricSpriteText(false, true)
+            AddStep("Create lyric with romaji", () => setContents(() => new DefaultLyricSpriteText(false)
             {
                 AllowMultiline = true,
                 Width = width
@@ -93,12 +93,12 @@ namespace osu.Framework.Tests.Visual.Sprites
                 UseFullGlyphHeight = use
             }));
 
-            AddStep("Create lyric with ruby", () => setContents(() => new DefaultLyricSpriteText(true)
+            AddStep("Create lyric with ruby", () => setContents(() => new DefaultLyricSpriteText()
             {
                 UseFullGlyphHeight = use
             }));
 
-            AddStep("Create lyric with romaji", () => setContents(() => new DefaultLyricSpriteText(false, true)
+            AddStep("Create lyric with romaji", () => setContents(() => new DefaultLyricSpriteText(false)
             {
                 UseFullGlyphHeight = use
             }));
@@ -213,7 +213,7 @@ namespace osu.Framework.Tests.Visual.Sprites
                 ReserveRomajiHeight = reserveRomajiHeight,
             }));
 
-            AddStep("Create lyric with ruby", () => setContents(() => new DefaultLyricSpriteText(true)
+            AddStep("Create lyric with ruby", () => setContents(() => new DefaultLyricSpriteText()
             {
                 Width = multiLine ? 50 : 200,
                 AllowMultiline = multiLine,
@@ -221,7 +221,7 @@ namespace osu.Framework.Tests.Visual.Sprites
                 ReserveRomajiHeight = reserveRomajiHeight,
             }));
 
-            AddStep("Create lyric with romaji", () => setContents(() => new DefaultLyricSpriteText(false, true)
+            AddStep("Create lyric with romaji", () => setContents(() => new DefaultLyricSpriteText(false)
             {
                 Width = multiLine ? 50 : 200,
                 AllowMultiline = multiLine,
