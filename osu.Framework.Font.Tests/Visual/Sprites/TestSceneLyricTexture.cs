@@ -40,7 +40,7 @@ namespace osu.Framework.Tests.Visual.Sprites
             }));
         }
 
-        private Drawable createKaraokeText(ILyricTexture lyricTexture)
+        private static Drawable createKaraokeText(ILyricTexture lyricTexture)
         {
             return new Sprite
             {

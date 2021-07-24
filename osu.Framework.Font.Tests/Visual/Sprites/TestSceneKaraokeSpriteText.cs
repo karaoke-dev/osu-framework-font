@@ -77,7 +77,7 @@ namespace osu.Framework.Tests.Visual.Sprites
             });
         }
 
-        private Drawable createCustomizeTimeTagKaraokeText(Dictionary<TextIndex, double> timeTags)
+        private static Drawable createCustomizeTimeTagKaraokeText(Dictionary<TextIndex, double> timeTags)
         {
             return new KaraokeSpriteText
             {
