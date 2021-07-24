@@ -379,7 +379,7 @@ namespace osu.Framework.Graphics.Sprites
         private float borderRadius;
 
         /// <summary>
-        /// Gets or sets the border redius
+        /// Gets or sets the border radius
         /// </summary>
         public float BorderRadius
         {
