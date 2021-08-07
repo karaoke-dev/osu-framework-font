@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using osu.Framework.Graphics.Sprites;
+using osu.Framework.IO.Stores;
 using osuTK;
 
 namespace osu.Framework.Text
@@ -38,7 +39,7 @@ namespace osu.Framework.Text
         /// <param name="fixedWidthReferenceCharacter">The character to use to calculate the fixed width width. Defaults to 'm'.</param>
         /// <param name="relativePosition">Should be added into top or bottom.</param>
         /// <param name="alignment">Lyric text alignment.</param>
-        public PositionTextBuilder(ITexturedGlyphLookupStore store, FontUsage mainTextFont, FontUsage font, float maxWidth, bool useFontSizeAsHeight = true, Vector2 startOffset = default,
+        public PositionTextBuilder(ITexturedGlyphLookupStore store, FontUsage mainTextFont, FontUsage font, float maxWidth = int.MaxValue, bool useFontSizeAsHeight = true, Vector2 startOffset = default,
                                    Vector2 spacing = default, List<TextBuilderGlyph> characterList = null, char[] neverFixedWidthCharacters = null,
                                    char fallbackCharacter = '?', char fixedWidthReferenceCharacter = 'm', RelativePosition relativePosition = RelativePosition.Top, LyricTextAlignment alignment = LyricTextAlignment.Auto)
             : base(store, font, maxWidth, useFontSizeAsHeight, startOffset, spacing, characterList, neverFixedWidthCharacters, fallbackCharacter, fixedWidthReferenceCharacter)
@@ -64,13 +65,16 @@ namespace osu.Framework.Text
             if (string.IsNullOrEmpty(text))
                 return;
 
-            // calculate start position
+            // calculate start render position
             var canterPosition = getCenterPosition(positionText.StartIndex, positionText.EndIndex);
             var textWidth = getTextWidth(positionText.Text);
-            var textHeight = getTextHeight(positionText.Text);
-            var position = new Vector2(canterPosition.X - textWidth / 2, canterPosition.Y - textHeight);
+            var yOffset = -getTextHeight(font);
+            var position = new Vector2(canterPosition.X - textWidth / 2, canterPosition.Y + yOffset);
+
+            // set start render position
             setCurrentPosition(position + startOffset);
 
+            // render the chars.
             foreach (var c in text)
             {
                 if (!AddCharacter(c))
@@ -89,14 +93,24 @@ namespace osu.Framework.Text
 
         private Vector2 getCenterPosition(int startCharIndex, int endCharIndex)
         {
-            var startCharacterRectangle = Characters[startCharIndex].DrawRectangle;
-            var endCharacterRectangle = Characters[endCharIndex - 1].DrawRectangle;
+            var starCharacter = Characters[startCharIndex];
+            var endCharacter = Characters[endCharIndex - 1];
+            var startCharacterRectangle = starCharacter.DrawRectangle;
+            var endCharacterRectangle = endCharacter.DrawRectangle;
 
-            // todo : should deal with multi-line issue.
-            var x = (startCharacterRectangle.Left + endCharacterRectangle.Right) / 2;
-            // should use main font's size
-            var y = startCharacterRectangle.Centre.Y + (relativePosition == RelativePosition.Top ? -mainTextFont.Size / 2 : mainTextFont.Size / 2);
-            return new Vector2(x, y);
+            // if center position is between two lines, then should let canter position in the first line.
+            var leftX = startCharacterRectangle.Left;
+            var rightX = endCharacterRectangle.Right > leftX
+                ? endCharacterRectangle.Right
+                : Characters.Max(c => c.DrawRectangle.Right);
+            var x = (leftX + rightX) / 2;
+
+            // because each character has different height, so we need to get base text height from here.
+            var y = startCharacterRectangle.Centre.Y - starCharacter.YOffset;
+
+            // return center position.
+            var yOffset = relativePosition == RelativePosition.Top ? 0 : getTextHeight(mainTextFont);
+            return new Vector2(x, y + yOffset);
         }
 
         private float getTextWidth(string text)
@@ -107,12 +121,16 @@ namespace osu.Framework.Text
             return text.Sum(c => (getTexturedGlyph(c)?.Width ?? 0) * font.Size) + spacing.X * text.Length - 1;
         }
 
-        private float getTextHeight(string text)
+        private float getTextHeight(FontUsage fontUsage)
         {
-            if (string.IsNullOrEmpty(text))
-                return 0;
+            if (!(store is FontStore fontStore))
+                return fontUsage.Size;
 
-            return getTexturedGlyph(text[0]).Height * font.Size;
+            var baseHeight = fontStore.GetBaseHeight(fontUsage.FontName);
+            if (baseHeight.HasValue)
+                return baseHeight.Value * fontUsage.Size;
+
+            return fontUsage.Size;
         }
 
         private ITexturedCharacterGlyph getTexturedGlyph(char character)
