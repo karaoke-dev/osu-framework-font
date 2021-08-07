@@ -38,7 +38,7 @@ namespace osu.Framework.Text
         /// <param name="fixedWidthReferenceCharacter">The character to use to calculate the fixed width width. Defaults to 'm'.</param>
         /// <param name="relativePosition">Should be added into top or bottom.</param>
         /// <param name="alignment">Lyric text alignment.</param>
-        public PositionTextBuilder(ITexturedGlyphLookupStore store, FontUsage mainTextFont, FontUsage font, float maxWidth, bool useFontSizeAsHeight = true, Vector2 startOffset = default,
+        public PositionTextBuilder(ITexturedGlyphLookupStore store, FontUsage mainTextFont, FontUsage font, float maxWidth = int.MaxValue, bool useFontSizeAsHeight = true, Vector2 startOffset = default,
                                    Vector2 spacing = default, List<TextBuilderGlyph> characterList = null, char[] neverFixedWidthCharacters = null,
                                    char fallbackCharacter = '?', char fixedWidthReferenceCharacter = 'm', RelativePosition relativePosition = RelativePosition.Top, LyricTextAlignment alignment = LyricTextAlignment.Auto)
             : base(store, font, maxWidth, useFontSizeAsHeight, startOffset, spacing, characterList, neverFixedWidthCharacters, fallbackCharacter, fixedWidthReferenceCharacter)
@@ -89,14 +89,17 @@ namespace osu.Framework.Text
 
         private Vector2 getCenterPosition(int startCharIndex, int endCharIndex)
         {
-            var startCharacterRectangle = Characters[startCharIndex].DrawRectangle;
-            var endCharacterRectangle = Characters[endCharIndex - 1].DrawRectangle;
+            var starCharacter = Characters[startCharIndex];
+            var endCharacter = Characters[endCharIndex - 1];
+            var startCharacterRectangle = starCharacter.DrawRectangle;
+            var endCharacterRectangle = endCharacter.DrawRectangle;
 
             // todo : should deal with multi-line issue.
             var x = (startCharacterRectangle.Left + endCharacterRectangle.Right) / 2;
             // should use main font's size
-            var y = startCharacterRectangle.Centre.Y + (relativePosition == RelativePosition.Top ? -mainTextFont.Size / 2 : mainTextFont.Size / 2);
-            return new Vector2(x, y);
+            var y = startCharacterRectangle.Centre.Y - starCharacter.YOffset;
+            var yOffset = relativePosition == RelativePosition.Top ? -mainTextFont.Size / 2 : mainTextFont.Size / 2;
+            return new Vector2(x, y + yOffset);
         }
 
         private float getTextWidth(string text)
