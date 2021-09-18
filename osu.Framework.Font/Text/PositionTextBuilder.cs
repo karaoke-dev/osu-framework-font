@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using osu.Framework.Graphics.Sprites;
-using osu.Framework.IO.Stores;
 using osuTK;
 
 namespace osu.Framework.Text
@@ -67,8 +66,8 @@ namespace osu.Framework.Text
 
             // calculate start render position
             var canterPosition = getCenterPosition(positionText.StartIndex, positionText.EndIndex);
-            var textWidth = getTextWidth(positionText.Text);
-            var yOffset = -getTextHeight(font);
+            var textWidth = getTextWidth(text);
+            var yOffset = -getMainTextHeight(text.FirstOrDefault(), font);
             var position = new Vector2(canterPosition.X - textWidth / 2, canterPosition.Y + yOffset);
 
             // set start render position
@@ -109,7 +108,7 @@ namespace osu.Framework.Text
             var y = startCharacterRectangle.Centre.Y - starCharacter.YOffset;
 
             // return center position.
-            var yOffset = relativePosition == RelativePosition.Top ? 0 : getTextHeight(mainTextFont);
+            var yOffset = relativePosition == RelativePosition.Top ? 0 : getMainTextHeight(starCharacter.Character, mainTextFont);
             return new Vector2(x, y + yOffset);
         }
 
@@ -121,16 +120,13 @@ namespace osu.Framework.Text
             return text.Sum(c => (getTexturedGlyph(c)?.Width ?? 0) * font.Size) + spacing.X * text.Length - 1;
         }
 
-        private float getTextHeight(FontUsage fontUsage)
+        private float getMainTextHeight(char c, FontUsage fontUsage)
         {
-            if (!(store is FontStore fontStore))
-                return fontUsage.Size;
+            var texture = getTexturedGlyph(c);
+            if (texture == null)
+                return 0;
 
-            var baseHeight = fontStore.GetBaseHeight(fontUsage.FontName);
-            if (baseHeight.HasValue)
-                return baseHeight.Value * fontUsage.Size;
-
-            return fontUsage.Size;
+            return texture.Baseline * fontUsage.Size;
         }
 
         private ITexturedCharacterGlyph getTexturedGlyph(char character)

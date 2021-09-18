@@ -62,7 +62,7 @@ namespace osu.Framework.Graphics.Sprites
                 if (string.IsNullOrEmpty(displayedText))
                     return;
 
-                textBuilder = CreateTextBuilder(store);
+                textBuilder = getTextBuilder();
                 textBuilder.AddText(displayedText);
 
                 if (rubies?.Any() ?? false)
