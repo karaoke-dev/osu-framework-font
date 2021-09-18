@@ -15,6 +15,7 @@ using osu.Framework.Text;
 using osuTK;
 using osuTK.Graphics;
 using System.Linq;
+using osu.Framework.Layout;
 
 namespace osu.Framework.Graphics.Sprites
 {
@@ -41,6 +42,7 @@ namespace osu.Framework.Graphics.Sprites
             AddLayout(parentScreenSpaceCache);
             AddLayout(localScreenSpaceCache);
             AddLayout(shadowOffsetCache);
+            AddLayout(textBuilderCache);
         }
 
         [BackgroundDependencyLoader]
@@ -144,7 +146,7 @@ namespace osu.Framework.Graphics.Sprites
             {
                 font = value;
 
-                invalidate(true);
+                invalidate(true, true);
                 shadowOffsetCache.Invalidate();
             }
         }
@@ -161,7 +163,7 @@ namespace osu.Framework.Graphics.Sprites
             {
                 rubyFont = value;
 
-                invalidate(true);
+                invalidate(true, true);
                 shadowOffsetCache.Invalidate();
             }
         }
@@ -178,7 +180,7 @@ namespace osu.Framework.Graphics.Sprites
             {
                 romajiFont = value;
 
-                invalidate(true);
+                invalidate(true, true);
                 shadowOffsetCache.Invalidate();
             }
         }
@@ -208,7 +210,7 @@ namespace osu.Framework.Graphics.Sprites
 
                 allowMultiline = value;
 
-                invalidate(true);
+                invalidate(true, true);
             }
         }
 
@@ -288,7 +290,7 @@ namespace osu.Framework.Graphics.Sprites
 
                 useFullGlyphHeight = value;
 
-                invalidate(true);
+                invalidate(true, true);
             }
         }
 
@@ -305,7 +307,7 @@ namespace osu.Framework.Graphics.Sprites
                 textTexture = value;
                 Colour = (textTexture as SolidTexture)?.SolidColor ?? Color4.White;
 
-                Invalidate(Invalidation.All);
+                Invalidate();
             }
         }
 
@@ -321,7 +323,7 @@ namespace osu.Framework.Graphics.Sprites
 
                 shadowTexture = value;
                 ShadowColour = (shadowTexture as SolidTexture)?.SolidColor ?? Color4.White;
-                Invalidate(Invalidation.All);
+                Invalidate();
             }
         }
 
@@ -336,7 +338,7 @@ namespace osu.Framework.Graphics.Sprites
                     return;
 
                 borderTexture = value;
-                Invalidate(Invalidation.All);
+                Invalidate();
             }
         }
 
@@ -354,7 +356,7 @@ namespace osu.Framework.Graphics.Sprites
                     return;
 
                 rubyAlignment = value;
-                invalidate(true);
+                invalidate(true, true);
             }
         }
 
@@ -372,7 +374,7 @@ namespace osu.Framework.Graphics.Sprites
                     return;
 
                 romajiAlignment = value;
-                invalidate(true);
+                invalidate(true, true);
             }
         }
 
@@ -410,7 +412,7 @@ namespace osu.Framework.Graphics.Sprites
 
                 border = value;
 
-                invalidate(true);
+                invalidate(true, true);
             }
         }
 
@@ -434,7 +436,7 @@ namespace osu.Framework.Graphics.Sprites
                     AllowMultiline = false;
 
                 truncate = value;
-                invalidate(true);
+                invalidate(true, true);
             }
         }
 
@@ -452,7 +454,7 @@ namespace osu.Framework.Graphics.Sprites
                 if (ellipsisString == value) return;
 
                 ellipsisString = value;
-                invalidate(true);
+                invalidate(true, true);
             }
         }
 
@@ -485,7 +487,7 @@ namespace osu.Framework.Graphics.Sprites
                 base.Width = value;
                 explicitWidth = value;
 
-                invalidate(true);
+                invalidate(true, true);
             }
         }
 
@@ -506,7 +508,7 @@ namespace osu.Framework.Graphics.Sprites
                     return;
 
                 maxWidth = value;
-                invalidate(true);
+                invalidate(true, true);
             }
         }
 
@@ -531,7 +533,7 @@ namespace osu.Framework.Graphics.Sprites
                 base.Height = value;
                 explicitHeight = value;
 
-                invalidate(true);
+                invalidate(true, true);
             }
         }
 
@@ -572,7 +574,7 @@ namespace osu.Framework.Graphics.Sprites
 
                 spacing = value;
 
-                invalidate(true);
+                invalidate(true, true);
             }
         }
 
@@ -591,7 +593,7 @@ namespace osu.Framework.Graphics.Sprites
 
                 rubySpacing = value;
 
-                invalidate(true);
+                invalidate(true, true);
             }
         }
 
@@ -610,7 +612,7 @@ namespace osu.Framework.Graphics.Sprites
 
                 romajiSpacing = value;
 
-                invalidate(true);
+                invalidate(true, true);
             }
         }
 
@@ -635,7 +637,7 @@ namespace osu.Framework.Graphics.Sprites
 
                 padding = value;
 
-                invalidate(true);
+                invalidate(true, true);
             }
         }
 
@@ -654,7 +656,7 @@ namespace osu.Framework.Graphics.Sprites
 
                 rubyMargin = value;
 
-                invalidate(true);
+                invalidate(true, true);
             }
         }
 
@@ -673,7 +675,7 @@ namespace osu.Framework.Graphics.Sprites
 
                 romajiMargin = value;
 
-                invalidate(true);
+                invalidate(true, true);
             }
         }
 
@@ -692,7 +694,7 @@ namespace osu.Framework.Graphics.Sprites
 
                 reserveRubyHeight = value;
 
-                invalidate(true);
+                invalidate(true, true);
             }
         }
 
@@ -711,7 +713,7 @@ namespace osu.Framework.Graphics.Sprites
 
                 reserveRomajiHeight = value;
 
-                invalidate(true);
+                invalidate(true, true);
             }
         }
 
@@ -721,10 +723,14 @@ namespace osu.Framework.Graphics.Sprites
 
         #region Invalidation
 
-        private void invalidate(bool layout = false)
+        private void invalidate(bool characters = false, bool textBuilder = false)
         {
-            if (layout)
+            if (characters)
                 charactersCache.Invalidate();
+
+            if (textBuilder)
+                InvalidateTextBuilder();
+
             parentScreenSpaceCache.Invalidate();
             localScreenSpaceCache.Invalidate();
 
@@ -747,6 +753,13 @@ namespace osu.Framework.Graphics.Sprites
         /// The character to fallback to use if a character glyph lookup failed.
         /// </summary>
         protected virtual char FallbackCharacter => '?';
+
+        private readonly LayoutValue<TextBuilder> textBuilderCache = new LayoutValue<TextBuilder>(Invalidation.DrawSize, InvalidationSource.Parent);
+
+        /// <summary>
+        /// Invalidates the current <see cref="TextBuilder"/>, causing a new one to be created next time it's required via <see cref="CreateTextBuilder"/>.
+        /// </summary>
+        protected void InvalidateTextBuilder() => textBuilderCache.Invalidate();
 
         /// <summary>
         /// Creates a <see cref="TextBuilder"/> to generate the character layout for this <see cref="LyricSpriteText"/>.
@@ -796,23 +809,22 @@ namespace osu.Framework.Graphics.Sprites
                 new Vector2(0, romajiMargin), romajiSpacing, charactersBacking, FixedWidthExcludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter, RelativePosition.Bottom, romajiAlignment);
         }
 
+        private TextBuilder getTextBuilder()
+        {
+            if (!textBuilderCache.IsValid)
+                textBuilderCache.Value = CreateTextBuilder(store);
+
+            return textBuilderCache.Value;
+        }
+
         public override string ToString() => $@"""{displayedText}"" " + base.ToString();
 
-        /// <summary>
-        /// Gets the base height of the font used by this text. If the font of this text is invalid, 0 is returned.
-        /// </summary>
         public float LineBaseHeight
         {
             get
             {
-                var baseHeight = store.GetBaseHeight(Font.FontName);
-                if (baseHeight.HasValue)
-                    return baseHeight.Value * Font.Size;
-
-                if (string.IsNullOrEmpty(displayedText))
-                    return 0;
-
-                return store.GetBaseHeight(displayedText[0]).GetValueOrDefault() * Font.Size;
+                computeCharacters();
+                return textBuilderCache.Value.LineBaseHeight;
             }
         }
 
