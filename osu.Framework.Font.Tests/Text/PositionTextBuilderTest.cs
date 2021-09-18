@@ -21,24 +21,27 @@ namespace osu.Framework.Tests.Text
         private const float y_offset = 2;
         private const float x_advance = 3;
         private const float width = 4;
-        private const float height = 5;
-        private const float kerning = -6;
+        private const float baseline = 5;
+        private const float height = 6;
+        private const float kerning = -7;
 
-        private const float b_x_offset = 7;
-        private const float b_y_offset = 8;
-        private const float b_x_advance = 9;
-        private const float b_width = 10;
-        private const float b_height = 11;
-        private const float b_kerning = -12;
+        private const float b_x_offset = 8;
+        private const float b_y_offset = 9;
+        private const float b_x_advance = 10;
+        private const float b_width = 11;
+        private const float b_baseline = 12;
+        private const float b_height = 13;
+        private const float b_kerning = -14;
 
-        private const float m_x_offset = 13;
-        private const float m_y_offset = 14;
-        private const float m_x_advance = 15;
-        private const float m_width = 16;
-        private const float m_height = 17;
-        private const float m_kerning = -18;
+        private const float m_x_offset = 15;
+        private const float m_y_offset = 16;
+        private const float m_x_advance = 17;
+        private const float m_width = 18;
+        private const float m_baseline = 19;
+        private const float m_height = 20;
+        private const float m_kerning = -21;
 
-        private static readonly Vector2 spacing = new Vector2(19, 20);
+        private static readonly Vector2 spacing = new(19, 20);
 
         private static readonly TestFontUsage normal_font = new("test");
         private static readonly TestFontUsage fixed_width_font = new("test-fixedwidth", fixedWidth: true);
@@ -48,19 +51,19 @@ namespace osu.Framework.Tests.Text
         public PositionTextBuilderTest()
         {
             fontStore = new TestStore(
-                new GlyphEntry(normal_font, new TestGlyph('カ', x_offset, y_offset, x_advance, width, height, kerning)),
-                new GlyphEntry(normal_font, new TestGlyph('ラ', b_x_offset, b_y_offset, b_x_advance, b_width, b_height, b_kerning)),
-                new GlyphEntry(normal_font, new TestGlyph('オ', m_x_offset, m_y_offset, m_x_advance, m_width, m_height, m_kerning)),
-                new GlyphEntry(fixed_width_font, new TestGlyph('ケ', x_offset, y_offset, x_advance, width, height, kerning)),
-                new GlyphEntry(fixed_width_font, new TestGlyph('か', b_x_offset, b_y_offset, b_x_advance, b_width, b_height, b_kerning)),
-                new GlyphEntry(fixed_width_font, new TestGlyph('ら', m_x_offset, m_y_offset, m_x_advance, m_width, m_height, m_kerning)),
-                new GlyphEntry(fixed_width_font, new TestGlyph('お', x_offset, y_offset, x_advance, width, height, kerning)),
-                new GlyphEntry(fixed_width_font, new TestGlyph('け', b_x_offset, b_y_offset, b_x_advance, b_width, b_height, b_kerning)),
-                new GlyphEntry(fixed_width_font, new TestGlyph('k', m_x_offset, m_y_offset, m_x_advance, m_width, m_height, m_kerning)),
-                new GlyphEntry(fixed_width_font, new TestGlyph('a', x_offset, y_offset, x_advance, width, height, kerning)),
-                new GlyphEntry(fixed_width_font, new TestGlyph('r', b_x_offset, b_y_offset, b_x_advance, b_width, b_height, b_kerning)),
-                new GlyphEntry(fixed_width_font, new TestGlyph('o', m_x_offset, m_y_offset, m_x_advance, m_width, m_height, m_kerning)),
-                new GlyphEntry(fixed_width_font, new TestGlyph('e', x_offset, y_offset, x_advance, width, height, kerning))
+                new GlyphEntry(normal_font, new TestGlyph('カ', x_offset, y_offset, x_advance, width, baseline, height, kerning)),
+                new GlyphEntry(normal_font, new TestGlyph('ラ', b_x_offset, b_y_offset, b_x_advance, b_width, b_baseline, b_height, b_kerning)),
+                new GlyphEntry(normal_font, new TestGlyph('オ', m_x_offset, m_y_offset, m_x_advance, m_width, m_baseline, m_height, m_kerning)),
+                new GlyphEntry(fixed_width_font, new TestGlyph('ケ', x_offset, y_offset, x_advance, width, baseline, height, kerning)),
+                new GlyphEntry(fixed_width_font, new TestGlyph('か', b_x_offset, b_y_offset, b_x_advance, b_width, b_baseline, b_height, b_kerning)),
+                new GlyphEntry(fixed_width_font, new TestGlyph('ら', m_x_offset, m_y_offset, m_x_advance, m_width, m_baseline, m_height, m_kerning)),
+                new GlyphEntry(fixed_width_font, new TestGlyph('お', x_offset, y_offset, x_advance, width, baseline, height, kerning)),
+                new GlyphEntry(fixed_width_font, new TestGlyph('け', b_x_offset, b_y_offset, b_x_advance, b_width, b_baseline, b_height, b_kerning)),
+                new GlyphEntry(fixed_width_font, new TestGlyph('k', m_x_offset, m_y_offset, m_x_advance, m_width, m_baseline, m_height, m_kerning)),
+                new GlyphEntry(fixed_width_font, new TestGlyph('a', x_offset, y_offset, x_advance, width, baseline, height, kerning)),
+                new GlyphEntry(fixed_width_font, new TestGlyph('r', b_x_offset, b_y_offset, b_x_advance, b_width, b_baseline, b_height, b_kerning)),
+                new GlyphEntry(fixed_width_font, new TestGlyph('o', m_x_offset, m_y_offset, m_x_advance, m_width, m_baseline, m_height, m_kerning)),
+                new GlyphEntry(fixed_width_font, new TestGlyph('e', x_offset, y_offset, x_advance, width, baseline, height, kerning))
             );
         }
 
@@ -100,8 +103,8 @@ namespace osu.Framework.Tests.Text
             }
         }
 
-        [TestCase('か', 5.5f, 9.5f)]
-        [TestCase('ら', 8.5f, 15.5f)]
+        [TestCase('か', 6.0f, 14.0f)]
+        [TestCase('ら', 9.5f, 14.0f)]
         public void TestAddPositionTextPosition(char c, float x, float y)
         {
             var builder = new PositionTextBuilder(fontStore, normal_font, normal_font, characterList: characterList);
@@ -178,12 +181,15 @@ namespace osu.Framework.Tests.Text
             public float YOffset { get; }
             public float XAdvance { get; }
             public float Width { get; }
+
+            public float Baseline { get; }
             public float Height { get; }
+
             public char Character { get; }
 
             private readonly float glyphKerning;
 
-            public TestGlyph(char character, float xOffset, float yOffset, float xAdvance, float width, float height, float kerning)
+            public TestGlyph(char character, float xOffset, float yOffset, float xAdvance, float width, float baseline, float height, float kerning)
             {
                 glyphKerning = kerning;
                 Character = character;
@@ -191,6 +197,7 @@ namespace osu.Framework.Tests.Text
                 YOffset = yOffset;
                 XAdvance = xAdvance;
                 Width = width;
+                Baseline = baseline;
                 Height = height;
             }
 
