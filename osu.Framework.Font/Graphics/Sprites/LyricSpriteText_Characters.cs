@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using osu.Framework.Extensions.IEnumerableExtensions;
 using osu.Framework.Layout;
@@ -33,8 +32,6 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
-        private bool isComputingCharacters;
-
         /// <summary>
         /// Compute character textures and positions.
         /// </summary>
@@ -52,18 +49,21 @@ namespace osu.Framework.Graphics.Sprites
 
             charactersBacking.Clear();
 
-            Debug.Assert(!isComputingCharacters, "Cyclic invocation of computeCharacters()!");
-            isComputingCharacters = true;
+            // Todo: Re-enable this assert after autosize is split into two passes.
+            // Debug.Assert(!isComputingCharacters, "Cyclic invocation of computeCharacters()!");
 
-            TextBuilder textBuilder = null;
+            Vector2 textBounds = Vector2.Zero;
 
             try
             {
                 if (string.IsNullOrEmpty(displayedText))
                     return;
 
-                textBuilder = getTextBuilder();
+                TextBuilder textBuilder = getTextBuilder();
+
+                textBuilder.Reset();
                 textBuilder.AddText(displayedText);
+                textBounds = textBuilder.Bounds;
 
                 if (rubies?.Any() ?? false)
                 {
@@ -80,17 +80,16 @@ namespace osu.Framework.Graphics.Sprites
             finally
             {
                 if (requiresAutoSizedWidth)
-                    base.Width = (textBuilder?.Bounds.X ?? 0) + Padding.Right;
+                    base.Width = textBounds.X + Padding.Right;
 
                 if (requiresAutoSizedHeight)
                 {
                     var romajiHeight = ReserveRomajiHeight || (Romajies?.Any() ?? false) ? RomajiFont.Size : 0;
-                    base.Height = (textBuilder?.Bounds.Y ?? 0) + romajiHeight + Padding.Bottom;
+                    base.Height = textBounds.Y + romajiHeight + Padding.Bottom;
                 }
 
                 base.Width = Math.Min(base.Width, MaxWidth);
 
-                isComputingCharacters = false;
                 charactersCache.Validate();
             }
         }

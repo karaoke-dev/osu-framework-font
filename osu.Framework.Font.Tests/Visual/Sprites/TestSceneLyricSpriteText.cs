@@ -50,7 +50,7 @@ namespace osu.Framework.Tests.Visual.Sprites
                 Width = width
             }));
 
-            AddStep("Create lyric with ruby", () => setContents(() => new DefaultLyricSpriteText()
+            AddStep("Create lyric with ruby", () => setContents(() => new DefaultLyricSpriteText
             {
                 AllowMultiline = true,
                 Width = width
@@ -93,7 +93,7 @@ namespace osu.Framework.Tests.Visual.Sprites
                 UseFullGlyphHeight = use
             }));
 
-            AddStep("Create lyric with ruby", () => setContents(() => new DefaultLyricSpriteText()
+            AddStep("Create lyric with ruby", () => setContents(() => new DefaultLyricSpriteText
             {
                 UseFullGlyphHeight = use
             }));
@@ -213,7 +213,7 @@ namespace osu.Framework.Tests.Visual.Sprites
                 ReserveRomajiHeight = reserveRomajiHeight,
             }));
 
-            AddStep("Create lyric with ruby", () => setContents(() => new DefaultLyricSpriteText()
+            AddStep("Create lyric with ruby", () => setContents(() => new DefaultLyricSpriteText
             {
                 Width = multiLine ? 50 : 200,
                 AllowMultiline = multiLine,
