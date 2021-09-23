@@ -103,6 +103,8 @@ namespace osu.Framework.Graphics.Sprites
 
             protected virtual void UpdateUniforms(IShader targetShader, FrameBuffer current)
             {
+                if (targetShader is ICustomizedShader customizedShader)
+                    customizedShader.ApplyValue(current);
             }
         }
 
