@@ -22,7 +22,7 @@ namespace osu.Framework.Graphics.Sprites
     /// <summary>
     /// A container for simple text rendering purposes. If more complex text rendering is required, use <see cref="TextFlowContainer"/> instead.
     /// </summary>
-    public partial class LyricSpriteText : Drawable, IHasLineBaseHeight, ITexturedShaderDrawable, IHasFilterTerms, IFillFlowContainer, IHasCurrentValue<string>, IHasRuby, IHasRomaji, IHasTexture
+    public partial class LyricSpriteText : Drawable, IHasLineBaseHeight, ITexturedShaderDrawable, IHasFilterTerms, IFillFlowContainer, IHasCurrentValue<string>, IHasRuby, IHasRomaji, IHasTexture, IBufferedDrawable
     {
         private const float default_text_size = 48;
         private static readonly char[] default_never_fixed_width_characters = { '.', ',', ':', ' ' };
@@ -57,6 +57,77 @@ namespace osu.Framework.Graphics.Sprites
                 var unused = store.Get(font.FontName, character) ?? store.Get(null, character);
             }
         }
+
+        #region frame buffer
+
+        public DrawColourInfo? FrameBufferDrawColour => base.DrawColourInfo;
+
+        // Children should not receive the true colour to avoid colour doubling when the frame-buffers are rendered to the back-buffer.
+        public override DrawColourInfo DrawColourInfo
+        {
+            get
+            {
+                // Todo: This is incorrect.
+                var blending = Blending;
+                blending.ApplyDefaultToInherited();
+
+                return new DrawColourInfo(Color4.White, blending);
+            }
+        }
+
+        private Color4 backgroundColour = new Color4(0, 0, 0, 0);
+
+        /// <summary>
+        /// The background colour of the framebuffer. Transparent black by default.
+        /// </summary>
+        public Color4 BackgroundColour
+        {
+            get => backgroundColour;
+            set
+            {
+                if (backgroundColour == value)
+                    return;
+
+                backgroundColour = value;
+                Invalidate(Invalidation.DrawNode);
+            }
+        }
+
+        private Vector2 frameBufferScale = Vector2.One;
+
+        public Vector2 FrameBufferScale
+        {
+            get => frameBufferScale;
+            set
+            {
+                if (frameBufferScale == value)
+                    return;
+
+                frameBufferScale = value;
+                Invalidate(Invalidation.DrawNode);
+            }
+        }
+
+        #endregion
+
+        #region Shader
+
+        private IShader shader;
+
+        public IShader Shader
+        {
+            get => shader;
+            set
+            {
+                if (shader == value)
+                    return;
+
+                shader = value;
+                Invalidate(Invalidation.DrawNode);
+            }
+        }
+
+        #endregion
 
         #region text
 
