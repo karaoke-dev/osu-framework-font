@@ -22,7 +22,7 @@ namespace osu.Framework.Graphics.Sprites
     /// <summary>
     /// A container for simple text rendering purposes. If more complex text rendering is required, use <see cref="TextFlowContainer"/> instead.
     /// </summary>
-    public partial class LyricSpriteText : Drawable, IHasLineBaseHeight, ITexturedShaderDrawable, IHasFilterTerms, IFillFlowContainer, IHasCurrentValue<string>, IHasRuby, IHasRomaji, IHasTexture, IBufferedDrawable
+    public partial class LyricSpriteText : Drawable, IHasLineBaseHeight, IHasFilterTerms, IFillFlowContainer, IHasCurrentValue<string>, IHasRuby, IHasRomaji, IHasTexture, IBufferedDrawable
     {
         private const float default_text_size = 48;
         private static readonly char[] default_never_fixed_width_characters = { '.', ',', ':', ' ' };
