@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Shaders;
 using osu.Framework.Layout;
 using osuTK;
 
@@ -40,6 +41,18 @@ namespace osu.Framework.Graphics.Sprites
                     Child = frontLyricText = new T()
                 }
             };
+        }
+
+        public IReadOnlyList<IShader> LeftLyricTextShaders
+        {
+            get => frontLyricText.Shaders;
+            set => frontLyricText.Shaders = value;
+        }
+
+        public IReadOnlyList<IShader> RightLyricTextShaders
+        {
+            get => backLyricText.Shaders;
+            set => backLyricText.Shaders = value;
         }
 
         public string Text
