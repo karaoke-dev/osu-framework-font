@@ -8,7 +8,7 @@ using osu.Framework.Testing;
 using osuTK;
 using osuTK.Graphics;
 
-namespace osu.Framework.Tests.Visual.Sprites
+namespace osu.Framework.Font.Tests.Visual.Sprites
 {
     public class TestSceneKaraokeSpriteText : TestScene
     {

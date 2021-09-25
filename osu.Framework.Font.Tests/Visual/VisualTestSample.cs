@@ -4,7 +4,7 @@
 using NUnit.Framework;
 using osu.Framework.Testing;
 
-namespace osu.Framework.Tests.Visual
+namespace osu.Framework.Font.Tests.Visual
 {
     [TestFixture]
     public sealed class VisualTestSample : TestScene

@@ -5,7 +5,7 @@ using System;
 using NUnit.Framework;
 using osu.Framework.Graphics.Sprites;
 
-namespace osu.Framework.Tests.Graphics
+namespace osu.Framework.Font.Tests.Graphics
 {
     [TestFixture]
     public class TextIndexTest

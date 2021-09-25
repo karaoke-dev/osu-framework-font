@@ -4,17 +4,17 @@
 using System;
 using NUnit.Framework;
 using osu.Framework.Allocation;
+using osu.Framework.Font.Tests.Helper;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shaders;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Testing;
-using osu.Framework.Tests.Helper;
 using osuTK;
 using osuTK.Graphics;
 
-namespace osu.Framework.Tests.Visual.Sprites
+namespace osu.Framework.Font.Tests.Visual.Sprites
 {
     public class TestSceneLyricSpriteTextWithShader : TestScene
     {

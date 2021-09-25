@@ -5,7 +5,7 @@ using System.Reflection;
 using osu.Framework.Allocation;
 using osu.Framework.IO.Stores;
 
-namespace osu.Framework.Tests
+namespace osu.Framework.Font.Tests
 {
     internal class TestGame : Game
     {

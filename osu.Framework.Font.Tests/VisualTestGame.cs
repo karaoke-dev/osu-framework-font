@@ -8,7 +8,7 @@ using osu.Framework.Graphics.Cursor;
 using osu.Framework.Platform;
 using osu.Framework.Testing;
 
-namespace osu.Framework.Tests
+namespace osu.Framework.Font.Tests
 {
     internal class VisualTestGame : TestGame
     {

@@ -5,11 +5,11 @@ using System;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using osu.Framework.Extensions.Color4Extensions;
+using osu.Framework.Font.Tests.Helper;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Testing;
-using osu.Framework.Tests.Helper;
 
-namespace osu.Framework.Tests.Visual.Sprites
+namespace osu.Framework.Font.Tests.Visual.Sprites
 {
     public class TestSceneLyricSpriteText : TestScene
     {
