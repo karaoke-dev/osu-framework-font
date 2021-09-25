@@ -3,7 +3,7 @@
 
 using osu.Framework.Testing;
 
-namespace osu.Framework.Tests
+namespace osu.Framework.Font.Tests
 {
     internal class AutomatedVisualTestGame : TestGame
     {

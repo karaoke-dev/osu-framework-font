@@ -10,7 +10,7 @@ using osu.Framework.Graphics.Textures;
 using osu.Framework.Text;
 using osuTK;
 
-namespace osu.Framework.Tests.Text
+namespace osu.Framework.Font.Tests.Text
 {
     [TestFixture]
     public class PositionTextBuilderTest

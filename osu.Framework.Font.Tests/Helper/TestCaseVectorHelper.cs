@@ -5,7 +5,7 @@ using System;
 using System.Text.RegularExpressions;
 using osuTK;
 
-namespace osu.Framework.Tests.Helper
+namespace osu.Framework.Font.Tests.Helper
 {
     public static class TestCaseVectorHelper
     {

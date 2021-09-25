@@ -4,7 +4,7 @@
 using System;
 using osu.Framework.Platform;
 
-namespace osu.Framework.Tests
+namespace osu.Framework.Font.Tests
 {
     public static class Program
     {

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using osu.Framework.Graphics.Sprites;
 
-namespace osu.Framework.Tests.Helper
+namespace osu.Framework.Font.Tests.Helper
 {
     public static class TestCaseTagHelper
     {

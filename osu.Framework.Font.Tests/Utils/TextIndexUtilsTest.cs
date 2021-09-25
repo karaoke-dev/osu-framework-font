@@ -6,7 +6,7 @@ using NUnit.Framework;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Utils;
 
-namespace osu.Framework.Tests.Utils
+namespace osu.Framework.Font.Tests.Utils
 {
     public class TextIndexUtilsTest
     {
