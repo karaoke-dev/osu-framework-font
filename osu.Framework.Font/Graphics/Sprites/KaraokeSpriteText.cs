@@ -4,10 +4,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using osu.Framework.Allocation;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shaders;
 using osu.Framework.Layout;
 using osuTK;
+using osuTK.Graphics;
 
 namespace osu.Framework.Graphics.Sprites
 {
@@ -15,13 +17,16 @@ namespace osu.Framework.Graphics.Sprites
     {
     }
 
-    public class KaraokeSpriteText<T> : CompositeDrawable, IHasRuby, IHasRomaji where T : LyricSpriteText, new()
+    public partial class KaraokeSpriteText<T> : CompositeDrawable, IMultiShaderBufferedDrawable, IHasRuby, IHasRomaji where T : LyricSpriteText, new()
     {
         private readonly Container frontLyricTextContainer;
         private readonly T frontLyricText;
 
         private readonly Container backLyricTextContainer;
         private readonly T backLyricText;
+
+        public IShader TextureShader { get; private set; }
+        public IShader RoundedTextureShader { get; private set; }
 
         public KaraokeSpriteText()
         {
@@ -43,6 +48,80 @@ namespace osu.Framework.Graphics.Sprites
             };
         }
 
+        [BackgroundDependencyLoader]
+        private void load(ShaderManager shaders)
+        {
+            TextureShader = shaders.Load(VertexShaderDescriptor.TEXTURE_2, FragmentShaderDescriptor.TEXTURE);
+            RoundedTextureShader = shaders.Load(VertexShaderDescriptor.TEXTURE_2, FragmentShaderDescriptor.TEXTURE_ROUNDED);
+        }
+
+        #region frame buffer
+
+        public DrawColourInfo? FrameBufferDrawColour => base.DrawColourInfo;
+
+        // Children should not receive the true colour to avoid colour doubling when the frame-buffers are rendered to the back-buffer.
+        public override DrawColourInfo DrawColourInfo
+        {
+            get
+            {
+                // Todo: This is incorrect.
+                var blending = Blending;
+                blending.ApplyDefaultToInherited();
+
+                return new DrawColourInfo(Color4.White, blending);
+            }
+        }
+
+        private Color4 backgroundColour = new Color4(0, 0, 0, 0);
+
+        /// <summary>
+        /// The background colour of the framebuffer. Transparent black by default.
+        /// </summary>
+        public Color4 BackgroundColour
+        {
+            get => backgroundColour;
+            set
+            {
+                if (backgroundColour == value)
+                    return;
+
+                backgroundColour = value;
+                Invalidate(Invalidation.DrawNode);
+            }
+        }
+
+        private Vector2 frameBufferScale = Vector2.One;
+
+        public Vector2 FrameBufferScale
+        {
+            get => frameBufferScale;
+            set
+            {
+                if (frameBufferScale == value)
+                    return;
+
+                frameBufferScale = value;
+                Invalidate(Invalidation.DrawNode);
+            }
+        }
+
+        #endregion
+
+        #region Shader
+
+        private readonly List<IShader> shaders = new List<IShader>();
+
+        public IReadOnlyList<IShader> Shaders
+        {
+            get => shaders;
+            set
+            {
+                shaders.Clear();
+                shaders.AddRange(value);
+                Invalidate(Invalidation.DrawNode);
+            }
+        }
+
         public IReadOnlyList<IShader> LeftLyricTextShaders
         {
             get => frontLyricText.Shaders;
@@ -55,6 +134,10 @@ namespace osu.Framework.Graphics.Sprites
             set => backLyricText.Shaders = value;
         }
 
+        #endregion
+
+        #region text
+
         public string Text
         {
             get => frontLyricText.Text;
@@ -62,16 +145,6 @@ namespace osu.Framework.Graphics.Sprites
             {
                 frontLyricText.Text = value;
                 backLyricText.Text = value;
-            }
-        }
-
-        public FontUsage Font
-        {
-            get => frontLyricText.Font;
-            set
-            {
-                frontLyricText.Font = value;
-                backLyricText.Font = value;
             }
         }
 
@@ -95,6 +168,20 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
+        #endregion
+
+        #region font
+
+        public FontUsage Font
+        {
+            get => frontLyricText.Font;
+            set
+            {
+                frontLyricText.Font = value;
+                backLyricText.Font = value;
+            }
+        }
+
         public FontUsage RubyFont
         {
             get => frontLyricText.RubyFont;
@@ -115,57 +202,29 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
-        public int RubyMargin
+        #endregion
+
+        #region style
+
+        public bool Shadow
         {
-            get => frontLyricText.RubyMargin;
+            get => frontLyricText.Shadow;
             set
             {
-                frontLyricText.RubyMargin = value;
-                backLyricText.RubyMargin = value;
+                frontLyricText.Shadow = value;
+                backLyricText.Shadow = value;
             }
         }
 
-        public int RomajiMargin
+        public Vector2 ShadowOffset
         {
-            get => frontLyricText.RomajiMargin;
+            get => frontLyricText.ShadowOffset;
             set
             {
-                frontLyricText.RomajiMargin = value;
-                backLyricText.RomajiMargin = value;
+                frontLyricText.ShadowOffset = value;
+                backLyricText.ShadowOffset = value;
             }
         }
-
-        public Vector2 Spacing
-        {
-            get => frontLyricText.Spacing;
-            set
-            {
-                frontLyricText.Spacing = value;
-                backLyricText.Spacing = value;
-            }
-        }
-
-        public Vector2 RubySpacing
-        {
-            get => frontLyricText.RubySpacing;
-            set
-            {
-                frontLyricText.RubySpacing = value;
-                backLyricText.RubySpacing = value;
-            }
-        }
-
-        public Vector2 RomajiSpacing
-        {
-            get => frontLyricText.RomajiSpacing;
-            set
-            {
-                frontLyricText.RomajiSpacing = value;
-                backLyricText.RomajiSpacing = value;
-            }
-        }
-
-        public IReadOnlyDictionary<TextIndex, double> TimeTags { get; set; } = new Dictionary<TextIndex, double>();
 
         public ILyricTexture FrontTextTexture
         {
@@ -201,48 +260,6 @@ namespace osu.Framework.Graphics.Sprites
         {
             get => backLyricText.ShadowTexture;
             set => backLyricText.ShadowTexture = value;
-        }
-
-        public bool Shadow
-        {
-            get => frontLyricText.Shadow;
-            set
-            {
-                frontLyricText.Shadow = value;
-                backLyricText.Shadow = value;
-            }
-        }
-
-        public Vector2 ShadowOffset
-        {
-            get => frontLyricText.ShadowOffset;
-            set
-            {
-                frontLyricText.ShadowOffset = value;
-                backLyricText.ShadowOffset = value;
-            }
-        }
-
-        public override double LifetimeStart
-        {
-            get => base.LifetimeStart;
-            set
-            {
-                base.LifetimeStart = value;
-                frontLyricText.LifetimeStart = value;
-                backLyricText.LifetimeStart = value;
-            }
-        }
-
-        public override double LifetimeEnd
-        {
-            get => base.LifetimeEnd;
-            set
-            {
-                base.LifetimeEnd = value;
-                frontLyricText.LifetimeEnd = value;
-                backLyricText.LifetimeEnd = value;
-            }
         }
 
         public LyricTextAlignment RubyAlignment
@@ -282,6 +299,90 @@ namespace osu.Framework.Graphics.Sprites
             {
                 frontLyricText.Border = value;
                 backLyricText.Border = value;
+            }
+        }
+
+        #endregion
+
+        #region text spacing
+
+        public Vector2 Spacing
+        {
+            get => frontLyricText.Spacing;
+            set
+            {
+                frontLyricText.Spacing = value;
+                backLyricText.Spacing = value;
+            }
+        }
+
+        public Vector2 RubySpacing
+        {
+            get => frontLyricText.RubySpacing;
+            set
+            {
+                frontLyricText.RubySpacing = value;
+                backLyricText.RubySpacing = value;
+            }
+        }
+
+        public Vector2 RomajiSpacing
+        {
+            get => frontLyricText.RomajiSpacing;
+            set
+            {
+                frontLyricText.RomajiSpacing = value;
+                backLyricText.RomajiSpacing = value;
+            }
+        }
+
+        #endregion
+
+        #region margin/padding
+
+        public int RubyMargin
+        {
+            get => frontLyricText.RubyMargin;
+            set
+            {
+                frontLyricText.RubyMargin = value;
+                backLyricText.RubyMargin = value;
+            }
+        }
+
+        public int RomajiMargin
+        {
+            get => frontLyricText.RomajiMargin;
+            set
+            {
+                frontLyricText.RomajiMargin = value;
+                backLyricText.RomajiMargin = value;
+            }
+        }
+
+        #endregion
+
+        public IReadOnlyDictionary<TextIndex, double> TimeTags { get; set; } = new Dictionary<TextIndex, double>();
+
+        public override double LifetimeStart
+        {
+            get => base.LifetimeStart;
+            set
+            {
+                base.LifetimeStart = value;
+                frontLyricText.LifetimeStart = value;
+                backLyricText.LifetimeStart = value;
+            }
+        }
+
+        public override double LifetimeEnd
+        {
+            get => base.LifetimeEnd;
+            set
+            {
+                base.LifetimeEnd = value;
+                frontLyricText.LifetimeEnd = value;
+                backLyricText.LifetimeEnd = value;
             }
         }
 

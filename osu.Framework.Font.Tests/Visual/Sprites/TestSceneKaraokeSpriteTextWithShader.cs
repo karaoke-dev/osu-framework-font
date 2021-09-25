@@ -22,6 +22,26 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
         [Resolved]
         private ShaderManager shaderManager { get; set; }
 
+        [TestCase("CRT")]
+        [TestCase("not_found_shader")] // notice that missing shader will let whole sprite text being white.
+        public void ApplyShader(string shaderName)
+        {
+            var shader = shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, shaderName);
+            AddStep("Create lyric", () => setContents((spriteText) =>
+            {
+                spriteText.Shaders = new[]
+                {
+                    shader,
+                };
+
+                spriteText.Shadow = true;
+                spriteText.ShadowOffset = new Vector2(3);
+                spriteText.FrontTextShadowTexture = new SolidTexture { SolidColor = Color4.Green };
+                spriteText.FrontTextTexture = new SolidTexture { SolidColor = Color4.LightBlue };
+                spriteText.BackTextShadowTexture = new SolidTexture { SolidColor = Color4.Red };
+            }));
+        }
+
         [TestCase("CRT", "CRT")]
         [TestCase("CRT", "not_found_shader")] // notice that missing shader will let whole sprite text being white.
         public void ApplyLyricTextShader(string leftShaderName, string rightShaderName)
@@ -64,6 +84,39 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
                 spriteText.RightLyricTextShaders = new[]
                 {
                     new OutlineShader(shader)
+                    {
+                        Radius = 10,
+                        OutlineColour = Color4.Red,
+                    },
+                };
+            }));
+        }
+
+        [TestCase]
+        public void ApplyShaderInBothPart()
+        {
+            var outlineShader = shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, "Outline");
+            var crtShader = shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, "CRT");
+            AddStep("Create lyric", () => setContents((spriteText) =>
+            {
+                // apply shader in karaoke sprite text.
+                spriteText.Shaders = new[]
+                {
+                    crtShader
+                };
+
+                // apply shader in lyric sprite text.
+                spriteText.LeftLyricTextShaders = new[]
+                {
+                    new OutlineShader(outlineShader)
+                    {
+                        Radius = 10,
+                        OutlineColour = Color4.Green,
+                    },
+                };
+                spriteText.RightLyricTextShaders = new[]
+                {
+                    new OutlineShader(outlineShader)
                     {
                         Radius = 10,
                         OutlineColour = Color4.Red,
