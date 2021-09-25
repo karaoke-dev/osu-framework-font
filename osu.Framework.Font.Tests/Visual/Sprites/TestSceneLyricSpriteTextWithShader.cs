@@ -27,7 +27,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
         public void ApplyShader(string shaderName)
         {
             var shader = shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, shaderName);
-            AddStep("Create lyric", () => setContents((spriteText) => spriteText.Shaders = new[]
+            AddStep("Create lyric", () => setContents(spriteText => spriteText.Shaders = new[]
             {
                 shader,
             }));
@@ -43,7 +43,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
                 OutlineColour = Color4.Green,
             };
 
-            AddStep("Create lyric", () => setContents((spriteText) => spriteText.Shaders = new[]
+            AddStep("Create lyric", () => setContents(spriteText => spriteText.Shaders = new[]
             {
                 outlineShader,
             }));
@@ -57,7 +57,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
         {
             // todo : might not use relative to main text in shadow offset.
             var shadowShader = shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, "Shadow");
-            AddStep("Create lyric", () => setContents((spriteText) =>
+            AddStep("Create lyric", () => setContents(spriteText =>
             {
                 spriteText.Shaders = new[]
                 {

@@ -27,7 +27,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
         public void ApplyShader(string shaderName)
         {
             var shader = shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, shaderName);
-            AddStep("Create lyric", () => setContents((spriteText) =>
+            AddStep("Create lyric", () => setContents(spriteText =>
             {
                 spriteText.LeftTextColour = Color4.Green;
                 spriteText.RightTextColour = Color4.Red;
@@ -44,7 +44,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
         {
             var leftShader = shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, leftShaderName);
             var rightShader = shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, rightShaderName);
-            AddStep("Create lyric", () => setContents((spriteText) =>
+            AddStep("Create lyric", () => setContents(spriteText =>
             {
                 spriteText.LeftTextColour = Color4.Green;
                 spriteText.RightTextColour = Color4.Red;
@@ -63,7 +63,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
         public void ApplyLyricTextShaderWithParams()
         {
             var shader = shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, "Outline");
-            AddStep("Create lyric", () => setContents((spriteText) =>
+            AddStep("Create lyric", () => setContents(spriteText =>
             {
                 spriteText.LeftLyricTextShaders = new[]
                 {
@@ -89,7 +89,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
         {
             var outlineShader = shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, "Outline");
             var crtShader = shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, "CRT");
-            AddStep("Create lyric", () => setContents((spriteText) =>
+            AddStep("Create lyric", () => setContents(spriteText =>
             {
                 // apply shader in karaoke sprite text.
                 spriteText.Shaders = new[]
