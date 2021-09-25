@@ -92,6 +92,39 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
             }));
         }
 
+        [TestCase]
+        public void ApplyShaderInBothPart()
+        {
+            var outlineShader = shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, "Outline");
+            var crtShader = shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, "CRT");
+            AddStep("Create lyric", () => setContents((spriteText) =>
+            {
+                // apply shader in karaoke sprite text.
+                spriteText.Shaders = new[]
+                {
+                    crtShader
+                };
+
+                // apply shader in lyric sprite text.
+                spriteText.LeftLyricTextShaders = new[]
+                {
+                    new OutlineShader(outlineShader)
+                    {
+                        Radius = 10,
+                        OutlineColour = Color4.Green,
+                    },
+                };
+                spriteText.RightLyricTextShaders = new[]
+                {
+                    new OutlineShader(outlineShader)
+                    {
+                        Radius = 10,
+                        OutlineColour = Color4.Red,
+                    },
+                };
+            }));
+        }
+
         private void setContents(Action<KaraokeSpriteText> applySpriteTextProperty)
         {
             var startTime = Time.Current;
