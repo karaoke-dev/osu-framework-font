@@ -4,10 +4,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using osu.Framework.Allocation;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shaders;
 using osu.Framework.Layout;
 using osuTK;
+using osuTK.Graphics;
 
 namespace osu.Framework.Graphics.Sprites
 {
@@ -15,13 +17,16 @@ namespace osu.Framework.Graphics.Sprites
     {
     }
 
-    public class KaraokeSpriteText<T> : CompositeDrawable, IHasRuby, IHasRomaji where T : LyricSpriteText, new()
+    public partial class KaraokeSpriteText<T> : CompositeDrawable, IMultiShaderBufferedDrawable, IHasRuby, IHasRomaji where T : LyricSpriteText, new()
     {
         private readonly Container frontLyricTextContainer;
         private readonly T frontLyricText;
 
         private readonly Container backLyricTextContainer;
         private readonly T backLyricText;
+
+        public IShader TextureShader { get; private set; }
+        public IShader RoundedTextureShader { get; private set; }
 
         public KaraokeSpriteText()
         {
@@ -41,6 +46,80 @@ namespace osu.Framework.Graphics.Sprites
                     Child = frontLyricText = new T()
                 }
             };
+        }
+
+        [BackgroundDependencyLoader]
+        private void load(ShaderManager shaders)
+        {
+            TextureShader = shaders.Load(VertexShaderDescriptor.TEXTURE_2, FragmentShaderDescriptor.TEXTURE);
+            RoundedTextureShader = shaders.Load(VertexShaderDescriptor.TEXTURE_2, FragmentShaderDescriptor.TEXTURE_ROUNDED);
+        }
+
+        #region frame buffer
+
+        public DrawColourInfo? FrameBufferDrawColour => base.DrawColourInfo;
+
+        // Children should not receive the true colour to avoid colour doubling when the frame-buffers are rendered to the back-buffer.
+        public override DrawColourInfo DrawColourInfo
+        {
+            get
+            {
+                // Todo: This is incorrect.
+                var blending = Blending;
+                blending.ApplyDefaultToInherited();
+
+                return new DrawColourInfo(Color4.White, blending);
+            }
+        }
+
+        private Color4 backgroundColour = new Color4(0, 0, 0, 0);
+
+        /// <summary>
+        /// The background colour of the framebuffer. Transparent black by default.
+        /// </summary>
+        public Color4 BackgroundColour
+        {
+            get => backgroundColour;
+            set
+            {
+                if (backgroundColour == value)
+                    return;
+
+                backgroundColour = value;
+                Invalidate(Invalidation.DrawNode);
+            }
+        }
+
+        private Vector2 frameBufferScale = Vector2.One;
+
+        public Vector2 FrameBufferScale
+        {
+            get => frameBufferScale;
+            set
+            {
+                if (frameBufferScale == value)
+                    return;
+
+                frameBufferScale = value;
+                Invalidate(Invalidation.DrawNode);
+            }
+        }
+
+        #endregion
+
+        #region Shader
+
+        private readonly List<IShader> shaders = new List<IShader>();
+
+        public IReadOnlyList<IShader> Shaders
+        {
+            get => shaders;
+            set
+            {
+                shaders.Clear();
+                shaders.AddRange(value);
+                Invalidate(Invalidation.DrawNode);
+            }
         }
 
         public IReadOnlyList<IShader> LeftLyricTextShaders
@@ -316,12 +395,6 @@ namespace osu.Framework.Graphics.Sprites
         protected override bool OnInvalidate(Invalidation invalidation, InvalidationSource source)
         {
             var result = base.OnInvalidate(invalidation, source);
-
-            if ((invalidation & Invalidation.DrawNode) > 0)
-            {
-                ++updateVersion;
-                result = true;
-            }
 
             var hasTimeTag = TimeTags != null;
             var hasText = !string.IsNullOrEmpty(Text);
