@@ -12,7 +12,13 @@ namespace osu.Framework.Tests
         [BackgroundDependencyLoader]
         private void load()
         {
+            // add store from osu.game.resources
             Resources.AddStore(new DllResourceStore(@"osu.Game.Resources.dll"));
+
+            // add store from main project
+            Resources.AddStore(new NamespacedResourceStore<byte[]>(new FontResourceStore(), "Resources"));
+
+            // add store from test project
             Resources.AddStore(new NamespacedResourceStore<byte[]>(new DllResourceStore(Assembly.GetExecutingAssembly().Location), "Resources"));
 
             // Add font resource
