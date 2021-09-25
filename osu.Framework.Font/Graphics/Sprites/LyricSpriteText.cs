@@ -41,7 +41,6 @@ namespace osu.Framework.Graphics.Sprites
             AddLayout(charactersCache);
             AddLayout(parentScreenSpaceCache);
             AddLayout(localScreenSpaceCache);
-            AddLayout(shadowOffsetCache);
             AddLayout(textBuilderCache);
         }
 
@@ -216,7 +215,6 @@ namespace osu.Framework.Graphics.Sprites
                 font = value;
 
                 invalidate(true, true);
-                shadowOffsetCache.Invalidate();
             }
         }
 
@@ -233,7 +231,6 @@ namespace osu.Framework.Graphics.Sprites
                 rubyFont = value;
 
                 invalidate(true, true);
-                shadowOffsetCache.Invalidate();
             }
         }
 
@@ -250,7 +247,6 @@ namespace osu.Framework.Graphics.Sprites
                 romajiFont = value;
 
                 invalidate(true, true);
-                shadowOffsetCache.Invalidate();
             }
         }
 
@@ -280,66 +276,6 @@ namespace osu.Framework.Graphics.Sprites
                 allowMultiline = value;
 
                 invalidate(true, true);
-            }
-        }
-
-        private bool shadow;
-
-        /// <summary>
-        /// True if a shadow should be displayed around the text.
-        /// </summary>
-        public bool Shadow
-        {
-            get => shadow;
-            set
-            {
-                if (shadow == value)
-                    return;
-
-                shadow = value;
-
-                Invalidate(Invalidation.DrawNode);
-            }
-        }
-
-        private Color4 shadowColour = new Color4(0, 0, 0, 0.2f);
-
-        /// <summary>
-        /// The colour of the shadow displayed around the text. A shadow will only be displayed if the <see cref="Shadow"/> property is set to true.
-        /// </summary>
-        public Color4 ShadowColour
-        {
-            get => shadowColour;
-            set
-            {
-                if (shadowColour == value)
-                    return;
-
-                shadowColour = value;
-
-                Invalidate(Invalidation.DrawNode);
-            }
-        }
-
-        private Vector2 shadowOffset = new Vector2(0, 0.06f);
-
-        /// <summary>
-        /// The offset of the shadow displayed around the text. A shadow will only be displayed if the <see cref="Shadow"/> property is set to true.
-        /// </summary>
-        public Vector2 ShadowOffset
-        {
-            get => shadowOffset;
-            set
-            {
-                // Need to change size to percentage of font size.
-                var percentagedSize = value / Font.Size;
-                if (shadowOffset == percentagedSize)
-                    return;
-
-                shadowOffset = percentagedSize;
-
-                invalidate(true);
-                shadowOffsetCache.Invalidate();
             }
         }
 

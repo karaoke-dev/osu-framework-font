@@ -48,6 +48,27 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
             }));
         }
 
+        [TestCase(false, null, null)]
+        [TestCase(true, "#FF0000", null)]
+        [TestCase(true, "#FF0000", "(3,3)")]
+        [TestCase(true, "#FF0000", "(-3,-3)")]
+        public void TestShadow(bool shadow, string shadowColor, string shadowOffset)
+        {
+            // todo : might not use relative to main text in shadow offset.
+            var shadowShader = shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, "Shadow");
+            AddStep("Create lyric", () => setContents((spriteText) =>
+            {
+                // todo : should implement those property in shadow shader.
+                //Shadow = shadow,
+                //ShadowColour = Color4Extensions.FromHex(shadowColor ?? "#FFFFFF"),
+                //ShadowOffset = TestCaseVectorHelper.ParseVector2(shadowOffset)
+                spriteText.Shaders = new[]
+                {
+                    shadowShader,
+                };
+            }));
+        }
+
         private void setContents(Action<LyricSpriteText> applySpriteTextProperty)
         {
             Child = new Container

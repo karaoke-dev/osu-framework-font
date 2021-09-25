@@ -4,7 +4,6 @@
 using System;
 using System.Threading.Tasks;
 using NUnit.Framework;
-using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Font.Tests.Helper;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Testing;
@@ -66,21 +65,6 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
             {
                 AllowMultiline = true,
                 Width = width
-            }));
-        }
-
-        [TestCase(false, null, null)]
-        [TestCase(true, "#FF0000", null)]
-        [TestCase(true, "#FF0000", "(3,3)")]
-        [TestCase(true, "#FF0000", "(-3,-3)")]
-        public void TestShadow(bool shadow, string shadowColor, string shadowOffset)
-        {
-            // todo : might not use relative to main text in shadow offset.
-            AddStep("Create lyric", () => setContents(() => new DefaultLyricSpriteText
-            {
-                Shadow = shadow,
-                ShadowColour = Color4Extensions.FromHex(shadowColor ?? "#FFFFFF"),
-                ShadowOffset = TestCaseVectorHelper.ParseVector2(shadowOffset)
             }));
         }
 

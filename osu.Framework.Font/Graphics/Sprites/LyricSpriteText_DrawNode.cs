@@ -3,14 +3,12 @@
 
 using System;
 using System.Collections.Generic;
-using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.OpenGL.Vertices;
 using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Shaders;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.Layout;
 using osuTK;
-using osuTK.Graphics;
 using osuTK.Graphics.ES30;
 
 namespace osu.Framework.Graphics.Sprites
@@ -82,10 +80,6 @@ namespace osu.Framework.Graphics.Sprites
         {
             protected new LyricSpriteText Source => (LyricSpriteText)base.Source;
 
-            private bool shadow;
-            private ColourInfo shadowColour;
-            private Vector2 shadowOffset;
-
             private readonly List<ScreenSpaceCharacterPart> parts = new List<ScreenSpaceCharacterPart>();
 
             public LyricSpriteTextDrawNode(LyricSpriteText source)
@@ -99,13 +93,6 @@ namespace osu.Framework.Graphics.Sprites
 
                 parts.Clear();
                 parts.AddRange(Source.screenSpaceCharacters);
-                shadow = Source.Shadow;
-
-                if (shadow)
-                {
-                    shadowColour = Source.ShadowColour;
-                    shadowOffset = Source.premultipliedShadowOffset;
-                }
             }
 
             public override void Draw(Action<TexturedVertex2D> vertexAction)
@@ -114,29 +101,8 @@ namespace osu.Framework.Graphics.Sprites
 
                 Shader.Bind();
 
-                var avgColour = (Color4)DrawColourInfo.Colour.AverageColour;
-                float shadowAlpha = MathF.Pow(Math.Max(Math.Max(avgColour.R, avgColour.G), avgColour.B), 2);
-
-                //adjust shadow alpha based on highest component intensity to avoid muddy display of darker text.
-                //squared result for quadratic fall-off seems to give the best result.
-                var finalShadowColour = DrawColourInfo.Colour;
-                finalShadowColour.ApplyChild(shadowColour.MultiplyAlpha(shadowAlpha));
-
                 for (int i = 0; i < parts.Count; i++)
                 {
-                    if (shadow)
-                    {
-                        var shadowQuad = parts[i].DrawQuad;
-
-                        DrawQuad(parts[i].Texture,
-                            new Quad(
-                                shadowQuad.TopLeft + shadowOffset,
-                                shadowQuad.TopRight + shadowOffset,
-                                shadowQuad.BottomLeft + shadowOffset,
-                                shadowQuad.BottomRight + shadowOffset),
-                            finalShadowColour, vertexAction: vertexAction, inflationPercentage: parts[i].InflationPercentage);
-                    }
-
                     DrawQuad(parts[i].Texture, parts[i].DrawQuad, DrawColourInfo.Colour, vertexAction: vertexAction, inflationPercentage: parts[i].InflationPercentage);
                 }
 

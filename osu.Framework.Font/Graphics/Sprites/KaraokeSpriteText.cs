@@ -206,26 +206,6 @@ namespace osu.Framework.Graphics.Sprites
 
         #region style
 
-        public bool Shadow
-        {
-            get => frontLyricText.Shadow;
-            set
-            {
-                frontLyricText.Shadow = value;
-                backLyricText.Shadow = value;
-            }
-        }
-
-        public Vector2 ShadowOffset
-        {
-            get => frontLyricText.ShadowOffset;
-            set
-            {
-                frontLyricText.ShadowOffset = value;
-                backLyricText.ShadowOffset = value;
-            }
-        }
-
         public LyricTextAlignment RubyAlignment
         {
             get => frontLyricText.RubyAlignment;

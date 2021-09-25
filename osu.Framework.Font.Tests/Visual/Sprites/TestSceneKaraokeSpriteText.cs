@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Testing;
-using osuTK;
 
 namespace osu.Framework.Font.Tests.Visual.Sprites
 {
@@ -112,8 +111,6 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
                         Text = "ke"
                     }
                 },
-                Shadow = true,
-                ShadowOffset = new Vector2(3),
             };
         }
     }

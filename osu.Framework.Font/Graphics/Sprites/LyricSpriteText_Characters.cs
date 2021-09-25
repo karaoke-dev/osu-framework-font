@@ -138,10 +138,5 @@ namespace osu.Framework.Graphics.Sprites
 
             localScreenSpaceCache.Validate();
         }
-
-        private readonly LayoutValue<Vector2> shadowOffsetCache = new LayoutValue<Vector2>(Invalidation.DrawInfo, InvalidationSource.Parent);
-
-        private Vector2 premultipliedShadowOffset =>
-            shadowOffsetCache.IsValid ? shadowOffsetCache.Value : shadowOffsetCache.Value = ToScreenSpace(shadowOffset * Font.Size) - ToScreenSpace(Vector2.Zero);
     }
 }

@@ -33,9 +33,6 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
                 {
                     shader,
                 };
-
-                spriteText.Shadow = true;
-                spriteText.ShadowOffset = new Vector2(3);
             }));
         }
 
@@ -55,9 +52,6 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
                 {
                     rightShader,
                 };
-
-                spriteText.Shadow = true;
-                spriteText.ShadowOffset = new Vector2(3);
             }));
         }
 
