@@ -226,42 +226,6 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
-        public ILyricTexture FrontTextTexture
-        {
-            get => frontLyricText.TextTexture;
-            set => frontLyricText.TextTexture = value;
-        }
-
-        public ILyricTexture FrontBorderTexture
-        {
-            get => frontLyricText.BorderTexture;
-            set => frontLyricText.BorderTexture = value;
-        }
-
-        public ILyricTexture FrontTextShadowTexture
-        {
-            get => frontLyricText.ShadowTexture;
-            set => frontLyricText.ShadowTexture = value;
-        }
-
-        public ILyricTexture BackTextTexture
-        {
-            get => backLyricText.TextTexture;
-            set => backLyricText.TextTexture = value;
-        }
-
-        public ILyricTexture BackBorderTexture
-        {
-            get => backLyricText.BorderTexture;
-            set => backLyricText.BorderTexture = value;
-        }
-
-        public ILyricTexture BackTextShadowTexture
-        {
-            get => backLyricText.ShadowTexture;
-            set => backLyricText.ShadowTexture = value;
-        }
-
         public LyricTextAlignment RubyAlignment
         {
             get => frontLyricText.RubyAlignment;

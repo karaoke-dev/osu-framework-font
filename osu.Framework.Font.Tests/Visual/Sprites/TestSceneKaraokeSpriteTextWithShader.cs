@@ -36,9 +36,6 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
 
                 spriteText.Shadow = true;
                 spriteText.ShadowOffset = new Vector2(3);
-                spriteText.FrontTextShadowTexture = new SolidTexture { SolidColor = Color4.Green };
-                spriteText.FrontTextTexture = new SolidTexture { SolidColor = Color4.LightBlue };
-                spriteText.BackTextShadowTexture = new SolidTexture { SolidColor = Color4.Red };
             }));
         }
 
@@ -61,9 +58,6 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
 
                 spriteText.Shadow = true;
                 spriteText.ShadowOffset = new Vector2(3);
-                spriteText.FrontTextShadowTexture = new SolidTexture { SolidColor = Color4.Green };
-                spriteText.FrontTextTexture = new SolidTexture { SolidColor = Color4.LightBlue };
-                spriteText.BackTextShadowTexture = new SolidTexture { SolidColor = Color4.Red };
             }));
         }
 

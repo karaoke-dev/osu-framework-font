@@ -22,7 +22,7 @@ namespace osu.Framework.Graphics.Sprites
     /// <summary>
     /// A container for simple text rendering purposes. If more complex text rendering is required, use <see cref="TextFlowContainer"/> instead.
     /// </summary>
-    public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, IHasLineBaseHeight, IHasFilterTerms, IFillFlowContainer, IHasCurrentValue<string>, IHasRuby, IHasRomaji, IHasTexture
+    public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, IHasLineBaseHeight, IHasFilterTerms, IFillFlowContainer, IHasCurrentValue<string>, IHasRuby, IHasRomaji
     {
         private const float default_text_size = 48;
         private static readonly char[] default_never_fixed_width_characters = { '.', ',', ':', ' ' };
@@ -360,54 +360,6 @@ namespace osu.Framework.Graphics.Sprites
                 useFullGlyphHeight = value;
 
                 invalidate(true, true);
-            }
-        }
-
-        private ILyricTexture textTexture;
-
-        public ILyricTexture TextTexture
-        {
-            get => textTexture;
-            set
-            {
-                if (textTexture == value)
-                    return;
-
-                textTexture = value;
-                Colour = (textTexture as SolidTexture)?.SolidColor ?? Color4.White;
-
-                Invalidate();
-            }
-        }
-
-        private ILyricTexture shadowTexture;
-
-        public ILyricTexture ShadowTexture
-        {
-            get => shadowTexture;
-            set
-            {
-                if (shadowTexture == value)
-                    return;
-
-                shadowTexture = value;
-                ShadowColour = (shadowTexture as SolidTexture)?.SolidColor ?? Color4.White;
-                Invalidate();
-            }
-        }
-
-        private ILyricTexture borderTexture;
-
-        public ILyricTexture BorderTexture
-        {
-            get => borderTexture;
-            set
-            {
-                if (borderTexture == value)
-                    return;
-
-                borderTexture = value;
-                Invalidate();
             }
         }
 

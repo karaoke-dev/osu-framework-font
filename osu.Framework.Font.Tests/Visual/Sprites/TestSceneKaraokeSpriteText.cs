@@ -6,7 +6,6 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Testing;
 using osuTK;
-using osuTK.Graphics;
 
 namespace osu.Framework.Font.Tests.Visual.Sprites
 {
@@ -115,9 +114,6 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
                 },
                 Shadow = true,
                 ShadowOffset = new Vector2(3),
-                FrontTextShadowTexture = new SolidTexture { SolidColor = Color4.Green },
-                FrontTextTexture = new SolidTexture { SolidColor = Color4.LightBlue },
-                BackTextShadowTexture = new SolidTexture { SolidColor = Color4.Red },
             };
         }
     }
