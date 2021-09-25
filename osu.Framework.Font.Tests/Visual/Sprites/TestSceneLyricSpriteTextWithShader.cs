@@ -4,6 +4,7 @@
 using System;
 using NUnit.Framework;
 using osu.Framework.Allocation;
+using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Font.Tests.Helper;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
@@ -50,21 +51,21 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
 
         [TestCase(false, null, null)]
         [TestCase(true, "#FF0000", null)]
-        [TestCase(true, "#FF0000", "(3,3)")]
-        [TestCase(true, "#FF0000", "(-3,-3)")]
+        [TestCase(true, "#FF0000", "(10,10)")]
+        [TestCase(true, "#FF0000", "(-20,-20)")]
         public void TestShadow(bool shadow, string shadowColor, string shadowOffset)
         {
             // todo : might not use relative to main text in shadow offset.
             var shadowShader = shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, "Shadow");
             AddStep("Create lyric", () => setContents((spriteText) =>
             {
-                // todo : should implement those property in shadow shader.
-                //Shadow = shadow,
-                //ShadowColour = Color4Extensions.FromHex(shadowColor ?? "#FFFFFF"),
-                //ShadowOffset = TestCaseVectorHelper.ParseVector2(shadowOffset)
                 spriteText.Shaders = new[]
                 {
-                    shadowShader,
+                    new ShadowShader(shadowShader)
+                    {
+                        ShadowColour = Color4Extensions.FromHex(shadowColor ?? "#FFFFFF"),
+                        ShadowOffset = TestCaseVectorHelper.ParseVector2(shadowOffset)
+                    },
                 };
             }));
         }
