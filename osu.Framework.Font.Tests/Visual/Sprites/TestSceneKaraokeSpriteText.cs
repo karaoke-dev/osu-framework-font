@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Testing;
+using osuTK.Graphics;
 
 namespace osu.Framework.Font.Tests.Visual.Sprites
 {
@@ -111,6 +112,8 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
                         Text = "ke"
                     }
                 },
+                LeftTextColour = Color4.Green,
+                RightTextColour = Color4.Red,
             };
         }
     }

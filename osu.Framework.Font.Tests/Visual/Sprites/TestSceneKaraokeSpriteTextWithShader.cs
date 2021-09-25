@@ -29,6 +29,8 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
             var shader = shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, shaderName);
             AddStep("Create lyric", () => setContents((spriteText) =>
             {
+                spriteText.LeftTextColour = Color4.Green;
+                spriteText.RightTextColour = Color4.Red;
                 spriteText.Shaders = new[]
                 {
                     shader,
@@ -44,6 +46,8 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
             var rightShader = shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, rightShaderName);
             AddStep("Create lyric", () => setContents((spriteText) =>
             {
+                spriteText.LeftTextColour = Color4.Green;
+                spriteText.RightTextColour = Color4.Red;
                 spriteText.LeftLyricTextShaders = new[]
                 {
                     leftShader,

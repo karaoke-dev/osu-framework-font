@@ -61,19 +61,6 @@ namespace osu.Framework.Graphics.Sprites
 
         public DrawColourInfo? FrameBufferDrawColour => base.DrawColourInfo;
 
-        // Children should not receive the true colour to avoid colour doubling when the frame-buffers are rendered to the back-buffer.
-        public override DrawColourInfo DrawColourInfo
-        {
-            get
-            {
-                // Todo: This is incorrect.
-                var blending = Blending;
-                blending.ApplyDefaultToInherited();
-
-                return new DrawColourInfo(Color4.White, blending);
-            }
-        }
-
         private Color4 backgroundColour = new Color4(0, 0, 0, 0);
 
         /// <summary>
