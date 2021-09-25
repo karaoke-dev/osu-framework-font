@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Testing;
-using osuTK;
 using osuTK.Graphics;
 
 namespace osu.Framework.Font.Tests.Visual.Sprites
@@ -113,11 +112,8 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
                         Text = "ke"
                     }
                 },
-                Shadow = true,
-                ShadowOffset = new Vector2(3),
-                FrontTextShadowTexture = new SolidTexture { SolidColor = Color4.Green },
-                FrontTextTexture = new SolidTexture { SolidColor = Color4.LightBlue },
-                BackTextShadowTexture = new SolidTexture { SolidColor = Color4.Red },
+                LeftTextColour = Color4.Green,
+                RightTextColour = Color4.Red,
             };
         }
     }

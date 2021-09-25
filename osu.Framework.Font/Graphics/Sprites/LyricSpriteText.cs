@@ -22,7 +22,7 @@ namespace osu.Framework.Graphics.Sprites
     /// <summary>
     /// A container for simple text rendering purposes. If more complex text rendering is required, use <see cref="TextFlowContainer"/> instead.
     /// </summary>
-    public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, IHasLineBaseHeight, IHasFilterTerms, IFillFlowContainer, IHasCurrentValue<string>, IHasRuby, IHasRomaji, IHasTexture
+    public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, IHasLineBaseHeight, IHasFilterTerms, IFillFlowContainer, IHasCurrentValue<string>, IHasRuby, IHasRomaji
     {
         private const float default_text_size = 48;
         private static readonly char[] default_never_fixed_width_characters = { '.', ',', ':', ' ' };
@@ -41,7 +41,6 @@ namespace osu.Framework.Graphics.Sprites
             AddLayout(charactersCache);
             AddLayout(parentScreenSpaceCache);
             AddLayout(localScreenSpaceCache);
-            AddLayout(shadowOffsetCache);
             AddLayout(textBuilderCache);
         }
 
@@ -61,19 +60,6 @@ namespace osu.Framework.Graphics.Sprites
         #region frame buffer
 
         public DrawColourInfo? FrameBufferDrawColour => base.DrawColourInfo;
-
-        // Children should not receive the true colour to avoid colour doubling when the frame-buffers are rendered to the back-buffer.
-        public override DrawColourInfo DrawColourInfo
-        {
-            get
-            {
-                // Todo: This is incorrect.
-                var blending = Blending;
-                blending.ApplyDefaultToInherited();
-
-                return new DrawColourInfo(Color4.White, blending);
-            }
-        }
 
         private Color4 backgroundColour = new Color4(0, 0, 0, 0);
 
@@ -216,7 +202,6 @@ namespace osu.Framework.Graphics.Sprites
                 font = value;
 
                 invalidate(true, true);
-                shadowOffsetCache.Invalidate();
             }
         }
 
@@ -233,7 +218,6 @@ namespace osu.Framework.Graphics.Sprites
                 rubyFont = value;
 
                 invalidate(true, true);
-                shadowOffsetCache.Invalidate();
             }
         }
 
@@ -250,7 +234,6 @@ namespace osu.Framework.Graphics.Sprites
                 romajiFont = value;
 
                 invalidate(true, true);
-                shadowOffsetCache.Invalidate();
             }
         }
 
@@ -283,66 +266,6 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
-        private bool shadow;
-
-        /// <summary>
-        /// True if a shadow should be displayed around the text.
-        /// </summary>
-        public bool Shadow
-        {
-            get => shadow;
-            set
-            {
-                if (shadow == value)
-                    return;
-
-                shadow = value;
-
-                Invalidate(Invalidation.DrawNode);
-            }
-        }
-
-        private Color4 shadowColour = new Color4(0, 0, 0, 0.2f);
-
-        /// <summary>
-        /// The colour of the shadow displayed around the text. A shadow will only be displayed if the <see cref="Shadow"/> property is set to true.
-        /// </summary>
-        public Color4 ShadowColour
-        {
-            get => shadowColour;
-            set
-            {
-                if (shadowColour == value)
-                    return;
-
-                shadowColour = value;
-
-                Invalidate(Invalidation.DrawNode);
-            }
-        }
-
-        private Vector2 shadowOffset = new Vector2(0, 0.06f);
-
-        /// <summary>
-        /// The offset of the shadow displayed around the text. A shadow will only be displayed if the <see cref="Shadow"/> property is set to true.
-        /// </summary>
-        public Vector2 ShadowOffset
-        {
-            get => shadowOffset;
-            set
-            {
-                // Need to change size to percentage of font size.
-                var percentagedSize = value / Font.Size;
-                if (shadowOffset == percentagedSize)
-                    return;
-
-                shadowOffset = percentagedSize;
-
-                invalidate(true);
-                shadowOffsetCache.Invalidate();
-            }
-        }
-
         private bool useFullGlyphHeight = true;
 
         /// <summary>
@@ -360,54 +283,6 @@ namespace osu.Framework.Graphics.Sprites
                 useFullGlyphHeight = value;
 
                 invalidate(true, true);
-            }
-        }
-
-        private ILyricTexture textTexture;
-
-        public ILyricTexture TextTexture
-        {
-            get => textTexture;
-            set
-            {
-                if (textTexture == value)
-                    return;
-
-                textTexture = value;
-                Colour = (textTexture as SolidTexture)?.SolidColor ?? Color4.White;
-
-                Invalidate();
-            }
-        }
-
-        private ILyricTexture shadowTexture;
-
-        public ILyricTexture ShadowTexture
-        {
-            get => shadowTexture;
-            set
-            {
-                if (shadowTexture == value)
-                    return;
-
-                shadowTexture = value;
-                ShadowColour = (shadowTexture as SolidTexture)?.SolidColor ?? Color4.White;
-                Invalidate();
-            }
-        }
-
-        private ILyricTexture borderTexture;
-
-        public ILyricTexture BorderTexture
-        {
-            get => borderTexture;
-            set
-            {
-                if (borderTexture == value)
-                    return;
-
-                borderTexture = value;
-                Invalidate();
             }
         }
 

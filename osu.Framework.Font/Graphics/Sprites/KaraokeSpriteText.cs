@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using osu.Framework.Allocation;
+using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shaders;
 using osu.Framework.Layout;
@@ -206,60 +207,16 @@ namespace osu.Framework.Graphics.Sprites
 
         #region style
 
-        public bool Shadow
+        public ColourInfo LeftTextColour
         {
-            get => frontLyricText.Shadow;
-            set
-            {
-                frontLyricText.Shadow = value;
-                backLyricText.Shadow = value;
-            }
+            get => frontLyricText.Colour;
+            set => frontLyricText.Colour = value;
         }
 
-        public Vector2 ShadowOffset
+        public ColourInfo RightTextColour
         {
-            get => frontLyricText.ShadowOffset;
-            set
-            {
-                frontLyricText.ShadowOffset = value;
-                backLyricText.ShadowOffset = value;
-            }
-        }
-
-        public ILyricTexture FrontTextTexture
-        {
-            get => frontLyricText.TextTexture;
-            set => frontLyricText.TextTexture = value;
-        }
-
-        public ILyricTexture FrontBorderTexture
-        {
-            get => frontLyricText.BorderTexture;
-            set => frontLyricText.BorderTexture = value;
-        }
-
-        public ILyricTexture FrontTextShadowTexture
-        {
-            get => frontLyricText.ShadowTexture;
-            set => frontLyricText.ShadowTexture = value;
-        }
-
-        public ILyricTexture BackTextTexture
-        {
-            get => backLyricText.TextTexture;
-            set => backLyricText.TextTexture = value;
-        }
-
-        public ILyricTexture BackBorderTexture
-        {
-            get => backLyricText.BorderTexture;
-            set => backLyricText.BorderTexture = value;
-        }
-
-        public ILyricTexture BackTextShadowTexture
-        {
-            get => backLyricText.ShadowTexture;
-            set => backLyricText.ShadowTexture = value;
+            get => backLyricText.Colour;
+            set => backLyricText.Colour = value;
         }
 
         public LyricTextAlignment RubyAlignment
