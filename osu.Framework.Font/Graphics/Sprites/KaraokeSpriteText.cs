@@ -55,6 +55,10 @@ namespace osu.Framework.Graphics.Sprites
             set => backLyricText.Shaders = value;
         }
 
+        #endregion
+
+        #region text
+
         public string Text
         {
             get => frontLyricText.Text;
@@ -62,16 +66,6 @@ namespace osu.Framework.Graphics.Sprites
             {
                 frontLyricText.Text = value;
                 backLyricText.Text = value;
-            }
-        }
-
-        public FontUsage Font
-        {
-            get => frontLyricText.Font;
-            set
-            {
-                frontLyricText.Font = value;
-                backLyricText.Font = value;
             }
         }
 
@@ -95,6 +89,20 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
+        #endregion
+
+        #region font
+
+        public FontUsage Font
+        {
+            get => frontLyricText.Font;
+            set
+            {
+                frontLyricText.Font = value;
+                backLyricText.Font = value;
+            }
+        }
+
         public FontUsage RubyFont
         {
             get => frontLyricText.RubyFont;
@@ -115,57 +123,29 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
-        public int RubyMargin
+        #endregion
+
+        #region style
+
+        public bool Shadow
         {
-            get => frontLyricText.RubyMargin;
+            get => frontLyricText.Shadow;
             set
             {
-                frontLyricText.RubyMargin = value;
-                backLyricText.RubyMargin = value;
+                frontLyricText.Shadow = value;
+                backLyricText.Shadow = value;
             }
         }
 
-        public int RomajiMargin
+        public Vector2 ShadowOffset
         {
-            get => frontLyricText.RomajiMargin;
+            get => frontLyricText.ShadowOffset;
             set
             {
-                frontLyricText.RomajiMargin = value;
-                backLyricText.RomajiMargin = value;
+                frontLyricText.ShadowOffset = value;
+                backLyricText.ShadowOffset = value;
             }
         }
-
-        public Vector2 Spacing
-        {
-            get => frontLyricText.Spacing;
-            set
-            {
-                frontLyricText.Spacing = value;
-                backLyricText.Spacing = value;
-            }
-        }
-
-        public Vector2 RubySpacing
-        {
-            get => frontLyricText.RubySpacing;
-            set
-            {
-                frontLyricText.RubySpacing = value;
-                backLyricText.RubySpacing = value;
-            }
-        }
-
-        public Vector2 RomajiSpacing
-        {
-            get => frontLyricText.RomajiSpacing;
-            set
-            {
-                frontLyricText.RomajiSpacing = value;
-                backLyricText.RomajiSpacing = value;
-            }
-        }
-
-        public IReadOnlyDictionary<TextIndex, double> TimeTags { get; set; } = new Dictionary<TextIndex, double>();
 
         public ILyricTexture FrontTextTexture
         {
@@ -201,48 +181,6 @@ namespace osu.Framework.Graphics.Sprites
         {
             get => backLyricText.ShadowTexture;
             set => backLyricText.ShadowTexture = value;
-        }
-
-        public bool Shadow
-        {
-            get => frontLyricText.Shadow;
-            set
-            {
-                frontLyricText.Shadow = value;
-                backLyricText.Shadow = value;
-            }
-        }
-
-        public Vector2 ShadowOffset
-        {
-            get => frontLyricText.ShadowOffset;
-            set
-            {
-                frontLyricText.ShadowOffset = value;
-                backLyricText.ShadowOffset = value;
-            }
-        }
-
-        public override double LifetimeStart
-        {
-            get => base.LifetimeStart;
-            set
-            {
-                base.LifetimeStart = value;
-                frontLyricText.LifetimeStart = value;
-                backLyricText.LifetimeStart = value;
-            }
-        }
-
-        public override double LifetimeEnd
-        {
-            get => base.LifetimeEnd;
-            set
-            {
-                base.LifetimeEnd = value;
-                frontLyricText.LifetimeEnd = value;
-                backLyricText.LifetimeEnd = value;
-            }
         }
 
         public LyricTextAlignment RubyAlignment
@@ -285,6 +223,90 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
+        #endregion
+
+        #region text spacing
+
+        public Vector2 Spacing
+        {
+            get => frontLyricText.Spacing;
+            set
+            {
+                frontLyricText.Spacing = value;
+                backLyricText.Spacing = value;
+            }
+        }
+
+        public Vector2 RubySpacing
+        {
+            get => frontLyricText.RubySpacing;
+            set
+            {
+                frontLyricText.RubySpacing = value;
+                backLyricText.RubySpacing = value;
+            }
+        }
+
+        public Vector2 RomajiSpacing
+        {
+            get => frontLyricText.RomajiSpacing;
+            set
+            {
+                frontLyricText.RomajiSpacing = value;
+                backLyricText.RomajiSpacing = value;
+            }
+        }
+
+        #endregion
+
+        #region margin/padding
+
+        public int RubyMargin
+        {
+            get => frontLyricText.RubyMargin;
+            set
+            {
+                frontLyricText.RubyMargin = value;
+                backLyricText.RubyMargin = value;
+            }
+        }
+
+        public int RomajiMargin
+        {
+            get => frontLyricText.RomajiMargin;
+            set
+            {
+                frontLyricText.RomajiMargin = value;
+                backLyricText.RomajiMargin = value;
+            }
+        }
+
+        #endregion
+
+        public IReadOnlyDictionary<TextIndex, double> TimeTags { get; set; } = new Dictionary<TextIndex, double>();
+
+        public override double LifetimeStart
+        {
+            get => base.LifetimeStart;
+            set
+            {
+                base.LifetimeStart = value;
+                frontLyricText.LifetimeStart = value;
+                backLyricText.LifetimeStart = value;
+            }
+        }
+
+        public override double LifetimeEnd
+        {
+            get => base.LifetimeEnd;
+            set
+            {
+                base.LifetimeEnd = value;
+                frontLyricText.LifetimeEnd = value;
+                backLyricText.LifetimeEnd = value;
+            }
+        }
+
         // TODO : implement
         public bool Continuous { get; set; }
 
@@ -294,6 +316,12 @@ namespace osu.Framework.Graphics.Sprites
         protected override bool OnInvalidate(Invalidation invalidation, InvalidationSource source)
         {
             var result = base.OnInvalidate(invalidation, source);
+
+            if ((invalidation & Invalidation.DrawNode) > 0)
+            {
+                ++updateVersion;
+                result = true;
+            }
 
             var hasTimeTag = TimeTags != null;
             var hasText = !string.IsNullOrEmpty(Text);
