@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.OpenGL;
 using osu.Framework.Graphics.OpenGL.Buffers;
@@ -53,7 +54,7 @@ namespace osu.Framework.Graphics.Sprites
 
             private long updateVersion;
 
-            private IShader shader;
+            private IReadOnlyList<IShader> shaders;
 
             public LyricSpriteTextShaderEffectDrawNode(LyricSpriteText source, LyricSpriteTextShaderEffectDrawNodeSharedData sharedData)
                 : base(source, new LyricSpriteTextDrawNode(source), sharedData)
@@ -65,7 +66,7 @@ namespace osu.Framework.Graphics.Sprites
                 base.ApplyState();
 
                 updateVersion = Source.updateVersion;
-                shader = Source.Shader;
+                shaders = Source.Shaders;
             }
 
             protected override long GetDrawVersion() => updateVersion;
@@ -83,7 +84,7 @@ namespace osu.Framework.Graphics.Sprites
 
             private void drawFrameBuffer()
             {
-                if (shader == null)
+                if (!shaders.Any())
                     return;
 
                 FrameBuffer current = SharedData.CurrentEffectBuffer;
@@ -91,13 +92,19 @@ namespace osu.Framework.Graphics.Sprites
 
                 GLWrapper.SetBlend(BlendingParameters.None);
 
-                using (BindFrameBuffer(target))
+                foreach (var shader in shaders)
                 {
-                    UpdateUniforms(shader, current);
+                    var isFirst = shaders.ToList().IndexOf(shader) == 0;
+                    var source = isFirst ? current : target;
 
-                    shader.Bind();
-                    DrawFrameBuffer(current, new RectangleF(0, 0, current.Texture.Width, current.Texture.Height), ColourInfo.SingleColour(Color4.White));
-                    shader.Unbind();
+                    using (BindFrameBuffer(target))
+                    {
+                        UpdateUniforms(shader, source);
+
+                        shader.Bind();
+                        DrawFrameBuffer(source, new RectangleF(0, 0, source.Texture.Width, source.Texture.Height), ColourInfo.SingleColour(Color4.White));
+                        shader.Unbind();
+                    }
                 }
             }
 

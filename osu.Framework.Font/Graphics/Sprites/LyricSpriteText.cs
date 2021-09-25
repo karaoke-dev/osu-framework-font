@@ -112,17 +112,15 @@ namespace osu.Framework.Graphics.Sprites
 
         #region Shader
 
-        private IShader shader;
+        private readonly List<IShader> shaders = new List<IShader>();
 
-        public IShader Shader
+        public IReadOnlyList<IShader> Shaders
         {
-            get => shader;
+            get => shaders;
             set
             {
-                if (shader == value)
-                    return;
-
-                shader = value;
+                shaders.Clear();
+                shaders.AddRange(value);
                 Invalidate(Invalidation.DrawNode);
             }
         }

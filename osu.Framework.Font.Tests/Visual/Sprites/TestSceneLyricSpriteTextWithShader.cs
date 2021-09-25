@@ -6,7 +6,6 @@ using NUnit.Framework;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics.OpenGL.Buffers;
 using osu.Framework.Graphics.Shaders;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
@@ -27,12 +26,9 @@ namespace osu.Framework.Tests.Visual.Sprites
         public void ApplyShader(string shaderName)
         {
             var shader = shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, shaderName);
-            AddStep("Create lyric", () => setContents(() => new LyricSpriteText
+            AddStep("Create lyric", () => setContents((spriteText) => spriteText.Shaders = new[]
             {
-                Text = "カラオケ",
-                Rubies = TestCaseTagHelper.ParseParsePositionTexts(new[] { "[0,1]:か", "[1,2]:ら", "[2,3]:お", "[3,4]:け" }),
-                Romajies = TestCaseTagHelper.ParseParsePositionTexts(new[] { "[0,1]:ka", "[1,2]:ra", "[2,3]:o", "[3,4]:ke" }),
-                Shader = shader,
+                shader,
             }));
         }
 
@@ -40,18 +36,19 @@ namespace osu.Framework.Tests.Visual.Sprites
         public void ApplyShaderWithParams()
         {
             var shader = shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, "Outline");
-            var outlineShader = new OutlineShader(shader);
-
-            AddStep("Create lyric", () => setContents(() => new LyricSpriteText
+            var outlineShader = new OutlineShader(shader)
             {
-                Text = "カラオケ",
-                Rubies = TestCaseTagHelper.ParseParsePositionTexts(new[] { "[0,1]:か", "[1,2]:ら", "[2,3]:お", "[3,4]:け" }),
-                Romajies = TestCaseTagHelper.ParseParsePositionTexts(new[] { "[0,1]:ka", "[1,2]:ra", "[2,3]:o", "[3,4]:ke" }),
-                Shader = outlineShader,
+                Radius = 10,
+                OutlineColour = Color4.Green,
+            };
+
+            AddStep("Create lyric", () => setContents((spriteText) => spriteText.Shaders = new[]
+            {
+                outlineShader,
             }));
         }
 
-        private void setContents(Func<LyricSpriteText> creationFunction)
+        private void setContents(Action<LyricSpriteText> applySpriteTextProperty)
         {
             Child = new Container
             {
@@ -63,30 +60,15 @@ namespace osu.Framework.Tests.Visual.Sprites
                         Colour = Color4.CornflowerBlue,
                         RelativeSizeAxes = Axes.Both,
                     },
-                    creationFunction().With(x => x.Scale = new Vector2(5)),
+                    new LyricSpriteText
+                    {
+                        Text = "カラオケ",
+                        Rubies = TestCaseTagHelper.ParseParsePositionTexts(new[] { "[0,1]:か", "[1,2]:ら", "[2,3]:お", "[3,4]:け" }),
+                        Romajies = TestCaseTagHelper.ParseParsePositionTexts(new[] { "[0,1]:ka", "[1,2]:ra", "[2,3]:o", "[3,4]:ke" }),
+                        Scale = new Vector2(5)
+                    }.With(applySpriteTextProperty),
                 }
             };
-        }
-
-        private class OutlineShader : CustomizedShader
-        {
-            public OutlineShader(IShader originShader)
-                : base(originShader)
-            {
-            }
-
-            public override void ApplyValue(FrameBuffer current)
-            {
-                var radius = 10;
-                GetUniform<int>(@"g_Radius").UpdateValue(ref radius);
-
-                var colour = Color4.Green;
-                var colourMatrix = new Vector4(colour.R, colour.G, colour.B, colour.A);
-                GetUniform<Vector4>(@"g_Colour").UpdateValue(ref colourMatrix);
-
-                var size = current.Size;
-                GetUniform<Vector2>(@"g_TexSize").UpdateValue(ref size);
-            }
         }
     }
 }
