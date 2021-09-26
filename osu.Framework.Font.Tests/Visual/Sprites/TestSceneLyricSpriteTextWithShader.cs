@@ -49,11 +49,9 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
             }));
         }
 
-        [TestCase(false, null, null)]
-        [TestCase(true, "#FF0000", null)]
-        [TestCase(true, "#FF0000", "(10,10)")]
-        [TestCase(true, "#FF0000", "(-20,-20)")]
-        public void TestShadow(bool shadow, string shadowColor, string shadowOffset)
+        [TestCase("#FFFF00", "(10,10)")]
+        [TestCase("#FF0000", "(-20,-20)")]
+        public void TestShadow(string shadowColor, string shadowOffset)
         {
             // todo : might not use relative to main text in shadow offset.
             var shadowShader = shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, "Shadow");
@@ -63,7 +61,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
                 {
                     new ShadowShader(shadowShader)
                     {
-                        ShadowColour = Color4Extensions.FromHex(shadowColor ?? "#FFFFFF"),
+                        ShadowColour = Color4Extensions.FromHex(shadowColor),
                         ShadowOffset = TestCaseVectorHelper.ParseVector2(shadowOffset)
                     },
                 };
