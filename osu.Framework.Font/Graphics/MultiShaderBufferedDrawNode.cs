@@ -1,9 +1,10 @@
 ﻿// Copyright (c) andy840119 <andy840119@gmail.com>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
-using System.Collections.Generic;
+using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.OpenGL;
 using osu.Framework.Graphics.OpenGL.Buffers;
@@ -19,17 +20,20 @@ namespace osu.Framework.Graphics
 
         protected new MultiShaderBufferedDrawNodeSharedData SharedData => (MultiShaderBufferedDrawNodeSharedData)base.SharedData;
 
-        private IReadOnlyList<IShader> shaders;
+        private IShader[] shaders;
+
+        private readonly double loadTime;
 
         public MultiShaderBufferedDrawNode(IBufferedDrawable source, DrawNode child, MultiShaderBufferedDrawNodeSharedData sharedData)
             : base(source, child, sharedData)
         {
+            loadTime = Source.Clock.CurrentTime;
         }
 
         public override void ApplyState()
         {
             base.ApplyState();
-            shaders = Source.Shaders;
+            shaders = Source.Shaders.ToArray();
         }
 
         protected override void PopulateContents()
@@ -53,6 +57,17 @@ namespace osu.Framework.Graphics
             {
                 // should draw origin content if no shader effects.
                 DrawFrameBuffer(SharedData.CurrentEffectBuffer, DrawRectangle, Color4.White);
+            }
+
+            // if contains shader that need to apply time, then need to force run populate contents in each frame.
+            // todo : use better way.
+            if (containTimePropertyShader())
+            {
+                var prop = typeof(BufferedDrawNodeSharedData).GetField("DrawVersion", BindingFlags.Instance | BindingFlags.NonPublic);
+                if (prop == null)
+                    throw new NullReferenceException();
+
+                prop.SetValue(SharedData, -1);
             }
         }
 
@@ -95,6 +110,12 @@ namespace osu.Framework.Graphics
                     if (shader is ICustomizedShader customizedShader)
                         customizedShader.ApplyValue(current);
 
+                    if (shader is IApplicableToCurrentTime clockShader)
+                    {
+                        var time = (float)(Source.Clock.CurrentTime - loadTime) / 1000;
+                        clockShader.ApplyCurrentTime(time);
+                    }
+
                     shader.Bind();
                     DrawFrameBuffer(current, new RectangleF(0, 0, current.Texture.Width, current.Texture.Height), ColourInfo.SingleColour(Color4.White));
                     shader.Unbind();
@@ -116,6 +137,22 @@ namespace osu.Framework.Graphics
 
                 return shaderBuffers[fromShader];
             }
+        }
+
+        private bool containTimePropertyShader()
+        {
+            return shaders.Any(x =>
+            {
+                switch (x)
+                {
+                    case IApplicableToCurrentTime _:
+                    case IStepShader stepShader when stepShader.StepShaders.Any(s => s is IApplicableToCurrentTime):
+                        return true;
+
+                    default:
+                        return false;
+                }
+            });
         }
     }
 }
