@@ -32,7 +32,7 @@ namespace osu.Framework.Graphics
             {
                 var shader = x.Key;
                 if (shader is IStepShader stepShader)
-                    return stepShader.IsValid() && stepShader.Draw;
+                    return stepShader.StepShaders.Any() && stepShader.Draw;
 
                 return true;
             }).Select(x => x.Value).ToArray();

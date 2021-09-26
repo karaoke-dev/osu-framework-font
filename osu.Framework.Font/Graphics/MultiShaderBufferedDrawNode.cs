@@ -70,14 +70,18 @@ namespace osu.Framework.Graphics
                 var current = getSourceFrameBuffer(shader);
                 var target = SharedData.CreateFrameBuffer();
 
-                renderShader(shader, current, target);
-
                 if (shader is IStepShader stepShader)
                 {
-                    foreach (var step in stepShader.GetStepShaders())
+                    var stepShaders = stepShader.StepShaders;
+
+                    for (int i = 0; i < stepShaders.Count; i++)
                     {
-                        renderShader(step, target, target);
+                        renderShader(stepShaders[i], i == 0 ? current : target, target);
                     }
+                }
+                else
+                {
+                    renderShader(shader, current, target);
                 }
 
                 // todo: not really sure will cause memory issue.
