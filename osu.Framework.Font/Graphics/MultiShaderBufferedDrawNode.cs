@@ -33,7 +33,13 @@ namespace osu.Framework.Graphics
         public override void ApplyState()
         {
             base.ApplyState();
+
+            if (shaders == Source.Shaders.ToArray())
+                return;
+
+            // should clear frame buffer if shader changed.
             shaders = Source.Shaders.ToArray();
+            SharedData.ClearBuffer();
         }
 
         protected override long GetDrawVersion()
@@ -97,8 +103,6 @@ namespace osu.Framework.Graphics
 
             GLWrapper.SetBlend(BlendingParameters.None);
 
-            SharedData.ShaderBuffers.Clear();
-
             foreach (var shader in shaders)
             {
                 var current = getSourceFrameBuffer(shader);
@@ -118,8 +122,7 @@ namespace osu.Framework.Graphics
                     renderShader(shader, current, target);
                 }
 
-                // todo: not really sure will cause memory issue.
-                SharedData.ShaderBuffers.Add(shader, target);
+                SharedData.AddOrReplaceBuffer(shader, target);
             }
 
             void renderShader(IShader shader, FrameBuffer current, FrameBuffer target)

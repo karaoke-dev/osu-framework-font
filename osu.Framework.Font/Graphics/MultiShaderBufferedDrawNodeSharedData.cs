@@ -11,7 +11,9 @@ namespace osu.Framework.Graphics
 {
     public class MultiShaderBufferedDrawNodeSharedData : BufferedDrawNodeSharedData
     {
-        public readonly IDictionary<IShader, FrameBuffer> ShaderBuffers = new Dictionary<IShader, FrameBuffer>();
+        private readonly Dictionary<IShader, FrameBuffer> shaderBuffers = new Dictionary<IShader, FrameBuffer>();
+
+        public IReadOnlyDictionary<IShader, FrameBuffer> ShaderBuffers => shaderBuffers;
 
         private readonly RenderbufferInternalFormat[] formats;
 
@@ -36,5 +38,35 @@ namespace osu.Framework.Graphics
 
                 return true;
             }).Select(x => x.Value).ToArray();
+
+        public void AddOrReplaceBuffer(IShader shader, FrameBuffer frameBuffer)
+        {
+            if (shaderBuffers.ContainsKey(shader))
+            {
+                shaderBuffers[shader] = frameBuffer;
+            }
+            else
+            {
+                shaderBuffers.Add(shader, frameBuffer);
+            }
+        }
+
+        public void ClearBuffer()
+        {
+            shaderBuffers.Clear();
+        }
+
+        protected override void Dispose(bool isDisposing)
+        {
+            base.Dispose(isDisposing);
+
+            // clear all frame in the dictionary.
+            foreach (var shaderBuffer in shaderBuffers)
+            {
+                shaderBuffer.Value.Dispose();
+            }
+
+            shaderBuffers.Clear();
+        }
     }
 }
