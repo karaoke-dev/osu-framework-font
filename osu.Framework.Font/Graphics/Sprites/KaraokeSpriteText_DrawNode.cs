@@ -18,8 +18,6 @@ namespace osu.Framework.Graphics.Sprites
         /// </summary>
         protected class KaraokeSpriteTextShaderEffectDrawNode : MultiShaderBufferedDrawNode, ICompositeDrawNode
         {
-            protected new KaraokeSpriteText<T> Source => (KaraokeSpriteText<T>)base.Source;
-
             protected new CompositeDrawableDrawNode Child => (CompositeDrawableDrawNode)base.Child;
 
             private long updateVersion;
