@@ -31,22 +31,15 @@ namespace osu.Framework.Graphics.Shaders
         public bool Draw { get; set; } = true;
 
         public void Bind()
-            => StepShaders.FirstOrDefault()?.Bind();
+            => throw new NotSupportedException();
 
         public void Unbind()
-            => StepShaders.FirstOrDefault()?.Unbind();
+            => throw new NotSupportedException();
 
         public Uniform<T> GetUniform<T>(string name) where T : struct, IEquatable<T>
             => throw new NotSupportedException();
 
-        public bool IsLoaded => StepShaders.Any();
-
-        public IReadOnlyList<IShader> GetStepShaders()
-        {
-            // should skip first shader because it already being drawed.
-            return StepShaders.Skip(1).ToArray();
-        }
-
-        public bool IsValid() => StepShaders.Any();
+        public bool IsLoaded
+            => throw new NotSupportedException();
     }
 }

@@ -16,17 +16,11 @@ namespace osu.Framework.Graphics.Shaders
         /// <summary>
         /// List if <see cref="IShader"/>, will pass <see cref="FrameBuffer"/> to each shaders.
         /// </summary>
-        IReadOnlyList<IShader> GetStepShaders();
+        IReadOnlyList<IShader> StepShaders { get; }
 
         /// <summary>
         /// Should draw <see cref="FrameBuffer"/> or not.
         /// </summary>
         bool Draw { get; }
-
-        /// <summary>
-        /// Is this <see cref="FrameBuffer"/> can be drawed?
-        /// </summary>
-        /// <returns></returns>
-        bool IsValid();
     }
 }
