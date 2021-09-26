@@ -3,7 +3,6 @@
 
 using System.Collections.Generic;
 using osu.Framework.Graphics.Shaders;
-using osuTK.Graphics.ES30;
 
 namespace osu.Framework.Graphics.Sprites
 {
@@ -11,7 +10,7 @@ namespace osu.Framework.Graphics.Sprites
     {
         // todo: should have a better way to let user able to customize formats?
         protected override DrawNode CreateDrawNode()
-            => new KaraokeSpriteTextShaderEffectDrawNode(this, new KaraokeSpriteTextShaderEffectDrawNodeSharedData(null, false));
+            => new KaraokeSpriteTextShaderEffectDrawNode(this, new MultiShaderBufferedDrawNodeSharedData());
 
         /// <summary>
         /// <see cref="BufferedDrawNode"/> to apply <see cref="IShader"/>.
@@ -22,7 +21,7 @@ namespace osu.Framework.Graphics.Sprites
 
             private long updateVersion;
 
-            public KaraokeSpriteTextShaderEffectDrawNode(KaraokeSpriteText<T> source, KaraokeSpriteTextShaderEffectDrawNodeSharedData sharedData)
+            public KaraokeSpriteTextShaderEffectDrawNode(KaraokeSpriteText<T> source, MultiShaderBufferedDrawNodeSharedData sharedData)
                 : base(source, new CompositeDrawableDrawNode(source), sharedData)
             {
             }
@@ -44,14 +43,6 @@ namespace osu.Framework.Graphics.Sprites
             }
 
             public bool AddChildDrawNodes => RequiresRedraw;
-        }
-
-        public class KaraokeSpriteTextShaderEffectDrawNodeSharedData : BufferedDrawNodeSharedData
-        {
-            public KaraokeSpriteTextShaderEffectDrawNodeSharedData(RenderbufferInternalFormat[] formats, bool pixelSnapping)
-                : base(2, formats, pixelSnapping)
-            {
-            }
         }
     }
 }

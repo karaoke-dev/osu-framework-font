@@ -9,7 +9,6 @@ using osu.Framework.Graphics.Shaders;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.Layout;
 using osuTK;
-using osuTK.Graphics.ES30;
 
 namespace osu.Framework.Graphics.Sprites
 {
@@ -39,7 +38,7 @@ namespace osu.Framework.Graphics.Sprites
 
         // todo: should have a better way to let user able to customize formats?
         protected override DrawNode CreateDrawNode()
-            => new LyricSpriteTextShaderEffectDrawNode(this, new LyricSpriteTextShaderEffectDrawNodeSharedData(null, false));
+            => new LyricSpriteTextShaderEffectDrawNode(this, new MultiShaderBufferedDrawNodeSharedData());
 
         /// <summary>
         /// <see cref="BufferedDrawNode"/> to apply <see cref="IShader"/>.
@@ -50,7 +49,7 @@ namespace osu.Framework.Graphics.Sprites
 
             private long updateVersion;
 
-            public LyricSpriteTextShaderEffectDrawNode(LyricSpriteText source, LyricSpriteTextShaderEffectDrawNodeSharedData sharedData)
+            public LyricSpriteTextShaderEffectDrawNode(LyricSpriteText source, MultiShaderBufferedDrawNodeSharedData sharedData)
                 : base(source, new LyricSpriteTextDrawNode(source), sharedData)
             {
             }
@@ -63,14 +62,6 @@ namespace osu.Framework.Graphics.Sprites
             }
 
             protected override long GetDrawVersion() => updateVersion;
-        }
-
-        public class LyricSpriteTextShaderEffectDrawNodeSharedData : BufferedDrawNodeSharedData
-        {
-            public LyricSpriteTextShaderEffectDrawNodeSharedData(RenderbufferInternalFormat[] formats, bool pixelSnapping)
-                : base(2, formats, pixelSnapping)
-            {
-            }
         }
 
         /// <summary>
