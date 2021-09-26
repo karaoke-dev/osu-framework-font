@@ -47,6 +47,13 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
                         Size = new Vector2(grid_size),
                     }).ToArray()
                 },
+                new DraggableCircle
+                {
+                    Size = new Vector2(50),
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
+                    Colour = Color4.Purple,
+                },
                 ShaderContainer = new TestShaderContainer
                 {
                     Anchor = Anchor.Centre,
