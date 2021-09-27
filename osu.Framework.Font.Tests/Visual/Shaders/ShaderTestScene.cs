@@ -8,6 +8,7 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shaders;
 using osu.Framework.Graphics.Shapes;
+using osu.Framework.Input.Events;
 using osu.Framework.Testing;
 using osuTK;
 using osuTK.Graphics;
@@ -46,6 +47,13 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
                         Size = new Vector2(grid_size),
                     }).ToArray()
                 },
+                new DraggableCircle
+                {
+                    Size = new Vector2(50),
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
+                    Colour = Color4.Purple,
+                },
                 ShaderContainer = new TestShaderContainer
                 {
                     Anchor = Anchor.Centre,
@@ -53,7 +61,7 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
                     Size = new Vector2(x, y),
                     Children = new Drawable[]
                     {
-                        new Box
+                        new DraggableBox
                         {
                             X = -100,
                             Anchor = Anchor.Centre,
@@ -61,14 +69,14 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
                             Size = new Vector2(50),
                             Colour = Color4.Red,
                         },
-                        new Circle
+                        new DraggableCircle
                         {
                             Size = new Vector2(50),
                             Anchor = Anchor.Centre,
                             Origin = Anchor.Centre,
                             Colour = Color4.Blue,
                         },
-                        new Triangle
+                        new DraggableTriangle
                         {
                             X = 100,
                             Size = new Vector2(50),
@@ -97,6 +105,30 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
 
         protected IShader GetShader(string shaderName)
             => shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, shaderName);
+
+        private class DraggableBox : Box
+        {
+            protected override bool OnDragStart(DragStartEvent e) => true;
+
+            protected override void OnDrag(DragEvent e)
+                => Position += e.Delta;
+        }
+
+        private class DraggableCircle : Circle
+        {
+            protected override bool OnDragStart(DragStartEvent e) => true;
+
+            protected override void OnDrag(DragEvent e)
+                => Position += e.Delta;
+        }
+
+        private class DraggableTriangle : Triangle
+        {
+            protected override bool OnDragStart(DragStartEvent e) => true;
+
+            protected override void OnDrag(DragEvent e)
+                => Position += e.Delta;
+        }
 
         protected class TestShaderContainer : Container, IMultiShaderBufferedDrawable
         {
@@ -138,22 +170,10 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
             {
                 protected new CompositeDrawableDrawNode Child => (CompositeDrawableDrawNode)base.Child;
 
-                private long updateVersion;
-
                 public TestShaderContainerShaderEffectDrawNode(TestShaderContainer source, MultiShaderBufferedDrawNodeSharedData sharedData)
                     : base(source, new CompositeDrawableDrawNode(source), sharedData)
                 {
                 }
-
-                public override void ApplyState()
-                {
-                    base.ApplyState();
-
-                    // todo: figure out why this works if use invalidation instead of version.
-                    updateVersion = Source.InvalidationID;
-                }
-
-                protected override long GetDrawVersion() => updateVersion;
 
                 public List<DrawNode> Children
                 {
