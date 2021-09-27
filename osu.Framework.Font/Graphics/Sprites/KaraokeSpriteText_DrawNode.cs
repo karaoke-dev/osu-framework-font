@@ -19,22 +19,10 @@ namespace osu.Framework.Graphics.Sprites
         {
             protected new CompositeDrawableDrawNode Child => (CompositeDrawableDrawNode)base.Child;
 
-            private long updateVersion;
-
             public KaraokeSpriteTextShaderEffectDrawNode(KaraokeSpriteText<T> source, MultiShaderBufferedDrawNodeSharedData sharedData)
                 : base(source, new CompositeDrawableDrawNode(source), sharedData)
             {
             }
-
-            public override void ApplyState()
-            {
-                base.ApplyState();
-
-                // todo: figure out why this works if use invalidation instead of version.
-                updateVersion = Source.InvalidationID;
-            }
-
-            protected override long GetDrawVersion() => updateVersion;
 
             public List<DrawNode> Children
             {
