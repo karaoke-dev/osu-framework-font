@@ -62,7 +62,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
         [TestCase]
         public void ApplyLyricTextShaderWithParams()
         {
-            var shader = shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, "Outline");
+            var shader = shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, OutlineShader.SHADER_NAME);
             AddStep("Create lyric", () => setContents(spriteText =>
             {
                 spriteText.LeftLyricTextShaders = new[]
@@ -87,7 +87,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
         [TestCase]
         public void ApplyShaderInBothPart()
         {
-            var outlineShader = shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, "Outline");
+            var outlineShader = shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, OutlineShader.SHADER_NAME);
             var crtShader = shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, "CRT");
             AddStep("Create lyric", () => setContents(spriteText =>
             {

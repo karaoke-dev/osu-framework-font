@@ -18,7 +18,7 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
                 Name = "Step 1",
                 StepShaders = new[]
                 {
-                    new OutlineShader(GetShader("Outline"))
+                    new OutlineShader(GetShader(OutlineShader.SHADER_NAME))
                     {
                         Radius = 10,
                         OutlineColour = Color4.Yellow,
@@ -54,7 +54,7 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
                 Name = "Step create outline",
                 StepShaders = new[]
                 {
-                    new OutlineShader(GetShader("Outline"))
+                    new OutlineShader(GetShader(OutlineShader.SHADER_NAME))
                     {
                         Radius = 10,
                         OutlineColour = Color4.Yellow,
@@ -67,7 +67,7 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
                 Name = "Step create shadow",
                 StepShaders = new[]
                 {
-                    new ShadowShader(GetShader("Shadow"))
+                    new ShadowShader(GetShader(ShadowShader.SHADER_NAME))
                     {
                         ShadowColour = Color4.Red,
                         ShadowOffset = new Vector2(30, 30),

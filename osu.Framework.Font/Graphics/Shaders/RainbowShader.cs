@@ -8,6 +8,8 @@ namespace osu.Framework.Graphics.Shaders
 {
     public class RainbowShader : CustomizedShader, IApplicableToCurrentTime
     {
+        public const string SHADER_NAME = "Rainbow";
+
         public Vector2 Uv { get; set; } = new Vector2(0, 1);
 
         public float Speed { get; set; } = 5;

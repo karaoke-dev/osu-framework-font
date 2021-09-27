@@ -9,6 +9,8 @@ namespace osu.Framework.Graphics.Shaders
 {
     public class ShadowShader : CustomizedShader
     {
+        public const string SHADER_NAME = "Shadow";
+
         public Color4 ShadowColour { get; set; }
 
         public Vector2 ShadowOffset { get; set; }
