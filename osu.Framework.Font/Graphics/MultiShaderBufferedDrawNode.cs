@@ -36,6 +36,36 @@ namespace osu.Framework.Graphics
             shaders = Source.Shaders.ToArray();
         }
 
+        protected override long GetDrawVersion()
+        {
+            // if contains shader that need to apply time, then need to force run populate contents in each frame.
+            // todo : use better way.
+            if (containTimePropertyShader())
+            {
+                var prop = typeof(BufferedDrawNodeSharedData).GetField("DrawVersion", BindingFlags.Instance | BindingFlags.NonPublic);
+                if (prop == null)
+                    throw new NullReferenceException();
+
+                prop.SetValue(SharedData, -1);
+            }
+
+            return base.GetDrawVersion();
+
+            bool containTimePropertyShader() =>
+                shaders.Any(x =>
+                {
+                    switch (x)
+                    {
+                        case IApplicableToCurrentTime _:
+                        case IStepShader stepShader when stepShader.StepShaders.Any(s => s is IApplicableToCurrentTime):
+                            return true;
+
+                        default:
+                            return false;
+                    }
+                });
+        }
+
         protected override void PopulateContents()
         {
             base.PopulateContents();
@@ -57,17 +87,6 @@ namespace osu.Framework.Graphics
             {
                 // should draw origin content if no shader effects.
                 DrawFrameBuffer(SharedData.CurrentEffectBuffer, DrawRectangle, Color4.White);
-            }
-
-            // if contains shader that need to apply time, then need to force run populate contents in each frame.
-            // todo : use better way.
-            if (containTimePropertyShader())
-            {
-                var prop = typeof(BufferedDrawNodeSharedData).GetField("DrawVersion", BindingFlags.Instance | BindingFlags.NonPublic);
-                if (prop == null)
-                    throw new NullReferenceException();
-
-                prop.SetValue(SharedData, -1);
             }
         }
 
@@ -137,22 +156,6 @@ namespace osu.Framework.Graphics
 
                 return shaderBuffers[fromShader];
             }
-        }
-
-        private bool containTimePropertyShader()
-        {
-            return shaders.Any(x =>
-            {
-                switch (x)
-                {
-                    case IApplicableToCurrentTime _:
-                    case IStepShader stepShader when stepShader.StepShaders.Any(s => s is IApplicableToCurrentTime):
-                        return true;
-
-                    default:
-                        return false;
-                }
-            });
         }
     }
 }
