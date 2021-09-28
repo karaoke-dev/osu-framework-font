@@ -332,7 +332,26 @@ namespace osu.Framework.Graphics.Sprites
 
         #endregion
 
-        public IReadOnlyDictionary<TextIndex, double> TimeTags { get; set; } = new Dictionary<TextIndex, double>();
+        private readonly Dictionary<TextIndex, double> timeTags = new Dictionary<TextIndex, double>();
+
+        public IReadOnlyDictionary<TextIndex, double> TimeTags
+        {
+            get => timeTags;
+            set
+            {
+                timeTags.Clear();
+
+                if (value != null)
+                {
+                    foreach (var (timeTag, time) in value)
+                    {
+                        timeTags.Add(timeTag, time);
+                    }
+                }
+
+                Invalidate(Invalidation.Layout);
+            }
+        }
 
         public override double LifetimeStart
         {
