@@ -19,7 +19,7 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
             {
                 ShaderContainer.Shaders = new[]
                 {
-                    new OutlineShader(GetShader("Outline"))
+                    new OutlineShader(GetShader(OutlineShader.SHADER_NAME))
                     {
                         Radius = radius,
                         OutlineColour = Color4Extensions.FromHex(colour),
@@ -36,7 +36,7 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
             {
                 ShaderContainer.Shaders = new[]
                 {
-                    new ShadowShader(GetShader("Shadow"))
+                    new ShadowShader(GetShader(ShadowShader.SHADER_NAME))
                     {
                         ShadowColour = Color4Extensions.FromHex(colour),
                         ShadowOffset = TestCaseVectorHelper.ParseVector2(offset)
@@ -58,7 +58,7 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
             {
                 ShaderContainer.Shaders = new[]
                 {
-                    new RainbowShader(GetShader("Rainbow"))
+                    new RainbowShader(GetShader(RainbowShader.SHADER_NAME))
                     {
                         Uv = TestCaseVectorHelper.ParseVector2(uv),
                         Speed = speed,

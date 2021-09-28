@@ -36,15 +36,22 @@ namespace osu.Framework.Graphics.Sprites
             {
                 backLyricTextContainer = new Container
                 {
-                    AutoSizeAxes = Axes.Both,
+                    AutoSizeAxes = Axes.Y,
+                    Anchor = Anchor.CentreRight,
+                    Origin = Anchor.CentreRight,
                     Masking = true,
-                    Child = backLyricText = new T()
+                    Child = backLyricText = new T
+                    {
+                        Anchor = Anchor.CentreRight,
+                        Origin = Anchor.CentreRight,
+                    }
                 },
                 frontLyricTextContainer = new Container
                 {
                     AutoSizeAxes = Axes.Y,
+
                     Masking = true,
-                    Child = frontLyricText = new T()
+                    Child = frontLyricText = new T(),
                 }
             };
         }
@@ -118,7 +125,10 @@ namespace osu.Framework.Graphics.Sprites
             set
             {
                 shaders.Clear();
-                shaders.AddRange(value);
+
+                if (value != null)
+                    shaders.AddRange(value);
+
                 Invalidate(Invalidation.DrawNode);
             }
         }
@@ -126,13 +136,23 @@ namespace osu.Framework.Graphics.Sprites
         public IReadOnlyList<IShader> LeftLyricTextShaders
         {
             get => frontLyricText.Shaders;
-            set => frontLyricText.Shaders = value;
+            set
+            {
+                frontLyricText.Shaders = value;
+
+                Invalidate(Invalidation.DrawNode);
+            }
         }
 
         public IReadOnlyList<IShader> RightLyricTextShaders
         {
             get => backLyricText.Shaders;
-            set => backLyricText.Shaders = value;
+            set
+            {
+                backLyricText.Shaders = value;
+
+                Invalidate(Invalidation.DrawNode);
+            }
         }
 
         #endregion
@@ -319,7 +339,26 @@ namespace osu.Framework.Graphics.Sprites
 
         #endregion
 
-        public IReadOnlyDictionary<TextIndex, double> TimeTags { get; set; } = new Dictionary<TextIndex, double>();
+        private readonly Dictionary<TextIndex, double> timeTags = new Dictionary<TextIndex, double>();
+
+        public IReadOnlyDictionary<TextIndex, double> TimeTags
+        {
+            get => timeTags;
+            set
+            {
+                timeTags.Clear();
+
+                if (value != null)
+                {
+                    foreach (var (timeTag, time) in value)
+                    {
+                        timeTags.Add(timeTag, time);
+                    }
+                }
+
+                Invalidate(Invalidation.Layout);
+            }
+        }
 
         public override double LifetimeStart
         {
@@ -349,6 +388,12 @@ namespace osu.Framework.Graphics.Sprites
         // TODO : implement
         public KaraokeTextSmartHorizon KaraokeTextSmartHorizon { get; set; }
 
+        public override Vector2 Size
+        {
+            get => frontLyricText.Size;
+            set => throw new InvalidOperationException();
+        }
+
         protected override bool OnInvalidate(Invalidation invalidation, InvalidationSource source)
         {
             var result = base.OnInvalidate(invalidation, source);
@@ -360,6 +405,7 @@ namespace osu.Framework.Graphics.Sprites
 
             // reset masking transform.
             frontLyricTextContainer.ClearTransforms();
+            backLyricTextContainer.ClearTransforms();
 
             // process time-tag should in the text-range
             var characters = frontLyricText.Characters;
@@ -370,7 +416,8 @@ namespace osu.Framework.Graphics.Sprites
             var startTime = validTimeTag.FirstOrDefault().Value;
 
             // get transform sequence and set initial delay time.
-            var transformSequence = frontLyricTextContainer.Delay(startTime - Time.Current).Then();
+            var frontTransformSequence = frontLyricTextContainer.Delay(startTime - Time.Current).Then();
+            var backTransformSequence = backLyricTextContainer.Delay(startTime - Time.Current).Then();
 
             var previousTime = startTime;
 
@@ -380,7 +427,8 @@ namespace osu.Framework.Graphics.Sprites
                 var characterRectangle = characters[textIndex.Index].DrawRectangle;
                 var position = textIndex.State == TextIndex.IndexState.Start ? characterRectangle.Left : characterRectangle.Right;
                 var duration = Math.Max(time - previousTime, 0);
-                transformSequence.ResizeWidthTo(position, duration).Then();
+                frontTransformSequence.ResizeWidthTo(position, duration).Then();
+                backTransformSequence.ResizeWidthTo(DrawWidth - position, duration).Then();
 
                 previousTime = time;
             }

@@ -2,6 +2,7 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -37,7 +38,7 @@ namespace osu.Framework.Graphics
             if (shaders == Source.Shaders.ToArray())
                 return;
 
-            // should clear frame buffer if shader changed.
+            // should clear buffer if property changed because might be shader amount changed.
             shaders = Source.Shaders.ToArray();
             SharedData.ClearBuffer();
         }
@@ -45,31 +46,36 @@ namespace osu.Framework.Graphics
         protected override long GetDrawVersion()
         {
             // if contains shader that need to apply time, then need to force run populate contents in each frame.
-            // todo : use better way.
-            if (containTimePropertyShader())
+            if (ContainTimePropertyShader(shaders))
             {
-                var prop = typeof(BufferedDrawNodeSharedData).GetField("DrawVersion", BindingFlags.Instance | BindingFlags.NonPublic);
-                if (prop == null)
-                    throw new NullReferenceException();
-
-                prop.SetValue(SharedData, -1);
+                ResetDrawVersion();
             }
 
             return base.GetDrawVersion();
+        }
 
-            bool containTimePropertyShader() =>
-                shaders.Any(x =>
+        protected static bool ContainTimePropertyShader(IEnumerable<IShader> shaders) =>
+            shaders.Any(x =>
+            {
+                switch (x)
                 {
-                    switch (x)
-                    {
-                        case IApplicableToCurrentTime _:
-                        case IStepShader stepShader when stepShader.StepShaders.Any(s => s is IApplicableToCurrentTime):
-                            return true;
+                    case IApplicableToCurrentTime _:
+                    case IStepShader stepShader when stepShader.StepShaders.Any(s => s is IApplicableToCurrentTime):
+                        return true;
 
-                        default:
-                            return false;
-                    }
-                });
+                    default:
+                        return false;
+                }
+            });
+
+        protected void ResetDrawVersion()
+        {
+            // todo : use better way to reset draw version.
+            var prop = typeof(BufferedDrawNodeSharedData).GetField("DrawVersion", BindingFlags.Instance | BindingFlags.NonPublic);
+            if (prop == null)
+                throw new NullReferenceException();
+
+            prop.SetValue(SharedData, -1);
         }
 
         protected override void PopulateContents()

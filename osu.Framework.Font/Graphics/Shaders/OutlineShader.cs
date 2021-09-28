@@ -9,6 +9,7 @@ namespace osu.Framework.Graphics.Shaders
 {
     public class OutlineShader : CustomizedShader
     {
+        public const string SHADER_NAME = "Outline";
         public int Radius { get; set; }
 
         public Color4 OutlineColour { get; set; }

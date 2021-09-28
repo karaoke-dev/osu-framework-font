@@ -7,35 +7,12 @@ using osu.Framework.Graphics.OpenGL.Vertices;
 using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Shaders;
 using osu.Framework.Graphics.Textures;
-using osu.Framework.Layout;
 using osuTK;
 
 namespace osu.Framework.Graphics.Sprites
 {
     public partial class LyricSpriteText
     {
-        /// <summary>
-        /// In order to signal the draw thread to re-draw the buffered container we version it.
-        /// Our own version (update) keeps track of which version we are on, whereas the
-        /// drawVersion keeps track of the version the draw thread is on.
-        /// When forcing a redraw we increment updateVersion, pass it into each new drawnode
-        /// and the draw thread will realize its drawVersion is lagging behind, thus redrawing.
-        /// </summary>
-        private long updateVersion;
-
-        protected override bool OnInvalidate(Invalidation invalidation, InvalidationSource source)
-        {
-            var result = base.OnInvalidate(invalidation, source);
-
-            if ((invalidation & Invalidation.DrawNode) > 0)
-            {
-                ++updateVersion;
-                result = true;
-            }
-
-            return result;
-        }
-
         // todo: should have a better way to let user able to customize formats?
         protected override DrawNode CreateDrawNode()
             => new LyricSpriteTextShaderEffectDrawNode(this, new MultiShaderBufferedDrawNodeSharedData());
@@ -45,23 +22,10 @@ namespace osu.Framework.Graphics.Sprites
         /// </summary>
         protected class LyricSpriteTextShaderEffectDrawNode : MultiShaderBufferedDrawNode
         {
-            protected new LyricSpriteText Source => (LyricSpriteText)base.Source;
-
-            private long updateVersion;
-
             public LyricSpriteTextShaderEffectDrawNode(LyricSpriteText source, MultiShaderBufferedDrawNodeSharedData sharedData)
                 : base(source, new LyricSpriteTextDrawNode(source), sharedData)
             {
             }
-
-            public override void ApplyState()
-            {
-                base.ApplyState();
-
-                updateVersion = Source.updateVersion;
-            }
-
-            protected override long GetDrawVersion() => updateVersion;
         }
 
         /// <summary>

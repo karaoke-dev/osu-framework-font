@@ -8,16 +8,18 @@ namespace osu.Framework.Graphics.Shaders
 {
     public class RainbowShader : CustomizedShader, IApplicableToCurrentTime
     {
+        public const string SHADER_NAME = "Rainbow";
+
         public Vector2 Uv { get; set; } = new Vector2(0, 1);
 
-        public float Speed { get; set; } = 5;
+        public float Speed { get; set; } = 1;
 
-        public float Saturation { get; set; } = 0.7f;
+        public float Saturation { get; set; } = 0.5f;
 
-        public float Brightness { get; set; } = 0.8f;
+        public float Brightness { get; set; } = 1f;
 
         // todo: this property might able to be removed because it can be replaced by other property.
-        public float Section { get; set; } = 0.5f;
+        public float Section { get; set; } = 1f;
 
         public float Mix { get; set; } = 0.5f;
 
