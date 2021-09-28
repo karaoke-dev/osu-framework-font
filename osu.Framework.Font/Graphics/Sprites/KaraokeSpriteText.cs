@@ -129,13 +129,23 @@ namespace osu.Framework.Graphics.Sprites
         public IReadOnlyList<IShader> LeftLyricTextShaders
         {
             get => frontLyricText.Shaders;
-            set => frontLyricText.Shaders = value;
+            set
+            {
+                frontLyricText.Shaders = value;
+
+                Invalidate(Invalidation.DrawNode);
+            }
         }
 
         public IReadOnlyList<IShader> RightLyricTextShaders
         {
             get => backLyricText.Shaders;
-            set => backLyricText.Shaders = value;
+            set
+            {
+                backLyricText.Shaders = value;
+
+                Invalidate(Invalidation.DrawNode);
+            }
         }
 
         #endregion

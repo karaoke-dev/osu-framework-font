@@ -22,8 +22,6 @@ namespace osu.Framework.Graphics.Sprites
         /// </summary>
         protected class LyricSpriteTextShaderEffectDrawNode : MultiShaderBufferedDrawNode
         {
-            protected new LyricSpriteText Source => (LyricSpriteText)base.Source;
-
             public LyricSpriteTextShaderEffectDrawNode(LyricSpriteText source, MultiShaderBufferedDrawNodeSharedData sharedData)
                 : base(source, new LyricSpriteTextDrawNode(source), sharedData)
             {
