@@ -51,7 +51,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
             {
                 new OutlineShader(outlineShader)
                 {
-                    Radius = 10,
+                    Radius = 5,
                     OutlineColour = Color4.Green,
                 },
             });
