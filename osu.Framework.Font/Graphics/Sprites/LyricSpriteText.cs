@@ -325,44 +325,6 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
-        private float borderRadius;
-
-        /// <summary>
-        /// Gets or sets the border radius
-        /// </summary>
-        public float BorderRadius
-        {
-            get => borderRadius;
-            set
-            {
-                if (borderRadius == value)
-                    return;
-
-                borderRadius = value;
-
-                invalidate(true);
-            }
-        }
-
-        private bool border;
-
-        /// <summary>
-        /// Gets or sets the border
-        /// </summary>
-        public bool Border
-        {
-            get => border;
-            set
-            {
-                if (border == value)
-                    return;
-
-                border = value;
-
-                invalidate(true, true);
-            }
-        }
-
         private bool truncate;
 
         /// <summary>

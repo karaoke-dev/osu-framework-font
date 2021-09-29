@@ -259,26 +259,6 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
-        public float BorderRadius
-        {
-            get => frontLyricText.BorderRadius;
-            set
-            {
-                frontLyricText.BorderRadius = value;
-                backLyricText.BorderRadius = value;
-            }
-        }
-
-        public bool Border
-        {
-            get => frontLyricText.Border;
-            set
-            {
-                frontLyricText.Border = value;
-                backLyricText.Border = value;
-            }
-        }
-
         #endregion
 
         #region text spacing
