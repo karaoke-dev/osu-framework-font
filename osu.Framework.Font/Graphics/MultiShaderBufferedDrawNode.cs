@@ -21,7 +21,7 @@ namespace osu.Framework.Graphics
 
         protected new MultiShaderBufferedDrawNodeSharedData SharedData => (MultiShaderBufferedDrawNodeSharedData)base.SharedData;
 
-        private IShader[] shaders;
+        private IShader[] shaders = { };
 
         private readonly double loadTime;
 
@@ -35,12 +35,12 @@ namespace osu.Framework.Graphics
         {
             base.ApplyState();
 
-            if (shaders == Source.Shaders.ToArray())
+            if (shaders.SequenceEqual(Source.Shaders))
                 return;
 
             // should clear buffer if property changed because might be shader amount changed.
             shaders = Source.Shaders.ToArray();
-            SharedData.ClearBuffer();
+            SharedData.CreateDefaultFrameBuffers(shaders);
         }
 
         protected override long GetDrawVersion()
@@ -112,7 +112,7 @@ namespace osu.Framework.Graphics
             foreach (var shader in shaders)
             {
                 var current = getSourceFrameBuffer(shader);
-                var target = SharedData.CreateFrameBuffer();
+                var target = SharedData.ShaderBuffers[shader];
 
                 if (shader is IStepShader stepShader)
                 {
@@ -128,7 +128,7 @@ namespace osu.Framework.Graphics
                     renderShader(shader, current, target);
                 }
 
-                SharedData.AddOrReplaceBuffer(shader, target);
+                SharedData.UpdateBuffer(shader, target);
             }
 
             void renderShader(IShader shader, FrameBuffer current, FrameBuffer target)

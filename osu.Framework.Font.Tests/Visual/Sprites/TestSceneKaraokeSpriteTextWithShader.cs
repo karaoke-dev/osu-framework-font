@@ -47,16 +47,24 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
         public void ApplyLeftLyricTextShader()
         {
             var outlineShader = GetShader(OutlineShader.SHADER_NAME);
-            AddStep("Apply Outline shader in left text", () => karaokeSpriteText.LeftLyricTextShaders = new[]
+            AddStep("Apply Outline shader in left text", () =>
             {
-                new OutlineShader(outlineShader)
+                karaokeSpriteText.LeftTextColour = Color4.White;
+                karaokeSpriteText.LeftLyricTextShaders = new[]
                 {
-                    Radius = 5,
-                    OutlineColour = Color4.Green,
-                },
+                    new OutlineShader(outlineShader)
+                    {
+                        Radius = 5,
+                        OutlineColour = Color4.Green,
+                    },
+                };
             });
 
-            AddStep("Clear shader from left text", () => karaokeSpriteText.LeftLyricTextShaders = null);
+            AddStep("Clear shader from left text", () =>
+            {
+                karaokeSpriteText.LeftTextColour = Color4.Green;
+                karaokeSpriteText.LeftLyricTextShaders = null;
+            });
         }
 
         [Test]
@@ -65,29 +73,37 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
             var outlineShader = GetShader(OutlineShader.SHADER_NAME);
             var rainbowShader = GetShader(RainbowShader.SHADER_NAME);
 
-            AddStep("Apply Outline shader in right text", () => karaokeSpriteText.RightLyricTextShaders = new IShader[]
+            AddStep("Apply Outline shader in right text", () =>
             {
-                new OutlineShader(outlineShader)
+                karaokeSpriteText.RightTextColour = Color4.White;
+                karaokeSpriteText.RightLyricTextShaders = new IShader[]
                 {
-                    Radius = 1,
-                    OutlineColour = Color4.Blue,
-                },
-                new StepShader
-                {
-                    Name = "Outline with rainbow effect",
-                    StepShaders = new IShader[]
+                    new OutlineShader(outlineShader)
                     {
-                        new OutlineShader(outlineShader)
+                        Radius = 1,
+                        OutlineColour = Color4.Blue,
+                    },
+                    new StepShader
+                    {
+                        Name = "Outline with rainbow effect",
+                        StepShaders = new IShader[]
                         {
-                            Radius = 10,
-                            OutlineColour = Color4.White,
-                        },
-                        new RainbowShader(rainbowShader)
-                    }
-                },
+                            new OutlineShader(outlineShader)
+                            {
+                                Radius = 10,
+                                OutlineColour = Color4.White,
+                            },
+                            new RainbowShader(rainbowShader)
+                        }
+                    },
+                };
             });
 
-            AddStep("Clear shader from right text", () => karaokeSpriteText.RightLyricTextShaders = null);
+            AddStep("Clear shader from right text", () =>
+            {
+                karaokeSpriteText.RightTextColour = Color4.Red;
+                karaokeSpriteText.RightLyricTextShaders = null;
+            });
         }
 
         protected new void AddStep(string description, Action action)
