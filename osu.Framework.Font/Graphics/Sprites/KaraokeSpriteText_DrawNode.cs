@@ -23,7 +23,6 @@ namespace osu.Framework.Graphics.Sprites
             protected new CompositeDrawableDrawNode Child => (CompositeDrawableDrawNode)base.Child;
 
             private IShader[] leftLyricShaders;
-
             private IShader[] rightLyricShaders;
 
             public KaraokeSpriteTextShaderEffectDrawNode(KaraokeSpriteText<T> source, MultiShaderBufferedDrawNodeSharedData sharedData)

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) andy840119 <andy840119@gmail.com>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using osu.Framework.Graphics.OpenGL.Buffers;
@@ -23,10 +24,24 @@ namespace osu.Framework.Graphics
             this.formats = formats;
         }
 
-        public FrameBuffer CreateFrameBuffer()
+        public void CreateDefaultFrameBuffers(IShader[] shaders)
         {
+            shaderBuffers.Clear();
+
             var filterMode = PixelSnapping ? All.Nearest : All.Linear;
-            return new FrameBuffer(formats, filterMode);
+
+            foreach (var shader in shaders)
+            {
+                shaderBuffers.Add(shader, new FrameBuffer(formats, filterMode));
+            }
+        }
+
+        public void UpdateBuffer(IShader shader, FrameBuffer frameBuffer)
+        {
+            if (!shaderBuffers.ContainsKey(shader))
+                throw new Exception();
+
+            shaderBuffers[shader] = frameBuffer;
         }
 
         public FrameBuffer[] GetDrawFrameBuffers()
@@ -38,23 +53,6 @@ namespace osu.Framework.Graphics
 
                 return true;
             }).Select(x => x.Value).ToArray();
-
-        public void AddOrReplaceBuffer(IShader shader, FrameBuffer frameBuffer)
-        {
-            if (shaderBuffers.ContainsKey(shader))
-            {
-                shaderBuffers[shader] = frameBuffer;
-            }
-            else
-            {
-                shaderBuffers.Add(shader, frameBuffer);
-            }
-        }
-
-        public void ClearBuffer()
-        {
-            shaderBuffers.Clear();
-        }
 
         protected override void Dispose(bool isDisposing)
         {
