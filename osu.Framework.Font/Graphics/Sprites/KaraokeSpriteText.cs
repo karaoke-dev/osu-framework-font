@@ -384,6 +384,8 @@ namespace osu.Framework.Graphics.Sprites
                 return result;
 
             // reset masking transform.
+            frontLyricTextContainer.Width = 0;
+            backLyricTextContainer.Width = DrawWidth;
             frontLyricTextContainer.ClearTransforms();
             backLyricTextContainer.ClearTransforms();
 
