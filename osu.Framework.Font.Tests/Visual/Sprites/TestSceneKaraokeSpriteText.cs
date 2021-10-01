@@ -2,14 +2,17 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System.Collections.Generic;
+using NUnit.Framework;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Testing;
+using osu.Framework.Timing;
 using osuTK.Graphics;
 
 namespace osu.Framework.Font.Tests.Visual.Sprites
 {
     public class TestSceneKaraokeSpriteText : TestScene
     {
+        private readonly ManualClock manualClock = new();
         private readonly KaraokeSpriteText karaokeSpriteText;
 
         public TestSceneKaraokeSpriteText()
@@ -50,11 +53,25 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
                 LeftTextColour = Color4.Green,
                 RightTextColour = Color4.Red,
             };
+        }
 
-            AddLabel("Test time tag");
+        [TestCase(false)]
+        [TestCase(true)]
+        public void TestKaraokeSpriteTextTimeTag(bool manualTime)
+        {
+            if (manualTime)
+            {
+                AddSliderStep("Here can adjust time", 0, 3000, 1000, time =>
+                {
+                    manualClock.CurrentTime = time;
+                });
+            }
+
             AddStep("Default time tag", () =>
             {
-                var startTime = Time.Current;
+                var startTime = getStartTime();
+
+                karaokeSpriteText.Clock = manualTime ? new FramedClock(manualClock) : Clock;
                 karaokeSpriteText.TimeTags = new Dictionary<TextIndex, double>
                 {
                     { new TextIndex(0), startTime + 500 },
@@ -66,7 +83,9 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
             });
             AddStep("Time tag with end state", () =>
             {
-                var startTime = Time.Current;
+                var startTime = getStartTime();
+
+                karaokeSpriteText.Clock = manualTime ? new FramedClock(manualClock) : Clock;
                 karaokeSpriteText.TimeTags = new Dictionary<TextIndex, double>
                 {
                     // カ
@@ -88,7 +107,9 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
             });
             AddStep("Time tag with wrong order", () =>
             {
-                var startTime = Time.Current;
+                var startTime = getStartTime();
+
+                karaokeSpriteText.Clock = manualTime ? new FramedClock(manualClock) : Clock;
                 karaokeSpriteText.TimeTags = new Dictionary<TextIndex, double>
                 {
                     { new TextIndex(4), startTime + 2000 },
@@ -100,7 +121,9 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
             });
             AddStep("Time tag with out of range", () =>
             {
-                var startTime = Time.Current;
+                var startTime = getStartTime();
+
+                karaokeSpriteText.Clock = manualTime ? new FramedClock(manualClock) : Clock;
                 karaokeSpriteText.TimeTags = new Dictionary<TextIndex, double>
                 {
                     { new TextIndex(-1), startTime + 0 },
@@ -112,6 +135,26 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
                     { new TextIndex(8), startTime + 2500 },
                 };
             });
+
+            AddStep("Only one time-tag", () =>
+            {
+                var startTime = getStartTime();
+
+                karaokeSpriteText.Clock = manualTime ? new FramedClock(manualClock) : Clock;
+                karaokeSpriteText.TimeTags = new Dictionary<TextIndex, double>
+                {
+                    { new TextIndex(0), startTime + 500 },
+                };
+            });
+
+            AddStep("None time-tag", () =>
+            {
+                karaokeSpriteText.Clock = manualTime ? new FramedClock(manualClock) : Clock;
+                karaokeSpriteText.TimeTags = null;
+            });
+
+            double getStartTime()
+                => manualTime ? 0 : Clock.CurrentTime;
         }
     }
 }
