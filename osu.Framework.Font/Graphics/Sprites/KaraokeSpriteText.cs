@@ -398,15 +398,16 @@ namespace osu.Framework.Graphics.Sprites
                                .OrderBy(x => x.Value).ToArray();
 
             // get first time-tag relative start time.
-            var relativeTime = validTimeTag.FirstOrDefault().Value - Time.Current;
+            var currentTime = Time.Current;
+            var relativeTime = validTimeTag.FirstOrDefault().Value;
 
             // should use absolute time to process time-tags.
-            using (frontLyricTextContainer.BeginAbsoluteSequence(Time.Current))
-            using (frontLyricTextContainer.BeginAbsoluteSequence(Time.Current))
+            using (frontLyricTextContainer.BeginAbsoluteSequence(currentTime))
+            using (frontLyricTextContainer.BeginAbsoluteSequence(currentTime))
             {
                 // get transform sequence and set initial delay time.
-                var frontTransformSequence = frontLyricTextContainer.Delay(relativeTime).Then();
-                var backTransformSequence = backLyricTextContainer.Delay(relativeTime).Then();
+                var frontTransformSequence = frontLyricTextContainer.Delay(relativeTime - currentTime).Then();
+                var backTransformSequence = backLyricTextContainer.Delay(relativeTime - currentTime).Then();
 
                 foreach (var (textIndex, time) in validTimeTag)
                 {
