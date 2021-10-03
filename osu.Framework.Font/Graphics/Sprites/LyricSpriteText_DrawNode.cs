@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using osu.Framework.Graphics.Extensions;
 using osu.Framework.Graphics.OpenGL.Vertices;
 using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Shaders;
@@ -13,6 +14,13 @@ namespace osu.Framework.Graphics.Sprites
 {
     public partial class LyricSpriteText
     {
+        protected override Quad ComputeScreenSpaceDrawQuad()
+        {
+            // make draw size become bigger (for not masking the shader).
+            var newRectangle = DrawRectangle.Scale(2);
+            return ToScreenSpace(newRectangle);
+        }
+
         // todo: should have a better way to let user able to customize formats?
         protected override DrawNode CreateDrawNode()
             => new LyricSpriteTextShaderEffectDrawNode(this, new MultiShaderBufferedDrawNodeSharedData());
