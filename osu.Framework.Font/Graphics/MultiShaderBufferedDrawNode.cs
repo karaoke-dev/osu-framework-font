@@ -98,7 +98,7 @@ namespace osu.Framework.Graphics
             else
             {
                 // should draw origin content if no shader effects.
-                DrawFrameBuffer(SharedData.CurrentEffectBuffer, DrawRectangle, Color4.White);
+                base.DrawContents();
             }
         }
 
