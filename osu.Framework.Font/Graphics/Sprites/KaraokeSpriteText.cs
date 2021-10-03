@@ -20,10 +20,10 @@ namespace osu.Framework.Graphics.Sprites
 
     public partial class KaraokeSpriteText<T> : CompositeDrawable, IMultiShaderBufferedDrawable, IHasRuby, IHasRomaji where T : LyricSpriteText, new()
     {
-        private readonly Container frontLyricTextContainer;
+        private readonly MaskingContainer<T> frontLyricTextContainer;
         private readonly T frontLyricText;
 
-        private readonly Container backLyricTextContainer;
+        private readonly MaskingContainer<T> backLyricTextContainer;
         private readonly T backLyricText;
 
         public IShader TextureShader { get; private set; }
@@ -34,23 +34,22 @@ namespace osu.Framework.Graphics.Sprites
             AutoSizeAxes = Axes.Both;
             InternalChildren = new Drawable[]
             {
-                backLyricTextContainer = new Container
+                backLyricTextContainer = new MaskingContainer<T>
                 {
                     AutoSizeAxes = Axes.Y,
                     Anchor = Anchor.CentreRight,
                     Origin = Anchor.CentreRight,
-                    Masking = true,
+                    MaskingEdges = Edges.Left,
                     Child = backLyricText = new T
                     {
                         Anchor = Anchor.CentreRight,
                         Origin = Anchor.CentreRight,
                     }
                 },
-                frontLyricTextContainer = new Container
+                frontLyricTextContainer = new MaskingContainer<T>
                 {
                     AutoSizeAxes = Axes.Y,
-
-                    Masking = true,
+                    MaskingEdges = Edges.Right,
                     Child = frontLyricText = new T(),
                 }
             };
