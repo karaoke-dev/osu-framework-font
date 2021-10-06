@@ -25,7 +25,9 @@ namespace osu.Framework.Font.Tests.Visual
         [Resolved]
         private ShaderManager shaderManager { get; set; }
 
-        protected override Container<Drawable> Content { get; } = new Container { RelativeSizeAxes = Axes.Both };
+        private readonly Container content;
+
+        protected override Container<Drawable> Content => content;
 
         protected BackgroundGridTestSample()
         {
@@ -58,7 +60,18 @@ namespace osu.Framework.Font.Tests.Visual
                         Origin = Anchor.Centre,
                         Colour = Color4.Purple,
                     },
-                    Content,
+                    content = new Container
+                    {
+                        RelativeSizeAxes = Axes.Both,
+                    },
+                    new DraggableCircle
+                    {
+                        Name = "Test background change object",
+                        Size = new Vector2(GRID_SIZE),
+                        Anchor = Anchor.BottomRight,
+                        Origin = Anchor.BottomRight,
+                        Colour = Color4.Green,
+                    },
                 }
             });
         }
