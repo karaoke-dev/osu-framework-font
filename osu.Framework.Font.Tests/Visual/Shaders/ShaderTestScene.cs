@@ -73,6 +73,9 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
 
             private readonly List<IShader> shaders = new();
 
+            // todo: should have a better way to let user able to customize formats?
+            private readonly MultiShaderBufferedDrawNodeSharedData sharedData = new();
+
             public IReadOnlyList<IShader> Shaders
             {
                 get => shaders;
@@ -95,9 +98,8 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
                 RoundedTextureShader = shaders.Load(VertexShaderDescriptor.TEXTURE_2, FragmentShaderDescriptor.TEXTURE_ROUNDED);
             }
 
-            // todo: should have a better way to let user able to customize formats?
             protected override DrawNode CreateDrawNode()
-                => new TestShaderContainerShaderEffectDrawNode(this, new MultiShaderBufferedDrawNodeSharedData());
+                => new TestShaderContainerShaderEffectDrawNode(this, sharedData);
 
             /// <summary>
             /// <see cref="BufferedDrawNode"/> to apply <see cref="IShader"/>.

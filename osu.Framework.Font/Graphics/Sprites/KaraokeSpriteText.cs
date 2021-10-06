@@ -26,6 +26,9 @@ namespace osu.Framework.Graphics.Sprites
         private readonly MaskingContainer<T> backLyricTextContainer;
         private readonly T backLyricText;
 
+        // todo: should have a better way to let user able to customize formats?
+        private readonly MultiShaderBufferedDrawNodeSharedData sharedData = new MultiShaderBufferedDrawNodeSharedData();
+
         public IShader TextureShader { get; private set; }
         public IShader RoundedTextureShader { get; private set; }
 

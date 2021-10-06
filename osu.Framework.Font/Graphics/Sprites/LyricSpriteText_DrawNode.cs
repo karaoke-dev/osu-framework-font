@@ -21,9 +21,8 @@ namespace osu.Framework.Graphics.Sprites
             return ToScreenSpace(newRectangle);
         }
 
-        // todo: should have a better way to let user able to customize formats?
         protected override DrawNode CreateDrawNode()
-            => new LyricSpriteTextShaderEffectDrawNode(this, new MultiShaderBufferedDrawNodeSharedData());
+            => new LyricSpriteTextShaderEffectDrawNode(this, sharedData);
 
         /// <summary>
         /// <see cref="BufferedDrawNode"/> to apply <see cref="IShader"/>.
