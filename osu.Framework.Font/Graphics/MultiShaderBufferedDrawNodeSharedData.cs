@@ -26,7 +26,7 @@ namespace osu.Framework.Graphics
 
         public void CreateDefaultFrameBuffers(IShader[] shaders)
         {
-            shaderBuffers.Clear();
+            clearBuffers();
 
             var filterMode = PixelSnapping ? All.Nearest : All.Linear;
 
@@ -57,7 +57,11 @@ namespace osu.Framework.Graphics
         protected override void Dispose(bool isDisposing)
         {
             base.Dispose(isDisposing);
+            clearBuffers();
+        }
 
+        private void clearBuffers()
+        {
             // clear all frame in the dictionary.
             foreach (var shaderBuffer in shaderBuffers)
             {
