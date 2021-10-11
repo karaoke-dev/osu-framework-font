@@ -2,6 +2,7 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using NUnit.Framework;
+using osu.Framework.Extensions;
 using osu.Framework.Font.Tests.Helper;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Shaders;
@@ -31,36 +32,33 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
         [Test]
         public void ApplyShader()
         {
-            var outlineShader = GetShader(OutlineShader.SHADER_NAME);
-            var rainbowShader = GetShader(RainbowShader.SHADER_NAME);
-
             AddStep("Apply static shader", () => lyricSpriteText.Shaders = new[]
             {
-                new OutlineShader(outlineShader)
+                GetShaderByType<OutlineShader>().With(s =>
                 {
-                    Radius = 10,
-                    OutlineColour = Color4.Green,
-                },
+                    s.Radius = 10;
+                    s.OutlineColour = Color4.Green;
+                })
             });
 
             AddStep("Apply rainbow shader", () => lyricSpriteText.Shaders = new IShader[]
             {
-                new OutlineShader(outlineShader)
+                GetShaderByType<OutlineShader>().With(s =>
                 {
-                    Radius = 1,
-                    OutlineColour = Color4.Blue,
-                },
+                    s.Radius = 1;
+                    s.OutlineColour = Color4.Blue;
+                }),
                 new StepShader
                 {
                     Name = "Outline with rainbow effect",
                     StepShaders = new IShader[]
                     {
-                        new OutlineShader(outlineShader)
+                        GetShaderByType<OutlineShader>().With(s =>
                         {
-                            Radius = 10,
-                            OutlineColour = Color4.White,
-                        },
-                        new RainbowShader(rainbowShader)
+                            s.Radius = 10;
+                            s.OutlineColour = Color4.White;
+                        }),
+                        GetShaderByType<RainbowShader>()
                     }
                 },
             });

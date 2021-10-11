@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using NUnit.Framework;
+using osu.Framework.Extensions;
 using osu.Framework.Graphics;
 using osu.Framework.Font.Tests.Helper;
 using osu.Framework.Graphics.Shaders;
@@ -46,17 +47,16 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
         [Test]
         public void ApplyLeftLyricTextShader()
         {
-            var outlineShader = GetShader(OutlineShader.SHADER_NAME);
             AddStep("Apply Outline shader in left text", () =>
             {
                 karaokeSpriteText.LeftTextColour = Color4.White;
                 karaokeSpriteText.LeftLyricTextShaders = new[]
                 {
-                    new OutlineShader(outlineShader)
+                    GetShaderByType<OutlineShader>().With(s =>
                     {
-                        Radius = 5,
-                        OutlineColour = Color4.Green,
-                    },
+                        s.Radius = 5;
+                        s.OutlineColour = Color4.Green;
+                    })
                 };
             });
 
@@ -70,30 +70,27 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
         [Test]
         public void ApplyRightLyricTextShader()
         {
-            var outlineShader = GetShader(OutlineShader.SHADER_NAME);
-            var rainbowShader = GetShader(RainbowShader.SHADER_NAME);
-
             AddStep("Apply Outline shader in right text", () =>
             {
                 karaokeSpriteText.RightTextColour = Color4.White;
                 karaokeSpriteText.RightLyricTextShaders = new IShader[]
                 {
-                    new OutlineShader(outlineShader)
+                    GetShaderByType<OutlineShader>().With(s =>
                     {
-                        Radius = 1,
-                        OutlineColour = Color4.Blue,
-                    },
+                        s.Radius = 1;
+                        s.OutlineColour = Color4.Blue;
+                    }),
                     new StepShader
                     {
                         Name = "Outline with rainbow effect",
                         StepShaders = new IShader[]
                         {
-                            new OutlineShader(outlineShader)
+                            GetShaderByType<OutlineShader>().With(s =>
                             {
-                                Radius = 10,
-                                OutlineColour = Color4.White,
-                            },
-                            new RainbowShader(rainbowShader)
+                                s.Radius = 10;
+                                s.OutlineColour = Color4.White;
+                            }),
+                            GetShaderByType<RainbowShader>()
                         }
                     },
                 };

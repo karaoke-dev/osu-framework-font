@@ -2,6 +2,7 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using NUnit.Framework;
+using osu.Framework.Extensions;
 using osu.Framework.Graphics.Shaders;
 using osuTK;
 using osuTK.Graphics;
@@ -18,11 +19,11 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
                 Name = "Step 1",
                 StepShaders = new[]
                 {
-                    new OutlineShader(GetShader(OutlineShader.SHADER_NAME))
+                    GetShaderByType<OutlineShader>().With(s =>
                     {
-                        Radius = 10,
-                        OutlineColour = Color4.Yellow,
-                    },
+                        s.Radius = 10;
+                        s.OutlineColour = Color4.Yellow;
+                    }),
                     GetShader("CRT"),
                 }
             };
@@ -54,11 +55,11 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
                 Name = "Step create outline",
                 StepShaders = new[]
                 {
-                    new OutlineShader(GetShader(OutlineShader.SHADER_NAME))
+                    GetShaderByType<OutlineShader>().With(s =>
                     {
-                        Radius = 10,
-                        OutlineColour = Color4.Yellow,
-                    },
+                        s.Radius = 10;
+                        s.OutlineColour = Color4.Yellow;
+                    })
                 }
             };
 
@@ -67,11 +68,11 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
                 Name = "Step create shadow",
                 StepShaders = new[]
                 {
-                    new ShadowShader(GetShader(ShadowShader.SHADER_NAME))
+                    GetShaderByType<ShadowShader>().With(s =>
                     {
-                        ShadowColour = Color4.Red,
-                        ShadowOffset = new Vector2(30, 30),
-                    },
+                        s.ShadowColour = Color4.Red;
+                        s.ShadowOffset = new Vector2(30, 30);
+                    })
                 }
             };
 

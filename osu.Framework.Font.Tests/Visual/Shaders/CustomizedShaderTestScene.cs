@@ -2,6 +2,7 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using NUnit.Framework;
+using osu.Framework.Extensions;
 using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Font.Tests.Helper;
 using osu.Framework.Graphics.Shaders;
@@ -19,11 +20,11 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
             {
                 ShaderContainer.Shaders = new[]
                 {
-                    new OutlineShader(GetShader(OutlineShader.SHADER_NAME))
+                    GetShaderByType<OutlineShader>().With(s =>
                     {
-                        Radius = radius,
-                        OutlineColour = Color4Extensions.FromHex(colour),
-                    }
+                        s.Radius = radius;
+                        s.OutlineColour = Color4Extensions.FromHex(colour);
+                    })
                 };
             });
         }
@@ -36,11 +37,11 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
             {
                 ShaderContainer.Shaders = new[]
                 {
-                    new ShadowShader(GetShader(ShadowShader.SHADER_NAME))
+                    GetShaderByType<ShadowShader>().With(s =>
                     {
-                        ShadowColour = Color4Extensions.FromHex(colour),
-                        ShadowOffset = TestCaseVectorHelper.ParseVector2(offset)
-                    }
+                        s.ShadowColour = Color4Extensions.FromHex(colour);
+                        s.ShadowOffset = TestCaseVectorHelper.ParseVector2(offset);
+                    })
                 };
             });
         }
@@ -58,15 +59,15 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
             {
                 ShaderContainer.Shaders = new[]
                 {
-                    new RainbowShader(GetShader(RainbowShader.SHADER_NAME))
+                    GetShaderByType<RainbowShader>().With(s =>
                     {
-                        Uv = TestCaseVectorHelper.ParseVector2(uv),
-                        Speed = speed,
-                        Saturation = saturation,
-                        Brightness = brightness,
-                        Section = section,
-                        Mix = mix,
-                    }
+                        s.Uv = TestCaseVectorHelper.ParseVector2(uv);
+                        s.Speed = speed;
+                        s.Saturation = saturation;
+                        s.Brightness = brightness;
+                        s.Section = section;
+                        s.Mix = mix;
+                    })
                 };
             });
         }
