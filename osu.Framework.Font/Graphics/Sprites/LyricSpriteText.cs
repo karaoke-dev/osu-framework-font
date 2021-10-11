@@ -27,6 +27,9 @@ namespace osu.Framework.Graphics.Sprites
         private const float default_text_size = 48;
         private static readonly char[] default_never_fixed_width_characters = { '.', ',', ':', ' ' };
 
+        // todo: should have a better way to let user able to customize formats?
+        private readonly MultiShaderBufferedDrawNodeSharedData sharedData = new MultiShaderBufferedDrawNodeSharedData();
+
         [Resolved]
         private FontStore store { get; set; }
 
