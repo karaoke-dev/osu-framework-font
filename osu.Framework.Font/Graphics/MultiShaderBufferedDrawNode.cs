@@ -20,8 +20,6 @@ namespace osu.Framework.Graphics
 
         protected new MultiShaderBufferedDrawNodeSharedData SharedData => (MultiShaderBufferedDrawNodeSharedData)base.SharedData;
 
-        private IShader[] shaders = { };
-
         private readonly double loadTime;
 
         public MultiShaderBufferedDrawNode(IBufferedDrawable source, DrawNode child, MultiShaderBufferedDrawNodeSharedData sharedData)
@@ -33,19 +31,13 @@ namespace osu.Framework.Graphics
         public override void ApplyState()
         {
             base.ApplyState();
-
-            if (shaders.SequenceEqual(Source.Shaders))
-                return;
-
-            // should clear buffer if property changed because might be shader amount changed.
-            shaders = Source.Shaders.ToArray();
-            SharedData.CreateDefaultFrameBuffers(shaders);
+            SharedData.UpdateFrameBuffers(Source.Shaders.ToArray());
         }
 
         protected override long GetDrawVersion()
         {
             // if contains shader that need to apply time, then need to force run populate contents in each frame.
-            if (ContainTimePropertyShader(shaders))
+            if (ContainTimePropertyShader(SharedData.Shaders))
             {
                 ResetDrawVersion();
             }
@@ -91,10 +83,6 @@ namespace osu.Framework.Graphics
             {
                 foreach (var frameBuffer in drawFrameBuffers)
                 {
-                    // got no idea why happened.
-                    if (frameBuffer.Texture == null)
-                        break;
-
                     DrawFrameBuffer(frameBuffer, DrawRectangle, Color4.White);
                 }
             }
@@ -107,6 +95,7 @@ namespace osu.Framework.Graphics
 
         private void drawFrameBuffer()
         {
+            var shaders = SharedData.Shaders;
             if (!shaders.Any())
                 return;
 

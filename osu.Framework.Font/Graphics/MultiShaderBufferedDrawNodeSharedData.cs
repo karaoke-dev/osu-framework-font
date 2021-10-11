@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using osu.Framework.Graphics.OpenGL;
@@ -17,6 +16,8 @@ namespace osu.Framework.Graphics
     {
         private readonly Dictionary<IShader, FrameBuffer> shaderBuffers = new Dictionary<IShader, FrameBuffer>();
 
+        public IShader[] Shaders => shaderBuffers.Keys.ToArray();
+
         private readonly RenderbufferInternalFormat[] formats;
 
         public MultiShaderBufferedDrawNodeSharedData(RenderbufferInternalFormat[] formats = null, bool pixelSnapping = false)
@@ -25,11 +26,12 @@ namespace osu.Framework.Graphics
             this.formats = formats;
         }
 
-        public void CreateDefaultFrameBuffers(IShader[] shaders)
+        public void UpdateFrameBuffers(IShader[] shaders)
         {
             if (shaderBuffers.Keys.SequenceEqual(shaders))
                 return;
 
+            // collect all frame buffer that needs to be disposed.
             var disposedFrameBuffer = shaderBuffers.Values.ToArray();
             shaderBuffers.Clear();
 
@@ -66,7 +68,7 @@ namespace osu.Framework.Graphics
                 return CurrentEffectBuffer;
 
             if (!shaderBuffers.ContainsKey(fromShader))
-                throw new DirectoryNotFoundException();
+                throw new KeyNotFoundException();
 
             return shaderBuffers[fromShader];
         }
@@ -74,7 +76,7 @@ namespace osu.Framework.Graphics
         public FrameBuffer GetTargetFrameBuffer(IShader shader)
         {
             if (!shaderBuffers.ContainsKey(shader))
-                throw new DirectoryNotFoundException();
+                throw new KeyNotFoundException();
 
             return shaderBuffers[shader];
         }
@@ -90,7 +92,12 @@ namespace osu.Framework.Graphics
         public FrameBuffer[] GetDrawFrameBuffers()
             => shaderBuffers.Where(x =>
             {
-                var shader = x.Key;
+                var (shader, frameBuffer) = x;
+
+                // should not render disposed or not created frame buffer.
+                if (frameBuffer.Texture == null)
+                    return false;
+
                 if (shader is IStepShader stepShader)
                     return stepShader.StepShaders.Any() && stepShader.Draw;
 
