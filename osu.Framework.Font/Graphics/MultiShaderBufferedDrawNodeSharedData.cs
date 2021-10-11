@@ -3,7 +3,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
+using osu.Framework.Graphics.OpenGL;
 using osu.Framework.Graphics.OpenGL.Buffers;
 using osu.Framework.Graphics.Shaders;
 using osuTK.Graphics.ES30;
@@ -13,8 +16,6 @@ namespace osu.Framework.Graphics
     public class MultiShaderBufferedDrawNodeSharedData : BufferedDrawNodeSharedData
     {
         private readonly Dictionary<IShader, FrameBuffer> shaderBuffers = new Dictionary<IShader, FrameBuffer>();
-
-        public IReadOnlyDictionary<IShader, FrameBuffer> ShaderBuffers => shaderBuffers;
 
         private readonly RenderbufferInternalFormat[] formats;
 
@@ -26,14 +27,56 @@ namespace osu.Framework.Graphics
 
         public void CreateDefaultFrameBuffers(IShader[] shaders)
         {
-            clearBuffers();
+            if (shaderBuffers.Keys.SequenceEqual(shaders))
+                return;
 
-            var filterMode = PixelSnapping ? All.Nearest : All.Linear;
+            var disposedFrameBuffer = shaderBuffers.Values.ToArray();
+            shaderBuffers.Clear();
 
             foreach (var shader in shaders)
             {
+                var filterMode = PixelSnapping ? All.Nearest : All.Linear;
                 shaderBuffers.Add(shader, new FrameBuffer(formats, filterMode));
             }
+
+            clearBuffersWithSchedule(() =>
+            {
+                clearBuffers(disposedFrameBuffer);
+            });
+
+            static void clearBuffersWithSchedule(Action action)
+            {
+                // should call GLWrapper.ScheduleDisposal(() => Dispose(true));
+                Delegate act = new Action(() => action?.Invoke());
+                var prop = typeof(GLWrapper).GetRuntimeMethods().FirstOrDefault(x => x.Name == "ScheduleDisposal");
+                if (prop == null)
+                    throw new NullReferenceException();
+
+                prop.Invoke(prop, new object[] { act });
+            }
+        }
+
+        public FrameBuffer GetSourceFrameBuffer(IShader shader)
+        {
+            if (!(shader is IStepShader stepShader))
+                return CurrentEffectBuffer;
+
+            var fromShader = stepShader.FromShader;
+            if (fromShader == null)
+                return CurrentEffectBuffer;
+
+            if (!shaderBuffers.ContainsKey(fromShader))
+                throw new DirectoryNotFoundException();
+
+            return shaderBuffers[fromShader];
+        }
+
+        public FrameBuffer GetTargetFrameBuffer(IShader shader)
+        {
+            if (!shaderBuffers.ContainsKey(shader))
+                throw new DirectoryNotFoundException();
+
+            return shaderBuffers[shader];
         }
 
         public void UpdateBuffer(IShader shader, FrameBuffer frameBuffer)
@@ -45,7 +88,7 @@ namespace osu.Framework.Graphics
         }
 
         public FrameBuffer[] GetDrawFrameBuffers()
-            => ShaderBuffers.Where(x =>
+            => shaderBuffers.Where(x =>
             {
                 var shader = x.Key;
                 if (shader is IStepShader stepShader)
@@ -57,18 +100,16 @@ namespace osu.Framework.Graphics
         protected override void Dispose(bool isDisposing)
         {
             base.Dispose(isDisposing);
-            clearBuffers();
+            clearBuffers(shaderBuffers.Values.ToArray());
         }
 
-        private void clearBuffers()
+        private void clearBuffers(FrameBuffer[] effectBuffers)
         {
-            // clear all frame in the dictionary.
-            foreach (var shaderBuffer in shaderBuffers)
+            // dispose all frame buffer in array.
+            foreach (var shaderBuffer in effectBuffers)
             {
-                shaderBuffer.Value.Dispose();
+                shaderBuffer.Dispose();
             }
-
-            shaderBuffers.Clear();
         }
     }
 }

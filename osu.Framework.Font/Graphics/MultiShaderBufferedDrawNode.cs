@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Reflection;
 using osu.Framework.Graphics.Colour;
@@ -92,6 +91,10 @@ namespace osu.Framework.Graphics
             {
                 foreach (var frameBuffer in drawFrameBuffers)
                 {
+                    // got no idea why happened.
+                    if (frameBuffer.Texture == null)
+                        break;
+
                     DrawFrameBuffer(frameBuffer, DrawRectangle, Color4.White);
                 }
             }
@@ -111,8 +114,8 @@ namespace osu.Framework.Graphics
 
             foreach (var shader in shaders)
             {
-                var current = getSourceFrameBuffer(shader);
-                var target = SharedData.ShaderBuffers[shader];
+                var current = SharedData.GetSourceFrameBuffer(shader);
+                var target = SharedData.GetTargetFrameBuffer(shader);
 
                 if (shader is IStepShader stepShader)
                 {
@@ -148,22 +151,6 @@ namespace osu.Framework.Graphics
                     DrawFrameBuffer(current, new RectangleF(0, 0, current.Texture.Width, current.Texture.Height), ColourInfo.SingleColour(Color4.White));
                     shader.Unbind();
                 }
-            }
-
-            FrameBuffer getSourceFrameBuffer(IShader targetShader)
-            {
-                if (!(targetShader is IStepShader stepShader))
-                    return SharedData.CurrentEffectBuffer;
-
-                var fromShader = stepShader.FromShader;
-                if (fromShader == null)
-                    return SharedData.CurrentEffectBuffer;
-
-                var shaderBuffers = SharedData.ShaderBuffers;
-                if (!shaderBuffers.ContainsKey(fromShader))
-                    throw new DirectoryNotFoundException("Frame buffer does not found in target shader.");
-
-                return shaderBuffers[fromShader];
             }
         }
     }
