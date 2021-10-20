@@ -14,6 +14,7 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
         [TestCase(0, "#FF0000")]
         [TestCase(10, "#00FF00")]
         [TestCase(20, "#0000FF")]
+        [TestCase(100, "#0000FF")] // it might cause performance issue if set radius too large.
         public void TestOutlineShader(int radius, string colour)
         {
             AddStep("Apply shader", () =>
