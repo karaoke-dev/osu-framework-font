@@ -1,5 +1,9 @@
 #include "sh_Utils.h"
 
+#define PI 3.14159265359
+#define SAMPLES 128
+#define STEP_SAMPLES 2
+
 varying mediump vec2 v_TexCoord;
 
 uniform lowp sampler2D m_Sampler;
@@ -10,24 +14,28 @@ uniform vec4 g_Colour;
 
 lowp vec4 outline(sampler2D tex, int radius, mediump vec2 texCoord, mediump vec2 texSize, mediump vec4 colour)
 {
-	mediump vec4 sum = texture2D(tex, texCoord);
-
-	for (int size = 2; size <= radius; size += 2)
+	float angle = 0.0;
+	float outlineAlpha = 0.0;
+	
+	for (int i = 0; i < SAMPLES; i++)
 	{
-		// draw the circle outline with target size
-		for(int degree = 0; degree < 360; degree += 5)
-		{
-			mediump vec2 offset = vec2(sin(degree), cos(degree)) * size / texSize;
+		angle += 1.0 / (float(SAMPLES) / 2.0) * PI;
 
-			// create sample with target position.
-			sum += texture2D(tex, texCoord + offset).a * colour;
+		// todo: might need to adjust step samples amount to fill the inner side.
+		// but it will cause lots of performance issue if make step samples larger.
+		// so should find a better algorithm to fill inner colour.
+		for (int j = 1; j <= STEP_SAMPLES; j++)
+		{
+			vec2 testPoint = texCoord - vec2(sin(angle), cos(angle)) * (float(radius) * (1.0 / j)) / texSize;
+			float sampledAlpha = texture2D(tex, testPoint).a;
+			outlineAlpha = max(outlineAlpha, sampledAlpha);
 		}
 	}
 
-	// draw origin texture2D in center
-	sum += texture2D(tex, texCoord);
+	mediump vec4 ogCol = texture2D(tex, texCoord);
+	vec4 outlineCol = mix(vec4(0.0), colour, outlineAlpha);
 
-    return sum;
+	return mix(outlineCol, ogCol, ogCol.a);
 }
 
 void main(void)
