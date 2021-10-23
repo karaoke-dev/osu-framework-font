@@ -7,9 +7,10 @@ using osuTK.Graphics;
 
 namespace osu.Framework.Graphics.Shaders
 {
-    public class OutlineShader : CustomizedShader
+    public class OutlineShader : InternalShader
     {
-        public const string SHADER_NAME = "Outline";
+        public override string ShaderName => "Outline";
+
         public int Radius { get; set; }
 
         public Color4 OutlineColour { get; set; }

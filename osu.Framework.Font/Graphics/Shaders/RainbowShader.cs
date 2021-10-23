@@ -6,9 +6,9 @@ using osuTK;
 
 namespace osu.Framework.Graphics.Shaders
 {
-    public class RainbowShader : CustomizedShader, IApplicableToCurrentTime
+    public class RainbowShader : InternalShader, IApplicableToCurrentTime
     {
-        public const string SHADER_NAME = "Rainbow";
+        public override string ShaderName => "Rainbow";
 
         public Vector2 Uv { get; set; } = new Vector2(0, 1);
 

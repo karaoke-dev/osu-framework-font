@@ -6,9 +6,9 @@ using osuTK;
 
 namespace osu.Framework.Graphics.Shaders
 {
-    public class PixelShader : CustomizedShader
+    public class PixelShader : InternalShader
     {
-        public const string SHADER_NAME = "Pixel";
+        public override string ShaderName => "Pixel";
 
         public Vector2 Size { get; set; } = new Vector2(5);
 
