@@ -7,9 +7,9 @@ using osuTK.Graphics;
 
 namespace osu.Framework.Graphics.Shaders
 {
-    public class ShadowShader : CustomizedShader
+    public class ShadowShader : InternalShader
     {
-        public const string SHADER_NAME = "Shadow";
+        public override string ShaderName => "Shadow";
 
         public Color4 ShadowColour { get; set; }
 

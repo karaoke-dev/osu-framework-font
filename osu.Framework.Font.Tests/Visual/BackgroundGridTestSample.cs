@@ -80,8 +80,8 @@ namespace osu.Framework.Font.Tests.Visual
         protected IShader GetShader(string shaderName)
             => shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, shaderName);
 
-        protected T GetShaderByType<T>() where T : class, ICustomizedShader
-            => shaderManager.LocalCustomizedShader<T>();
+        protected T GetShaderByType<T>() where T : InternalShader
+            => shaderManager.LocalInternalShader<T>();
 
         protected class DraggableCircle : Circle
         {
