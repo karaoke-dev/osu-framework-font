@@ -8,18 +8,11 @@ namespace osu.Framework.Extensions
 {
     public static class ShaderManagerExtensions
     {
-        public static T LocalCustomizedShader<T>(this ShaderManager shaderManager) where T : class, ICustomizedShader
+        public static T LocalInternalShader<T>(this ShaderManager shaderManager) where T : InternalShader
         {
-            var type = typeof(T);
-
-            return type switch
-            {
-                Type _ when type == typeof(OutlineShader) => new OutlineShader(shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, OutlineShader.SHADER_NAME)) as T,
-                Type _ when type == typeof(RainbowShader) => new RainbowShader(shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, RainbowShader.SHADER_NAME)) as T,
-                Type _ when type == typeof(ShadowShader) => new ShadowShader(shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, ShadowShader.SHADER_NAME)) as T,
-                Type _ when type == typeof(PixelShader) => new PixelShader(shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, PixelShader.SHADER_NAME)) as T,
-                _ => throw new NotImplementedException()
-            };
+            var shaderName = ((T)Activator.CreateInstance(typeof(T), default(IShader))).ShaderName;
+            var shader = shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, shaderName);
+            return (T)Activator.CreateInstance(typeof(T), shader);
         }
     }
 }
