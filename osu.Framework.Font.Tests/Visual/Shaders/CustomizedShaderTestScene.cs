@@ -6,6 +6,7 @@ using osu.Framework.Extensions;
 using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Font.Tests.Helper;
 using osu.Framework.Graphics.Shaders;
+using osuTK;
 
 namespace osu.Framework.Font.Tests.Visual.Shaders
 {
@@ -68,6 +69,23 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
                         s.Brightness = brightness;
                         s.Section = section;
                         s.Mix = mix;
+                    })
+                };
+            });
+        }
+
+        [TestCase(5, 5)]
+        [TestCase(5, 20)]
+        [TestCase(20, 20)]
+        public void TestPixelShader(float x, float y)
+        {
+            AddStep("Apply shader", () =>
+            {
+                ShaderContainer.Shaders = new[]
+                {
+                    GetShaderByType<PixelShader>().With(s =>
+                    {
+                        s.Size = new Vector2(x, y);
                     })
                 };
             });
