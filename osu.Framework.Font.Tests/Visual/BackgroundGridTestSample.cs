@@ -83,23 +83,7 @@ namespace osu.Framework.Font.Tests.Visual
         protected T GetShaderByType<T>() where T : class, ICustomizedShader
             => shaderManager.LocalCustomizedShader<T>();
 
-        protected class DraggableBox : Box
-        {
-            protected override bool OnDragStart(DragStartEvent e) => true;
-
-            protected override void OnDrag(DragEvent e)
-                => Position += e.Delta;
-        }
-
         protected class DraggableCircle : Circle
-        {
-            protected override bool OnDragStart(DragStartEvent e) => true;
-
-            protected override void OnDrag(DragEvent e)
-                => Position += e.Delta;
-        }
-
-        protected class DraggableTriangle : Triangle
         {
             protected override bool OnDragStart(DragStartEvent e) => true;
 

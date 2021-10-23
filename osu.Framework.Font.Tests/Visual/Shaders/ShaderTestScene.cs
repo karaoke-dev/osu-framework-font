@@ -7,6 +7,8 @@ using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shaders;
 using osu.Framework.Graphics.Shapes;
+using osu.Framework.Graphics.Sprites;
+using osu.Framework.Input.Events;
 using osuTK;
 using osuTK.Graphics;
 
@@ -48,6 +50,15 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
                         Origin = Anchor.Centre,
                         Colour = Color4.Green,
                     },
+                    new DraggableText
+                    {
+                        X = -100,
+                        Y = 50,
+                        Text = "CA",
+                        Font = FontUsage.Default.With(size: 72),
+                        Anchor = Anchor.Centre,
+                        Origin = Anchor.Centre,
+                    },
                     createBorderBox("Left up cube", Anchor.TopLeft),
                     createBorderBox("Right up cube", Anchor.TopRight),
                     createBorderBox("Left down cube", Anchor.BottomLeft),
@@ -64,6 +75,30 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
                     Colour = Color4.Red,
                     Size = new Vector2(GRID_SIZE),
                 };
+        }
+
+        protected class DraggableBox : Box
+        {
+            protected override bool OnDragStart(DragStartEvent e) => true;
+
+            protected override void OnDrag(DragEvent e)
+                => Position += e.Delta;
+        }
+
+        protected class DraggableTriangle : Triangle
+        {
+            protected override bool OnDragStart(DragStartEvent e) => true;
+
+            protected override void OnDrag(DragEvent e)
+                => Position += e.Delta;
+        }
+
+        protected class DraggableText : SpriteText
+        {
+            protected override bool OnDragStart(DragStartEvent e) => true;
+
+            protected override void OnDrag(DragEvent e)
+                => Position += e.Delta;
         }
 
         protected class TestShaderContainer : Container, IMultiShaderBufferedDrawable
