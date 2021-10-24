@@ -16,6 +16,8 @@ namespace osu.Framework.Graphics.Shaders
 
         public Vector2 TextureDisplaySize { get; set; } = new Vector2(10);
 
+        public Vector2 TextureDisplayBorder { get; set; }
+
         public RepeatMovingBackgroundShader(IShader originShader)
             : base(originShader)
         {
@@ -43,8 +45,8 @@ namespace osu.Framework.Graphics.Shaders
             var textureDisplaySize = TextureDisplaySize;
             GetUniform<Vector2>("g_DisplaySize").UpdateValue(ref textureDisplaySize);
 
-            //var border = Border;
-            //GetUniform<Vector2>("g_Border").UpdateValue(ref border);
+            var textureDisplayBorder = TextureDisplayBorder;
+            GetUniform<Vector2>("g_DisplayBorder").UpdateValue(ref textureDisplayBorder);
         }
     }
 }

@@ -99,7 +99,7 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
         [TestCase("sample-texture", 10, 10)]
         [TestCase("sample-texture", 30, 30)]
         [TestCase("sample-texture", 5, 20)]
-        public void TestRepeatMovingBackgroundShader(string textureName, float width, float height)
+        public void TestRepeatMovingBackgroundShaderDisplaySize(string textureName, float width, float height)
         {
             AddStep("Apply shader", () =>
             {
@@ -109,6 +109,26 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
                     {
                         s.Texture = textures.Get(textureName);
                         s.TextureDisplaySize = new Vector2(width, height);
+                    })
+                };
+            });
+        }
+
+        [TestCase("sample-texture", 0, 0)]
+        [TestCase("sample-texture", 10, 10)]
+        [TestCase("sample-texture", 5, 20)]
+        [TestCase("sample-texture", 30, 30)]
+        public void TestRepeatMovingBackgroundShaderBorder(string textureName, float width, float height)
+        {
+            AddStep("Apply shader", () =>
+            {
+                ShaderContainer.Shaders = new[]
+                {
+                    GetShaderByType<RepeatMovingBackgroundShader>().With(s =>
+                    {
+                        s.Texture = textures.Get(textureName);
+                        s.TextureDisplaySize = new Vector2(30);
+                        s.TextureDisplayBorder = new Vector2(width, height);
                     })
                 };
             });

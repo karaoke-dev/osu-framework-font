@@ -11,16 +11,17 @@ uniform lowp sampler2D g_RepeatSample;
 uniform vec2 g_RepeatSampleCoord;
 uniform vec2 g_RepeatSampleSize;
 uniform vec2 g_DisplaySize;
+uniform vec2 g_DisplayBorder;
 uniform vec2 g_Offset;
 
 void main(void) {
     // calculate how many times texture should be repeated.
-    vec2 repeat = g_TexSize / g_DisplaySize;
+    vec2 repeat = g_TexSize / (g_DisplaySize + g_DisplayBorder);
 
     // get the repeat texture cooldinate.
     float repeatTexCoordX = mod(v_TexCoord.x * repeat.x + g_Offset.x, 1);
     float repeatTexCoordY = mod(v_TexCoord.y * repeat.y + g_Offset.y, 1);
-    vec2 repeatTexCoord = vec2(repeatTexCoordX, repeatTexCoordY);
+    vec2 repeatTexCoord = vec2(repeatTexCoordX, repeatTexCoordY) / g_DisplaySize * (g_DisplaySize + g_DisplayBorder);
 
     // because repeat texture will be the size of 1024*1024, so should make a conversion to get the target area of the texture.
     vec2 fixedTexCoord = repeatTexCoord * g_RepeatSampleSize + g_RepeatSampleCoord;
