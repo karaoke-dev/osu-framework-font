@@ -96,9 +96,9 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
             });
         }
 
-        [TestCase("sample-texture", 1f, 1f)]
+        [TestCase("sample-texture", 10, 10)]
+        [TestCase("sample-texture", 30, 30)]
         [TestCase("sample-texture", 5, 20)]
-        [TestCase("sample-texture", 20, 20)]
         public void TestRepeatMovingBackgroundShader(string textureName, float width, float height)
         {
             AddStep("Apply shader", () =>
@@ -108,7 +108,7 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
                     GetShaderByType<RepeatMovingBackgroundShader>().With(s =>
                     {
                         s.Texture = textures.Get(textureName);
-                        s.TextureSize = new Vector2(width, height);
+                        s.TextureDisplaySize = new Vector2(width, height);
                     })
                 };
             });

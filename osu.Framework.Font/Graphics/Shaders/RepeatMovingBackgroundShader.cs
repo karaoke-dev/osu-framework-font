@@ -14,9 +14,7 @@ namespace osu.Framework.Graphics.Shaders
 
         public Texture Texture { get; set; }
 
-        public Vector2 TextureSize { get; set; } = new Vector2(10);
-
-        public Vector2 Border { get; set; }
+        public Vector2 TextureDisplaySize { get; set; } = new Vector2(10);
 
         public RepeatMovingBackgroundShader(IShader originShader)
             : base(originShader)
@@ -28,20 +26,22 @@ namespace osu.Framework.Graphics.Shaders
             if (Texture == null)
                 return;
 
+            var size = current.Size;
+            GetUniform<Vector2>(@"g_TexSize").UpdateValue(ref size);
+
             Texture.TextureGL.Bind(TextureUnit.Texture1);
 
             var unitId = TextureUnit.Texture1 - TextureUnit.Texture0;
             GetUniform<int>(@"g_RepeatSample").UpdateValue(ref unitId);
 
-            var coord = Texture.GetTextureRect().TopLeft;
-            GetUniform<Vector2>(@"g_RepeatSampleCoord").UpdateValue(ref coord);
+            var textureCoord = Texture.GetTextureRect().TopLeft;
+            GetUniform<Vector2>(@"g_RepeatSampleCoord").UpdateValue(ref textureCoord);
 
-            var size = Texture.GetTextureRect().Size;
+            var textureSize = Texture.GetTextureRect().Size;
+            GetUniform<Vector2>(@"g_RepeatSampleSize").UpdateValue(ref textureSize);
 
-            GetUniform<Vector2>(@"g_RepeatSampleSize").UpdateValue(ref size);
-
-            var textureSize = TextureSize;
-            GetUniform<Vector2>("g_TextureSize").UpdateValue(ref textureSize);
+            var textureDisplaySize = TextureDisplaySize;
+            GetUniform<Vector2>("g_DisplaySize").UpdateValue(ref textureDisplaySize);
 
             //var border = Border;
             //GetUniform<Vector2>("g_Border").UpdateValue(ref border);
