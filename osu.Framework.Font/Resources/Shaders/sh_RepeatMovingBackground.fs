@@ -14,6 +14,7 @@ uniform vec2 g_DisplaySize;
 uniform vec2 g_DisplayBorder;
 uniform vec2 g_Speed;
 uniform float g_Time;
+uniform float g_Mix;
 
 void main(void) {
     // calculate how many times texture should be repeated.
@@ -28,5 +29,7 @@ void main(void) {
     vec2 fixedTexCoord = repeatTexCoord * g_RepeatSampleSize + g_RepeatSampleCoord;
 
     // get point colour from sample.
-    gl_FragColor = v_Colour * texture2D(g_RepeatSample, fixedTexCoord);
+    vec4 texColor = texture2D(m_Sampler, v_TexCoord);
+    vec4 repeatSampleColor = v_Colour * vec4(texture2D(g_RepeatSample, fixedTexCoord).xyz, texColor.a);
+    gl_FragColor = mix(texColor, repeatSampleColor, g_Mix);
 }

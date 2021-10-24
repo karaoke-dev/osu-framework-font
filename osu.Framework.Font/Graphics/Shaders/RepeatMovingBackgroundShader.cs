@@ -1,6 +1,7 @@
 ﻿// Copyright (c) andy840119 <andy840119@gmail.com>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
+using System;
 using osu.Framework.Graphics.OpenGL.Buffers;
 using osu.Framework.Graphics.Textures;
 using osuTK;
@@ -19,6 +20,8 @@ namespace osu.Framework.Graphics.Shaders
         public Vector2 TextureDisplayBorder { get; set; }
 
         public Vector2 Speed { get; set; }
+
+        public float Mix { get; set; } = 1f;
 
         public RepeatMovingBackgroundShader(IShader originShader)
             : base(originShader)
@@ -52,6 +55,9 @@ namespace osu.Framework.Graphics.Shaders
 
             var speed = Speed;
             GetUniform<Vector2>("g_Speed").UpdateValue(ref speed);
+
+            var mix = Math.Clamp(Mix, 0, 1);
+            GetUniform<float>(@"g_Mix").UpdateValue(ref mix);
         }
 
         public void ApplyCurrentTime(float currentTime)
