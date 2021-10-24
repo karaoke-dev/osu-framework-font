@@ -2,16 +2,21 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using NUnit.Framework;
+using osu.Framework.Allocation;
 using osu.Framework.Extensions;
 using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Font.Tests.Helper;
 using osu.Framework.Graphics.Shaders;
+using osu.Framework.Graphics.Textures;
 using osuTK;
 
 namespace osu.Framework.Font.Tests.Visual.Shaders
 {
     public class CustomizedShaderTestScene : ShaderTestScene
     {
+        [Resolved]
+        private TextureStore textures { get; set; }
+
         [TestCase(0, "#FF0000")]
         [TestCase(10, "#00FF00")]
         [TestCase(20, "#0000FF")]
@@ -86,6 +91,24 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
                     GetShaderByType<PixelShader>().With(s =>
                     {
                         s.Size = new Vector2(x, y);
+                    })
+                };
+            });
+        }
+
+        [TestCase("sample-texture", 5, 5)]
+        [TestCase("sample-texture", 5, 20)]
+        [TestCase("sample-texture", 20, 20)]
+        public void TestRepeatMovingBackgroundShader(string textureName, float x, float y)
+        {
+            AddStep("Apply shader", () =>
+            {
+                ShaderContainer.Shaders = new[]
+                {
+                    GetShaderByType<RepeatMovingBackgroundShader>().With(s =>
+                    {
+                        s.Texture = textures.Get(textureName);
+                        s.Repeat = new Vector2(x, y);
                     })
                 };
             });
