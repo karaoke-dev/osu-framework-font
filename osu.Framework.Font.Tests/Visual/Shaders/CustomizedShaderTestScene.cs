@@ -133,5 +133,25 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
                 };
             });
         }
+
+        [TestCase(0, 0)]
+        [TestCase(1, 1)]
+        [TestCase(0.1f, 0.1f)]
+        [TestCase(5, 2)]
+        public void TestRepeatMovingBackgroundShaderSpeed(float xSpeed, float ySpeed)
+        {
+            AddStep("Apply shader", () =>
+            {
+                ShaderContainer.Shaders = new[]
+                {
+                    GetShaderByType<RepeatMovingBackgroundShader>().With(s =>
+                    {
+                        s.Texture = textures.Get("sample-texture");
+                        s.TextureDisplaySize = new Vector2(30);
+                        s.Speed = new Vector2(xSpeed, ySpeed);
+                    })
+                };
+            });
+        }
     }
 }

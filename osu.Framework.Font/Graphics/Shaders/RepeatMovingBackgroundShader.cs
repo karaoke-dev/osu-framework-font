@@ -8,7 +8,7 @@ using osuTK.Graphics.ES30;
 
 namespace osu.Framework.Graphics.Shaders
 {
-    public class RepeatMovingBackgroundShader : InternalShader
+    public class RepeatMovingBackgroundShader : InternalShader, IApplicableToCurrentTime
     {
         public override string ShaderName => "RepeatMovingBackground";
 
@@ -17,6 +17,8 @@ namespace osu.Framework.Graphics.Shaders
         public Vector2 TextureDisplaySize { get; set; } = new Vector2(10);
 
         public Vector2 TextureDisplayBorder { get; set; }
+
+        public Vector2 Speed { get; set; }
 
         public RepeatMovingBackgroundShader(IShader originShader)
             : base(originShader)
@@ -47,6 +49,14 @@ namespace osu.Framework.Graphics.Shaders
 
             var textureDisplayBorder = TextureDisplayBorder;
             GetUniform<Vector2>("g_DisplayBorder").UpdateValue(ref textureDisplayBorder);
+
+            var speed = Speed;
+            GetUniform<Vector2>("g_Speed").UpdateValue(ref speed);
+        }
+
+        public void ApplyCurrentTime(float currentTime)
+        {
+            GetUniform<float>("g_Time").UpdateValue(ref currentTime);
         }
     }
 }
