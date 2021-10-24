@@ -14,7 +14,9 @@ namespace osu.Framework.Graphics.Shaders
 
         public Texture Texture { get; set; }
 
-        public Vector2 Repeat { get; set; } = new Vector2(3);
+        public Vector2 TextureSize { get; set; } = new Vector2(10);
+
+        public Vector2 Border { get; set; }
 
         public RepeatMovingBackgroundShader(IShader originShader)
             : base(originShader)
@@ -23,13 +25,26 @@ namespace osu.Framework.Graphics.Shaders
 
         public override void ApplyValue(FrameBuffer current)
         {
-            Texture?.TextureGL.Bind(TextureUnit.Texture3);
+            if (Texture == null)
+                return;
 
-            var unitId = TextureUnit.Texture3 - TextureUnit.Texture0;
+            Texture.TextureGL.Bind(TextureUnit.Texture1);
+
+            var unitId = TextureUnit.Texture1 - TextureUnit.Texture0;
             GetUniform<int>(@"g_RepeatSample").UpdateValue(ref unitId);
 
-            var repeat = Repeat;
-            GetUniform<Vector2>("g_Repeat").UpdateValue(ref repeat);
+            var coord = Texture.GetTextureRect().TopLeft;
+            GetUniform<Vector2>(@"g_RepeatSampleCoord").UpdateValue(ref coord);
+
+            var size = Texture.GetTextureRect().Size;
+
+            GetUniform<Vector2>(@"g_RepeatSampleSize").UpdateValue(ref size);
+
+            var textureSize = TextureSize;
+            GetUniform<Vector2>("g_TextureSize").UpdateValue(ref textureSize);
+
+            //var border = Border;
+            //GetUniform<Vector2>("g_Border").UpdateValue(ref border);
         }
     }
 }
