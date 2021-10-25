@@ -1,5 +1,3 @@
-#include "sh_Utils.h"
-
 varying mediump vec2 v_TexCoord;
 
 uniform lowp sampler2D m_Sampler;

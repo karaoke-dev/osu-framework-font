@@ -6,21 +6,21 @@ varying vec4 v_Colour;
 
 uniform lowp sampler2D m_Sampler;
 
-uniform vec2 u_uv;
-uniform float u_speed;
-uniform float u_time;
-uniform float u_saturation;
-uniform float u_brightness;
-uniform float u_section;
-uniform float u_mix;
+uniform vec2 g_Uv;
+uniform float g_Speed;
+uniform float g_Time;
+uniform float g_Saturation;
+uniform float g_Brightness;
+uniform float g_Section;
+uniform float g_Mix;
 
 void main(void)
 {
-    float pos = (v_TexCoord.y - u_uv[0]) / (u_uv[1] - u_uv[0]);
+    float pos = (v_TexCoord.y - g_Uv[0]) / (g_Uv[1] - g_Uv[0]);
     vec4 texColor = texture2D(m_Sampler, v_TexCoord);
     
-    vec4 col = vec4(u_section * ((u_time * u_speed) + pos), u_saturation, u_brightness, 1);
-    vec4 finalCol = mix(texColor, vec4(hsv2rgb(col).xyz, texColor.a), u_mix);
+    vec4 col = vec4(g_Section * ((g_Time * g_Speed) + pos), g_Saturation, g_Brightness, 1);
+    vec4 finalCol = mix(texColor, vec4(hsv2rgb(col).xyz, texColor.a), g_Mix);
     
     gl_FragColor = finalCol;
 }

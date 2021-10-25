@@ -1,5 +1,3 @@
-#include "sh_Utils.h"
-
 #define PI 3.14159265359
 #define SAMPLES 128
 #define STEP_SAMPLES 2
