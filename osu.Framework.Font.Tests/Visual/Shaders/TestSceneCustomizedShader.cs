@@ -12,7 +12,7 @@ using osuTK;
 
 namespace osu.Framework.Font.Tests.Visual.Shaders
 {
-    public class CustomizedShaderTestScene : ShaderTestScene
+    public class TestSceneCustomizedShader : TestSceneShader
     {
         [Resolved]
         private TextureStore textures { get; set; }
