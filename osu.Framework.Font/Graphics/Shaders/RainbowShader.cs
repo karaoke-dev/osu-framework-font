@@ -31,27 +31,27 @@ namespace osu.Framework.Graphics.Shaders
         public override void ApplyValue(FrameBuffer current)
         {
             var uv = Uv;
-            GetUniform<Vector2>(@"u_uv").UpdateValue(ref uv);
+            GetUniform<Vector2>(@"g_Uv").UpdateValue(ref uv);
 
             var speed = Speed;
-            GetUniform<float>(@"u_speed").UpdateValue(ref speed);
+            GetUniform<float>(@"g_Speed").UpdateValue(ref speed);
 
             var saturation = Saturation;
-            GetUniform<float>(@"u_saturation").UpdateValue(ref saturation);
+            GetUniform<float>(@"g_Saturation").UpdateValue(ref saturation);
 
             var brightness = Brightness;
-            GetUniform<float>(@"u_brightness").UpdateValue(ref brightness);
+            GetUniform<float>(@"g_Brightness").UpdateValue(ref brightness);
 
             var section = Section;
-            GetUniform<float>(@"u_section").UpdateValue(ref section);
+            GetUniform<float>(@"g_Section").UpdateValue(ref section);
 
             var mix = Mix;
-            GetUniform<float>(@"u_mix").UpdateValue(ref mix);
+            GetUniform<float>(@"g_Mix").UpdateValue(ref mix);
         }
 
         public void ApplyCurrentTime(float currentTime)
         {
-            GetUniform<float>("u_time").UpdateValue(ref currentTime);
+            GetUniform<float>("g_Time").UpdateValue(ref currentTime);
         }
     }
 }

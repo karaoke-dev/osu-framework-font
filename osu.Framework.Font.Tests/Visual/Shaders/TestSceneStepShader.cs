@@ -9,7 +9,7 @@ using osuTK.Graphics;
 
 namespace osu.Framework.Font.Tests.Visual.Shaders
 {
-    public class StepShaderTestScene : ShaderTestScene
+    public class TestSceneStepShader : TestSceneShader
     {
         [Test]
         public void ApplySingleStepShader()

@@ -14,11 +14,11 @@ using osuTK.Graphics;
 
 namespace osu.Framework.Font.Tests.Visual.Shaders
 {
-    public abstract class ShaderTestScene : BackgroundGridTestSample
+    public abstract class TestSceneShader : BackgroundGridTestSample
     {
         protected readonly TestShaderContainer ShaderContainer;
 
-        protected ShaderTestScene()
+        protected TestSceneShader()
         {
             Child = ShaderContainer = new TestShaderContainer
             {

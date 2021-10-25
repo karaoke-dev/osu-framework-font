@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 namespace osu.Framework.Font.Tests.Visual.Shaders
 {
-    public class NormalShaderTestScene : ShaderTestScene
+    public class TestSceneNormalShader : TestSceneShader
     {
         [TestCase("CRT")]
         [TestCase("not_found_shader")] // notice that missing shader will let whole sprite text being white.
