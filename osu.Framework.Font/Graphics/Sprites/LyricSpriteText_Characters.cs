@@ -23,7 +23,7 @@ namespace osu.Framework.Graphics.Sprites
         /// <summary>
         /// The characters in local space.
         /// </summary>
-        public List<TextBuilderGlyph> Characters
+        public IReadOnlyList<TextBuilderGlyph> Characters
         {
             get
             {
@@ -102,7 +102,7 @@ namespace osu.Framework.Graphics.Sprites
         /// <summary>
         /// The characters in screen space. These are ready to be drawn.
         /// </summary>
-        private List<ScreenSpaceCharacterPart> screenSpaceCharacters
+        private IEnumerable<ScreenSpaceCharacterPart> screenSpaceCharacters
         {
             get
             {
