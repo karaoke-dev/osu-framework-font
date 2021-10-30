@@ -127,10 +127,10 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
             public Vector2 FrameBufferScale => Vector2.One;
 
             [BackgroundDependencyLoader]
-            private void load(ShaderManager shaders)
+            private void load(ShaderManager shaderManager)
             {
-                TextureShader = shaders.Load(VertexShaderDescriptor.TEXTURE_2, FragmentShaderDescriptor.TEXTURE);
-                RoundedTextureShader = shaders.Load(VertexShaderDescriptor.TEXTURE_2, FragmentShaderDescriptor.TEXTURE_ROUNDED);
+                TextureShader = shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, FragmentShaderDescriptor.TEXTURE);
+                RoundedTextureShader = shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, FragmentShaderDescriptor.TEXTURE_ROUNDED);
             }
 
             protected override DrawNode CreateDrawNode()
