@@ -20,7 +20,7 @@ void main(void) {
     // calculate how many times texture should be repeated.
     vec2 repeat = g_TexSize / (g_DisplaySize + g_DisplayBorder);
 
-    // get the repeat texture cooldinate.
+    // get the repeat texture coordinate.
     float repeatTexCoordX = mod(v_TexCoord.x * repeat.x + g_Speed.x * g_Time, 1);
     float repeatTexCoordY = mod(v_TexCoord.y * repeat.y + g_Speed.y * g_Time, 1);
     vec2 repeatTexCoord = vec2(repeatTexCoordX, repeatTexCoordY) / g_DisplaySize * (g_DisplaySize + g_DisplayBorder);
