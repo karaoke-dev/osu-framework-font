@@ -2,7 +2,6 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using osu.Framework.Font.Tests.Helper;
 using osu.Framework.Graphics.Sprites;
@@ -225,18 +224,6 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
         private void setContents(Func<LyricSpriteText> creationFunction)
         {
             Child = creationFunction();
-        }
-
-        private void setContents(Func<LyricSpriteText> creationFunction, double delay, Action<LyricSpriteText> thenDo)
-        {
-            var lyricLine = creationFunction();
-            Child = lyricLine;
-
-            new Task(async delegate
-            {
-                await Task.Delay(TimeSpan.FromSeconds(delay / 1000));
-                thenDo?.Invoke(lyricLine);
-            }).Start();
         }
 
         internal class DefaultLyricSpriteText : LyricSpriteText

@@ -7,9 +7,9 @@ using osu.Framework.Graphics.Sprites;
 
 namespace osu.Framework.IO.Stores
 {
-    public class FontResourceStore : DllResourceStore
+    public class ShaderResourceStore : DllResourceStore
     {
-        public FontResourceStore()
+        public ShaderResourceStore()
             : base(typeof(LyricSpriteText).Assembly)
         {
             var property = typeof(DllResourceStore).GetField("prefix", BindingFlags.NonPublic | BindingFlags.Instance);
