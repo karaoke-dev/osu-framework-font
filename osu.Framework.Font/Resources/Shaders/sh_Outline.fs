@@ -10,21 +10,20 @@ uniform mediump vec2 g_TexSize;
 uniform int g_Radius;
 uniform vec4 g_Colour;
 
+vec2 angelPosition[SAMPLES];
+
 lowp vec4 outline(sampler2D tex, int radius, mediump vec2 texCoord, mediump vec2 texSize, mediump vec4 colour)
 {
-	float angle = 0.0;
 	float outlineAlpha = 0.0;
 	
 	for (int i = 0; i < SAMPLES; i++)
 	{
-		angle += 1.0 / (float(SAMPLES) / 2.0) * PI;
-
 		// todo: might need to adjust step samples amount to fill the inner side.
 		// but it will cause lots of performance issue if make step samples larger.
 		// so should find a better algorithm to fill inner colour.
 		for (int j = 1; j <= STEP_SAMPLES; j++)
 		{
-			vec2 testPoint = texCoord - vec2(sin(angle), cos(angle)) * (float(radius) * (1.0 / j)) / texSize;
+			vec2 testPoint = texCoord - angelPosition[i] * (float(radius) * (1.0 / j)) / texSize;
 			float sampledAlpha = texture2D(tex, testPoint).a;
 			outlineAlpha = max(outlineAlpha, sampledAlpha);
 		}
@@ -34,6 +33,17 @@ lowp vec4 outline(sampler2D tex, int radius, mediump vec2 texCoord, mediump vec2
 	vec4 outlineCol = mix(vec4(0.0), colour, outlineAlpha);
 
 	return mix(outlineCol, ogCol, ogCol.a);
+}
+
+void init(void)
+{
+	// pre-calculate position in here.
+	float angle = 0.0;
+	for (int i = 0; i < SAMPLES; i++)
+	{
+		angle += 1.0 / (float(SAMPLES) / 2.0) * PI;
+		angelPosition[i] = vec2(sin(angle), cos(angle));
+	}
 }
 
 void main(void)
