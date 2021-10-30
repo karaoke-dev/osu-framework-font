@@ -39,7 +39,7 @@ namespace osu.Framework.Graphics.Sprites
         public LyricSpriteText()
         {
             Font = new FontUsage(null, default_text_size);
-            current.BindValueChanged(text => Text = text.NewValue);
+            current.BindValueChanged(t => Text = t.NewValue);
 
             AddLayout(charactersCache);
             AddLayout(parentScreenSpaceCache);
