@@ -16,7 +16,7 @@ namespace osu.Framework.Font.Tests
             Resources.AddStore(new DllResourceStore(@"osu.Game.Resources.dll"));
 
             // add store from main project
-            Resources.AddStore(new NamespacedResourceStore<byte[]>(new FontResourceStore(), "Resources"));
+            Resources.AddStore(new NamespacedResourceStore<byte[]>(new ShaderResourceStore(), "Resources"));
 
             // add store from test project
             Resources.AddStore(new NamespacedResourceStore<byte[]>(new DllResourceStore(Assembly.GetExecutingAssembly().Location), "Resources"));
