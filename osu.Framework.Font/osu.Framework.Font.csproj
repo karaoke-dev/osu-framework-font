@@ -27,7 +27,7 @@
     <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
   <ItemGroup Label="Package References">
-    <PackageReference Include="ppy.osu.Framework" Version="2021.1103.0" />
+    <PackageReference Include="ppy.osu.Framework" Version="2021.1106.0" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\**\*" />
