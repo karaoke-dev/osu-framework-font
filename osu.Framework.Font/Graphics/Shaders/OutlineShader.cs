@@ -15,11 +15,6 @@ namespace osu.Framework.Graphics.Shaders
 
         public Color4 OutlineColour { get; set; }
 
-        public OutlineShader(IShader originShader)
-            : base(originShader)
-        {
-        }
-
         public override void ApplyValue(FrameBuffer current)
         {
             var radius = Radius;

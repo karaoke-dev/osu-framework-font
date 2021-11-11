@@ -23,11 +23,6 @@ namespace osu.Framework.Graphics.Shaders
 
         public float Mix { get; set; } = 1f;
 
-        public RepeatMovingBackgroundShader(IShader originShader)
-            : base(originShader)
-        {
-        }
-
         public override void ApplyValue(FrameBuffer current)
         {
             if (Texture == null)
