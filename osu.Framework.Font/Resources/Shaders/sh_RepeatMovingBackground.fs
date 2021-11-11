@@ -16,6 +16,10 @@ uniform vec2 g_Speed;
 uniform float g_Time;
 uniform float g_Mix;
 
+float mod(float a, int b) {
+    return a - (float(b) * floor(a/float(b)));
+}
+
 void main(void) {
     // calculate how many times texture should be repeated.
     vec2 repeat = g_TexSize / (g_DisplaySize + g_DisplayBorder);
