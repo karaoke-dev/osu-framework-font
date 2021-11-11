@@ -6,10 +6,5 @@ namespace osu.Framework.Graphics.Shaders
     public abstract class InternalShader : CustomizedShader
     {
         public abstract string ShaderName { get; }
-
-        protected InternalShader(IShader originShader)
-            : base(originShader)
-        {
-        }
     }
 }

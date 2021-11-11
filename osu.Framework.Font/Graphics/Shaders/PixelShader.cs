@@ -12,11 +12,6 @@ namespace osu.Framework.Graphics.Shaders
 
         public Vector2 Size { get; set; } = new Vector2(5);
 
-        public PixelShader(IShader originShader)
-            : base(originShader)
-        {
-        }
-
         public override void ApplyValue(FrameBuffer current)
         {
             var size = Size;

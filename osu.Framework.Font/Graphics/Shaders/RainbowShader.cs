@@ -23,11 +23,6 @@ namespace osu.Framework.Graphics.Shaders
 
         public float Mix { get; set; } = 0.5f;
 
-        public RainbowShader(IShader originShader)
-            : base(originShader)
-        {
-        }
-
         public override void ApplyValue(FrameBuffer current)
         {
             var uv = Uv;

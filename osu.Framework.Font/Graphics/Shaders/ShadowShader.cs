@@ -15,11 +15,6 @@ namespace osu.Framework.Graphics.Shaders
 
         public Vector2 ShadowOffset { get; set; }
 
-        public ShadowShader(IShader originShader)
-            : base(originShader)
-        {
-        }
-
         public override void ApplyValue(FrameBuffer current)
         {
             var shadowColour = new Vector4(ShadowColour.R, ShadowColour.G, ShadowColour.B, ShadowColour.A);
