@@ -10,9 +10,14 @@ namespace osu.Framework.Extensions
         public static T LocalInternalShader<T>(this ShaderManager shaderManager) where T : InternalShader, new()
         {
             var internalShader = new T();
+            shaderManager.AttachShader(internalShader);
+            return internalShader;
+        }
+
+        public static void AttachShader<T>(this ShaderManager shaderManager, T internalShader) where T : InternalShader, new()
+        {
             var shader = shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, internalShader.ShaderName);
             internalShader.AttachOriginShader(shader);
-            return internalShader;
         }
     }
 }
