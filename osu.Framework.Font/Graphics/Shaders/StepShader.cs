@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using osu.Framework.Graphics.OpenGL.Buffers;
 
 namespace osu.Framework.Graphics.Shaders
 {
@@ -40,6 +41,9 @@ namespace osu.Framework.Graphics.Shaders
             => throw new NotSupportedException();
 
         public bool IsLoaded
+            => throw new NotSupportedException();
+
+        public void ApplyValue(FrameBuffer current)
             => throw new NotSupportedException();
     }
 }

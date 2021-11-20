@@ -6,7 +6,7 @@ using osu.Framework.Graphics.OpenGL.Buffers;
 
 namespace osu.Framework.Graphics.Shaders
 {
-    public interface IStepShader : IShader
+    public interface IStepShader : ICustomizedShader
     {
         /// <summary>
         /// Render <see cref="FrameBuffer"/> from target <see cref="IShader"/> result.
