@@ -14,7 +14,7 @@ namespace osu.Framework.Extensions
             return internalShader;
         }
 
-        public static void AttachShader<T>(this ShaderManager shaderManager, T internalShader) where T : InternalShader, new()
+        public static void AttachShader<T>(this ShaderManager shaderManager, T internalShader) where T : InternalShader
         {
             var shader = shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, internalShader.ShaderName);
             internalShader.AttachOriginShader(shader);
