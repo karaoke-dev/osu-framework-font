@@ -14,9 +14,9 @@ namespace osu.Framework.Graphics.Shaders
         IShader FromShader { get; }
 
         /// <summary>
-        /// List if <see cref="IShader"/>, will pass <see cref="FrameBuffer"/> to each shaders.
+        /// List if <see cref="ICustomizedShader"/>, will pass <see cref="FrameBuffer"/> to each shaders.
         /// </summary>
-        IReadOnlyList<IShader> StepShaders { get; }
+        IReadOnlyList<ICustomizedShader> StepShaders { get; }
 
         /// <summary>
         /// Should draw <see cref="FrameBuffer"/> or not.

@@ -83,7 +83,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
                     new StepShader
                     {
                         Name = "Outline with rainbow effect",
-                        StepShaders = new IShader[]
+                        StepShaders = new ICustomizedShader[]
                         {
                             GetShaderByType<OutlineShader>().With(s =>
                             {

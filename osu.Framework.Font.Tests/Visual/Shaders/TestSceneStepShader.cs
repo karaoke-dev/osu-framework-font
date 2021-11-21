@@ -24,7 +24,11 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
                         s.Radius = 10;
                         s.OutlineColour = Color4.Yellow;
                     }),
-                    GetShader("CRT"),
+                    GetShaderByType<OutlineShader>().With(s =>
+                    {
+                        s.Radius = 10;
+                        s.OutlineColour = Color4.Red;
+                    })
                 }
             };
 

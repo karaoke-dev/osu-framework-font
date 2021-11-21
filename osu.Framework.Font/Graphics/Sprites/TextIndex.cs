@@ -5,11 +5,11 @@ using System;
 
 namespace osu.Framework.Graphics.Sprites
 {
-    public struct TextIndex : IComparable<TextIndex>, IEquatable<TextIndex>
+    public readonly struct TextIndex : IComparable<TextIndex>, IEquatable<TextIndex>
     {
-        public int Index { get; set; }
+        public int Index { get; }
 
-        public IndexState State { get; set; }
+        public IndexState State { get; }
 
         public TextIndex(int index = 0, IndexState state = IndexState.Start)
         {

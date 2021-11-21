@@ -11,10 +11,6 @@ namespace osu.Framework.Graphics.Shaders
     /// </summary>
     public abstract class CustomizedShader : ICustomizedShader
     {
-        protected CustomizedShader()
-        {
-        }
-
         private IShader shader;
 
         public void AttachOriginShader(IShader originShader)
