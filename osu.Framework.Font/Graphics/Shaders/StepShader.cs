@@ -14,9 +14,9 @@ namespace osu.Framework.Graphics.Shaders
 
         public IShader FromShader { get; set; }
 
-        private readonly List<IShader> shaders = new List<IShader>();
+        private readonly List<ICustomizedShader> shaders = new List<ICustomizedShader>();
 
-        public IReadOnlyList<IShader> StepShaders
+        public IReadOnlyList<ICustomizedShader> StepShaders
         {
             get => shaders;
             set
