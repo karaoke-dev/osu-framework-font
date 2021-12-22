@@ -66,8 +66,8 @@ namespace osu.Framework.Text
 
             // calculate start render position
             var canterPosition = getCenterPosition(positionText.StartIndex, positionText.EndIndex);
-            var textWidth = getTextWidth(text);
-            var yOffset = -getMainTextHeight(text.FirstOrDefault(), font);
+            var textWidth = getSubTextWidth(text);
+            var yOffset = -getTextHeight(text.FirstOrDefault(), font);
             var position = new Vector2(canterPosition.X - textWidth / 2, canterPosition.Y + yOffset);
 
             // set start render position
@@ -108,11 +108,11 @@ namespace osu.Framework.Text
             var y = startCharacterRectangle.Centre.Y - starCharacter.YOffset;
 
             // return center position.
-            var yOffset = relativePosition == RelativePosition.Top ? 0 : getMainTextHeight(starCharacter.Character, mainTextFont);
+            var yOffset = relativePosition == RelativePosition.Top ? 0 : getTextHeight(starCharacter.Character, mainTextFont);
             return new Vector2(x, y + yOffset);
         }
 
-        private float getTextWidth(string text)
+        private float getSubTextWidth(string text)
         {
             if (string.IsNullOrEmpty(text))
                 return 0;
@@ -120,7 +120,7 @@ namespace osu.Framework.Text
             return text.Sum(c => (getTexturedGlyph(c)?.Width ?? 0) * font.Size) + spacing.X * text.Length - 1;
         }
 
-        private float getMainTextHeight(char c, FontUsage fontUsage)
+        private float getTextHeight(char c, FontUsage fontUsage)
         {
             var texture = getTexturedGlyph(c);
             if (texture == null)
