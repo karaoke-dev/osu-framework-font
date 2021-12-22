@@ -152,12 +152,12 @@ namespace osu.Framework.Graphics.Sprites
 
         private string displayedText => Text;
 
-        private PositionText[] rubies;
+        private IReadOnlyList<PositionText> rubies;
 
         /// <summary>
         /// Gets or sets the ruby text to be displayed.
         /// </summary>
-        public PositionText[] Rubies
+        public IReadOnlyList<PositionText> Rubies
         {
             get => rubies;
             set
@@ -168,12 +168,12 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
-        private PositionText[] romajies;
+        private IReadOnlyList<PositionText> romajies;
 
         /// <summary>
         /// Gets or sets the romaji text to be displayed.
         /// </summary>
-        public PositionText[] Romajies
+        public IReadOnlyList<PositionText> Romajies
         {
             get => romajies;
             set
@@ -184,7 +184,7 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
-        private PositionText[] filterValidValues(PositionText[] texts)
+        private IReadOnlyList<PositionText> filterValidValues(IEnumerable<PositionText> texts)
         {
             return texts?.Where(positionText => Math.Min(positionText.StartIndex, positionText.EndIndex) >= 0
                                                 && Math.Max(positionText.StartIndex, positionText.EndIndex) <= text.Length
