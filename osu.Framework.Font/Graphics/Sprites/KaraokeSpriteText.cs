@@ -171,7 +171,7 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
-        public PositionText[] Rubies
+        public IReadOnlyList<PositionText> Rubies
         {
             get => frontLyricText.Rubies;
             set
@@ -181,7 +181,7 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
-        public PositionText[] Romajies
+        public IReadOnlyList<PositionText> Romajies
         {
             get => frontLyricText.Romajies;
             set
