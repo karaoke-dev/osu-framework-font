@@ -67,7 +67,7 @@ namespace osu.Framework.Text
             // calculate start render position
             var canterPosition = getCenterPosition(positionText.StartIndex, positionText.EndIndex);
             var textWidth = getSubTextWidth(text);
-            var yOffset = -getTextHeight(text.FirstOrDefault(), font);
+            var yOffset = -getCharHeight(text.FirstOrDefault(), font);
             var position = new Vector2(canterPosition.X - textWidth / 2, canterPosition.Y + yOffset);
 
             // set start render position
@@ -108,7 +108,7 @@ namespace osu.Framework.Text
             var y = startCharacterRectangle.Centre.Y - starCharacter.YOffset;
 
             // return center position.
-            var yOffset = relativePosition == RelativePosition.Top ? 0 : getTextHeight(starCharacter.Character, mainTextFont);
+            var yOffset = relativePosition == RelativePosition.Top ? 0 : getCharHeight(starCharacter.Character, mainTextFont);
             return new Vector2(x, y + yOffset);
         }
 
@@ -117,10 +117,19 @@ namespace osu.Framework.Text
             if (string.IsNullOrEmpty(text))
                 return 0;
 
-            return text.Sum(c => (getTexturedGlyph(c)?.Width ?? 0) * font.Size) + spacing.X * text.Length - 1;
+            return text.Sum(c => getCharWidth(c, font)) + spacing.X * (text.Length - 1);
         }
 
-        private float getTextHeight(char c, FontUsage fontUsage)
+        private float getCharWidth(char c, FontUsage fontUsage)
+        {
+            var texture = getTexturedGlyph(c);
+            if (texture == null)
+                return 0;
+
+            return texture.Width * fontUsage.Size;
+        }
+
+        private float getCharHeight(char c, FontUsage fontUsage)
         {
             var texture = getTexturedGlyph(c);
             if (texture == null)
