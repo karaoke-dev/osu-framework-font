@@ -10,7 +10,7 @@ Unofficial support for extra font effect.
 
 ## Nuget
 
-[osu.Framework.Microphone](https://www.nuget.org/packages/osu.Framework.Microphone)
+[osu.Framework.KaraokeFont](https://www.nuget.org/packages/osu.Framework.KaraokeFont)
 
 ## License
 
