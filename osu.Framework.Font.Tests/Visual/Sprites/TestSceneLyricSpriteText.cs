@@ -127,12 +127,6 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
             }));
         }
 
-        [Ignore("This feature will be removed")]
-        public void TestBorder()
-        {
-            // todo : will be replaced by render effect.
-        }
-
         [TestCase(false, "")]
         [TestCase(true, "…")]
         [TestCase(true, "...")]
