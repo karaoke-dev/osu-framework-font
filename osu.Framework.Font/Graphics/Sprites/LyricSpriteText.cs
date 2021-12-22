@@ -1,8 +1,9 @@
-// Copyright (c) andy840119 <andy840119@gmail.com>. Licensed under the MIT Licence.
+// Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Extensions.IEnumerableExtensions;
@@ -10,12 +11,11 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shaders;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.IO.Stores;
-using osu.Framework.Utils;
+using osu.Framework.Layout;
 using osu.Framework.Text;
+using osu.Framework.Utils;
 using osuTK;
 using osuTK.Graphics;
-using System.Linq;
-using osu.Framework.Layout;
 
 namespace osu.Framework.Graphics.Sprites
 {

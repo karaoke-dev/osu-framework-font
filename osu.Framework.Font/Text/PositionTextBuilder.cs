@@ -1,4 +1,4 @@
-﻿// Copyright (c) andy840119 <andy840119@gmail.com>. Licensed under the MIT Licence.
+﻿// Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
@@ -38,9 +38,11 @@ namespace osu.Framework.Text
         /// <param name="fixedWidthReferenceCharacter">The character to use to calculate the fixed width width. Defaults to 'm'.</param>
         /// <param name="relativePosition">Should be added into top or bottom.</param>
         /// <param name="alignment">Lyric text alignment.</param>
-        public PositionTextBuilder(ITexturedGlyphLookupStore store, FontUsage mainTextFont, FontUsage font, float maxWidth = int.MaxValue, bool useFontSizeAsHeight = true, Vector2 startOffset = default,
+        public PositionTextBuilder(ITexturedGlyphLookupStore store, FontUsage mainTextFont, FontUsage font, float maxWidth = int.MaxValue, bool useFontSizeAsHeight = true,
+                                   Vector2 startOffset = default,
                                    Vector2 spacing = default, List<TextBuilderGlyph> characterList = null, char[] neverFixedWidthCharacters = null,
-                                   char fallbackCharacter = '?', char fixedWidthReferenceCharacter = 'm', RelativePosition relativePosition = RelativePosition.Top, LyricTextAlignment alignment = LyricTextAlignment.Auto)
+                                   char fallbackCharacter = '?', char fixedWidthReferenceCharacter = 'm', RelativePosition relativePosition = RelativePosition.Top,
+                                   LyricTextAlignment alignment = LyricTextAlignment.Auto)
             : base(store, font, maxWidth, useFontSizeAsHeight, startOffset, spacing, characterList, neverFixedWidthCharacters, fallbackCharacter, fixedWidthReferenceCharacter)
         {
             this.store = store;
