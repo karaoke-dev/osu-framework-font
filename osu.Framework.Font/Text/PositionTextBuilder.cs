@@ -64,11 +64,15 @@ namespace osu.Framework.Text
             if (string.IsNullOrEmpty(text))
                 return;
 
-            // calculate start render position
+            // get some position relative params.
             var canterPosition = getCenterPosition(positionText.StartIndex, positionText.EndIndex);
-            var textWidth = getSubTextWidth(text);
-            var yOffset = -getCharHeight(text.FirstOrDefault(), font);
-            var position = new Vector2(canterPosition.X - textWidth / 2, canterPosition.Y + yOffset);
+            var mainFontHeight = getMainTextHeight();
+            var subTextWidth = getSubTextWidth(text);
+            var subTextHeight = getSubTextHeight(text);
+
+            // calculate the start text position.
+            var yOffset = relativePosition == RelativePosition.Top ? -mainFontHeight / 2 - subTextHeight : mainFontHeight / 2;
+            var position = new Vector2(canterPosition.X - subTextWidth / 2, canterPosition.Y + yOffset);
 
             // set start render position
             setCurrentPosition(position + startOffset);
@@ -83,6 +87,7 @@ namespace osu.Framework.Text
 
         private void setCurrentPosition(Vector2 position)
         {
+            // force change the start print text position.
             var prop = typeof(TextBuilder).GetField("currentPos", BindingFlags.Instance | BindingFlags.NonPublic);
             if (prop == null)
                 throw new NullReferenceException();
@@ -102,14 +107,19 @@ namespace osu.Framework.Text
             var rightX = endCharacterRectangle.Right > leftX
                 ? endCharacterRectangle.Right
                 : Characters.Max(c => c.DrawRectangle.Right);
-            var x = (leftX + rightX) / 2;
 
             // because each character has different height, so we need to get base text height from here.
-            var y = startCharacterRectangle.Centre.Y - starCharacter.YOffset;
+            var x = (leftX + rightX) / 2;
+            var y = startCharacterRectangle.Centre.Y;
 
             // return center position.
-            var yOffset = relativePosition == RelativePosition.Top ? 0 : getCharHeight(starCharacter.Character, mainTextFont);
-            return new Vector2(x, y + yOffset);
+            return new Vector2(x, y);
+        }
+
+        private float getMainTextHeight()
+        {
+            // note: base line in here already include font size. see TextBuilderGlyph.
+            return Characters.Max(x => x.Baseline);
         }
 
         private float getSubTextWidth(string text)
@@ -120,9 +130,17 @@ namespace osu.Framework.Text
             return text.Sum(c => getCharWidth(c, font)) + spacing.X * (text.Length - 1);
         }
 
+        private float getSubTextHeight(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+                return 0;
+
+            return getCharHeight(text.First(), font);
+        }
+
         private float getCharWidth(char c, FontUsage fontUsage)
         {
-            var texture = getTexturedGlyph(c);
+            var texture = getTexturedGlyph(c, fontUsage);
             if (texture == null)
                 return 0;
 
@@ -131,14 +149,14 @@ namespace osu.Framework.Text
 
         private float getCharHeight(char c, FontUsage fontUsage)
         {
-            var texture = getTexturedGlyph(c);
+            var texture = getTexturedGlyph(c, fontUsage);
             if (texture == null)
                 return 0;
 
             return texture.Baseline * fontUsage.Size;
         }
 
-        private ITexturedCharacterGlyph getTexturedGlyph(char character)
+        private ITexturedCharacterGlyph getTexturedGlyph(char character, FontUsage font)
         {
             return store.Get(font.FontName, character)
                    ?? store.Get(null, character)
