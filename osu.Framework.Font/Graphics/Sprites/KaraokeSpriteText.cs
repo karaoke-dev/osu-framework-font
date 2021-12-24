@@ -168,6 +168,8 @@ namespace osu.Framework.Graphics.Sprites
             {
                 frontLyricText.Text = value;
                 backLyricText.Text = value;
+
+                Invalidate(Invalidation.DrawNode);
             }
         }
 
@@ -178,6 +180,8 @@ namespace osu.Framework.Graphics.Sprites
             {
                 frontLyricText.Rubies = value;
                 backLyricText.Rubies = value;
+
+                Invalidate(Invalidation.DrawNode);
             }
         }
 
@@ -188,6 +192,8 @@ namespace osu.Framework.Graphics.Sprites
             {
                 frontLyricText.Romajies = value;
                 backLyricText.Romajies = value;
+
+                Invalidate(Invalidation.DrawNode);
             }
         }
 

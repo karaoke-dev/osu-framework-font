@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using NUnit.Framework;
+using osu.Framework.Font.Tests.Helper;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Testing;
 using osu.Framework.Timing;
@@ -155,6 +156,37 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
 
             double getStartTime()
                 => manualTime ? 0 : Clock.CurrentTime;
+        }
+
+        [Test]
+        public void TestChangeText()
+        {
+            AddStep("Change texr", () =>
+            {
+                karaokeSpriteText.Text = "カラオケー";
+            });
+        }
+
+        [Test]
+        public void TestChangeRuby()
+        {
+            AddStep("Change ruby", () =>
+            {
+                var rubyTags = new[] { "[0,1]:123aaa", "[1,2]:ら", "[2,3]:お", "[3,4]:け" };
+                var ruby = TestCaseTagHelper.ParseParsePositionTexts(rubyTags);
+                karaokeSpriteText.Rubies = ruby;
+            });
+        }
+
+        [Test]
+        public void TestChangeRomaji()
+        {
+            AddStep("Change romaji", () =>
+            {
+                var romajiTags = new[] { "[0,1]:ka", "[1,2]:ra", "[2,3]:o", "[3,4]:ke" };
+                var romajies = TestCaseTagHelper.ParseParsePositionTexts(romajiTags);
+                karaokeSpriteText.Romajies = romajies;
+            });
         }
     }
 }
