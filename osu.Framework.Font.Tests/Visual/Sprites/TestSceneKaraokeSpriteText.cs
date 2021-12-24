@@ -3,9 +3,11 @@
 
 using System.Collections.Generic;
 using NUnit.Framework;
+using osu.Framework.Font.Tests.Helper;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Testing;
 using osu.Framework.Timing;
+using osuTK;
 using osuTK.Graphics;
 
 namespace osu.Framework.Font.Tests.Visual.Sprites
@@ -155,6 +157,148 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
 
             double getStartTime()
                 => manualTime ? 0 : Clock.CurrentTime;
+        }
+
+        [Test]
+        public void TestChangeText()
+        {
+            AddStep("Change texr", () =>
+            {
+                karaokeSpriteText.Text = "カラオケー";
+            });
+        }
+
+        [Test]
+        public void TestChangeRuby()
+        {
+            AddStep("Change ruby", () =>
+            {
+                var rubyTags = new[] { "[0,1]:123aaa", "[1,2]:ら", "[2,3]:お", "[3,4]:け" };
+                var ruby = TestCaseTagHelper.ParseParsePositionTexts(rubyTags);
+                karaokeSpriteText.Rubies = ruby;
+            });
+        }
+
+        [Test]
+        public void TestChangeRomaji()
+        {
+            AddStep("Change romaji", () =>
+            {
+                var romajiTags = new[] { "[0,1]:ka", "[1,2]:ra", "[2,3]:o", "[3,4]:ke" };
+                var romajies = TestCaseTagHelper.ParseParsePositionTexts(romajiTags);
+                karaokeSpriteText.Romajies = romajies;
+            });
+        }
+
+        [Test]
+        public void TestChangeFont()
+        {
+            AddStep("Change font", () =>
+            {
+                var font = FontUsage.Default.With(size: 64);
+                karaokeSpriteText.Font = font;
+            });
+        }
+
+        [Test]
+        public void TestChangeRubyFont()
+        {
+            AddStep("Change ruby font", () =>
+            {
+                var font = FontUsage.Default.With(size: 24);
+                karaokeSpriteText.RubyFont = font;
+            });
+        }
+
+        [Test]
+        public void TestChangeRomajiFont()
+        {
+            AddStep("Change romaji font", () =>
+            {
+                var font = FontUsage.Default.With(size: 24);
+                karaokeSpriteText.RomajiFont = font;
+            });
+        }
+
+        [Test]
+        public void TestLeftTextColour()
+        {
+            AddStep("Change left text colour", () =>
+            {
+                karaokeSpriteText.LeftTextColour = Color4.Orange;
+            });
+        }
+
+        [Test]
+        public void TestRightTextColour()
+        {
+            AddStep("Change right text colour", () =>
+            {
+                karaokeSpriteText.RightTextColour = Color4.Blue;
+            });
+        }
+
+        [Test]
+        public void TestRubyAlignment()
+        {
+            AddStep("Test ruby alignment", () =>
+            {
+                karaokeSpriteText.RubyAlignment = LyricTextAlignment.EqualSpace;
+            });
+        }
+
+        [Test]
+        public void TestRomajiAlignment()
+        {
+            AddStep("Test romaji alignment", () =>
+            {
+                karaokeSpriteText.RomajiAlignment = LyricTextAlignment.EqualSpace;
+            });
+        }
+
+        [Test]
+        public void TestSpacing()
+        {
+            AddStep("Change spacing", () =>
+            {
+                karaokeSpriteText.Spacing = new Vector2(10);
+            });
+        }
+
+        [Test]
+        public void TestRubySpacing()
+        {
+            AddStep("Change ruby spacing", () =>
+            {
+                karaokeSpriteText.RubySpacing = new Vector2(10);
+            });
+        }
+
+        [Test]
+        public void TestRomajiSpacing()
+        {
+            AddStep("Change romaji spacing", () =>
+            {
+                karaokeSpriteText.RomajiSpacing = new Vector2(10);
+            });
+        }
+
+        [Test]
+        public void TestRubyMargin()
+        {
+            AddStep("Change ruby margin", () =>
+            {
+                karaokeSpriteText.RubyMargin = 10;
+            });
+        }
+
+        [Test]
+        public void TestRomajiMargin()
+        {
+            AddStep("Change romaji margin", () =>
+            {
+                karaokeSpriteText.RomajiMargin = 10;
+            });
         }
     }
 }

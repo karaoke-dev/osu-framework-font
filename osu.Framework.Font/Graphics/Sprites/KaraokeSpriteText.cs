@@ -168,6 +168,8 @@ namespace osu.Framework.Graphics.Sprites
             {
                 frontLyricText.Text = value;
                 backLyricText.Text = value;
+
+                Invalidate(Invalidation.DrawNode);
             }
         }
 
@@ -178,6 +180,8 @@ namespace osu.Framework.Graphics.Sprites
             {
                 frontLyricText.Rubies = value;
                 backLyricText.Rubies = value;
+
+                Invalidate(Invalidation.DrawNode);
             }
         }
 
@@ -188,6 +192,8 @@ namespace osu.Framework.Graphics.Sprites
             {
                 frontLyricText.Romajies = value;
                 backLyricText.Romajies = value;
+
+                Invalidate(Invalidation.DrawNode);
             }
         }
 
@@ -202,6 +208,8 @@ namespace osu.Framework.Graphics.Sprites
             {
                 frontLyricText.Font = value;
                 backLyricText.Font = value;
+
+                Invalidate(Invalidation.DrawNode);
             }
         }
 
@@ -212,6 +220,8 @@ namespace osu.Framework.Graphics.Sprites
             {
                 frontLyricText.RubyFont = value;
                 backLyricText.RubyFont = value;
+
+                Invalidate(Invalidation.DrawNode);
             }
         }
 
@@ -222,6 +232,8 @@ namespace osu.Framework.Graphics.Sprites
             {
                 frontLyricText.RomajiFont = value;
                 backLyricText.RomajiFont = value;
+
+                Invalidate(Invalidation.DrawNode);
             }
         }
 
@@ -232,13 +244,23 @@ namespace osu.Framework.Graphics.Sprites
         public ColourInfo LeftTextColour
         {
             get => frontLyricText.Colour;
-            set => frontLyricText.Colour = value;
+            set
+            {
+                frontLyricText.Colour = value;
+
+                Invalidate(Invalidation.DrawNode);
+            }
         }
 
         public ColourInfo RightTextColour
         {
             get => backLyricText.Colour;
-            set => backLyricText.Colour = value;
+            set
+            {
+                backLyricText.Colour = value;
+
+                Invalidate(Invalidation.DrawNode);
+            }
         }
 
         public LyricTextAlignment RubyAlignment
@@ -248,6 +270,8 @@ namespace osu.Framework.Graphics.Sprites
             {
                 frontLyricText.RubyAlignment = value;
                 backLyricText.RubyAlignment = value;
+
+                Invalidate(Invalidation.DrawNode);
             }
         }
 
@@ -258,6 +282,8 @@ namespace osu.Framework.Graphics.Sprites
             {
                 frontLyricText.RomajiAlignment = value;
                 backLyricText.RomajiAlignment = value;
+
+                Invalidate(Invalidation.DrawNode);
             }
         }
 
@@ -272,6 +298,8 @@ namespace osu.Framework.Graphics.Sprites
             {
                 frontLyricText.Spacing = value;
                 backLyricText.Spacing = value;
+
+                Invalidate(Invalidation.DrawNode);
             }
         }
 
@@ -282,6 +310,8 @@ namespace osu.Framework.Graphics.Sprites
             {
                 frontLyricText.RubySpacing = value;
                 backLyricText.RubySpacing = value;
+
+                Invalidate(Invalidation.DrawNode);
             }
         }
 
@@ -292,6 +322,8 @@ namespace osu.Framework.Graphics.Sprites
             {
                 frontLyricText.RomajiSpacing = value;
                 backLyricText.RomajiSpacing = value;
+
+                Invalidate(Invalidation.DrawNode);
             }
         }
 
@@ -306,6 +338,8 @@ namespace osu.Framework.Graphics.Sprites
             {
                 frontLyricText.RubyMargin = value;
                 backLyricText.RubyMargin = value;
+
+                Invalidate(Invalidation.DrawNode);
             }
         }
 
@@ -316,6 +350,8 @@ namespace osu.Framework.Graphics.Sprites
             {
                 frontLyricText.RomajiMargin = value;
                 backLyricText.RomajiMargin = value;
+
+                Invalidate(Invalidation.DrawNode);
             }
         }
 
