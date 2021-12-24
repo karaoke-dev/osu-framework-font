@@ -282,5 +282,23 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
                 karaokeSpriteText.RomajiSpacing = new Vector2(10);
             });
         }
+
+        [Test]
+        public void TestRubyMargin()
+        {
+            AddStep("Change ruby margin", () =>
+            {
+                karaokeSpriteText.RubyMargin = 10;
+            });
+        }
+
+        [Test]
+        public void TestRomajiMargin()
+        {
+            AddStep("Change romaji margin", () =>
+            {
+                karaokeSpriteText.RomajiMargin = 10;
+            });
+        }
     }
 }

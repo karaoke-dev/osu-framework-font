@@ -338,6 +338,8 @@ namespace osu.Framework.Graphics.Sprites
             {
                 frontLyricText.RubyMargin = value;
                 backLyricText.RubyMargin = value;
+
+                Invalidate(Invalidation.DrawNode);
             }
         }
 
@@ -348,6 +350,8 @@ namespace osu.Framework.Graphics.Sprites
             {
                 frontLyricText.RomajiMargin = value;
                 backLyricText.RomajiMargin = value;
+
+                Invalidate(Invalidation.DrawNode);
             }
         }
 
