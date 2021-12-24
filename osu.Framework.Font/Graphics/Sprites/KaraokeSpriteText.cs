@@ -244,13 +244,23 @@ namespace osu.Framework.Graphics.Sprites
         public ColourInfo LeftTextColour
         {
             get => frontLyricText.Colour;
-            set => frontLyricText.Colour = value;
+            set
+            {
+                frontLyricText.Colour = value;
+
+                Invalidate(Invalidation.DrawNode);
+            }
         }
 
         public ColourInfo RightTextColour
         {
             get => backLyricText.Colour;
-            set => backLyricText.Colour = value;
+            set
+            {
+                backLyricText.Colour = value;
+
+                Invalidate(Invalidation.DrawNode);
+            }
         }
 
         public LyricTextAlignment RubyAlignment

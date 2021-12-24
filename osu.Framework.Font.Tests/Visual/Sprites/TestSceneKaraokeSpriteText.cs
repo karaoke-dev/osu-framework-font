@@ -218,5 +218,23 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
                 karaokeSpriteText.RomajiFont = font;
             });
         }
+
+        [Test]
+        public void TestLeftTextColour()
+        {
+            AddStep("Change left text colour", () =>
+            {
+                karaokeSpriteText.LeftTextColour = Color4.Orange;
+            });
+        }
+
+        [Test]
+        public void TestRightTextColour()
+        {
+            AddStep("Change right text colour", () =>
+            {
+                karaokeSpriteText.RightTextColour = Color4.Blue;
+            });
+        }
     }
 }
