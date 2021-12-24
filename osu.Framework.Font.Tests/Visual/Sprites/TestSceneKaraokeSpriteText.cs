@@ -7,6 +7,7 @@ using osu.Framework.Font.Tests.Helper;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Testing;
 using osu.Framework.Timing;
+using osuTK;
 using osuTK.Graphics;
 
 namespace osu.Framework.Font.Tests.Visual.Sprites
@@ -252,6 +253,33 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
             AddStep("Test romaji alignment", () =>
             {
                 karaokeSpriteText.RomajiAlignment = LyricTextAlignment.EqualSpace;
+            });
+        }
+
+        [Test]
+        public void TestSpacing()
+        {
+            AddStep("Change spacing", () =>
+            {
+                karaokeSpriteText.Spacing = new Vector2(10);
+            });
+        }
+
+        [Test]
+        public void TestRubySpacing()
+        {
+            AddStep("Change ruby spacing", () =>
+            {
+                karaokeSpriteText.RubySpacing = new Vector2(10);
+            });
+        }
+
+        [Test]
+        public void TestRomajiSpacing()
+        {
+            AddStep("Change romaji spacing", () =>
+            {
+                karaokeSpriteText.RomajiSpacing = new Vector2(10);
             });
         }
     }

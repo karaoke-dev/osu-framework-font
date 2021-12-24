@@ -298,6 +298,8 @@ namespace osu.Framework.Graphics.Sprites
             {
                 frontLyricText.Spacing = value;
                 backLyricText.Spacing = value;
+
+                Invalidate(Invalidation.DrawNode);
             }
         }
 
@@ -308,6 +310,8 @@ namespace osu.Framework.Graphics.Sprites
             {
                 frontLyricText.RubySpacing = value;
                 backLyricText.RubySpacing = value;
+
+                Invalidate(Invalidation.DrawNode);
             }
         }
 
@@ -318,6 +322,8 @@ namespace osu.Framework.Graphics.Sprites
             {
                 frontLyricText.RomajiSpacing = value;
                 backLyricText.RomajiSpacing = value;
+
+                Invalidate(Invalidation.DrawNode);
             }
         }
 
