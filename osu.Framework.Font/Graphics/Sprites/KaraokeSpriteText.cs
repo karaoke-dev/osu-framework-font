@@ -270,6 +270,8 @@ namespace osu.Framework.Graphics.Sprites
             {
                 frontLyricText.RubyAlignment = value;
                 backLyricText.RubyAlignment = value;
+
+                Invalidate(Invalidation.DrawNode);
             }
         }
 
@@ -280,6 +282,8 @@ namespace osu.Framework.Graphics.Sprites
             {
                 frontLyricText.RomajiAlignment = value;
                 backLyricText.RomajiAlignment = value;
+
+                Invalidate(Invalidation.DrawNode);
             }
         }
 

@@ -236,5 +236,23 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
                 karaokeSpriteText.RightTextColour = Color4.Blue;
             });
         }
+
+        [Test]
+        public void TestRubyAlignment()
+        {
+            AddStep("Test ruby alignment", () =>
+            {
+                karaokeSpriteText.RubyAlignment = LyricTextAlignment.EqualSpace;
+            });
+        }
+
+        [Test]
+        public void TestRomajiAlignment()
+        {
+            AddStep("Test romaji alignment", () =>
+            {
+                karaokeSpriteText.RomajiAlignment = LyricTextAlignment.EqualSpace;
+            });
+        }
     }
 }
