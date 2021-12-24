@@ -208,6 +208,8 @@ namespace osu.Framework.Graphics.Sprites
             {
                 frontLyricText.Font = value;
                 backLyricText.Font = value;
+
+                Invalidate(Invalidation.DrawNode);
             }
         }
 
@@ -218,6 +220,8 @@ namespace osu.Framework.Graphics.Sprites
             {
                 frontLyricText.RubyFont = value;
                 backLyricText.RubyFont = value;
+
+                Invalidate(Invalidation.DrawNode);
             }
         }
 
@@ -228,6 +232,8 @@ namespace osu.Framework.Graphics.Sprites
             {
                 frontLyricText.RomajiFont = value;
                 backLyricText.RomajiFont = value;
+
+                Invalidate(Invalidation.DrawNode);
             }
         }
 

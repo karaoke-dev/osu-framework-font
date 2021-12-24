@@ -188,5 +188,35 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
                 karaokeSpriteText.Romajies = romajies;
             });
         }
+
+        [Test]
+        public void TestChangeFont()
+        {
+            AddStep("Change font", () =>
+            {
+                var font = FontUsage.Default.With(size: 64);
+                karaokeSpriteText.Font = font;
+            });
+        }
+
+        [Test]
+        public void TestChangeRubyFont()
+        {
+            AddStep("Change ruby font", () =>
+            {
+                var font = FontUsage.Default.With(size: 24);
+                karaokeSpriteText.RubyFont = font;
+            });
+        }
+
+        [Test]
+        public void TestChangeRomajiFont()
+        {
+            AddStep("Change romaji font", () =>
+            {
+                var font = FontUsage.Default.With(size: 24);
+                karaokeSpriteText.RomajiFont = font;
+            });
+        }
     }
 }
