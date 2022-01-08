@@ -4,10 +4,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using osu.Framework.Graphics.OpenGL;
 using osu.Framework.Graphics.OpenGL.Buffers;
 using osu.Framework.Graphics.Shaders;
+using osu.Framework.Utils;
 using osuTK.Graphics.ES30;
 
 namespace osu.Framework.Graphics
@@ -41,21 +40,10 @@ namespace osu.Framework.Graphics
                 shaderBuffers.Add(shader, new FrameBuffer(formats, filterMode));
             }
 
-            clearBuffersWithSchedule(() =>
+            GLWrapperUtils.ScheduleDisposal(s =>
             {
-                clearBuffers(disposedFrameBuffer);
-            });
-
-            static void clearBuffersWithSchedule(Action action)
-            {
-                // should call GLWrapper.ScheduleDisposal(() => Dispose(true));
-                Delegate act = new Action(() => action?.Invoke());
-                var prop = typeof(GLWrapper).GetRuntimeMethods().FirstOrDefault(x => x.Name == "ScheduleDisposal");
-                if (prop == null)
-                    throw new NullReferenceException();
-
-                prop.Invoke(prop, new object[] { act });
-            }
+                s.clearBuffers(disposedFrameBuffer);
+            }, this);
         }
 
         public FrameBuffer GetSourceFrameBuffer(IShader shader)
