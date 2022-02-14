@@ -49,7 +49,7 @@ jobs:
       - name: Install .NET 5.0.x
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: "5.0.x"
+          dotnet-version: "6.0.x"
           
       - name: Build (Framework)
         run: dotnet build -c Release osu.Framework.Font /p:Version=${{needs.check-if-tag.outputs.version}} /p:GenerateDocumentationFile=true
