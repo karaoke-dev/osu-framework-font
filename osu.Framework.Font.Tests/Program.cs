@@ -13,7 +13,7 @@ namespace osu.Framework.Font.Tests
         {
             bool benchmark = args.Length > 0 && args[0] == @"-benchmark";
 
-            using (GameHost host = Host.GetSuitableHost(@"font-tests"))
+            using (GameHost host = Host.GetSuitableDesktopHost(@"font-tests"))
             {
                 if (benchmark)
                     host.Run(new AutomatedVisualTestGame());
