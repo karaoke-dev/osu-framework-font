@@ -7,7 +7,7 @@ using osuTK.Graphics;
 
 namespace osu.Framework.Graphics.Shaders
 {
-    public class DefaultKaraokeFontShader : InternalShader
+    public class DefaultKaraokeLyricShader : InternalShader
     {
         public override string ShaderName => "DefaultKaraokeFont";
 
@@ -16,6 +16,10 @@ namespace osu.Framework.Graphics.Shaders
         public int Radius { get; set; }
 
         public Color4 OutlineColour { get; set; }
+
+        public Vector2 ShaderOffset { get; set; }
+
+        public int ShaderSize { get; set; }
 
         public override void ApplyValue(FrameBuffer current)
         {
