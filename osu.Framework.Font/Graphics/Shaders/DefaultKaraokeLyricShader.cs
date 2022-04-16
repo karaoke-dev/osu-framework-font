@@ -9,7 +9,7 @@ namespace osu.Framework.Graphics.Shaders
 {
     public class DefaultKaraokeLyricShader : InternalShader
     {
-        public override string ShaderName => "DefaultKaraokeFont";
+        public override string ShaderName => "DefaultKaraokeLyric";
 
         public Color4 Colour { get; set; }
 
@@ -20,6 +20,10 @@ namespace osu.Framework.Graphics.Shaders
         public Vector2 ShaderOffset { get; set; }
 
         public int ShaderSize { get; set; }
+
+        public int ShaderSigma { get; set; }
+
+        public Vector2 ShaderColour { get; set; }
 
         public override void ApplyValue(FrameBuffer current)
         {
