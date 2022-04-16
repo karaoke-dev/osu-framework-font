@@ -17,25 +17,29 @@ namespace osu.Framework.Graphics.Shaders
 
         public Color4 OutlineColour { get; set; }
 
-        public Vector2 ShaderOffset { get; set; }
+        public Vector2 ShadowOffset { get; set; }
 
-        public int ShaderSize { get; set; }
+        public int ShadowSize { get; set; }
 
-        public int ShaderSigma { get; set; }
+        public int ShadowSigma { get; set; }
 
-        public Vector2 ShaderColour { get; set; }
+        public Vector2 ShadowColour { get; set; }
 
         public override void ApplyValue(FrameBuffer current)
         {
-            var radius = Radius;
-            GetUniform<int>(@"g_Radius").UpdateValue(ref radius);
-
+            // outline effect
             var colourMatrix = new Vector4(Colour.R, Colour.G, Colour.B, Colour.A);
             GetUniform<Vector4>(@"g_Colour").UpdateValue(ref colourMatrix);
+
+            var radius = Radius;
+            GetUniform<int>(@"g_Radius").UpdateValue(ref radius);
 
             var outlineColourMatrix = new Vector4(OutlineColour.R, OutlineColour.G, OutlineColour.B, OutlineColour.A);
             GetUniform<Vector4>(@"g_OutlineColour").UpdateValue(ref outlineColourMatrix);
 
+            // shadow effect
+
+            // common property.
             var size = current.Size;
             GetUniform<Vector2>(@"g_TexSize").UpdateValue(ref size);
         }

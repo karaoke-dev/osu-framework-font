@@ -7,8 +7,13 @@ varying mediump vec2 v_TexCoord;
 uniform lowp sampler2D m_Sampler;
 
 uniform mediump vec2 g_TexSize;
-uniform int g_Radius;
 
+// outline effect
+uniform vec4 g_Colour;
+uniform int g_Radius;
+uniform vec4 g_OutlineColour;
+
+// shadow effect
 uniform mediump float g_Sigma;
 uniform highp vec2 g_BlurDirection;
 
