@@ -45,5 +45,8 @@ lowp vec4 blur(sampler2D tex, int radius, highp vec2 direction, mediump vec2 tex
 
 void main(void)
 {
-	gl_FragColor = blur(m_Sampler, g_Radius, g_BlurDirection, v_TexCoord, g_TexSize, g_Sigma);
+	mediump vec4 originTexture = texture2D(m_Sampler, v_TexCoord) * g_Colour;
+	lowp vec4 outline = blur(m_Sampler, g_Radius, g_BlurDirection, v_TexCoord, g_TexSize, g_Sigma) * g_OutlineColour;
+	lowp vec4 shadow = blur(m_Sampler, g_Radius, g_BlurDirection, v_TexCoord, g_TexSize, g_Sigma);
+	gl_FragColor = originTexture;
 }

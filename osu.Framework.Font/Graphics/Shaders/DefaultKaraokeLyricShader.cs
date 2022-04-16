@@ -21,7 +21,7 @@ namespace osu.Framework.Graphics.Shaders
 
         public int ShadowSize { get; set; }
 
-        public int ShadowSigma { get; set; }
+        public float ShadowSigma { get; set; }
 
         public Vector2 ShadowColour { get; set; }
 
@@ -38,6 +38,11 @@ namespace osu.Framework.Graphics.Shaders
             GetUniform<Vector4>(@"g_OutlineColour").UpdateValue(ref outlineColourMatrix);
 
             // shadow effect
+            var shadowOffset = ShadowOffset;
+            GetUniform<Vector2>(@"g_BlurDirection").UpdateValue(ref shadowOffset);
+
+            var shadowSigma = ShadowSigma;
+            GetUniform<float>(@"g_Sigma").UpdateValue(ref shadowSigma);
 
             // common property.
             var size = current.Size;
