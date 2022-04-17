@@ -1,4 +1,5 @@
 ﻿// see : https://github.com/kiwipxl/GLSL-shaders/blob/master/repeat.glsl
+#include "sh_Utils.h"
 
 varying vec2 v_TexCoord;
 varying vec4 v_Colour;
@@ -35,5 +36,5 @@ void main(void) {
     // get point colour from sample.
     vec4 texColor = texture2D(m_Sampler, v_TexCoord);
     vec4 repeatSampleColor = v_Colour * vec4(texture2D(g_RepeatSample, fixedTexCoord).xyz, texColor.a);
-    gl_FragColor = mix(texColor, repeatSampleColor, g_Mix);
+    gl_FragColor = toSRGB(mix(texColor, repeatSampleColor, g_Mix));
 }
