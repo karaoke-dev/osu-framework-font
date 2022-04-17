@@ -171,7 +171,7 @@ void main(void)
 	angelPosition[127] = lowp vec2(0.00, 1.00);
 
 	lowp vec4 sample = texture2D(m_Sampler, v_TexCoord);
-	lowp vec4 originColur = vec4(mix(sample.xyz, g_Colour.xyz, g_Colour.a), sample.w);
+	lowp vec4 originColur = vec4(mix(sample.rgb, g_Colour.rgb, g_Colour.a), sample.a);
 	lowp vec4 outlineColour = outline(m_Sampler, g_Radius, v_TexCoord, g_TexSize, g_OutlineColour);
 
 	gl_FragColor = mix(outlineColour, originColur, originColur.a);
