@@ -6,20 +6,14 @@ uniform mediump vec2 g_TexSize;
 uniform vec4 g_Colour;
 uniform vec2 g_Offset;
 
-lowp vec4 outline(sampler2D tex, mediump vec2 texCoord, mediump vec2 texSize, mediump vec4 colour, mediump vec2 offset)
+lowp vec4 shadow(sampler2D tex, mediump vec2 texCoord, mediump vec2 texSize, mediump vec4 colour, mediump vec2 offset)
 {
-	mediump vec4 sum = texture2D(tex, texCoord);
-
-	// draw shader with target offset and colour.
-	sum += texture2D(tex, texCoord + offset / texSize).a * colour;
-
-	// draw origin texture2D in center
-	sum += texture2D(tex, texCoord);
-
-    return sum;
+    return texture2D(tex, texCoord + offset / texSize).a * colour;
 }
 
 void main(void)
 {
-	gl_FragColor = outline(m_Sampler, v_TexCoord, g_TexSize, g_Colour, g_Offset);
+	lowp vec4 texture = texture2D(m_Sampler, v_TexCoord);
+	lowp vec4 shadow = shadow(m_Sampler, v_TexCoord, g_TexSize, g_Colour, g_Offset);
+	gl_FragColor = mix(shadow, texture, texture.a);
 }
