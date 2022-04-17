@@ -32,10 +32,7 @@ lowp vec4 outline(sampler2D tex, int radius, mediump vec2 texCoord, mediump vec2
 		}
 	}
 
-	mediump vec4 ogCol = texture2D(tex, texCoord);
-	vec4 outlineCol = mix(vec4(0.0), colour, outlineAlpha);
-
-	return mix(outlineCol, ogCol, ogCol.a);
+	return mix(vec4(0.0), colour, outlineAlpha);
 }
 
 void main(void)
@@ -168,5 +165,9 @@ void main(void)
 	angelPosition[125] = lowp vec2(-0.10, 1.00);
 	angelPosition[126] = lowp vec2(-0.05, 1.00);
 	angelPosition[127] = lowp vec2(0.00, 1.00);
-	gl_FragColor = outline(m_Sampler, g_Radius, v_TexCoord, g_TexSize, g_OutlineColour);
+
+	mediump vec4 originColur = texture2D(m_Sampler, v_TexCoord);
+	lowp vec4 outlineColour = outline(m_Sampler, g_Radius, v_TexCoord, g_TexSize, g_OutlineColour);
+
+	gl_FragColor = mix(outlineColour, originColur, originColur.a);
 }
