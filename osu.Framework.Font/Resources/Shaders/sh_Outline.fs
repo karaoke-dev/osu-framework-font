@@ -8,7 +8,7 @@ uniform lowp sampler2D m_Sampler;
 
 uniform mediump vec2 g_TexSize;
 uniform int g_Radius;
-uniform vec4 g_Colour;
+uniform vec4 g_OutlineColour;
 
 lowp vec2 angelPosition[128];
 
@@ -168,5 +168,5 @@ void main(void)
 	angelPosition[125] = lowp vec2(-0.10, 1.00);
 	angelPosition[126] = lowp vec2(-0.05, 1.00);
 	angelPosition[127] = lowp vec2(0.00, 1.00);
-	gl_FragColor = outline(m_Sampler, g_Radius, v_TexCoord, g_TexSize, g_Colour);
+	gl_FragColor = outline(m_Sampler, g_Radius, v_TexCoord, g_TexSize, g_OutlineColour);
 }
