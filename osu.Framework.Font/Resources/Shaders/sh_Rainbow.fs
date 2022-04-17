@@ -17,7 +17,7 @@ uniform float g_Mix;
 void main(void)
 {
     float pos = (v_TexCoord.y - g_Uv[0]) / (g_Uv[1] - g_Uv[0]);
-    vec4 texColor = texture2D(m_Sampler, v_TexCoord);
+    vec4 texColor = toSRGB(texture2D(m_Sampler, v_TexCoord));
     
     vec4 col = vec4(g_Section * ((g_Time * g_Speed) + pos), g_Saturation, g_Brightness, 1);
     vec4 finalCol = mix(texColor, vec4(hsv2rgb(col).xyz, texColor.a), g_Mix);

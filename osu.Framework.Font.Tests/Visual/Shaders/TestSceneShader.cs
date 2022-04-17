@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using osu.Framework.Allocation;
+using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shaders;
@@ -33,14 +34,14 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
                         Anchor = Anchor.Centre,
                         Origin = Anchor.Centre,
                         Size = new Vector2(50),
-                        Colour = Color4.Red,
+                        Colour = Color4Extensions.FromHex(RED),
                     },
                     new DraggableCircle
                     {
                         Size = new Vector2(50),
                         Anchor = Anchor.Centre,
                         Origin = Anchor.Centre,
-                        Colour = Color4.Blue,
+                        Colour = Color4Extensions.FromHex(BLUE),
                     },
                     new DraggableTriangle
                     {
@@ -48,7 +49,7 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
                         Size = new Vector2(50),
                         Anchor = Anchor.Centre,
                         Origin = Anchor.Centre,
-                        Colour = Color4.Green,
+                        Colour = Color4Extensions.FromHex(GREEN)
                     },
                     new DraggableText
                     {
@@ -72,7 +73,7 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
                     Name = name,
                     Anchor = position,
                     Origin = position,
-                    Colour = Color4.Red,
+                    Colour = Color4Extensions.FromHex(RED),
                     Size = new Vector2(GRID_SIZE),
                 };
         }
