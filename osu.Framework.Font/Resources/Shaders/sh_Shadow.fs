@@ -1,3 +1,5 @@
+#include "sh_Utils.h"
+
 varying mediump vec2 v_TexCoord;
 
 uniform lowp sampler2D m_Sampler;
@@ -13,7 +15,7 @@ lowp vec4 shadow(sampler2D tex, mediump vec2 texCoord, mediump vec2 texSize, med
 
 void main(void)
 {
-	lowp vec4 texture = texture2D(m_Sampler, v_TexCoord);
+	lowp vec4 texture = toSRGB(texture2D(m_Sampler, v_TexCoord));
 	lowp vec4 shadow = shadow(m_Sampler, v_TexCoord, g_TexSize, g_Colour, g_Offset);
 	gl_FragColor = mix(shadow, texture, texture.a);
 }
