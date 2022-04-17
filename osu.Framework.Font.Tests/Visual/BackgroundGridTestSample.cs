@@ -24,9 +24,9 @@ namespace osu.Framework.Font.Tests.Visual
         private const int row = 6;
         private const int spacing = 5;
 
-        protected const string RED = "#FF0000";
-        protected const string GREEN = "#00FF00";
-        protected const string BLUE = "#0000FF";
+        protected const string RED = "#AF0000";
+        protected const string GREEN = "#00AF00";
+        protected const string BLUE = "#0000AF";
 
         [Resolved]
         private ShaderManager shaderManager { get; set; }
