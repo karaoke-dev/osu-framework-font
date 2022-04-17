@@ -11,11 +11,31 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
 {
     public class TestSceneOutlineShader : TestSceneInternalShader
     {
+        [TestCase("#FF0000FF")] // will make the inner texture red
+        [TestCase("#FFFFFFFF")] // will make the inner texture white
+        [TestCase("#000000FF")] // will make the inner texture black
+        [TestCase("#00000000")] // will not affect inner texture
+        [TestCase("#FFFFFF00")] // will not affect inner texture
+        [TestCase("#FFFFFFAA")] // will make inner texture lighter
+        public void TestColour(string colour)
+        {
+            AddStep("Apply shader", () =>
+            {
+                ShaderContainer.Shaders = new[]
+                {
+                    GetShaderByType<OutlineShader>().With(s =>
+                    {
+                        s.Colour = Color4Extensions.FromHex(colour);
+                    })
+                };
+            });
+        }
+
         [TestCase(0, "#FF0000")]
         [TestCase(10, "#00FF00")]
         [TestCase(20, "#0000FF")]
         [TestCase(100, "#0000FF")] // it might cause performance issue if set radius too large.
-        public void TestProperty(int radius, string colour)
+        public void TestOutline(int radius, string colour)
         {
             AddStep("Apply shader", () =>
             {

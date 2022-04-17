@@ -1,3 +1,6 @@
+#include "sh_Utils.h"
+#include "sh_TextureWrapping.h"
+
 #define PI 3.14159265359
 #define SAMPLES 128
 #define STEP_SAMPLES 2
@@ -7,6 +10,7 @@ varying mediump vec2 v_TexCoord;
 uniform lowp sampler2D m_Sampler;
 
 uniform mediump vec2 g_TexSize;
+uniform vec4 g_Colour;
 uniform int g_Radius;
 uniform vec4 g_OutlineColour;
 
@@ -166,7 +170,8 @@ void main(void)
 	angelPosition[126] = lowp vec2(-0.05, 1.00);
 	angelPosition[127] = lowp vec2(0.00, 1.00);
 
-	mediump vec4 originColur = texture2D(m_Sampler, v_TexCoord);
+	lowp vec4 sample = texture2D(m_Sampler, v_TexCoord);
+	lowp vec4 originColur = vec4(mix(sample.xyz, g_Colour.xyz, g_Colour.a), sample.w);
 	lowp vec4 outlineColour = outline(m_Sampler, g_Radius, v_TexCoord, g_TexSize, g_OutlineColour);
 
 	gl_FragColor = mix(outlineColour, originColur, originColur.a);
