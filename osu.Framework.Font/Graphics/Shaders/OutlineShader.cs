@@ -11,17 +11,22 @@ namespace osu.Framework.Graphics.Shaders
     {
         public override string ShaderName => "Outline";
 
+        public Color4 Colour { get; set; }
+
         public int Radius { get; set; }
 
         public Color4 OutlineColour { get; set; }
 
         public override void ApplyValue(FrameBuffer current)
         {
+            var colourMatrix = new Vector4(Colour.R, Colour.G, Colour.B, Colour.A);
+            GetUniform<Vector4>(@"g_Colour").UpdateValue(ref colourMatrix);
+
             var radius = Radius;
             GetUniform<int>(@"g_Radius").UpdateValue(ref radius);
 
-            var colourMatrix = new Vector4(OutlineColour.R, OutlineColour.G, OutlineColour.B, OutlineColour.A);
-            GetUniform<Vector4>(@"g_Colour").UpdateValue(ref colourMatrix);
+            var outlineColourMatrix = new Vector4(OutlineColour.R, OutlineColour.G, OutlineColour.B, OutlineColour.A);
+            GetUniform<Vector4>(@"g_OutlineColour").UpdateValue(ref outlineColourMatrix);
 
             var size = current.Size;
             GetUniform<Vector2>(@"g_TexSize").UpdateValue(ref size);
