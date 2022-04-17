@@ -1,4 +1,5 @@
 // see the demo: https://www.geeks3d.com/20101029/shader-library-pixelation-post-processing-effect-glsl/
+#include "sh_Utils.h"
 
 varying mediump vec2 v_TexCoord;
 
@@ -14,5 +15,5 @@ void main(void)
 	uv = uv * separaorParts;
     uv = floor(uv);
     uv = uv / separaorParts;
-    gl_FragColor = texture2D(m_Sampler, uv);
+    gl_FragColor = toSRGB(texture2D(m_Sampler, uv));
 }
