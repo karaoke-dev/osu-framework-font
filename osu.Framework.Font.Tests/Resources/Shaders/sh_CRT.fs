@@ -3,7 +3,7 @@
 varying mediump vec2 v_TexCoord;
 varying vec4 v_TexRect;
 
-const float gradient = 0.003f;
+const float gradient = 0.003;
 
 #define PI 3.1415926538
 
