@@ -470,7 +470,5 @@ namespace osu.Framework.Graphics.Sprites
 
             return true;
         }
-
-        public override bool RemoveCompletedTransforms => false;
     }
 }
