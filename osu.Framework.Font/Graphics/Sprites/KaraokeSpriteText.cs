@@ -421,54 +421,56 @@ namespace osu.Framework.Graphics.Sprites
             if (!invalidation.HasFlag(Invalidation.Presence) || !hasTimeTag || !hasText)
                 return result;
 
-            Schedule(() =>
-            {
-                // set initial width.
-                // we should get width from child object because draw width haven't updated.
-                var width = frontLyricText.Width;
-                frontLyricTextContainer.Width = 0;
-                backLyricTextContainer.Width = width;
-
-                // reset masking transform.
-                frontLyricTextContainer.ClearTransforms();
-                backLyricTextContainer.ClearTransforms();
-
-                // filter valid time-tag with order.
-                var characters = frontLyricText.Characters;
-                var validTimeTag = TimeTags
-                                   .Where(x => x.Key.Index >= 0 && x.Key.Index < Text.Length)
-                                   .OrderBy(x => x.Value).ToArray();
-
-                // get first time-tag relative start time.
-                var currentTime = Time.Current;
-                var relativeTime = validTimeTag.FirstOrDefault().Value;
-
-                // should use absolute time to process time-tags.
-                using (frontLyricTextContainer.BeginAbsoluteSequence(currentTime))
-                using (backLyricTextContainer.BeginAbsoluteSequence(currentTime))
-                {
-                    // get transform sequence and set initial delay time.
-                    var frontTransformSequence = frontLyricTextContainer.Delay(relativeTime - currentTime).Then();
-                    var backTransformSequence = backLyricTextContainer.Delay(relativeTime - currentTime).Then();
-
-                    foreach (var (textIndex, time) in validTimeTag)
-                    {
-                        // calculate position and duration relative to precious time-tag time.
-                        var characterRectangle = characters[textIndex.Index].DrawRectangle;
-                        var position = textIndex.State == TextIndex.IndexState.Start ? characterRectangle.Left : characterRectangle.Right;
-                        var duration = Math.Max(time - relativeTime, 0);
-
-                        // apply the position with delay time.
-                        frontTransformSequence.ResizeWidthTo(position, duration).Then();
-                        backTransformSequence.ResizeWidthTo(DrawWidth - position, duration).Then();
-
-                        // save current time-tag time for letting next time-tag able to calculate duration.
-                        relativeTime = time;
-                    }
-                }
-            });
+            Schedule(RefreshStateTransforms);
 
             return true;
+        }
+
+        public virtual void RefreshStateTransforms()
+        {
+            // set initial width.
+            // we should get width from child object because draw width haven't updated.
+            var width = frontLyricText.Width;
+            frontLyricTextContainer.Width = 0;
+            backLyricTextContainer.Width = width;
+
+            // reset masking transform.
+            frontLyricTextContainer.ClearTransforms();
+            backLyricTextContainer.ClearTransforms();
+
+            // filter valid time-tag with order.
+            var characters = frontLyricText.Characters;
+            var validTimeTag = TimeTags
+                               .Where(x => x.Key.Index >= 0 && x.Key.Index < Text.Length)
+                               .OrderBy(x => x.Value).ToArray();
+
+            // get first time-tag relative start time.
+            var currentTime = Time.Current;
+            var relativeTime = validTimeTag.FirstOrDefault().Value;
+
+            // should use absolute time to process time-tags.
+            using (frontLyricTextContainer.BeginAbsoluteSequence(currentTime))
+            using (backLyricTextContainer.BeginAbsoluteSequence(currentTime))
+            {
+                // get transform sequence and set initial delay time.
+                var frontTransformSequence = frontLyricTextContainer.Delay(relativeTime - currentTime).Then();
+                var backTransformSequence = backLyricTextContainer.Delay(relativeTime - currentTime).Then();
+
+                foreach (var (textIndex, time) in validTimeTag)
+                {
+                    // calculate position and duration relative to precious time-tag time.
+                    var characterRectangle = characters[textIndex.Index].DrawRectangle;
+                    var position = textIndex.State == TextIndex.IndexState.Start ? characterRectangle.Left : characterRectangle.Right;
+                    var duration = Math.Max(time - relativeTime, 0);
+
+                    // apply the position with delay time.
+                    frontTransformSequence.ResizeWidthTo(position, duration).Then();
+                    backTransformSequence.ResizeWidthTo(DrawWidth - position, duration).Then();
+
+                    // save current time-tag time for letting next time-tag able to calculate duration.
+                    relativeTime = time;
+                }
+            }
         }
     }
 }
