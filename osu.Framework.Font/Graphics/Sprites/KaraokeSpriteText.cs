@@ -1,4 +1,4 @@
-﻿// Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
+// Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
@@ -445,7 +445,7 @@ namespace osu.Framework.Graphics.Sprites
 
                 // should use absolute time to process time-tags.
                 using (frontLyricTextContainer.BeginAbsoluteSequence(currentTime))
-                using (frontLyricTextContainer.BeginAbsoluteSequence(currentTime))
+                using (backLyricTextContainer.BeginAbsoluteSequence(currentTime))
                 {
                     // get transform sequence and set initial delay time.
                     var frontTransformSequence = frontLyricTextContainer.Delay(relativeTime - currentTime).Then();
