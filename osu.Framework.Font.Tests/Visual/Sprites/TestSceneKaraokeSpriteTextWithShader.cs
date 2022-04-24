@@ -14,7 +14,7 @@ using osuTK.Graphics;
 
 namespace osu.Framework.Font.Tests.Visual.Sprites
 {
-    public class TestSceneKaraokeSpriteTextWithShader : BackgroundGridTestSample
+    public class TestSceneKaraokeSpriteTextWithShader : BackgroundGridTestScene
     {
         private readonly KaraokeSpriteText karaokeSpriteText;
 

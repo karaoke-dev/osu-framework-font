@@ -9,7 +9,7 @@ using osu.Framework.Graphics.Shaders;
 
 namespace osu.Framework.Font.Tests.Visual.Shaders
 {
-    public class TestSceneShadowShader : TestSceneInternalShader
+    public class TestSceneShadowShader : InternalShaderTestScene
     {
         [TestCase(RED, "(10,10)")]
         [TestCase(GREEN, "(-20,-20)")]

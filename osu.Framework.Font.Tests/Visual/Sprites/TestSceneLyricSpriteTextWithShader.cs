@@ -12,7 +12,7 @@ using osuTK.Graphics;
 
 namespace osu.Framework.Font.Tests.Visual.Sprites
 {
-    public class TestSceneLyricSpriteTextWithShader : BackgroundGridTestSample
+    public class TestSceneLyricSpriteTextWithShader : BackgroundGridTestScene
     {
         private readonly LyricSpriteText lyricSpriteText;
 

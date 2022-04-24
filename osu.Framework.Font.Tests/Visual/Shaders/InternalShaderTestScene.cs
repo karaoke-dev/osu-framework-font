@@ -3,7 +3,7 @@
 
 namespace osu.Framework.Font.Tests.Visual.Shaders
 {
-    public abstract class TestSceneInternalShader : TestSceneShader
+    public abstract class InternalShaderTestScene : ShaderTestScene
     {
     }
 }

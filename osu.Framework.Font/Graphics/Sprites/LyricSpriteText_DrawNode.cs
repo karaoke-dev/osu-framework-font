@@ -65,7 +65,8 @@ namespace osu.Framework.Graphics.Sprites
 
                 for (int i = 0; i < parts.Count; i++)
                 {
-                    DrawQuad(parts[i].Texture, parts[i].DrawQuad, DrawColourInfo.Colour, vertexAction: vertexAction, inflationPercentage: parts[i].InflationPercentage);
+                    // Note: should use white here because buffered container will change the colour.
+                    DrawQuad(parts[i].Texture, parts[i].DrawQuad, Colour4.White, vertexAction: vertexAction, inflationPercentage: parts[i].InflationPercentage);
                 }
 
                 Shader.Unbind();
