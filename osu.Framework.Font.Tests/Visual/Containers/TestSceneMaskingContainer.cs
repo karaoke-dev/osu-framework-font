@@ -10,11 +10,11 @@ using osuTK.Graphics;
 
 namespace osu.Framework.Font.Tests.Visual.Containers
 {
-    public class MaskingContainerTestScene : BackgroundGridTestSample
+    public class TestSceneMaskingContainer : BackgroundGridTestSample
     {
         private readonly MaskingContainer<Drawable> maskingContainer;
 
-        public MaskingContainerTestScene()
+        public TestSceneMaskingContainer()
         {
             Child = maskingContainer = new MaskingContainer<Drawable>
             {
