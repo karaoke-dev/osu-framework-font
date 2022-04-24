@@ -16,7 +16,7 @@ using osuTK.Graphics;
 
 namespace osu.Framework.Font.Tests.Visual
 {
-    public abstract class BackgroundGridTestSample : TestScene
+    public abstract class BackgroundGridTestScene : TestScene
     {
         protected const int GRID_SIZE = 30;
 
@@ -35,7 +35,7 @@ namespace osu.Framework.Font.Tests.Visual
 
         protected override Container<Drawable> Content => content;
 
-        protected BackgroundGridTestSample()
+        protected BackgroundGridTestScene()
         {
             const int x = (GRID_SIZE + spacing) * column - spacing;
             const int y = (GRID_SIZE + spacing) * row - spacing;
