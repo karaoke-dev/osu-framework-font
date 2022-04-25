@@ -1,7 +1,5 @@
 #include "sh_Utils.h"
 
-#define STEP_SAMPLES 2
-
 varying mediump vec2 v_TexCoord;
 
 uniform lowp sampler2D m_Sampler;
@@ -11,10 +9,10 @@ uniform vec4 g_Colour;
 uniform int g_Radius;
 uniform vec4 g_OutlineColour;
 
-lowp vec4 outline(sampler2D tex, int radius, mediump vec2 texCoord, mediump vec2 texSize, mediump vec4 colour)
+lowp float outlineAlpha(sampler2D tex, int radius, mediump vec2 texCoord, mediump vec2 texSize)
 {
     mediump vec2 offset = mediump vec2(float(radius)) / texSize;
-    float alpha = 0.0;
+    lowp float alpha = 0.0;
 
     alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(0.05, 1.00) * offset).a);
     alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(0.10, 1.00) * offset).a);
@@ -144,7 +142,13 @@ lowp vec4 outline(sampler2D tex, int radius, mediump vec2 texCoord, mediump vec2
     alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(-0.10, 1.00) * offset).a);
     alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(-0.05, 1.00) * offset).a);
     alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(0.00, 1.00) * offset).a);
-    return mix(vec4(0.0), colour, alpha);
+    return alpha;
+}
+
+lowp vec4 outline(sampler2D tex, int radius, mediump vec2 texCoord, mediump vec2 texSize, mediump vec4 colour)
+{
+	lowp float outlineAlpha = max(outlineAlpha(tex, radius, texCoord, texSize), outlineAlpha(tex, radius / 2, texCoord, texSize));
+	return mix(vec4(0.0), colour, outlineAlpha);
 }
 
 void main(void)

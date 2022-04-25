@@ -60,10 +60,10 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
             const float pi = 3.14159265359f;
             double angle = 0.0f;
 
-            Console.WriteLine($"lowp vec4 outline(sampler2D tex, int radius, mediump vec2 texCoord, mediump vec2 texSize, mediump vec4 colour)");
+            Console.WriteLine($"lowp float outlineAlpha(sampler2D tex, int radius, mediump vec2 texCoord, mediump vec2 texSize)");
             Console.WriteLine("{");
             Console.WriteLine("    mediump vec2 offset = mediump vec2(float(radius)) / texSize;");
-            Console.WriteLine("    float alpha = 0.0;");
+            Console.WriteLine("    lowp float alpha = 0.0;");
             Console.WriteLine();
 
             for (int i = 0; i < samples; i++)
@@ -72,7 +72,7 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
                 Console.WriteLine($"    alpha = max(alpha, texture2D(tex, texCoord - lowp vec2({Math.Sin(angle):N2}, {Math.Cos(angle):N2}) * offset).a);");
             }
 
-            Console.WriteLine("    return mix(vec4(0.0), colour, alpha);");
+            Console.WriteLine("    return alpha;");
             Console.WriteLine("}");
         }
     }
