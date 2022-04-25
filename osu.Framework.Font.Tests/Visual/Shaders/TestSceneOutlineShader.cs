@@ -52,7 +52,7 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
             });
         }
 
-        [TestCase(128)]
+        [TestCase(32)]
         public void CreateGetOutlineMethod(int samples)
         {
             // it's a script on creating const params in shader.
