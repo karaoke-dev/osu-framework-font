@@ -53,23 +53,27 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
         }
 
         [TestCase(128)]
-        public void CreateAnglePositionParams(int samples)
+        public void CreateGetOutlineMethod(int samples)
         {
             // it's a script on creating const params in shader.
 
             const float pi = 3.14159265359f;
             double angle = 0.0f;
 
-            Console.WriteLine($"const lowp vec2 angelPosition[{samples}] = lowp vec2[](");
+            Console.WriteLine($"lowp vec4 outline(sampler2D tex, int radius, mediump vec2 texCoord, mediump vec2 texSize, mediump vec4 colour)");
+            Console.WriteLine("{");
+            Console.WriteLine("    mediump vec2 offset = mediump vec2(float(radius)) / texSize;");
+            Console.WriteLine("    float alpha = 0.0;");
+            Console.WriteLine();
 
             for (int i = 0; i < samples; i++)
             {
-                var last = i == samples - 1;
                 angle += 1.0 / (samples / 2.0) * pi;
-                Console.WriteLine($"    lowp vec2({Math.Sin(angle):N2}, {Math.Cos(angle):N2})" + (last ? "" : ","));
+                Console.WriteLine($"    alpha = max(alpha, texture2D(tex, texCoord - lowp vec2({Math.Sin(angle):N2}, {Math.Cos(angle):N2}) * offset).a);");
             }
 
-            Console.WriteLine(");");
+            Console.WriteLine("    return mix(vec4(0.0), colour, alpha);");
+            Console.WriteLine("}");
         }
     }
 }
