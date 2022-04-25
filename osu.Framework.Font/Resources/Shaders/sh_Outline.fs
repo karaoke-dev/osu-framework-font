@@ -1,7 +1,6 @@
 #include "sh_Utils.h"
 #include "sh_TextureWrapping.h"
 
-#define PI 3.14159265359
 #define SAMPLES 128
 #define STEP_SAMPLES 2
 
@@ -29,7 +28,7 @@ lowp vec4 outline(sampler2D tex, int radius, mediump vec2 texCoord, mediump vec2
 		{
 			if(outlineAlpha < 0.99) 
 			{
-				vec2 testPoint = texCoord - angelPosition[i] * (float(radius) * (1.0 / float(j))) / texSize;
+				vec2 testPoint = texCoord - angelPosition[i] * float(radius) / float(j) / texSize;
 				float sampledAlpha = texture2D(tex, testPoint).a;
 				outlineAlpha = max(outlineAlpha, sampledAlpha);
 			}
