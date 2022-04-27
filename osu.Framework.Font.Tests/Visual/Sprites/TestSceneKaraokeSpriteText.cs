@@ -1,20 +1,17 @@
 // Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using osu.Framework.Font.Tests.Helper;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Testing;
-using osu.Framework.Timing;
 using osuTK.Graphics;
 
 namespace osu.Framework.Font.Tests.Visual.Sprites
 {
     public class TestSceneKaraokeSpriteText : TestScene
     {
-        private readonly ManualClock manualClock = new();
         private readonly KaraokeSpriteText karaokeSpriteText;
 
         public TestSceneKaraokeSpriteText()
@@ -27,37 +24,6 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
                 LeftTextColour = Color4.Green,
                 RightTextColour = Color4.Red,
             };
-        }
-
-        [TestCase(false)]
-        [TestCase(true)]
-        public void TestKaraokeSpriteTextClock(bool manualTime)
-        {
-            if (manualTime)
-            {
-                AddSliderStep("Here can adjust time", 0, 3000, 1000, time =>
-                {
-                    manualClock.CurrentTime = time;
-                });
-            }
-
-            AddStep("Apply time-tags", () =>
-            {
-                var startTime = getStartTime();
-
-                karaokeSpriteText.Clock = manualTime ? new FramedClock(manualClock) : Clock;
-                karaokeSpriteText.TimeTags = new Dictionary<TextIndex, double>
-                {
-                    { new TextIndex(0), startTime + 500 },
-                    { new TextIndex(1), startTime + 600 },
-                    { new TextIndex(2), startTime + 1000 },
-                    { new TextIndex(3), startTime + 1500 },
-                    { new TextIndex(4), startTime + 2000 },
-                };
-            });
-
-            double getStartTime()
-                => manualTime ? 0 : Clock.CurrentTime;
         }
 
         [TestCase(new[] { "[0,start]:500", "[1,start]:600", "[2,start]:1000", "[3,start]:1500", "[4,start]:2000" }, true)] // Normal time-tag.
