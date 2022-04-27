@@ -1,4 +1,4 @@
-﻿// Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
+// Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
 using System.Collections.Generic;
@@ -22,36 +22,8 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
             Child = karaokeSpriteText = new KaraokeSpriteText
             {
                 Text = "カラオケ！",
-                Rubies = new[]
-                {
-                    new PositionText
-                    {
-                        StartIndex = 0,
-                        EndIndex = 1,
-                        Text = "か"
-                    },
-                    new PositionText
-                    {
-                        StartIndex = 2,
-                        EndIndex = 3,
-                        Text = "お"
-                    }
-                },
-                Romajies = new[]
-                {
-                    new PositionText
-                    {
-                        StartIndex = 1,
-                        EndIndex = 2,
-                        Text = "ra"
-                    },
-                    new PositionText
-                    {
-                        StartIndex = 3,
-                        EndIndex = 4,
-                        Text = "ke"
-                    }
-                },
+                Rubies = TestCaseTagHelper.ParseParsePositionTexts(new[] { "[0,1]:か", "[2,3]:お" }),
+                Romajies = TestCaseTagHelper.ParseParsePositionTexts(new[] { "[1,2]:ra", "[3,4]:ke" }),
                 LeftTextColour = Color4.Green,
                 RightTextColour = Color4.Red,
             };
