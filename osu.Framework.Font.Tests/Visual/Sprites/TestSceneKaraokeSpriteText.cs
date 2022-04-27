@@ -2,6 +2,7 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using osu.Framework.Font.Tests.Helper;
 using osu.Framework.Graphics.Sprites;
@@ -58,6 +59,21 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
 
             double getStartTime()
                 => manualTime ? 0 : Clock.CurrentTime;
+        }
+
+        [TestCase(new[] { "[0,start]:500", "[1,start]:600", "[2,start]:1000", "[3,start]:1500", "[4,start]:2000" }, true)] // Normal time-tag.
+        [TestCase(new[] { "[0,start]:0", "[0,end]:100", "[1,start]:1000", "[1,end]:1100", "[2,start]:2000", "[2,end]:2100", "[3,start]:3000", "[3,end]:3100", "[4,start]:4000", "[4,end]:4100" }, true)]
+        [TestCase(new[] { "[-1,start]:0", "[0,start]:500", "[1,end]:600", "[2,start]:1000", "[3,end]:1500", "[4,end]:2000", "[8,end]:2500" }, true)] // Out-of-range time-tag, but it's acceptable now.
+        [TestCase(new[] { "[0,start]:500" }, true)] // Only one time-tag.
+        public void TestKaraokeSpriteTextTimeTags(string[] timeTags, bool boo)
+        {
+            AddStep("Apply time-tags", () =>
+            {
+                var startTime = Clock.CurrentTime;
+
+                karaokeSpriteText.TimeTags = TestCaseTagHelper.ParseTimeTags(timeTags)
+                                                              .ToDictionary(k => k.Key, v => v.Value + startTime);
+            });
         }
 
         [Test]
