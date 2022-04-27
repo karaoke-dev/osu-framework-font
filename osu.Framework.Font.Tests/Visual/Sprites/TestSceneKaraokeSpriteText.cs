@@ -8,7 +8,6 @@ using osu.Framework.Font.Tests.Helper;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Testing;
 using osu.Framework.Timing;
-using osuTK;
 using osuTK.Graphics;
 
 namespace osu.Framework.Font.Tests.Visual.Sprites
@@ -76,64 +75,45 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
             });
         }
 
-        [Test]
-        public void TestChangeText()
+        [TestCase("カラオケー")]
+        public void TestText(string text)
         {
-            AddStep("Change texr", () =>
+            AddStep("Change text", () =>
             {
-                karaokeSpriteText.Text = "カラオケー";
+                karaokeSpriteText.Text = text;
             });
         }
 
-        [Test]
-        public void TestChangeRuby()
+        [TestCase(new[] { "[0,1]:123aaa", "[1,2]:ら", "[2,3]:お", "[3,4]:け" }, true)]
+        public void TestRuby(string[] rubyTags, bool boo)
         {
             AddStep("Change ruby", () =>
             {
-                var rubyTags = new[] { "[0,1]:123aaa", "[1,2]:ら", "[2,3]:お", "[3,4]:け" };
                 var ruby = TestCaseTagHelper.ParseParsePositionTexts(rubyTags);
                 karaokeSpriteText.Rubies = ruby;
             });
         }
 
-        [Test]
-        public void TestChangeRomaji()
+        [TestCase(new[] { "[0,1]:ka", "[1,2]:ra", "[2,3]:o", "[3,4]:ke" }, true)]
+        public void TestRomaji(string[] romajiTags, bool boo)
         {
             AddStep("Change romaji", () =>
             {
-                var romajiTags = new[] { "[0,1]:ka", "[1,2]:ra", "[2,3]:o", "[3,4]:ke" };
                 var romajies = TestCaseTagHelper.ParseParsePositionTexts(romajiTags);
                 karaokeSpriteText.Romajies = romajies;
             });
         }
 
-        [Test]
-        public void TestChangeFont()
+        [TestCase(48, 24, 24)]
+        [TestCase(48, 10, 24)]
+        [TestCase(48, 24, 10)]
+        public void TestFont(int mainFontSize, int rubyFontSize, int romajiFontSize)
         {
             AddStep("Change font", () =>
             {
-                var font = FontUsage.Default.With(size: 64);
-                karaokeSpriteText.Font = font;
-            });
-        }
-
-        [Test]
-        public void TestChangeRubyFont()
-        {
-            AddStep("Change ruby font", () =>
-            {
-                var font = FontUsage.Default.With(size: 24);
-                karaokeSpriteText.RubyFont = font;
-            });
-        }
-
-        [Test]
-        public void TestChangeRomajiFont()
-        {
-            AddStep("Change romaji font", () =>
-            {
-                var font = FontUsage.Default.With(size: 24);
-                karaokeSpriteText.RomajiFont = font;
+                karaokeSpriteText.Font = new FontUsage(null, mainFontSize);
+                karaokeSpriteText.RubyFont = new FontUsage(null, rubyFontSize);
+                karaokeSpriteText.RomajiFont = new FontUsage(null, romajiFontSize);
             });
         }
 
@@ -142,6 +122,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
         {
             AddStep("Change left text colour", () =>
             {
+                // note: usually we use shader to adjust the style.
                 karaokeSpriteText.LeftTextColour = Color4.Orange;
             });
         }
@@ -155,66 +136,47 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
             });
         }
 
-        [Test]
-        public void TestRubyAlignment()
+        [TestCase(LyricTextAlignment.Auto, LyricTextAlignment.Auto)]
+        [TestCase(LyricTextAlignment.Auto, LyricTextAlignment.Center)]
+        [TestCase(LyricTextAlignment.Auto, LyricTextAlignment.EqualSpace)]
+        [TestCase(LyricTextAlignment.Center, LyricTextAlignment.Auto)]
+        [TestCase(LyricTextAlignment.Center, LyricTextAlignment.Center)]
+        [TestCase(LyricTextAlignment.Center, LyricTextAlignment.EqualSpace)]
+        [TestCase(LyricTextAlignment.EqualSpace, LyricTextAlignment.Auto)]
+        [TestCase(LyricTextAlignment.EqualSpace, LyricTextAlignment.Center)]
+        [TestCase(LyricTextAlignment.EqualSpace, LyricTextAlignment.EqualSpace)]
+        public void TestAlignment(LyricTextAlignment rubyAlignment, LyricTextAlignment romajiAlignment)
         {
-            AddStep("Test ruby alignment", () =>
+            AddStep("Change alignment", () =>
             {
-                karaokeSpriteText.RubyAlignment = LyricTextAlignment.EqualSpace;
+                karaokeSpriteText.RomajiAlignment = rubyAlignment;
+                karaokeSpriteText.RomajiAlignment = romajiAlignment;
             });
         }
 
-        [Test]
-        public void TestRomajiAlignment()
-        {
-            AddStep("Test romaji alignment", () =>
-            {
-                karaokeSpriteText.RomajiAlignment = LyricTextAlignment.EqualSpace;
-            });
-        }
-
-        [Test]
-        public void TestSpacing()
+        [TestCase(null, null, null)]
+        [TestCase("(10,0)", null, null)]
+        [TestCase(null, "(10,0)", null)]
+        [TestCase(null, null, "(10,0)")]
+        public void TestSpacing(string spacing, string rubySpacing, string romajiSpacing)
         {
             AddStep("Change spacing", () =>
             {
-                karaokeSpriteText.Spacing = new Vector2(10);
+                karaokeSpriteText.Spacing = TestCaseVectorHelper.ParseVector2(spacing);
+                karaokeSpriteText.RubySpacing = TestCaseVectorHelper.ParseVector2(rubySpacing);
+                karaokeSpriteText.RomajiSpacing = TestCaseVectorHelper.ParseVector2(romajiSpacing);
             });
         }
 
-        [Test]
-        public void TestRubySpacing()
+        [TestCase(0, 0)]
+        [TestCase(0, 20)]
+        [TestCase(20, 0)]
+        public void TestMarginPadding(int rubyMargin, int romajiMargin)
         {
-            AddStep("Change ruby spacing", () =>
+            AddStep("Change margin", () =>
             {
-                karaokeSpriteText.RubySpacing = new Vector2(10);
-            });
-        }
-
-        [Test]
-        public void TestRomajiSpacing()
-        {
-            AddStep("Change romaji spacing", () =>
-            {
-                karaokeSpriteText.RomajiSpacing = new Vector2(10);
-            });
-        }
-
-        [Test]
-        public void TestRubyMargin()
-        {
-            AddStep("Change ruby margin", () =>
-            {
-                karaokeSpriteText.RubyMargin = 10;
-            });
-        }
-
-        [Test]
-        public void TestRomajiMargin()
-        {
-            AddStep("Change romaji margin", () =>
-            {
-                karaokeSpriteText.RomajiMargin = 10;
+                karaokeSpriteText.RubyMargin = rubyMargin;
+                karaokeSpriteText.RomajiMargin = romajiMargin;
             });
         }
     }
