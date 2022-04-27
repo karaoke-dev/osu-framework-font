@@ -1,20 +1,17 @@
-﻿// Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
+// Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
-using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using osu.Framework.Font.Tests.Helper;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Testing;
-using osu.Framework.Timing;
-using osuTK;
 using osuTK.Graphics;
 
 namespace osu.Framework.Font.Tests.Visual.Sprites
 {
     public class TestSceneKaraokeSpriteText : TestScene
     {
-        private readonly ManualClock manualClock = new();
         private readonly KaraokeSpriteText karaokeSpriteText;
 
         public TestSceneKaraokeSpriteText()
@@ -22,201 +19,67 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
             Child = karaokeSpriteText = new KaraokeSpriteText
             {
                 Text = "カラオケ！",
-                Rubies = new[]
-                {
-                    new PositionText
-                    {
-                        StartIndex = 0,
-                        EndIndex = 1,
-                        Text = "か"
-                    },
-                    new PositionText
-                    {
-                        StartIndex = 2,
-                        EndIndex = 3,
-                        Text = "お"
-                    }
-                },
-                Romajies = new[]
-                {
-                    new PositionText
-                    {
-                        StartIndex = 1,
-                        EndIndex = 2,
-                        Text = "ra"
-                    },
-                    new PositionText
-                    {
-                        StartIndex = 3,
-                        EndIndex = 4,
-                        Text = "ke"
-                    }
-                },
+                Rubies = TestCaseTagHelper.ParseParsePositionTexts(new[] { "[0,1]:か", "[2,3]:お" }),
+                Romajies = TestCaseTagHelper.ParseParsePositionTexts(new[] { "[1,2]:ra", "[3,4]:ke" }),
                 LeftTextColour = Color4.Green,
                 RightTextColour = Color4.Red,
             };
         }
 
-        [TestCase(false)]
-        [TestCase(true)]
-        public void TestKaraokeSpriteTextTimeTag(bool manualTime)
+        [TestCase(new[] { "[0,start]:500", "[1,start]:600", "[2,start]:1000", "[3,start]:1500", "[4,start]:2000" }, true)] // Normal time-tag.
+        [TestCase(new[] { "[0,start]:0", "[0,end]:100", "[1,start]:1000", "[1,end]:1100", "[2,start]:2000", "[2,end]:2100", "[3,start]:3000", "[3,end]:3100", "[4,start]:4000", "[4,end]:4100" }, true)]
+        [TestCase(new[] { "[-1,start]:0", "[0,start]:500", "[1,end]:600", "[2,start]:1000", "[3,end]:1500", "[4,end]:2000", "[8,end]:2500" }, true)] // Out-of-range time-tag, but it's acceptable now.
+        [TestCase(new[] { "[0,start]:500" }, true)] // Only one time-tag.
+        public void TestKaraokeSpriteTextTimeTags(string[] timeTags, bool boo)
         {
-            if (manualTime)
+            AddStep("Apply time-tags", () =>
             {
-                AddSliderStep("Here can adjust time", 0, 3000, 1000, time =>
-                {
-                    manualClock.CurrentTime = time;
-                });
-            }
+                var startTime = Clock.CurrentTime;
 
-            AddStep("Default time tag", () =>
-            {
-                var startTime = getStartTime();
-
-                karaokeSpriteText.Clock = manualTime ? new FramedClock(manualClock) : Clock;
-                karaokeSpriteText.TimeTags = new Dictionary<TextIndex, double>
-                {
-                    { new TextIndex(0), startTime + 500 },
-                    { new TextIndex(1), startTime + 600 },
-                    { new TextIndex(2), startTime + 1000 },
-                    { new TextIndex(3), startTime + 1500 },
-                    { new TextIndex(4), startTime + 2000 },
-                };
-            });
-            AddStep("Time tag with end state", () =>
-            {
-                var startTime = getStartTime();
-
-                karaokeSpriteText.Clock = manualTime ? new FramedClock(manualClock) : Clock;
-                karaokeSpriteText.TimeTags = new Dictionary<TextIndex, double>
-                {
-                    // カ
-                    { new TextIndex(0), startTime + 0 },
-                    { new TextIndex(0, TextIndex.IndexState.End), startTime + 100 },
-                    // ラ
-                    { new TextIndex(1), startTime + 1000 },
-                    { new TextIndex(1, TextIndex.IndexState.End), startTime + 1100 },
-                    // オ
-                    { new TextIndex(2), startTime + 2000 },
-                    { new TextIndex(2, TextIndex.IndexState.End), startTime + 2100 },
-                    // ケ
-                    { new TextIndex(3), startTime + 3000 },
-                    { new TextIndex(3, TextIndex.IndexState.End), startTime + 3100 },
-                    // !
-                    { new TextIndex(4), startTime + 4000 },
-                    { new TextIndex(4, TextIndex.IndexState.End), startTime + 4100 },
-                };
-            });
-            AddStep("Time tag with wrong order", () =>
-            {
-                var startTime = getStartTime();
-
-                karaokeSpriteText.Clock = manualTime ? new FramedClock(manualClock) : Clock;
-                karaokeSpriteText.TimeTags = new Dictionary<TextIndex, double>
-                {
-                    { new TextIndex(4), startTime + 2000 },
-                    { new TextIndex(3), startTime + 1500 },
-                    { new TextIndex(2), startTime + 1000 },
-                    { new TextIndex(1), startTime + 600 },
-                    { new TextIndex(0), startTime + 500 },
-                };
-            });
-            AddStep("Time tag with out of range", () =>
-            {
-                var startTime = getStartTime();
-
-                karaokeSpriteText.Clock = manualTime ? new FramedClock(manualClock) : Clock;
-                karaokeSpriteText.TimeTags = new Dictionary<TextIndex, double>
-                {
-                    { new TextIndex(-1), startTime + 0 },
-                    { new TextIndex(0), startTime + 500 },
-                    { new TextIndex(1), startTime + 600 },
-                    { new TextIndex(2), startTime + 1000 },
-                    { new TextIndex(3), startTime + 1500 },
-                    { new TextIndex(4), startTime + 2000 },
-                    { new TextIndex(8), startTime + 2500 },
-                };
-            });
-
-            AddStep("Only one time-tag", () =>
-            {
-                var startTime = getStartTime();
-
-                karaokeSpriteText.Clock = manualTime ? new FramedClock(manualClock) : Clock;
-                karaokeSpriteText.TimeTags = new Dictionary<TextIndex, double>
-                {
-                    { new TextIndex(0), startTime + 500 },
-                };
-            });
-
-            AddStep("None time-tag", () =>
-            {
-                karaokeSpriteText.Clock = manualTime ? new FramedClock(manualClock) : Clock;
-                karaokeSpriteText.TimeTags = null;
-            });
-
-            double getStartTime()
-                => manualTime ? 0 : Clock.CurrentTime;
-        }
-
-        [Test]
-        public void TestChangeText()
-        {
-            AddStep("Change texr", () =>
-            {
-                karaokeSpriteText.Text = "カラオケー";
+                karaokeSpriteText.TimeTags = TestCaseTagHelper.ParseTimeTags(timeTags)
+                                                              .ToDictionary(k => k.Key, v => v.Value + startTime);
             });
         }
 
-        [Test]
-        public void TestChangeRuby()
+        [TestCase("カラオケー")]
+        public void TestText(string text)
+        {
+            AddStep("Change text", () =>
+            {
+                karaokeSpriteText.Text = text;
+            });
+        }
+
+        [TestCase(new[] { "[0,1]:123aaa", "[1,2]:ら", "[2,3]:お", "[3,4]:け" }, true)]
+        public void TestRuby(string[] rubyTags, bool boo)
         {
             AddStep("Change ruby", () =>
             {
-                var rubyTags = new[] { "[0,1]:123aaa", "[1,2]:ら", "[2,3]:お", "[3,4]:け" };
                 var ruby = TestCaseTagHelper.ParseParsePositionTexts(rubyTags);
                 karaokeSpriteText.Rubies = ruby;
             });
         }
 
-        [Test]
-        public void TestChangeRomaji()
+        [TestCase(new[] { "[0,1]:ka", "[1,2]:ra", "[2,3]:o", "[3,4]:ke" }, true)]
+        public void TestRomaji(string[] romajiTags, bool boo)
         {
             AddStep("Change romaji", () =>
             {
-                var romajiTags = new[] { "[0,1]:ka", "[1,2]:ra", "[2,3]:o", "[3,4]:ke" };
                 var romajies = TestCaseTagHelper.ParseParsePositionTexts(romajiTags);
                 karaokeSpriteText.Romajies = romajies;
             });
         }
 
-        [Test]
-        public void TestChangeFont()
+        [TestCase(48, 24, 24)]
+        [TestCase(48, 10, 24)]
+        [TestCase(48, 24, 10)]
+        public void TestFont(int mainFontSize, int rubyFontSize, int romajiFontSize)
         {
             AddStep("Change font", () =>
             {
-                var font = FontUsage.Default.With(size: 64);
-                karaokeSpriteText.Font = font;
-            });
-        }
-
-        [Test]
-        public void TestChangeRubyFont()
-        {
-            AddStep("Change ruby font", () =>
-            {
-                var font = FontUsage.Default.With(size: 24);
-                karaokeSpriteText.RubyFont = font;
-            });
-        }
-
-        [Test]
-        public void TestChangeRomajiFont()
-        {
-            AddStep("Change romaji font", () =>
-            {
-                var font = FontUsage.Default.With(size: 24);
-                karaokeSpriteText.RomajiFont = font;
+                karaokeSpriteText.Font = new FontUsage(null, mainFontSize);
+                karaokeSpriteText.RubyFont = new FontUsage(null, rubyFontSize);
+                karaokeSpriteText.RomajiFont = new FontUsage(null, romajiFontSize);
             });
         }
 
@@ -225,6 +88,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
         {
             AddStep("Change left text colour", () =>
             {
+                // note: usually we use shader to adjust the style.
                 karaokeSpriteText.LeftTextColour = Color4.Orange;
             });
         }
@@ -238,66 +102,47 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
             });
         }
 
-        [Test]
-        public void TestRubyAlignment()
+        [TestCase(LyricTextAlignment.Auto, LyricTextAlignment.Auto)]
+        [TestCase(LyricTextAlignment.Auto, LyricTextAlignment.Center)]
+        [TestCase(LyricTextAlignment.Auto, LyricTextAlignment.EqualSpace)]
+        [TestCase(LyricTextAlignment.Center, LyricTextAlignment.Auto)]
+        [TestCase(LyricTextAlignment.Center, LyricTextAlignment.Center)]
+        [TestCase(LyricTextAlignment.Center, LyricTextAlignment.EqualSpace)]
+        [TestCase(LyricTextAlignment.EqualSpace, LyricTextAlignment.Auto)]
+        [TestCase(LyricTextAlignment.EqualSpace, LyricTextAlignment.Center)]
+        [TestCase(LyricTextAlignment.EqualSpace, LyricTextAlignment.EqualSpace)]
+        public void TestAlignment(LyricTextAlignment rubyAlignment, LyricTextAlignment romajiAlignment)
         {
-            AddStep("Test ruby alignment", () =>
+            AddStep("Change alignment", () =>
             {
-                karaokeSpriteText.RubyAlignment = LyricTextAlignment.EqualSpace;
+                karaokeSpriteText.RomajiAlignment = rubyAlignment;
+                karaokeSpriteText.RomajiAlignment = romajiAlignment;
             });
         }
 
-        [Test]
-        public void TestRomajiAlignment()
-        {
-            AddStep("Test romaji alignment", () =>
-            {
-                karaokeSpriteText.RomajiAlignment = LyricTextAlignment.EqualSpace;
-            });
-        }
-
-        [Test]
-        public void TestSpacing()
+        [TestCase(null, null, null)]
+        [TestCase("(10,0)", null, null)]
+        [TestCase(null, "(10,0)", null)]
+        [TestCase(null, null, "(10,0)")]
+        public void TestSpacing(string spacing, string rubySpacing, string romajiSpacing)
         {
             AddStep("Change spacing", () =>
             {
-                karaokeSpriteText.Spacing = new Vector2(10);
+                karaokeSpriteText.Spacing = TestCaseVectorHelper.ParseVector2(spacing);
+                karaokeSpriteText.RubySpacing = TestCaseVectorHelper.ParseVector2(rubySpacing);
+                karaokeSpriteText.RomajiSpacing = TestCaseVectorHelper.ParseVector2(romajiSpacing);
             });
         }
 
-        [Test]
-        public void TestRubySpacing()
+        [TestCase(0, 0)]
+        [TestCase(0, 20)]
+        [TestCase(20, 0)]
+        public void TestMarginPadding(int rubyMargin, int romajiMargin)
         {
-            AddStep("Change ruby spacing", () =>
+            AddStep("Change margin", () =>
             {
-                karaokeSpriteText.RubySpacing = new Vector2(10);
-            });
-        }
-
-        [Test]
-        public void TestRomajiSpacing()
-        {
-            AddStep("Change romaji spacing", () =>
-            {
-                karaokeSpriteText.RomajiSpacing = new Vector2(10);
-            });
-        }
-
-        [Test]
-        public void TestRubyMargin()
-        {
-            AddStep("Change ruby margin", () =>
-            {
-                karaokeSpriteText.RubyMargin = 10;
-            });
-        }
-
-        [Test]
-        public void TestRomajiMargin()
-        {
-            AddStep("Change romaji margin", () =>
-            {
-                karaokeSpriteText.RomajiMargin = 10;
+                karaokeSpriteText.RubyMargin = rubyMargin;
+                karaokeSpriteText.RomajiMargin = romajiMargin;
             });
         }
     }

@@ -1,14 +1,13 @@
 ﻿// Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
-using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using osu.Framework.Extensions;
 using osu.Framework.Font.Tests.Helper;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Shaders;
 using osu.Framework.Graphics.Sprites;
+using osu.Framework.Timing;
 using osuTK;
 using osuTK.Graphics;
 
@@ -16,21 +15,30 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
 {
     public class TestSceneKaraokeSpriteTextWithShader : BackgroundGridTestScene
     {
-        private readonly KaraokeSpriteText karaokeSpriteText;
+        private readonly ManualClock manualClock = new();
+
+        private readonly TestKaraokeSpriteText karaokeSpriteText;
 
         public TestSceneKaraokeSpriteTextWithShader()
         {
-            Child = karaokeSpriteText = new KaraokeSpriteText
+            Child = karaokeSpriteText = new TestKaraokeSpriteText
             {
                 Anchor = Anchor.Centre,
                 Origin = Anchor.Centre,
                 Text = "カラオケ！",
                 Rubies = TestCaseTagHelper.ParseParsePositionTexts(new[] { "[0,1]:か", "[1,2]:ら", "[2,3]:お", "[3,4]:け" }),
                 Romajies = TestCaseTagHelper.ParseParsePositionTexts(new[] { "[0,1]:ka", "[1,2]:ra", "[2,3]:o", "[3,4]:ke" }),
+                TimeTags = TestCaseTagHelper.ParseTimeTags(new[] { "[0,start]:500", "[1,start]:600", "[2,start]:1000", "[3,start]:1500", "[4,start]:2000" }),
                 Scale = new Vector2(2),
                 LeftTextColour = Color4.Green,
                 RightTextColour = Color4.Red,
+                Clock = new FramedClock(manualClock),
             };
+
+            AddSliderStep("Adjust clock time", 0, 3000, 1000, time =>
+            {
+                manualClock.CurrentTime = time;
+            });
         }
 
         [Test]
@@ -103,26 +111,9 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
             });
         }
 
-        protected new void AddStep(string description, Action action)
+        private class TestKaraokeSpriteText : KaraokeSpriteText
         {
-            base.AddStep(description, () =>
-            {
-                action?.Invoke();
-                resetTime();
-            });
-
-            void resetTime()
-            {
-                var startTime = Time.Current;
-                karaokeSpriteText.TimeTags = new Dictionary<TextIndex, double>
-                {
-                    { new TextIndex(0), startTime + 500 },
-                    { new TextIndex(1), startTime + 600 },
-                    { new TextIndex(2), startTime + 1000 },
-                    { new TextIndex(3), startTime + 1500 },
-                    { new TextIndex(4), startTime + 2000 },
-                };
-            }
+            public override bool RemoveCompletedTransforms => false;
         }
     }
 }

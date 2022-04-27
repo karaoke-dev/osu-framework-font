@@ -2,6 +2,7 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using osu.Framework.Graphics.Sprites;
@@ -41,7 +42,35 @@ namespace osu.Framework.Font.Tests.Helper
             };
         }
 
-        public static PositionText[] ParseParsePositionTexts(string[] strings)
+        /// <summary>
+        /// Process test case time tag string format into <see cref="Tuple"/>
+        /// </summary>
+        /// <example>
+        /// [0,start]:1000
+        /// </example>
+        /// <param name="str">Time tag string format</param>
+        /// <returns><see cref="Tuple"/>Time tag object</returns>
+        public static Tuple<TextIndex, double> ParseTimeTag(string str)
+        {
+            if (string.IsNullOrEmpty(str))
+                return new Tuple<TextIndex, double>(new TextIndex(), 0);
+
+            var regex = new Regex("(?<index>[-0-9]+),(?<state>start|end)]:(?<time>[-0-9]+|s*|)");
+            var result = regex.Match(str);
+            if (!result.Success)
+                throw new RegexMatchTimeoutException(nameof(str));
+
+            int index = int.Parse(result.Groups["index"].Value);
+            var state = result.Groups["state"].Value == "start" ? TextIndex.IndexState.Start : TextIndex.IndexState.End;
+            double time = string.IsNullOrEmpty(result.Groups["time"].Value) ? 0 : double.Parse(result.Groups["time"].Value);
+
+            return new Tuple<TextIndex, double>(new TextIndex(index, state), time);
+        }
+
+        public static PositionText[] ParseParsePositionTexts(IEnumerable<string> strings)
             => strings?.Select(ParsePositionText).ToArray();
+
+        public static IReadOnlyDictionary<TextIndex, double> ParseTimeTags(IEnumerable<string> strings)
+            => strings?.Select(ParseTimeTag).ToDictionary(k => k.Item1, k => k.Item2);
     }
 }
