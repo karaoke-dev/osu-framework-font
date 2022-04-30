@@ -1,6 +1,7 @@
 ﻿// Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
+using System;
 using osu.Framework.Graphics.OpenGL.Buffers;
 using osu.Framework.Graphics.Primitives;
 using osuTK;
@@ -34,7 +35,7 @@ namespace osu.Framework.Graphics.Shaders
         }
 
         public RectangleF ComputeCharacterDrawRectangle(RectangleF originalCharacterDrawRectangle)
-            => originalCharacterDrawRectangle.Inflate(Radius);
+            => originalCharacterDrawRectangle.Inflate(Math.Max(Radius, 0));
 
         public Quad ComputeScreenSpaceDrawQuad(Quad originDrawQuad)
         {

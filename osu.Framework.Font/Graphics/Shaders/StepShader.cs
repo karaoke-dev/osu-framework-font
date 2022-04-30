@@ -53,6 +53,6 @@ namespace osu.Framework.Graphics.Shaders
 
         public Quad ComputeScreenSpaceDrawQuad(Quad originDrawQuad) =>
             StepShaders.OfType<IApplicableToDrawQuad>()
-                       .Aggregate(originDrawQuad, (rectangle, shader) => shader.ComputeScreenSpaceDrawQuad(rectangle));
+                       .Aggregate(originDrawQuad, (quad, shader) => shader.ComputeScreenSpaceDrawQuad(quad));
     }
 }

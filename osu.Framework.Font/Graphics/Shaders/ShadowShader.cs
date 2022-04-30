@@ -35,8 +35,8 @@ namespace osu.Framework.Graphics.Shaders
             {
                 Left = Math.Max(-ShadowOffset.X, 0),
                 Right = Math.Max(ShadowOffset.X, 0),
-                Top = Math.Max(ShadowOffset.Y, 0),
-                Bottom = Math.Max(-ShadowOffset.Y, 0),
+                Top = Math.Max(-ShadowOffset.Y, 0),
+                Bottom = Math.Max(ShadowOffset.Y, 0),
             });
 
             return Quad.FromRectangle(rectangle);
