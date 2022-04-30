@@ -64,7 +64,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
 
             AddLabel("Timing");
 
-            AddSliderStep("Adjust clock time", 0, end_time + exrea_time, start_time - exrea_time, time =>
+            AddSliderStep("Adjust clock time", start_time - exrea_time, end_time + exrea_time, start_time, time =>
             {
                 manualClock.CurrentTime = time;
             });
