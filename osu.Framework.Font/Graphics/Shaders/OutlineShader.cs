@@ -2,12 +2,13 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using osu.Framework.Graphics.OpenGL.Buffers;
+using osu.Framework.Graphics.Primitives;
 using osuTK;
 using osuTK.Graphics;
 
 namespace osu.Framework.Graphics.Shaders
 {
-    public class OutlineShader : InternalShader
+    public class OutlineShader : InternalShader, IApplicableToCharacterSize, IApplicableToDrawQuad
     {
         public override string ShaderName => "Outline";
 
@@ -30,6 +31,15 @@ namespace osu.Framework.Graphics.Shaders
 
             var size = current.Size;
             GetUniform<Vector2>(@"g_TexSize").UpdateValue(ref size);
+        }
+
+        public RectangleF ComputeCharacterDrawRectangle(RectangleF originalCharacterDrawRectangle)
+            => originalCharacterDrawRectangle.Inflate(Radius);
+
+        public Quad ComputeScreenSpaceDrawQuad(Quad originDrawQuad)
+        {
+            var rectangle = ComputeCharacterDrawRectangle(originDrawQuad.AABBFloat);
+            return Quad.FromRectangle(rectangle);
         }
     }
 }

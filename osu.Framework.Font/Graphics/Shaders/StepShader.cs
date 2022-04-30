@@ -5,10 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using osu.Framework.Graphics.OpenGL.Buffers;
+using osu.Framework.Graphics.Primitives;
 
 namespace osu.Framework.Graphics.Shaders
 {
-    public class StepShader : IStepShader
+    public class StepShader : IStepShader, IApplicableToCharacterSize, IApplicableToDrawQuad
     {
         public string Name { get; set; }
 
@@ -45,5 +46,13 @@ namespace osu.Framework.Graphics.Shaders
 
         public void ApplyValue(FrameBuffer current)
             => throw new NotSupportedException();
+
+        public RectangleF ComputeCharacterDrawRectangle(RectangleF originalCharacterDrawRectangle) =>
+            StepShaders.OfType<IApplicableToCharacterSize>()
+                       .Aggregate(originalCharacterDrawRectangle, (rectangle, shader) => shader.ComputeCharacterDrawRectangle(rectangle));
+
+        public Quad ComputeScreenSpaceDrawQuad(Quad originDrawQuad) =>
+            StepShaders.OfType<IApplicableToDrawQuad>()
+                       .Aggregate(originDrawQuad, (rectangle, shader) => shader.ComputeScreenSpaceDrawQuad(rectangle));
     }
 }
