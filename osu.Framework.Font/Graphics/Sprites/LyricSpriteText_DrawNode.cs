@@ -3,7 +3,7 @@
 
 using System;
 using System.Collections.Generic;
-using osu.Framework.Graphics.Extensions;
+using System.Linq;
 using osu.Framework.Graphics.OpenGL.Vertices;
 using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Shaders;
@@ -17,8 +17,12 @@ namespace osu.Framework.Graphics.Sprites
         protected override Quad ComputeScreenSpaceDrawQuad()
         {
             // make draw size become bigger (for not masking the shader).
-            var newRectangle = DrawRectangle.Scale(2);
-            return ToScreenSpace(newRectangle);
+            var quad = ToScreenSpace(DrawRectangle);
+            var drawRectangele = Shaders.OfType<IApplicableToDrawQuad>()
+                                        .Select(x => x.ComputeScreenSpaceDrawQuad(quad).AABBFloat)
+                                        .Aggregate(quad.AABBFloat, RectangleF.Union);
+
+            return Quad.FromRectangle(drawRectangele);
         }
 
         protected override DrawNode CreateDrawNode()
