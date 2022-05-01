@@ -113,7 +113,7 @@ namespace osu.Framework.Graphics.Sprites
                 if (value != null)
                     shaders.AddRange(value);
 
-                Invalidate(Invalidation.DrawNode);
+                Invalidate();
             }
         }
 

@@ -7,6 +7,7 @@ using System.Linq;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
+using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Shaders;
 using osu.Framework.Layout;
 using osuTK;
@@ -428,6 +429,8 @@ namespace osu.Framework.Graphics.Sprites
 
         public virtual void RefreshStateTransforms()
         {
+            // todo: IApplicableToCharacterSize should affect padding in the masking container also.
+
             // set initial width.
             // we should get width from child object because draw width haven't updated.
             var width = frontLyricText.Width;
@@ -439,7 +442,6 @@ namespace osu.Framework.Graphics.Sprites
             backLyricTextContainer.ClearTransforms();
 
             // filter valid time-tag with order.
-            var characters = frontLyricText.Characters;
             var validTimeTag = TimeTags
                                .Where(x => x.Key.Index >= 0 && x.Key.Index < Text.Length)
                                .OrderBy(x => x.Value).ToArray();
@@ -456,8 +458,7 @@ namespace osu.Framework.Graphics.Sprites
             foreach ((var textIndex, double time) in validTimeTag)
             {
                 // calculate position and duration relative to precious time-tag time.
-                var characterRectangle = characters[textIndex.Index].DrawRectangle;
-                var position = textIndex.State == TextIndex.IndexState.Start ? characterRectangle.Left : characterRectangle.Right;
+                var position = getCharacterPosition(textIndex);
                 var duration = Math.Max(time - relativeTime, 0);
 
                 // apply the position with delay time.
@@ -466,6 +467,28 @@ namespace osu.Framework.Graphics.Sprites
 
                 // save current time-tag time for letting next time-tag able to calculate duration.
                 relativeTime = time;
+            }
+        }
+
+        private float getCharacterPosition(TextIndex index)
+        {
+            var characterRectangle = getCharacterRectangle(index);
+            var computedRectangle = getComputeCharacterDrawRectangle(index.State, characterRectangle);
+            return index.State == TextIndex.IndexState.Start ? computedRectangle.Left : computedRectangle.Right;
+
+            RectangleF getCharacterRectangle(TextIndex textIndex)
+            {
+                var characters = textIndex.State == TextIndex.IndexState.Start ? frontLyricText.Characters : backLyricText.Characters;
+                return characters[textIndex.Index].DrawRectangle;
+            }
+
+            RectangleF getComputeCharacterDrawRectangle(TextIndex.IndexState state, RectangleF originalCharacterDrawRectangle)
+            {
+                // combine the rectangle to get the max value.
+                var lyricTextShaders = state == TextIndex.IndexState.Start ? LeftLyricTextShaders : RightLyricTextShaders;
+                return lyricTextShaders.OfType<IApplicableToCharacterSize>()
+                                       .Select(x => x.ComputeCharacterDrawRectangle(originalCharacterDrawRectangle))
+                                       .Aggregate(originalCharacterDrawRectangle, RectangleF.Union);
             }
         }
     }
