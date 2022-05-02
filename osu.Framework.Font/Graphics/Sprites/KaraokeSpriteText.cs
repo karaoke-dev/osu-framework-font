@@ -20,11 +20,11 @@ namespace osu.Framework.Graphics.Sprites
 
     public partial class KaraokeSpriteText<T> : CompositeDrawable, ISingleShaderBufferedDrawable, IHasRuby, IHasRomaji where T : LyricSpriteText, new()
     {
-        private readonly MaskingContainer<T> frontLyricTextContainer;
-        private readonly T frontLyricText;
+        private readonly MaskingContainer<T> leftLyricTextContainer;
+        private readonly T leftLyricText;
 
-        private readonly MaskingContainer<T> backLyricTextContainer;
-        private readonly T backLyricText;
+        private readonly MaskingContainer<T> rightLyricTextContainer;
+        private readonly T rightLyricText;
 
         // todo: should have a better way to let user able to customize formats?
         private readonly BufferedDrawNodeSharedData sharedData = new BufferedDrawNodeSharedData(2);
@@ -37,23 +37,23 @@ namespace osu.Framework.Graphics.Sprites
             AutoSizeAxes = Axes.Both;
             InternalChildren = new Drawable[]
             {
-                backLyricTextContainer = new MaskingContainer<T>
+                rightLyricTextContainer = new MaskingContainer<T>
                 {
                     AutoSizeAxes = Axes.Y,
                     Anchor = Anchor.CentreRight,
                     Origin = Anchor.CentreRight,
                     MaskingEdges = Edges.Left,
-                    Child = backLyricText = new T
+                    Child = rightLyricText = new T
                     {
                         Anchor = Anchor.CentreRight,
                         Origin = Anchor.CentreRight,
                     }
                 },
-                frontLyricTextContainer = new MaskingContainer<T>
+                leftLyricTextContainer = new MaskingContainer<T>
                 {
                     AutoSizeAxes = Axes.Y,
                     MaskingEdges = Edges.Right,
-                    Child = frontLyricText = new T(),
+                    Child = leftLyricText = new T(),
                 }
             };
         }
@@ -144,10 +144,10 @@ namespace osu.Framework.Graphics.Sprites
 
         public IReadOnlyList<IShader> LeftLyricTextShaders
         {
-            get => frontLyricText.Shaders;
+            get => leftLyricText.Shaders;
             set
             {
-                frontLyricText.Shaders = value;
+                leftLyricText.Shaders = value;
 
                 Invalidate(Invalidation.DrawNode);
             }
@@ -155,10 +155,10 @@ namespace osu.Framework.Graphics.Sprites
 
         public IReadOnlyList<IShader> RightLyricTextShaders
         {
-            get => backLyricText.Shaders;
+            get => rightLyricText.Shaders;
             set
             {
-                backLyricText.Shaders = value;
+                rightLyricText.Shaders = value;
 
                 Invalidate(Invalidation.DrawNode);
             }
@@ -170,11 +170,11 @@ namespace osu.Framework.Graphics.Sprites
 
         public string Text
         {
-            get => frontLyricText.Text;
+            get => leftLyricText.Text;
             set
             {
-                frontLyricText.Text = value;
-                backLyricText.Text = value;
+                leftLyricText.Text = value;
+                rightLyricText.Text = value;
 
                 Invalidate(Invalidation.DrawNode);
             }
@@ -182,11 +182,11 @@ namespace osu.Framework.Graphics.Sprites
 
         public IReadOnlyList<PositionText> Rubies
         {
-            get => frontLyricText.Rubies;
+            get => leftLyricText.Rubies;
             set
             {
-                frontLyricText.Rubies = value;
-                backLyricText.Rubies = value;
+                leftLyricText.Rubies = value;
+                rightLyricText.Rubies = value;
 
                 Invalidate(Invalidation.DrawNode);
             }
@@ -194,11 +194,11 @@ namespace osu.Framework.Graphics.Sprites
 
         public IReadOnlyList<PositionText> Romajies
         {
-            get => frontLyricText.Romajies;
+            get => leftLyricText.Romajies;
             set
             {
-                frontLyricText.Romajies = value;
-                backLyricText.Romajies = value;
+                leftLyricText.Romajies = value;
+                rightLyricText.Romajies = value;
 
                 Invalidate(Invalidation.DrawNode);
             }
@@ -210,11 +210,11 @@ namespace osu.Framework.Graphics.Sprites
 
         public FontUsage Font
         {
-            get => frontLyricText.Font;
+            get => leftLyricText.Font;
             set
             {
-                frontLyricText.Font = value;
-                backLyricText.Font = value;
+                leftLyricText.Font = value;
+                rightLyricText.Font = value;
 
                 Invalidate(Invalidation.DrawNode);
             }
@@ -222,11 +222,11 @@ namespace osu.Framework.Graphics.Sprites
 
         public FontUsage RubyFont
         {
-            get => frontLyricText.RubyFont;
+            get => leftLyricText.RubyFont;
             set
             {
-                frontLyricText.RubyFont = value;
-                backLyricText.RubyFont = value;
+                leftLyricText.RubyFont = value;
+                rightLyricText.RubyFont = value;
 
                 Invalidate(Invalidation.DrawNode);
             }
@@ -234,11 +234,11 @@ namespace osu.Framework.Graphics.Sprites
 
         public FontUsage RomajiFont
         {
-            get => frontLyricText.RomajiFont;
+            get => leftLyricText.RomajiFont;
             set
             {
-                frontLyricText.RomajiFont = value;
-                backLyricText.RomajiFont = value;
+                leftLyricText.RomajiFont = value;
+                rightLyricText.RomajiFont = value;
 
                 Invalidate(Invalidation.DrawNode);
             }
@@ -250,10 +250,10 @@ namespace osu.Framework.Graphics.Sprites
 
         public ColourInfo LeftTextColour
         {
-            get => frontLyricText.Colour;
+            get => leftLyricText.Colour;
             set
             {
-                frontLyricText.Colour = value;
+                leftLyricText.Colour = value;
 
                 Invalidate(Invalidation.DrawNode);
             }
@@ -261,10 +261,10 @@ namespace osu.Framework.Graphics.Sprites
 
         public ColourInfo RightTextColour
         {
-            get => backLyricText.Colour;
+            get => rightLyricText.Colour;
             set
             {
-                backLyricText.Colour = value;
+                rightLyricText.Colour = value;
 
                 Invalidate(Invalidation.DrawNode);
             }
@@ -272,11 +272,11 @@ namespace osu.Framework.Graphics.Sprites
 
         public LyricTextAlignment RubyAlignment
         {
-            get => frontLyricText.RubyAlignment;
+            get => leftLyricText.RubyAlignment;
             set
             {
-                frontLyricText.RubyAlignment = value;
-                backLyricText.RubyAlignment = value;
+                leftLyricText.RubyAlignment = value;
+                rightLyricText.RubyAlignment = value;
 
                 Invalidate(Invalidation.DrawNode);
             }
@@ -284,11 +284,11 @@ namespace osu.Framework.Graphics.Sprites
 
         public LyricTextAlignment RomajiAlignment
         {
-            get => frontLyricText.RomajiAlignment;
+            get => leftLyricText.RomajiAlignment;
             set
             {
-                frontLyricText.RomajiAlignment = value;
-                backLyricText.RomajiAlignment = value;
+                leftLyricText.RomajiAlignment = value;
+                rightLyricText.RomajiAlignment = value;
 
                 Invalidate(Invalidation.DrawNode);
             }
@@ -300,11 +300,11 @@ namespace osu.Framework.Graphics.Sprites
 
         public Vector2 Spacing
         {
-            get => frontLyricText.Spacing;
+            get => leftLyricText.Spacing;
             set
             {
-                frontLyricText.Spacing = value;
-                backLyricText.Spacing = value;
+                leftLyricText.Spacing = value;
+                rightLyricText.Spacing = value;
 
                 Invalidate(Invalidation.DrawNode);
             }
@@ -312,11 +312,11 @@ namespace osu.Framework.Graphics.Sprites
 
         public Vector2 RubySpacing
         {
-            get => frontLyricText.RubySpacing;
+            get => leftLyricText.RubySpacing;
             set
             {
-                frontLyricText.RubySpacing = value;
-                backLyricText.RubySpacing = value;
+                leftLyricText.RubySpacing = value;
+                rightLyricText.RubySpacing = value;
 
                 Invalidate(Invalidation.DrawNode);
             }
@@ -324,11 +324,11 @@ namespace osu.Framework.Graphics.Sprites
 
         public Vector2 RomajiSpacing
         {
-            get => frontLyricText.RomajiSpacing;
+            get => leftLyricText.RomajiSpacing;
             set
             {
-                frontLyricText.RomajiSpacing = value;
-                backLyricText.RomajiSpacing = value;
+                leftLyricText.RomajiSpacing = value;
+                rightLyricText.RomajiSpacing = value;
 
                 Invalidate(Invalidation.DrawNode);
             }
@@ -340,11 +340,11 @@ namespace osu.Framework.Graphics.Sprites
 
         public int RubyMargin
         {
-            get => frontLyricText.RubyMargin;
+            get => leftLyricText.RubyMargin;
             set
             {
-                frontLyricText.RubyMargin = value;
-                backLyricText.RubyMargin = value;
+                leftLyricText.RubyMargin = value;
+                rightLyricText.RubyMargin = value;
 
                 Invalidate(Invalidation.DrawNode);
             }
@@ -352,11 +352,11 @@ namespace osu.Framework.Graphics.Sprites
 
         public int RomajiMargin
         {
-            get => frontLyricText.RomajiMargin;
+            get => leftLyricText.RomajiMargin;
             set
             {
-                frontLyricText.RomajiMargin = value;
-                backLyricText.RomajiMargin = value;
+                leftLyricText.RomajiMargin = value;
+                rightLyricText.RomajiMargin = value;
 
                 Invalidate(Invalidation.DrawNode);
             }
@@ -391,8 +391,8 @@ namespace osu.Framework.Graphics.Sprites
             set
             {
                 base.LifetimeStart = value;
-                frontLyricText.LifetimeStart = value;
-                backLyricText.LifetimeStart = value;
+                leftLyricText.LifetimeStart = value;
+                rightLyricText.LifetimeStart = value;
             }
         }
 
@@ -402,8 +402,8 @@ namespace osu.Framework.Graphics.Sprites
             set
             {
                 base.LifetimeEnd = value;
-                frontLyricText.LifetimeEnd = value;
-                backLyricText.LifetimeEnd = value;
+                leftLyricText.LifetimeEnd = value;
+                rightLyricText.LifetimeEnd = value;
             }
         }
 
@@ -415,7 +415,7 @@ namespace osu.Framework.Graphics.Sprites
 
         public override Vector2 Size
         {
-            get => frontLyricText.Size;
+            get => leftLyricText.Size;
             set => throw new InvalidOperationException();
         }
 
@@ -439,13 +439,13 @@ namespace osu.Framework.Graphics.Sprites
 
             // set initial width.
             // we should get width from child object because draw width haven't updated.
-            var width = frontLyricText.Width;
-            frontLyricTextContainer.Width = 0;
-            backLyricTextContainer.Width = width;
+            var width = leftLyricText.Width;
+            leftLyricTextContainer.Width = 0;
+            rightLyricTextContainer.Width = width;
 
             // reset masking transform.
-            frontLyricTextContainer.ClearTransforms();
-            backLyricTextContainer.ClearTransforms();
+            leftLyricTextContainer.ClearTransforms();
+            rightLyricTextContainer.ClearTransforms();
 
             // filter valid time-tag with order.
             var validTimeTag = TimeTags
@@ -458,8 +458,8 @@ namespace osu.Framework.Graphics.Sprites
 
             // get transform sequence and set initial delay time.
             var delay = relativeTime - currentTime;
-            var frontTransformSequence = frontLyricTextContainer.Delay(delay).ResizeWidthTo(0).Then();
-            var backTransformSequence = backLyricTextContainer.Delay(delay).ResizeWidthTo(width).Then();
+            var leftTransformSequence = leftLyricTextContainer.Delay(delay).ResizeWidthTo(0).Then();
+            var rightTransformSequence = rightLyricTextContainer.Delay(delay).ResizeWidthTo(width).Then();
 
             foreach ((var textIndex, double time) in validTimeTag)
             {
@@ -468,8 +468,8 @@ namespace osu.Framework.Graphics.Sprites
                 var duration = Math.Max(time - relativeTime, 0);
 
                 // apply the position with delay time.
-                frontTransformSequence.ResizeWidthTo(position, duration).Then();
-                backTransformSequence.ResizeWidthTo(width - position, duration).Then();
+                leftTransformSequence.ResizeWidthTo(position, duration).Then();
+                rightTransformSequence.ResizeWidthTo(width - position, duration).Then();
 
                 // save current time-tag time for letting next time-tag able to calculate duration.
                 relativeTime = time;
@@ -477,6 +477,6 @@ namespace osu.Framework.Graphics.Sprites
         }
 
         private float getCharacterPosition(TextIndex index)
-            => index.State == TextIndex.IndexState.Start ? frontLyricText.GetTextIndexPosition(index) : backLyricText.GetTextIndexPosition(index);
+            => index.State == TextIndex.IndexState.Start ? leftLyricText.GetTextIndexPosition(index) : rightLyricText.GetTextIndexPosition(index);
     }
 }
