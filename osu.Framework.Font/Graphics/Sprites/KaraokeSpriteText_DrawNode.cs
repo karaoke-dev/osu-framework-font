@@ -3,7 +3,6 @@
 
 using System.Collections.Generic;
 using System.Linq;
-using osu.Framework.Graphics.Extensions;
 using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Shaders;
 
@@ -13,9 +12,17 @@ namespace osu.Framework.Graphics.Sprites
     {
         protected override Quad ComputeScreenSpaceDrawQuad()
         {
-            // make draw size become bigger (for not masking the shader).
-            var newRectangle = DrawRectangle.Scale(2);
-            return ToScreenSpace(newRectangle);
+            var quad = ToScreenSpace(DrawRectangle);
+            var lyricSpriteTextDrawRectangle = LeftLyricTextShaders.Concat(RightLyricTextShaders).OfType<IApplicableToDrawQuad>()
+                                                                   .Select(x => x.ComputeScreenSpaceDrawQuad(quad).AABBFloat)
+                                                                   .Aggregate(quad.AABBFloat, RectangleF.Union);
+
+            // after union the size of left side and right side of the internal sprite text draw size, need to calculate the extra size in the karaoke sprite text itself.
+            var drawRectangle = Shaders.OfType<IApplicableToDrawQuad>()
+                                       .Select(x => x.ComputeScreenSpaceDrawQuad(quad).AABBFloat)
+                                       .Aggregate(lyricSpriteTextDrawRectangle, RectangleF.Union);
+
+            return Quad.FromRectangle(drawRectangle);
         }
 
         protected override DrawNode CreateDrawNode()
