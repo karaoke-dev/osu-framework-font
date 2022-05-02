@@ -423,9 +423,7 @@ namespace osu.Framework.Graphics.Sprites
         {
             var result = base.OnInvalidate(invalidation, source);
 
-            var hasTimeTag = TimeTags != null;
-            var hasText = !string.IsNullOrEmpty(Text);
-            if (!invalidation.HasFlag(Invalidation.Presence) || !hasTimeTag || !hasText)
+            if (!invalidation.HasFlag(Invalidation.Presence))
                 return result;
 
             Schedule(RefreshStateTransforms);
@@ -435,14 +433,6 @@ namespace osu.Framework.Graphics.Sprites
 
         public virtual void RefreshStateTransforms()
         {
-            // todo: IApplicableToCharacterSize should affect padding in the masking container also.
-
-            // set initial width.
-            // we should get width from child object because draw width haven't updated.
-            var width = leftLyricText.Width;
-            leftLyricTextContainer.Width = 0;
-            rightLyricTextContainer.Width = width;
-
             // reset masking transform.
             leftLyricTextContainer.ClearTransforms();
             rightLyricTextContainer.ClearTransforms();
@@ -451,6 +441,20 @@ namespace osu.Framework.Graphics.Sprites
             var validTimeTag = TimeTags
                                .Where(x => x.Key.Index >= 0 && x.Key.Index < Text.Length)
                                .OrderBy(x => x.Value).ToArray();
+
+            // not initialize if no time-tag or text.
+            var hasTimeTag = validTimeTag.Any();
+            var hasText = !string.IsNullOrEmpty(Text);
+            if (!hasTimeTag || !hasText)
+                return;
+
+            // todo: IApplicableToCharacterSize should affect padding in the masking container also.
+
+            // set initial width.
+            // we should get width from child object because draw width haven't updated.
+            var width = leftLyricText.Width;
+            leftLyricTextContainer.Width = 0;
+            rightLyricTextContainer.Width = width;
 
             // get first time-tag relative start time.
             var currentTime = Time.Current;
