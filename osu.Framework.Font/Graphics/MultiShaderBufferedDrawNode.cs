@@ -22,7 +22,7 @@ namespace osu.Framework.Graphics
 
         private readonly double loadTime;
 
-        public MultiShaderBufferedDrawNode(IBufferedDrawable source, DrawNode child, MultiShaderBufferedDrawNodeSharedData sharedData)
+        public MultiShaderBufferedDrawNode(IMultiShaderBufferedDrawable source, DrawNode child, MultiShaderBufferedDrawNodeSharedData sharedData)
             : base(source, child, sharedData)
         {
             loadTime = Source.Clock.CurrentTime;
