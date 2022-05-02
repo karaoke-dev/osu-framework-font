@@ -31,9 +31,9 @@ namespace osu.Framework.Graphics.Sprites
         /// <summary>
         /// <see cref="BufferedDrawNode"/> to apply <see cref="IShader"/>.
         /// </summary>
-        protected class LyricSpriteTextShaderEffectDrawNode : MultiShaderBufferedDrawNode
+        protected class LyricSpriteTextShaderEffectDrawNode : SingleShaderBufferedDrawNode
         {
-            public LyricSpriteTextShaderEffectDrawNode(LyricSpriteText source, MultiShaderBufferedDrawNodeSharedData sharedData)
+            public LyricSpriteTextShaderEffectDrawNode(LyricSpriteText source, BufferedDrawNodeSharedData sharedData)
                 : base(source, new LyricSpriteTextDrawNode(source), sharedData)
             {
             }
@@ -69,8 +69,7 @@ namespace osu.Framework.Graphics.Sprites
 
                 for (int i = 0; i < parts.Count; i++)
                 {
-                    // Note: should use white here because buffered container will change the colour.
-                    DrawQuad(parts[i].Texture, parts[i].DrawQuad, Colour4.White, vertexAction: vertexAction, inflationPercentage: parts[i].InflationPercentage);
+                    DrawQuad(parts[i].Texture, parts[i].DrawQuad, DrawColourInfo.Colour, vertexAction: vertexAction, inflationPercentage: parts[i].InflationPercentage);
                 }
 
                 Shader.Unbind();

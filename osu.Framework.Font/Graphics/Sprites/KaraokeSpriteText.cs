@@ -19,7 +19,7 @@ namespace osu.Framework.Graphics.Sprites
     {
     }
 
-    public partial class KaraokeSpriteText<T> : CompositeDrawable, IMultiShaderBufferedDrawable, IHasRuby, IHasRomaji where T : LyricSpriteText, new()
+    public partial class KaraokeSpriteText<T> : CompositeDrawable, ISingleShaderBufferedDrawable, IHasRuby, IHasRomaji where T : LyricSpriteText, new()
     {
         private readonly MaskingContainer<T> frontLyricTextContainer;
         private readonly T frontLyricText;
@@ -28,7 +28,7 @@ namespace osu.Framework.Graphics.Sprites
         private readonly T backLyricText;
 
         // todo: should have a better way to let user able to customize formats?
-        private readonly MultiShaderBufferedDrawNodeSharedData sharedData = new MultiShaderBufferedDrawNodeSharedData();
+        private readonly BufferedDrawNodeSharedData sharedData = new BufferedDrawNodeSharedData(2);
 
         public IShader TextureShader { get; private set; }
         public IShader RoundedTextureShader { get; private set; }
@@ -130,11 +130,18 @@ namespace osu.Framework.Graphics.Sprites
                 shaders.Clear();
 
                 if (value != null)
+                {
+                    if (value.Count > 1)
+                        throw new NotSupportedException($"{nameof(LyricSpriteText)} does not support more than one shaders now.");
+
                     shaders.AddRange(value);
+                }
 
                 Invalidate(Invalidation.DrawNode);
             }
         }
+
+        public IShader Shader => Shaders.FirstOrDefault();
 
         public IReadOnlyList<IShader> LeftLyricTextShaders
         {

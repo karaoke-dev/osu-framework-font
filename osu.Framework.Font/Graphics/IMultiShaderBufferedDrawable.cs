@@ -8,6 +8,6 @@ namespace osu.Framework.Graphics
 {
     public interface IMultiShaderBufferedDrawable : IBufferedDrawable
     {
-        IReadOnlyList<IShader> Shaders { get; set; }
+        IReadOnlyList<IShader> Shaders { get; }
     }
 }

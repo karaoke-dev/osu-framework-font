@@ -22,7 +22,7 @@ namespace osu.Framework.Graphics
 
         private readonly double loadTime;
 
-        public MultiShaderBufferedDrawNode(IBufferedDrawable source, DrawNode child, MultiShaderBufferedDrawNodeSharedData sharedData)
+        public MultiShaderBufferedDrawNode(IMultiShaderBufferedDrawable source, DrawNode child, MultiShaderBufferedDrawNodeSharedData sharedData)
             : base(source, child, sharedData)
         {
             loadTime = Source.Clock.CurrentTime;
@@ -112,6 +112,7 @@ namespace osu.Framework.Graphics
 
                     for (int i = 0; i < stepShaders.Count; i++)
                     {
+                        // todo: it will cause the render issue if set the current and target shader into same shader.
                         renderShader(stepShaders[i], i == 0 ? current : target, target);
                     }
                 }

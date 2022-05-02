@@ -22,13 +22,13 @@ namespace osu.Framework.Graphics.Sprites
     /// <summary>
     /// A container for simple text rendering purposes. If more complex text rendering is required, use <see cref="TextFlowContainer"/> instead.
     /// </summary>
-    public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, IHasLineBaseHeight, IHasFilterTerms, IFillFlowContainer, IHasCurrentValue<string>, IHasRuby, IHasRomaji
+    public partial class LyricSpriteText : Drawable, ISingleShaderBufferedDrawable, IHasLineBaseHeight, IHasFilterTerms, IFillFlowContainer, IHasCurrentValue<string>, IHasRuby, IHasRomaji
     {
         private const float default_text_size = 48;
         private static readonly char[] default_never_fixed_width_characters = { '.', ',', ':', ' ' };
 
         // todo: should have a better way to let user able to customize formats?
-        private readonly MultiShaderBufferedDrawNodeSharedData sharedData = new MultiShaderBufferedDrawNodeSharedData();
+        private readonly BufferedDrawNodeSharedData sharedData = new BufferedDrawNodeSharedData(2);
 
         [Resolved]
         private FontStore store { get; set; }
@@ -62,7 +62,7 @@ namespace osu.Framework.Graphics.Sprites
 
         #region frame buffer
 
-        public DrawColourInfo? FrameBufferDrawColour => base.DrawColourInfo;
+        public DrawColourInfo? FrameBufferDrawColour => new DrawColourInfo(Color4.White);
 
         private Color4 backgroundColour = new Color4(0, 0, 0, 0);
 
@@ -111,11 +111,18 @@ namespace osu.Framework.Graphics.Sprites
                 shaders.Clear();
 
                 if (value != null)
+                {
+                    if (value.Count > 1)
+                        throw new NotSupportedException($"{nameof(LyricSpriteText)} does not support more than one shaders now.");
+
                     shaders.AddRange(value);
+                }
 
                 Invalidate();
             }
         }
+
+        public IShader Shader => Shaders.FirstOrDefault();
 
         #endregion
 
