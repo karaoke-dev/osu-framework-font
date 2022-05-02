@@ -62,7 +62,7 @@ namespace osu.Framework.Graphics.Sprites
 
         #region frame buffer
 
-        public DrawColourInfo? FrameBufferDrawColour => base.DrawColourInfo;
+        public DrawColourInfo? FrameBufferDrawColour => new DrawColourInfo(Color4.White);
 
         private Color4 backgroundColour = new Color4(0, 0, 0, 0);
 
