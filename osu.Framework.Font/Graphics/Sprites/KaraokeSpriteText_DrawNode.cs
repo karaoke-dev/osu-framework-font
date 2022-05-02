@@ -24,16 +24,16 @@ namespace osu.Framework.Graphics.Sprites
         /// <summary>
         /// <see cref="BufferedDrawNode"/> to apply <see cref="IShader"/>.
         /// </summary>
-        protected class KaraokeSpriteTextShaderEffectDrawNode : MultiShaderBufferedDrawNode, ICompositeDrawNode
+        protected class KaraokeSpriteTextShaderEffectDrawNode : SingleShaderBufferedDrawNode, ICompositeDrawNode
         {
             protected new KaraokeSpriteText<T> Source => (KaraokeSpriteText<T>)base.Source;
 
             protected new CompositeDrawableDrawNode Child => (CompositeDrawableDrawNode)base.Child;
 
-            private IShader[] leftLyricShaders;
-            private IShader[] rightLyricShaders;
+            private IShader leftLyricShader;
+            private IShader rightLyricShader;
 
-            public KaraokeSpriteTextShaderEffectDrawNode(KaraokeSpriteText<T> source, MultiShaderBufferedDrawNodeSharedData sharedData)
+            public KaraokeSpriteTextShaderEffectDrawNode(KaraokeSpriteText<T> source, BufferedDrawNodeSharedData sharedData)
                 : base(source, new CompositeDrawableDrawNode(source), sharedData)
             {
             }
@@ -42,14 +42,14 @@ namespace osu.Framework.Graphics.Sprites
             {
                 base.ApplyState();
 
-                leftLyricShaders = Source.LeftLyricTextShaders.ToArray();
-                rightLyricShaders = Source.RightLyricTextShaders.ToArray();
+                leftLyricShader = Source.LeftLyricTextShaders.FirstOrDefault();
+                rightLyricShader = Source.RightLyricTextShaders.FirstOrDefault();
             }
 
             protected override long GetDrawVersion()
             {
                 // if contains shader that need to apply time, then need to force run populate contents in each frame.
-                if (ContainTimePropertyShader(leftLyricShaders) || ContainTimePropertyShader(rightLyricShaders))
+                if (ContainTimePropertyShader(leftLyricShader) || ContainTimePropertyShader(rightLyricShader))
                 {
                     ResetDrawVersion();
                 }
