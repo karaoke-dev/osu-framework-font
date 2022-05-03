@@ -1,10 +1,12 @@
-﻿// Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
+// Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using osu.Framework.Extensions.IEnumerableExtensions;
+using osu.Framework.Graphics.Primitives;
+using osu.Framework.Graphics.Shaders;
 using osu.Framework.Layout;
 using osu.Framework.Text;
 using osuTK;
@@ -137,6 +139,25 @@ namespace osu.Framework.Graphics.Sprites
             }
 
             localScreenSpaceCache.Validate();
+        }
+
+        public float GetTextIndexPosition(TextIndex index)
+        {
+            int charIndex = Math.Clamp(index.Index, 0, Text.Length - 1);
+            if (charIndex != index.Index)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            var characterRectangle = Characters[charIndex].DrawRectangle;
+            var computedRectangle = getComputeCharacterDrawRectangle(characterRectangle);
+            return index.State == TextIndex.IndexState.Start ? computedRectangle.Left : computedRectangle.Right;
+        }
+
+        private RectangleF getComputeCharacterDrawRectangle(RectangleF originalCharacterDrawRectangle)
+        {
+            // combine the rectangle to get the max value.
+            return Shaders.OfType<IApplicableToCharacterSize>()
+                          .Select(x => x.ComputeCharacterDrawRectangle(originalCharacterDrawRectangle))
+                          .Aggregate(originalCharacterDrawRectangle, RectangleF.Union);
         }
     }
 }
