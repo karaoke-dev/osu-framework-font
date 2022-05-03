@@ -152,6 +152,50 @@ namespace osu.Framework.Graphics.Sprites
             return index.State == TextIndex.IndexState.Start ? computedRectangle.Left : computedRectangle.Right;
         }
 
+        public RectangleF GetCharacterRectangle(int index)
+        {
+            int charIndex = Math.Clamp(index, 0, Text.Length - 1);
+            if (charIndex != index)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            var character = Characters[charIndex];
+            var drawRectangle = character.DrawRectangle;
+            return getComputeCharacterDrawRectangle(drawRectangle);
+        }
+
+        public RectangleF GetRubyTagPosition(PositionText rubyTag)
+        {
+            int rubyIndex = Rubies.ToList().IndexOf(rubyTag);
+            if (rubyIndex < 0)
+                throw new ArgumentOutOfRangeException(nameof(rubyIndex));
+
+            int startCharacterIndex = Text.Length + skinIndex(Rubies, rubyIndex);
+            int count = rubyTag.Text.Length;
+            var drawRectangle = Characters.ToList()
+                                          .GetRange(startCharacterIndex, count)
+                                          .Select(x => x.DrawRectangle)
+                                          .Aggregate(RectangleF.Union);
+            return getComputeCharacterDrawRectangle(drawRectangle);
+        }
+
+        public RectangleF GetRomajiTagPosition(PositionText romajiTag)
+        {
+            int romajiIndex = Romajies.ToList().IndexOf(romajiTag);
+            if (romajiIndex < 0)
+                throw new ArgumentOutOfRangeException(nameof(romajiIndex));
+
+            int startCharacterIndex = Text.Length + skinIndex(Rubies, Rubies.Count) + skinIndex(Romajies, romajiIndex);
+            int count = romajiTag.Text.Length;
+            var drawRectangle = Characters.ToList()
+                                          .GetRange(startCharacterIndex, count)
+                                          .Select(x => x.DrawRectangle)
+                                          .Aggregate(RectangleF.Union);
+            return getComputeCharacterDrawRectangle(drawRectangle);
+        }
+
+        private int skinIndex(IEnumerable<PositionText> positionTexts, int endIndex)
+            => positionTexts.Where((_, i) => i < endIndex).Sum(x => x.Text.Length);
+
         private RectangleF getComputeCharacterDrawRectangle(RectangleF originalCharacterDrawRectangle)
         {
             // combine the rectangle to get the max value.
