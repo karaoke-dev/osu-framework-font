@@ -7,7 +7,6 @@ using System.Linq;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Shaders;
 using osu.Framework.Layout;
 using osuTK;
@@ -478,25 +477,6 @@ namespace osu.Framework.Graphics.Sprites
         }
 
         private float getCharacterPosition(TextIndex index)
-        {
-            var characterRectangle = getCharacterRectangle(index);
-            var computedRectangle = getComputeCharacterDrawRectangle(index.State, characterRectangle);
-            return index.State == TextIndex.IndexState.Start ? computedRectangle.Left : computedRectangle.Right;
-
-            RectangleF getCharacterRectangle(TextIndex textIndex)
-            {
-                var characters = textIndex.State == TextIndex.IndexState.Start ? frontLyricText.Characters : backLyricText.Characters;
-                return characters[textIndex.Index].DrawRectangle;
-            }
-
-            RectangleF getComputeCharacterDrawRectangle(TextIndex.IndexState state, RectangleF originalCharacterDrawRectangle)
-            {
-                // combine the rectangle to get the max value.
-                var lyricTextShaders = state == TextIndex.IndexState.Start ? LeftLyricTextShaders : RightLyricTextShaders;
-                return lyricTextShaders.OfType<IApplicableToCharacterSize>()
-                                       .Select(x => x.ComputeCharacterDrawRectangle(originalCharacterDrawRectangle))
-                                       .Aggregate(originalCharacterDrawRectangle, RectangleF.Union);
-            }
-        }
+            => index.State == TextIndex.IndexState.Start ? frontLyricText.GetTextIndexPosition(index) : backLyricText.GetTextIndexPosition(index);
     }
 }
