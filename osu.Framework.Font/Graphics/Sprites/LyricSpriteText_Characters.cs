@@ -25,7 +25,7 @@ namespace osu.Framework.Graphics.Sprites
         /// <summary>
         /// The characters in local space.
         /// </summary>
-        public IReadOnlyList<TextBuilderGlyph> Characters
+        private IReadOnlyList<TextBuilderGlyph> characters
         {
             get
             {
@@ -128,7 +128,7 @@ namespace osu.Framework.Graphics.Sprites
 
             Vector2 inflationAmount = DrawInfo.MatrixInverse.ExtractScale().Xy;
 
-            foreach (var character in Characters)
+            foreach (var character in characters)
             {
                 screenSpaceCharactersBacking.Add(new ScreenSpaceCharacterPart
                 {
@@ -147,7 +147,7 @@ namespace osu.Framework.Graphics.Sprites
             if (charIndex != index.Index)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
-            var characterRectangle = Characters[charIndex].DrawRectangle;
+            var characterRectangle = characters[charIndex].DrawRectangle;
             var computedRectangle = getComputeCharacterDrawRectangle(characterRectangle);
             return index.State == TextIndex.IndexState.Start ? computedRectangle.Left : computedRectangle.Right;
         }
@@ -158,7 +158,7 @@ namespace osu.Framework.Graphics.Sprites
             if (charIndex != index)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
-            var character = Characters[charIndex];
+            var character = characters[charIndex];
             var drawRectangle = character.DrawRectangle;
             return getComputeCharacterDrawRectangle(drawRectangle);
         }
@@ -171,7 +171,7 @@ namespace osu.Framework.Graphics.Sprites
 
             int startCharacterIndex = Text.Length + skinIndex(Rubies, rubyIndex);
             int count = rubyTag.Text.Length;
-            var drawRectangle = Characters.ToList()
+            var drawRectangle = characters.ToList()
                                           .GetRange(startCharacterIndex, count)
                                           .Select(x => x.DrawRectangle)
                                           .Aggregate(RectangleF.Union);
@@ -186,7 +186,7 @@ namespace osu.Framework.Graphics.Sprites
 
             int startCharacterIndex = Text.Length + skinIndex(Rubies, Rubies.Count) + skinIndex(Romajies, romajiIndex);
             int count = romajiTag.Text.Length;
-            var drawRectangle = Characters.ToList()
+            var drawRectangle = characters.ToList()
                                           .GetRange(startCharacterIndex, count)
                                           .Select(x => x.DrawRectangle)
                                           .Aggregate(RectangleF.Union);
