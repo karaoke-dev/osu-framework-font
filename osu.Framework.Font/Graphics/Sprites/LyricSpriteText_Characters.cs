@@ -1,10 +1,12 @@
-﻿// Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
+// Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using osu.Framework.Extensions.IEnumerableExtensions;
+using osu.Framework.Graphics.Primitives;
+using osu.Framework.Graphics.Shaders;
 using osu.Framework.Layout;
 using osu.Framework.Text;
 using osuTK;
@@ -23,7 +25,7 @@ namespace osu.Framework.Graphics.Sprites
         /// <summary>
         /// The characters in local space.
         /// </summary>
-        public IReadOnlyList<TextBuilderGlyph> Characters
+        private IReadOnlyList<TextBuilderGlyph> characters
         {
             get
             {
@@ -126,7 +128,7 @@ namespace osu.Framework.Graphics.Sprites
 
             Vector2 inflationAmount = DrawInfo.MatrixInverse.ExtractScale().Xy;
 
-            foreach (var character in Characters)
+            foreach (var character in characters)
             {
                 screenSpaceCharactersBacking.Add(new ScreenSpaceCharacterPart
                 {
@@ -137,6 +139,64 @@ namespace osu.Framework.Graphics.Sprites
             }
 
             localScreenSpaceCache.Validate();
+        }
+
+        public float GetTextIndexPosition(TextIndex index)
+        {
+            var computedRectangle = GetCharacterRectangle(index.Index);
+            return index.State == TextIndex.IndexState.Start ? computedRectangle.Left : computedRectangle.Right;
+        }
+
+        public RectangleF GetCharacterRectangle(int index)
+        {
+            int charIndex = Math.Clamp(index, 0, Text.Length - 1);
+            if (charIndex != index)
+                throw new ArgumentOutOfRangeException(nameof(index));
+
+            var character = characters[charIndex];
+            var drawRectangle = character.DrawRectangle;
+            return getComputeCharacterDrawRectangle(drawRectangle);
+        }
+
+        public RectangleF GetRubyTagPosition(PositionText rubyTag)
+        {
+            int rubyIndex = Rubies.ToList().IndexOf(rubyTag);
+            if (rubyIndex < 0)
+                throw new ArgumentOutOfRangeException(nameof(rubyIndex));
+
+            int startCharacterIndex = Text.Length + skinIndex(Rubies, rubyIndex);
+            int count = rubyTag.Text.Length;
+            var drawRectangle = characters.ToList()
+                                          .GetRange(startCharacterIndex, count)
+                                          .Select(x => x.DrawRectangle)
+                                          .Aggregate(RectangleF.Union);
+            return getComputeCharacterDrawRectangle(drawRectangle);
+        }
+
+        public RectangleF GetRomajiTagPosition(PositionText romajiTag)
+        {
+            int romajiIndex = Romajies.ToList().IndexOf(romajiTag);
+            if (romajiIndex < 0)
+                throw new ArgumentOutOfRangeException(nameof(romajiIndex));
+
+            int startCharacterIndex = Text.Length + skinIndex(Rubies, Rubies.Count) + skinIndex(Romajies, romajiIndex);
+            int count = romajiTag.Text.Length;
+            var drawRectangle = characters.ToList()
+                                          .GetRange(startCharacterIndex, count)
+                                          .Select(x => x.DrawRectangle)
+                                          .Aggregate(RectangleF.Union);
+            return getComputeCharacterDrawRectangle(drawRectangle);
+        }
+
+        private int skinIndex(IEnumerable<PositionText> positionTexts, int endIndex)
+            => positionTexts.Where((_, i) => i < endIndex).Sum(x => x.Text.Length);
+
+        private RectangleF getComputeCharacterDrawRectangle(RectangleF originalCharacterDrawRectangle)
+        {
+            // combine the rectangle to get the max value.
+            return Shaders.OfType<IApplicableToCharacterSize>()
+                          .Select(x => x.ComputeCharacterDrawRectangle(originalCharacterDrawRectangle))
+                          .Aggregate(originalCharacterDrawRectangle, RectangleF.Union);
         }
     }
 }

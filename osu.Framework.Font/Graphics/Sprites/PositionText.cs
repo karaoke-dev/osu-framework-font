@@ -1,9 +1,11 @@
 ﻿// Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
+using System;
+
 namespace osu.Framework.Graphics.Sprites
 {
-    public struct PositionText
+    public struct PositionText : IEquatable<PositionText>
     {
         public PositionText(string text, int startIndex, int endIndex)
         {
@@ -17,5 +19,23 @@ namespace osu.Framework.Graphics.Sprites
         public int StartIndex { get; set; }
 
         public int EndIndex { get; set; }
+
+        public bool Equals(PositionText other)
+            => StartIndex == other.StartIndex && EndIndex == other.EndIndex && Text == other.Text;
+
+        public override bool Equals(object obj)
+        {
+            if (obj is PositionText positionText)
+                return Equals(positionText);
+
+            // If compare object is not int or position text, then it's no need to be compared.
+            return false;
+        }
+
+        public override int GetHashCode() => base.GetHashCode();
+
+        public static bool operator ==(PositionText first, PositionText second) => first.Equals(second);
+
+        public static bool operator !=(PositionText first, PositionText second) => !first.Equals(second);
     }
 }

@@ -41,10 +41,10 @@ namespace osu.Framework.Graphics.Sprites
 
         public override bool Equals(object obj)
         {
-            if (obj is TextIndex tone)
-                return Equals(tone);
+            if (obj is TextIndex textIndex)
+                return Equals(textIndex);
 
-            // If compare object is not int or tone, then it's no need to be compared.
+            // If compare object is not int or text index, then it's no need to be compared.
             return false;
         }
 
