@@ -143,12 +143,7 @@ namespace osu.Framework.Graphics.Sprites
 
         public float GetTextIndexPosition(TextIndex index)
         {
-            int charIndex = Math.Clamp(index.Index, 0, Text.Length - 1);
-            if (charIndex != index.Index)
-                throw new ArgumentOutOfRangeException(nameof(index));
-
-            var characterRectangle = characters[charIndex].DrawRectangle;
-            var computedRectangle = getComputeCharacterDrawRectangle(characterRectangle);
+            var computedRectangle = GetCharacterRectangle(index.Index);
             return index.State == TextIndex.IndexState.Start ? computedRectangle.Left : computedRectangle.Right;
         }
 
