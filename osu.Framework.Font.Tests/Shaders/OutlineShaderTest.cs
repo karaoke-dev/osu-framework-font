@@ -37,8 +37,7 @@ namespace osu.Framework.Font.Tests.Shaders
                 Radius = radius
             };
 
-            var quad = shader.ComputeScreenSpaceDrawQuad(new Quad(5, 5, 10, 10));
-            var rectangle = quad.AABBFloat;
+            var rectangle = shader.ComputeDrawRectangle(new RectangleF(5, 5, 10, 10));
             Assert.AreEqual(expectedX, rectangle.X);
             Assert.AreEqual(expectedY, rectangle.Y);
             Assert.AreEqual(expectedWidth, rectangle.Width);

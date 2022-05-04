@@ -17,12 +17,11 @@ namespace osu.Framework.Graphics.Sprites
         protected override Quad ComputeScreenSpaceDrawQuad()
         {
             // make draw size become bigger (for not masking the shader).
-            var quad = ToScreenSpace(DrawRectangle);
-            var drawRectangle = Shaders.OfType<IApplicableToDrawQuad>()
-                                       .Select(x => x.ComputeScreenSpaceDrawQuad(quad).AABBFloat)
-                                       .Aggregate(quad.AABBFloat, RectangleF.Union);
+            var drawRectangle = Shaders.OfType<IApplicableToDrawRectangle>()
+                                       .Select(x => x.ComputeDrawRectangle(DrawRectangle))
+                                       .Aggregate(DrawRectangle, RectangleF.Union);
 
-            return Quad.FromRectangle(drawRectangle);
+            return ToScreenSpace(drawRectangle);
         }
 
         protected override DrawNode CreateDrawNode()

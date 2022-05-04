@@ -5,8 +5,8 @@ using osu.Framework.Graphics.Primitives;
 
 namespace osu.Framework.Graphics.Shaders
 {
-    public interface IApplicableToDrawQuad
+    public interface IApplicableToDrawRectangle
     {
-        Quad ComputeScreenSpaceDrawQuad(Quad originDrawQuad);
+        RectangleF ComputeDrawRectangle(RectangleF originDrawRectangle);
     }
 }

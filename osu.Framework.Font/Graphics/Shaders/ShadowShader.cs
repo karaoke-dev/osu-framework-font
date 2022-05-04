@@ -8,7 +8,7 @@ using osuTK.Graphics;
 
 namespace osu.Framework.Graphics.Shaders
 {
-    public class ShadowShader : InternalShader, IApplicableToDrawQuad, IHasTextureSize, IHasInflationPercentage
+    public class ShadowShader : InternalShader, IApplicableToDrawRectangle, IHasTextureSize, IHasInflationPercentage
     {
         public override string ShaderName => "Shadow";
 
@@ -25,17 +25,13 @@ namespace osu.Framework.Graphics.Shaders
             GetUniform<Vector2>(@"g_Offset").UpdateValue(ref shadowOffset);
         }
 
-        public Quad ComputeScreenSpaceDrawQuad(Quad originDrawQuad)
-        {
-            var rectangle = originDrawQuad.AABBFloat.Inflate(new MarginPadding
+        public RectangleF ComputeDrawRectangle(RectangleF originDrawRectangle)
+            => originDrawRectangle.Inflate(new MarginPadding
             {
                 Left = Math.Max(-ShadowOffset.X, 0),
                 Right = Math.Max(ShadowOffset.X, 0),
                 Top = Math.Max(-ShadowOffset.Y, 0),
                 Bottom = Math.Max(ShadowOffset.Y, 0),
             });
-
-            return Quad.FromRectangle(rectangle);
-        }
     }
 }
