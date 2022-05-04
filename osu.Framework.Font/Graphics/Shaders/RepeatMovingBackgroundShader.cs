@@ -2,14 +2,13 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
-using osu.Framework.Graphics.OpenGL.Buffers;
 using osu.Framework.Graphics.Textures;
 using osuTK;
 using osuTK.Graphics.ES30;
 
 namespace osu.Framework.Graphics.Shaders
 {
-    public class RepeatMovingBackgroundShader : InternalShader, IApplicableToCurrentTime
+    public class RepeatMovingBackgroundShader : InternalShader, IApplicableToCurrentTime, IHasTextureSize
     {
         public override string ShaderName => "RepeatMovingBackground";
 
@@ -23,13 +22,10 @@ namespace osu.Framework.Graphics.Shaders
 
         public float Mix { get; set; } = 1f;
 
-        public override void ApplyValue(FrameBuffer current)
+        public override void ApplyValue()
         {
             if (Texture == null)
                 return;
-
-            var size = current.Size;
-            GetUniform<Vector2>(@"g_TexSize").UpdateValue(ref size);
 
             Texture.TextureGL.Bind(TextureUnit.Texture1);
 

@@ -1,7 +1,6 @@
 ﻿// Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
-using osu.Framework.Graphics.OpenGL.Buffers;
 using osuTK;
 
 namespace osu.Framework.Graphics.Shaders
@@ -23,7 +22,7 @@ namespace osu.Framework.Graphics.Shaders
 
         public float Mix { get; set; } = 0.5f;
 
-        public override void ApplyValue(FrameBuffer current)
+        public override void ApplyValue()
         {
             var uv = Uv;
             GetUniform<Vector2>(@"g_Uv").UpdateValue(ref uv);

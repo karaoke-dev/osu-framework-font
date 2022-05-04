@@ -60,7 +60,7 @@ namespace osu.Framework.Graphics
                 }
 
                 if (shader is ICustomizedShader customizedShader)
-                    customizedShader.ApplyValue(current);
+                    customizedShader.ApplyValue();
 
                 if (shader is IApplicableToCurrentTime clockShader)
                 {
