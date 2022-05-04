@@ -7,10 +7,12 @@ uniform lowp sampler2D m_Sampler;
 
 uniform mediump vec2 g_TexSize;
 uniform mediump vec2 g_Size;
+uniform float g_InflationPercentage;
+
 
 void main(void) 
 { 
-	vec2 separaorParts = g_TexSize / g_Size;
+	vec2 separaorParts = g_TexSize / (g_Size * g_InflationPercentage);
 	vec2 uv = v_TexCoord;
 	uv = uv * separaorParts;
     uv = floor(uv);

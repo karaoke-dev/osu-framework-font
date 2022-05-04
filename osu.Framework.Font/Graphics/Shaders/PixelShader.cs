@@ -5,7 +5,7 @@ using osuTK;
 
 namespace osu.Framework.Graphics.Shaders
 {
-    public class PixelShader : InternalShader, IHasTextureSize
+    public class PixelShader : InternalShader, IHasTextureSize, IHasInflationPercentage
     {
         public override string ShaderName => "Pixel";
 
