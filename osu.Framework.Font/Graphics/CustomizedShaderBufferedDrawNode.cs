@@ -59,6 +59,12 @@ namespace osu.Framework.Graphics
                     shader.GetUniform<Vector2>(@"g_TexSize").UpdateValue(ref size);
                 }
 
+                if (shader is IHasInflationPercentage)
+                {
+                    var localInflationAmount = DrawInfo.Matrix.ExtractScale().X;
+                    shader.GetUniform<float>(@"g_InflationPercentage").UpdateValue(ref localInflationAmount);
+                }
+
                 if (shader is ICustomizedShader customizedShader)
                     customizedShader.ApplyValue();
 
