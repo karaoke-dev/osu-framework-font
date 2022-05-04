@@ -80,7 +80,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
                             }),
                             GetShaderByType<ShadowShader>().With(s =>
                             {
-                                s.ShadowOffset = new Vector2(10);
+                                s.ShadowOffset = new Vector2(2);
                                 s.ShadowColour = Color4.Aqua;
                             })
                         }

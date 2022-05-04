@@ -11,8 +11,8 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
 {
     public class TestSceneShadowShader : InternalShaderTestScene
     {
-        [TestCase(RED, "(10,10)")]
-        [TestCase(GREEN, "(-20,-20)")]
+        [TestCase(RED, "(3,3)")]
+        [TestCase(GREEN, "(-4,-4)")]
         [TestCase(BLUE, "(0,0)")]
         public void TestProperty(string colour, string offset)
         {
