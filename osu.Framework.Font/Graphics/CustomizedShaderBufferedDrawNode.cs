@@ -28,8 +28,8 @@ namespace osu.Framework.Graphics
         {
             switch (shader)
             {
-                case IApplicableToCurrentTime _:
-                case IStepShader stepShader when stepShader.StepShaders.Any(s => s is IApplicableToCurrentTime):
+                case IHasCurrentTime _:
+                case IStepShader stepShader when stepShader.StepShaders.Any(s => s is IHasCurrentTime):
                     return true;
 
                 default:
@@ -65,14 +65,14 @@ namespace osu.Framework.Graphics
                     shader.GetUniform<float>(@"g_InflationPercentage").UpdateValue(ref localInflationAmount);
                 }
 
+                if (shader is IHasCurrentTime)
+                {
+                    var currentTime = (float)(Source.Clock.CurrentTime - loadTime) / 1000;
+                    shader.GetUniform<float>("g_Time").UpdateValue(ref currentTime);
+                }
+
                 if (shader is ICustomizedShader customizedShader)
                     customizedShader.ApplyValue();
-
-                if (shader is IApplicableToCurrentTime clockShader)
-                {
-                    var time = (float)(Source.Clock.CurrentTime - loadTime) / 1000;
-                    clockShader.ApplyCurrentTime(time);
-                }
 
                 shader.Bind();
                 DrawFrameBuffer(current, new RectangleF(0, 0, current.Texture.Width, current.Texture.Height), ColourInfo.SingleColour(Color4.White));

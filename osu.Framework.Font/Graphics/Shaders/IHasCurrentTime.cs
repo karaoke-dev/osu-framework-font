@@ -3,8 +3,7 @@
 
 namespace osu.Framework.Graphics.Shaders
 {
-    public interface IApplicableToCurrentTime
+    public interface IHasCurrentTime
     {
-        void ApplyCurrentTime(float currentTime);
     }
 }
