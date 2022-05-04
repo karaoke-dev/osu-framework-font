@@ -2,7 +2,6 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
-using osu.Framework.Graphics.OpenGL.Buffers;
 
 namespace osu.Framework.Graphics.Shaders
 {
@@ -27,6 +26,6 @@ namespace osu.Framework.Graphics.Shaders
 
         public bool IsLoaded => shader.IsLoaded;
 
-        public abstract void ApplyValue(FrameBuffer current);
+        public abstract void ApplyValue();
     }
 }

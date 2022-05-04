@@ -4,7 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using osu.Framework.Graphics.OpenGL.Buffers;
 using osu.Framework.Graphics.Primitives;
 
 namespace osu.Framework.Graphics.Shaders
@@ -44,7 +43,7 @@ namespace osu.Framework.Graphics.Shaders
         public bool IsLoaded
             => throw new NotSupportedException();
 
-        public void ApplyValue(FrameBuffer current)
+        public void ApplyValue()
             => throw new NotSupportedException();
 
         public RectangleF ComputeCharacterDrawRectangle(RectangleF originalCharacterDrawRectangle) =>
