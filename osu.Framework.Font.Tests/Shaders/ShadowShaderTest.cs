@@ -24,8 +24,7 @@ namespace osu.Framework.Font.Tests.Shaders
                 ShadowOffset = new Vector2(offsetX, offsetY)
             };
 
-            var quad = shader.ComputeScreenSpaceDrawQuad(new Quad(5, 5, 10, 10));
-            var rectangle = quad.AABBFloat;
+            var rectangle = shader.ComputeDrawRectangle(new RectangleF(5, 5, 10, 10));
             Assert.AreEqual(expectedX, rectangle.X);
             Assert.AreEqual(expectedY, rectangle.Y);
             Assert.AreEqual(expectedWidth, rectangle.Width);
