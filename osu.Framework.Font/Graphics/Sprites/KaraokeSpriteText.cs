@@ -468,7 +468,7 @@ namespace osu.Framework.Graphics.Sprites
             foreach ((var textIndex, double time) in validTimeTag)
             {
                 // calculate position and duration relative to precious time-tag time.
-                var position = getCharacterPosition(textIndex);
+                var position = getTextIndexPosition(textIndex);
                 var duration = Math.Max(time - relativeTime, 0);
 
                 // apply the position with delay time.
@@ -480,7 +480,7 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
-        private float getCharacterPosition(TextIndex index)
+        private float getTextIndexPosition(TextIndex index)
             => index.State == TextIndex.IndexState.Start ? leftLyricText.GetTextIndexPosition(index) : rightLyricText.GetTextIndexPosition(index);
     }
 }
