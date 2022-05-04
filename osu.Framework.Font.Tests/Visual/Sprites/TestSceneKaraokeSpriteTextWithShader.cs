@@ -62,7 +62,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
                 {
                     GetShaderByType<OutlineShader>().With(s =>
                     {
-                        s.Radius = 5;
+                        s.Radius = 2;
                         s.OutlineColour = Color4.Green;
                     })
                 };
@@ -96,7 +96,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
                         {
                             GetShaderByType<OutlineShader>().With(s =>
                             {
-                                s.Radius = 10;
+                                s.Radius = 3;
                                 s.OutlineColour = Color4.White;
                             }),
                             GetShaderByType<RainbowShader>()

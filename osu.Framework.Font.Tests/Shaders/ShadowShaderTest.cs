@@ -10,8 +10,8 @@ namespace osu.Framework.Font.Tests.Shaders
 {
     public class ShadowShaderTest
     {
-        private const float offset_x = 11;
-        private const float offset_y = 12;
+        private const float offset_x = 4;
+        private const float offset_y = 5;
 
         [TestCase(offset_x, 0, 5, 5, 10 + offset_x, 10)] // Offset right
         [TestCase(-offset_x, 0, 5 - offset_x, 5, 10 + offset_x, 10)] // Offset left

@@ -5,7 +5,7 @@ using osuTK;
 
 namespace osu.Framework.Graphics.Shaders
 {
-    public class RainbowShader : InternalShader, IApplicableToCurrentTime
+    public class RainbowShader : InternalShader, IHasCurrentTime
     {
         public override string ShaderName => "Rainbow";
 
@@ -41,11 +41,6 @@ namespace osu.Framework.Graphics.Shaders
 
             var mix = Mix;
             GetUniform<float>(@"g_Mix").UpdateValue(ref mix);
-        }
-
-        public void ApplyCurrentTime(float currentTime)
-        {
-            GetUniform<float>("g_Time").UpdateValue(ref currentTime);
         }
     }
 }

@@ -7,6 +7,7 @@ uniform lowp sampler2D m_Sampler;
 uniform mediump vec2 g_TexSize;
 uniform vec4 g_Colour;
 uniform vec2 g_Offset;
+uniform float g_InflationPercentage;
 
 lowp vec4 shadow(sampler2D tex, mediump vec2 texCoord, mediump vec2 texSize, mediump vec4 colour, mediump vec2 offset)
 {
@@ -16,6 +17,6 @@ lowp vec4 shadow(sampler2D tex, mediump vec2 texCoord, mediump vec2 texSize, med
 void main(void)
 {
 	lowp vec4 texture = toSRGB(texture2D(m_Sampler, v_TexCoord));
-	lowp vec4 shadow = shadow(m_Sampler, v_TexCoord, g_TexSize, g_Colour, g_Offset);
+	lowp vec4 shadow = shadow(m_Sampler, v_TexCoord, g_TexSize, g_Colour, g_Offset * g_InflationPercentage);
 	gl_FragColor = mix(shadow, texture, texture.a);
 }

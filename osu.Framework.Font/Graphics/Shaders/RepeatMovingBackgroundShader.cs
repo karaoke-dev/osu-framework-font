@@ -8,7 +8,7 @@ using osuTK.Graphics.ES30;
 
 namespace osu.Framework.Graphics.Shaders
 {
-    public class RepeatMovingBackgroundShader : InternalShader, IApplicableToCurrentTime, IHasTextureSize
+    public class RepeatMovingBackgroundShader : InternalShader, IHasCurrentTime, IHasTextureSize
     {
         public override string ShaderName => "RepeatMovingBackground";
 
@@ -49,11 +49,6 @@ namespace osu.Framework.Graphics.Shaders
 
             var mix = Math.Clamp(Mix, 0, 1);
             GetUniform<float>(@"g_Mix").UpdateValue(ref mix);
-        }
-
-        public void ApplyCurrentTime(float currentTime)
-        {
-            GetUniform<float>("g_Time").UpdateValue(ref currentTime);
         }
     }
 }

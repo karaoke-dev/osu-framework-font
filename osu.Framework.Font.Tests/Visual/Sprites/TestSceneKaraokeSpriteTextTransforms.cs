@@ -24,8 +24,8 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
         private const string right_outline_color = "#5932CC";
         private const string right_shadow_color = "#3D2D6B";
 
-        private const int outline_radius = 10;
-        private const int shadow_sizing = 10;
+        private const int outline_radius = 3;
+        private const int shadow_sizing = 3;
 
         private const double start_time = 1000;
         private const double end_time = 5000;
