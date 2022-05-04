@@ -1,7 +1,6 @@
 ﻿// Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
-using System;
 using NUnit.Framework;
 using osu.Framework.Extensions;
 using osu.Framework.Extensions.Color4Extensions;
@@ -50,30 +49,6 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
                     })
                 };
             });
-        }
-
-        [TestCase(32)]
-        public void CreateGetOutlineMethod(int samples)
-        {
-            // it's a script on creating const params in shader.
-
-            const float pi = 3.14159265359f;
-            double angle = 0.0f;
-
-            Console.WriteLine($"lowp float outlineAlpha(sampler2D tex, int radius, mediump vec2 texCoord, mediump vec2 texSize)");
-            Console.WriteLine("{");
-            Console.WriteLine("    mediump vec2 offset = mediump vec2(float(radius)) / texSize;");
-            Console.WriteLine("    lowp float alpha = 0.0;");
-            Console.WriteLine();
-
-            for (int i = 0; i < samples; i++)
-            {
-                angle += 1.0 / (samples / 2.0) * pi;
-                Console.WriteLine($"    alpha = max(alpha, texture2D(tex, texCoord - lowp vec2({Math.Sin(angle):N2}, {Math.Cos(angle):N2}) * offset).a);");
-            }
-
-            Console.WriteLine("    return alpha;");
-            Console.WriteLine("}");
         }
     }
 }
