@@ -8,13 +8,13 @@ using osuTK.Graphics;
 
 namespace osu.Framework.Graphics.Shaders
 {
-    public class OutlineShader : InternalShader, IApplicableToCharacterSize, IApplicableToDrawQuad, IHasTextureSize
+    public class OutlineShader : InternalShader, IApplicableToCharacterSize, IApplicableToDrawQuad, IHasTextureSize, IHasInflationPercentage
     {
         public override string ShaderName => "Outline";
 
         public Color4 Colour { get; set; }
 
-        public int Radius { get; set; }
+        public float Radius { get; set; }
 
         public Color4 OutlineColour { get; set; }
 
@@ -23,8 +23,8 @@ namespace osu.Framework.Graphics.Shaders
             var colourMatrix = new Vector4(Colour.R, Colour.G, Colour.B, Colour.A);
             GetUniform<Vector4>(@"g_Colour").UpdateValue(ref colourMatrix);
 
-            var radius = Radius;
-            GetUniform<int>(@"g_Radius").UpdateValue(ref radius);
+            float radius = Radius;
+            GetUniform<float>(@"g_Radius").UpdateValue(ref radius);
 
             var outlineColourMatrix = new Vector4(OutlineColour.R, OutlineColour.G, OutlineColour.B, OutlineColour.A);
             GetUniform<Vector4>(@"g_OutlineColour").UpdateValue(ref outlineColourMatrix);

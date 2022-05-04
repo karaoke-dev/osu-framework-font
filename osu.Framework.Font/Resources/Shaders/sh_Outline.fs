@@ -6,12 +6,13 @@ uniform lowp sampler2D m_Sampler;
 
 uniform mediump vec2 g_TexSize;
 uniform vec4 g_Colour;
-uniform int g_Radius;
+uniform float g_Radius;
 uniform vec4 g_OutlineColour;
+uniform float g_InflationPercentage;
 
-lowp float outlineAlpha(sampler2D tex, int radius, mediump vec2 texCoord, mediump vec2 texSize)
+lowp float outlineAlpha(sampler2D tex, float radius, mediump vec2 texCoord, mediump vec2 texSize)
 {
-    mediump vec2 offset = mediump vec2(float(radius)) / texSize;
+    mediump vec2 offset = mediump vec2(radius) / texSize;
     lowp float alpha = 0.0;
 
     alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(0.20, 0.98) * offset).a);
@@ -49,9 +50,9 @@ lowp float outlineAlpha(sampler2D tex, int radius, mediump vec2 texCoord, medium
     return alpha;
 }
 
-lowp vec4 outline(sampler2D tex, int radius, mediump vec2 texCoord, mediump vec2 texSize, mediump vec4 colour)
+lowp vec4 outline(sampler2D tex, float radius, mediump vec2 texCoord, mediump vec2 texSize, mediump vec4 colour)
 {
-	lowp float outlineAlpha = max(outlineAlpha(tex, radius, texCoord, texSize), outlineAlpha(tex, radius / 2, texCoord, texSize));
+	lowp float outlineAlpha = max(outlineAlpha(tex, radius, texCoord, texSize), outlineAlpha(tex, radius / 2.0, texCoord, texSize));
 	return mix(vec4(0.0), colour, outlineAlpha);
 }
 
@@ -59,7 +60,7 @@ void main(void)
 {
 	lowp vec4 sample = toSRGB(texture2D(m_Sampler, v_TexCoord));
 	lowp vec4 originColur = vec4(mix(sample.rgb, g_Colour.rgb, g_Colour.a), sample.a);
-	lowp vec4 outlineColour = outline(m_Sampler, g_Radius, v_TexCoord, g_TexSize, g_OutlineColour);
+	lowp vec4 outlineColour = outline(m_Sampler, g_Radius * g_InflationPercentage, v_TexCoord, g_TexSize, g_OutlineColour);
 
 	gl_FragColor = mix(outlineColour, originColur, originColur.a);
 }
