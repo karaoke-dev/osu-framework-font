@@ -8,7 +8,7 @@ using osuTK.Graphics;
 
 namespace osu.Framework.Graphics.Shaders
 {
-    public class OutlineShader : InternalShader, IApplicableToCharacterSize, IApplicableToDrawQuad, IHasTextureSize, IHasInflationPercentage
+    public class OutlineShader : InternalShader, IApplicableToCharacterSize, IApplicableToDrawRectangle, IHasTextureSize, IHasInflationPercentage
     {
         public override string ShaderName => "Outline";
 
@@ -33,10 +33,7 @@ namespace osu.Framework.Graphics.Shaders
         public RectangleF ComputeCharacterDrawRectangle(RectangleF originalCharacterDrawRectangle)
             => originalCharacterDrawRectangle.Inflate(Math.Max(Radius, 0));
 
-        public Quad ComputeScreenSpaceDrawQuad(Quad originDrawQuad)
-        {
-            var rectangle = ComputeCharacterDrawRectangle(originDrawQuad.AABBFloat);
-            return Quad.FromRectangle(rectangle);
-        }
+        public RectangleF ComputeDrawRectangle(RectangleF originDrawRectangle)
+            => ComputeCharacterDrawRectangle(originDrawRectangle);
     }
 }

@@ -8,7 +8,7 @@ using osu.Framework.Graphics.Primitives;
 
 namespace osu.Framework.Graphics.Shaders
 {
-    public class StepShader : IStepShader, IApplicableToCharacterSize, IApplicableToDrawQuad
+    public class StepShader : IStepShader, IApplicableToCharacterSize, IApplicableToDrawRectangle
     {
         public string Name { get; set; }
 
@@ -50,8 +50,8 @@ namespace osu.Framework.Graphics.Shaders
             StepShaders.OfType<IApplicableToCharacterSize>()
                        .Aggregate(originalCharacterDrawRectangle, (rectangle, shader) => shader.ComputeCharacterDrawRectangle(rectangle));
 
-        public Quad ComputeScreenSpaceDrawQuad(Quad originDrawQuad) =>
-            StepShaders.OfType<IApplicableToDrawQuad>()
-                       .Aggregate(originDrawQuad, (quad, shader) => shader.ComputeScreenSpaceDrawQuad(quad));
+        public RectangleF ComputeDrawRectangle(RectangleF originDrawRectangle) =>
+            StepShaders.OfType<IApplicableToDrawRectangle>()
+                       .Aggregate(originDrawRectangle, (quad, shader) => shader.ComputeDrawRectangle(quad));
     }
 }
