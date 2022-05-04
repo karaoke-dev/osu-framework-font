@@ -448,13 +448,13 @@ namespace osu.Framework.Graphics.Sprites
             if (!hasTimeTag || !hasText)
                 return;
 
-            // todo: IApplicableToCharacterSize should affect padding in the masking container also.
-
             // set initial width.
             // we should get width from child object because draw width haven't updated.
             var width = leftLyricText.Width;
-            leftLyricTextContainer.Width = 0;
-            rightLyricTextContainer.Width = width;
+            var startPosition = getTextIndexPosition(new TextIndex());
+            var endPosition = width - startPosition;
+            leftLyricTextContainer.Width = startPosition;
+            rightLyricTextContainer.Width = endPosition;
 
             // get first time-tag relative start time.
             var currentTime = Time.Current;
@@ -462,8 +462,8 @@ namespace osu.Framework.Graphics.Sprites
 
             // get transform sequence and set initial delay time.
             var delay = relativeTime - currentTime;
-            var leftTransformSequence = leftLyricTextContainer.Delay(delay).ResizeWidthTo(0).Then();
-            var rightTransformSequence = rightLyricTextContainer.Delay(delay).ResizeWidthTo(width).Then();
+            var leftTransformSequence = leftLyricTextContainer.Delay(delay).ResizeWidthTo(startPosition).Then();
+            var rightTransformSequence = rightLyricTextContainer.Delay(delay).ResizeWidthTo(endPosition).Then();
 
             foreach ((var textIndex, double time) in validTimeTag)
             {
