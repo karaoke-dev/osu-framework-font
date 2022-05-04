@@ -9,6 +9,7 @@ using osu.Framework.Graphics.OpenGL;
 using osu.Framework.Graphics.OpenGL.Buffers;
 using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Shaders;
+using osuTK;
 using osuTK.Graphics;
 
 namespace osu.Framework.Graphics
@@ -52,6 +53,12 @@ namespace osu.Framework.Graphics
 
             using (BindFrameBuffer(target))
             {
+                if (shader is IHasTextureSize)
+                {
+                    var size = current.Size;
+                    shader.GetUniform<Vector2>(@"g_TexSize").UpdateValue(ref size);
+                }
+
                 if (shader is ICustomizedShader customizedShader)
                     customizedShader.ApplyValue(current);
 
