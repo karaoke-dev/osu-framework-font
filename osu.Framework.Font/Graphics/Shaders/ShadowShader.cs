@@ -8,7 +8,7 @@ using osuTK.Graphics;
 
 namespace osu.Framework.Graphics.Shaders
 {
-    public class ShadowShader : InternalShader, IApplicableToDrawQuad, IHasTextureSize
+    public class ShadowShader : InternalShader, IApplicableToDrawQuad, IHasTextureSize, IHasInflationPercentage
     {
         public override string ShaderName => "Shadow";
 
