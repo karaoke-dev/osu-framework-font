@@ -21,12 +21,12 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
                 {
                     GetShaderByType<OutlineShader>().With(s =>
                     {
-                        s.Radius = 10;
+                        s.Radius = 3;
                         s.OutlineColour = Color4.Yellow;
                     }),
                     GetShaderByType<OutlineShader>().With(s =>
                     {
-                        s.Radius = 10;
+                        s.Radius = 3;
                         s.OutlineColour = Color4.Red;
                     })
                 }
@@ -61,7 +61,7 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
                 {
                     GetShaderByType<OutlineShader>().With(s =>
                     {
-                        s.Radius = 10;
+                        s.Radius = 3;
                         s.OutlineColour = Color4.Yellow;
                     })
                 }

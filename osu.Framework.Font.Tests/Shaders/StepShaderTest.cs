@@ -13,7 +13,7 @@ namespace osu.Framework.Font.Tests.Shaders
         [Test]
         public void TestComputeCharacterDrawRectangle()
         {
-            const int outline_radius = 10;
+            const int outline_radius = 3;
             const int shadow_offset_x = 11;
             const int shadow_offset_y = 12;
 
@@ -42,7 +42,7 @@ namespace osu.Framework.Font.Tests.Shaders
         [Test]
         public void TestComputeScreenSpaceDrawQuad()
         {
-            const int outline_radius = 10;
+            const int outline_radius = 3;
             const int shadow_offset_x = 11;
             const int shadow_offset_y = 12;
 
