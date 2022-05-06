@@ -423,12 +423,21 @@ namespace osu.Framework.Graphics.Sprites
         {
             var result = base.OnInvalidate(invalidation, source);
 
-            if (!invalidation.HasFlag(Invalidation.Presence))
+            if (!invalidation.HasFlag(Invalidation.Layout))
                 return result;
 
             Schedule(RefreshStateTransforms);
 
             return true;
+        }
+
+        protected override void LoadComplete()
+        {
+            base.LoadComplete();
+
+            // Because refresh state only triggered if some property changed.
+            // So we should make sure that it will be triggered at least once.
+            RefreshStateTransforms();
         }
 
         public virtual void RefreshStateTransforms()
