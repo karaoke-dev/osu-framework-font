@@ -1,10 +1,15 @@
 ﻿// Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
+using System;
 using System.Linq;
 using NUnit.Framework;
+using osu.Framework.Allocation;
+using osu.Framework.Extensions;
+using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Font.Tests.Helper;
 using osu.Framework.Graphics;
+using osu.Framework.Graphics.Shaders;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Testing;
 using osuTK;
@@ -14,21 +19,49 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
 {
     public class TestSceneKaraokeSpriteText : TestScene
     {
-        private readonly KaraokeSpriteText karaokeSpriteText;
+        private readonly TestKaraokeSpriteText karaokeSpriteText;
+        private readonly SpriteText transformAmountSpriteText;
+
+        private int transformAmount;
+
+        [Resolved]
+        private ShaderManager shaderManager { get; set; }
 
         public TestSceneKaraokeSpriteText()
         {
-            Child = karaokeSpriteText = new KaraokeSpriteText
+            Children = new Drawable[]
             {
-                Anchor = Anchor.Centre,
-                Origin = Anchor.Centre,
-                Text = "カラオケ！",
-                Rubies = TestCaseTagHelper.ParseParsePositionTexts(new[] { "[0,1]:か", "[2,3]:お" }),
-                Romajies = TestCaseTagHelper.ParseParsePositionTexts(new[] { "[1,2]:ra", "[3,4]:ke" }),
-                LeftTextColour = Color4.Green,
-                RightTextColour = Color4.Red,
-                Scale = new Vector2(2),
+                karaokeSpriteText = new TestKaraokeSpriteText
+                {
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
+                    Text = "カラオケ！",
+                    Rubies = TestCaseTagHelper.ParseParsePositionTexts(new[] { "[0,1]:か", "[2,3]:お" }),
+                    Romajies = TestCaseTagHelper.ParseParsePositionTexts(new[] { "[1,2]:ra", "[3,4]:ke" }),
+                    LeftTextColour = Color4.Green,
+                    RightTextColour = Color4.Red,
+                    Scale = new Vector2(2),
+                    TransformAction = () =>
+                    {
+                        transformAmount++;
+                        updateTransformerCountText();
+                    }
+                },
+                transformAmountSpriteText = new SpriteText
+                {
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
+                    Y = 100
+                }
             };
+
+            updateTransformerCountText();
+
+            void updateTransformerCountText()
+            {
+                transformAmountSpriteText.Text = $"Transform has been triggered {transformAmount} times";
+                transformAmountSpriteText.FadeColour(Color4.Red, 100).Then().FadeColour(Color4.White);
+            }
         }
 
         [TestCase("Normal", new[] { "[0,start]:500", "[1,start]:600", "[2,start]:1000", "[3,start]:1500", "[4,start]:2000" })] // Normal time-tag.
@@ -152,6 +185,50 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
                 karaokeSpriteText.RubyMargin = rubyMargin;
                 karaokeSpriteText.RomajiMargin = romajiMargin;
             });
+        }
+
+        [Test]
+        public void TestLyricShaders()
+        {
+            AddStep("Apply the shader", () =>
+            {
+                karaokeSpriteText.LeftLyricTextShaders = new[]
+                {
+                    shaderManager.LocalInternalShader<OutlineShader>().With(s =>
+                    {
+                        s.Radius = 3;
+                        s.Colour = Color4Extensions.FromHex("#FFDD77");
+                        s.OutlineColour = Color4Extensions.FromHex("#CCA532");
+                    })
+                };
+                karaokeSpriteText.RightLyricTextShaders = new[]
+                {
+                    shaderManager.LocalInternalShader<OutlineShader>().With(s =>
+                    {
+                        s.Radius = 3;
+                        s.Colour = Color4Extensions.FromHex("#AA88FF");
+                        s.OutlineColour = Color4Extensions.FromHex("#5932CC");
+                    })
+                };
+            });
+
+            AddStep("Clear shader", () =>
+            {
+                karaokeSpriteText.LeftLyricTextShaders = null;
+                karaokeSpriteText.RightLyricTextShaders = null;
+            });
+        }
+
+        private class TestKaraokeSpriteText : KaraokeSpriteText
+        {
+            public Action TransformAction;
+
+            public override void RefreshStateTransforms()
+            {
+                base.RefreshStateTransforms();
+
+                TransformAction?.Invoke();
+            }
         }
     }
 }
