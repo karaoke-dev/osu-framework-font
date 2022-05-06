@@ -1,11 +1,13 @@
-// Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
+﻿// Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
 using System.Linq;
 using NUnit.Framework;
 using osu.Framework.Font.Tests.Helper;
+using osu.Framework.Graphics;
 using osu.Framework.Graphics.Sprites;
 using osu.Framework.Testing;
+using osuTK;
 using osuTK.Graphics;
 
 namespace osu.Framework.Font.Tests.Visual.Sprites
@@ -18,11 +20,14 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
         {
             Child = karaokeSpriteText = new KaraokeSpriteText
             {
+                Anchor = Anchor.Centre,
+                Origin = Anchor.Centre,
                 Text = "カラオケ！",
                 Rubies = TestCaseTagHelper.ParseParsePositionTexts(new[] { "[0,1]:か", "[2,3]:お" }),
                 Romajies = TestCaseTagHelper.ParseParsePositionTexts(new[] { "[1,2]:ra", "[3,4]:ke" }),
                 LeftTextColour = Color4.Green,
                 RightTextColour = Color4.Red,
+                Scale = new Vector2(2),
             };
         }
 
