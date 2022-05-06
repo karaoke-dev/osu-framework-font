@@ -149,7 +149,7 @@ namespace osu.Framework.Graphics.Sprites
             {
                 leftLyricText.Shaders = value;
 
-                Invalidate(Invalidation.DrawNode);
+                Invalidate(Invalidation.Layout);
             }
         }
 
@@ -160,7 +160,7 @@ namespace osu.Framework.Graphics.Sprites
             {
                 rightLyricText.Shaders = value;
 
-                Invalidate(Invalidation.DrawNode);
+                Invalidate(Invalidation.Layout);
             }
         }
 
@@ -176,7 +176,7 @@ namespace osu.Framework.Graphics.Sprites
                 leftLyricText.Text = value;
                 rightLyricText.Text = value;
 
-                Invalidate(Invalidation.DrawNode);
+                Invalidate(Invalidation.Layout);
             }
         }
 
@@ -188,7 +188,7 @@ namespace osu.Framework.Graphics.Sprites
                 leftLyricText.Rubies = value;
                 rightLyricText.Rubies = value;
 
-                Invalidate(Invalidation.DrawNode);
+                Invalidate(Invalidation.Layout);
             }
         }
 
@@ -200,7 +200,7 @@ namespace osu.Framework.Graphics.Sprites
                 leftLyricText.Romajies = value;
                 rightLyricText.Romajies = value;
 
-                Invalidate(Invalidation.DrawNode);
+                Invalidate(Invalidation.Layout);
             }
         }
 
@@ -216,7 +216,7 @@ namespace osu.Framework.Graphics.Sprites
                 leftLyricText.Font = value;
                 rightLyricText.Font = value;
 
-                Invalidate(Invalidation.DrawNode);
+                Invalidate(Invalidation.Layout);
             }
         }
 
@@ -228,7 +228,7 @@ namespace osu.Framework.Graphics.Sprites
                 leftLyricText.RubyFont = value;
                 rightLyricText.RubyFont = value;
 
-                Invalidate(Invalidation.DrawNode);
+                Invalidate(Invalidation.Layout);
             }
         }
 
@@ -240,7 +240,7 @@ namespace osu.Framework.Graphics.Sprites
                 leftLyricText.RomajiFont = value;
                 rightLyricText.RomajiFont = value;
 
-                Invalidate(Invalidation.DrawNode);
+                Invalidate(Invalidation.Layout);
             }
         }
 
@@ -278,7 +278,7 @@ namespace osu.Framework.Graphics.Sprites
                 leftLyricText.RubyAlignment = value;
                 rightLyricText.RubyAlignment = value;
 
-                Invalidate(Invalidation.DrawNode);
+                Invalidate(Invalidation.Layout);
             }
         }
 
@@ -290,7 +290,7 @@ namespace osu.Framework.Graphics.Sprites
                 leftLyricText.RomajiAlignment = value;
                 rightLyricText.RomajiAlignment = value;
 
-                Invalidate(Invalidation.DrawNode);
+                Invalidate(Invalidation.Layout);
             }
         }
 
@@ -306,7 +306,7 @@ namespace osu.Framework.Graphics.Sprites
                 leftLyricText.Spacing = value;
                 rightLyricText.Spacing = value;
 
-                Invalidate(Invalidation.DrawNode);
+                Invalidate(Invalidation.Layout);
             }
         }
 
@@ -318,7 +318,7 @@ namespace osu.Framework.Graphics.Sprites
                 leftLyricText.RubySpacing = value;
                 rightLyricText.RubySpacing = value;
 
-                Invalidate(Invalidation.DrawNode);
+                Invalidate(Invalidation.Layout);
             }
         }
 
@@ -330,7 +330,7 @@ namespace osu.Framework.Graphics.Sprites
                 leftLyricText.RomajiSpacing = value;
                 rightLyricText.RomajiSpacing = value;
 
-                Invalidate(Invalidation.DrawNode);
+                Invalidate(Invalidation.Layout);
             }
         }
 
@@ -346,7 +346,7 @@ namespace osu.Framework.Graphics.Sprites
                 leftLyricText.RubyMargin = value;
                 rightLyricText.RubyMargin = value;
 
-                Invalidate(Invalidation.DrawNode);
+                Invalidate(Invalidation.Layout);
             }
         }
 
@@ -358,7 +358,7 @@ namespace osu.Framework.Graphics.Sprites
                 leftLyricText.RomajiMargin = value;
                 rightLyricText.RomajiMargin = value;
 
-                Invalidate(Invalidation.DrawNode);
+                Invalidate(Invalidation.Layout);
             }
         }
 
@@ -423,12 +423,21 @@ namespace osu.Framework.Graphics.Sprites
         {
             var result = base.OnInvalidate(invalidation, source);
 
-            if (!invalidation.HasFlag(Invalidation.Presence))
+            if (!invalidation.HasFlag(Invalidation.Layout))
                 return result;
 
             Schedule(RefreshStateTransforms);
 
             return true;
+        }
+
+        protected override void LoadComplete()
+        {
+            base.LoadComplete();
+
+            // Because refresh state only triggered if some property changed.
+            // So we should make sure that it will be triggered at least once.
+            RefreshStateTransforms();
         }
 
         public virtual void RefreshStateTransforms()
