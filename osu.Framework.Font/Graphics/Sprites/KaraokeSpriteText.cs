@@ -9,6 +9,7 @@ using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shaders;
 using osu.Framework.Layout;
+using osu.Framework.Utils;
 using osuTK;
 using osuTK.Graphics;
 
@@ -20,6 +21,8 @@ namespace osu.Framework.Graphics.Sprites
 
     public partial class KaraokeSpriteText<T> : CompositeDrawable, ISingleShaderBufferedDrawable, IHasRuby, IHasRomaji where T : LyricSpriteText, new()
     {
+        internal const double INTERPOLATION_TIMING = 1;
+
         private readonly MaskingContainer<T> leftLyricTextContainer;
         private readonly T leftLyricText;
 
@@ -493,9 +496,47 @@ namespace osu.Framework.Graphics.Sprites
                                   .Where(x => x.Value.Index >= 0 && x.Value.Index < Text.Length)
                                   .OrderBy(x => x.Key).ToArray();
 
-            // todo: do the algorithm.
+            return orderedTimeTags.Aggregate(new Dictionary<double, TextIndex>(), (collections, lastTimeTag) =>
+            {
+                if (collections.Count == 0)
+                {
+                    collections.Add(lastTimeTag.Key, lastTimeTag.Value);
+                    return collections;
+                }
 
-            return orderedTimeTags.ToDictionary(k => k.Key, v => v.Value);
+                foreach (var (time, textIndex) in getInterpolatedTimeTagBetweenTwoTimeTag(collections.LastOrDefault(), lastTimeTag))
+                {
+                    collections.Add(time, textIndex);
+                }
+
+                collections.Add(lastTimeTag.Key, lastTimeTag.Value);
+                return collections;
+            });
+
+            IEnumerable<KeyValuePair<double, TextIndex>> getInterpolatedTimeTagBetweenTwoTimeTag(KeyValuePair<double, TextIndex> firstTimeTag, KeyValuePair<double, TextIndex> secondTimeTag)
+            {
+                // we should not add the interpolation if timing is too small between two time-tags.
+                var firstTimeTagTime = firstTimeTag.Key;
+                var secondTimeTagTime = secondTimeTag.Key;
+                if (Math.Abs(firstTimeTagTime - secondTimeTagTime) <= INTERPOLATION_TIMING * 2)
+                    yield break;
+
+                // there's no need to add the interpolation if index are the same.
+                if (firstTimeTag.Value.Index == secondTimeTag.Value.Index)
+                    yield break;
+
+                var firstTimeTagIndex = firstTimeTag.Value;
+                var secondTimeTagIndex = secondTimeTag.Value;
+                var isLarger = firstTimeTag.Value < secondTimeTag.Value;
+
+                var firstInterpolatedTimeTagIndex = isLarger ? TextIndexUtils.GetNextIndex(firstTimeTagIndex) : TextIndexUtils.GetPreviousIndex(firstTimeTagIndex);
+                if (firstInterpolatedTimeTagIndex.Index != firstTimeTagIndex.Index)
+                    yield return new KeyValuePair<double, TextIndex>(firstTimeTagTime + INTERPOLATION_TIMING, firstInterpolatedTimeTagIndex);
+
+                var secondInterpolatedTimeTag = isLarger ? TextIndexUtils.GetPreviousIndex(secondTimeTagIndex) : TextIndexUtils.GetNextIndex(secondTimeTagIndex);
+                if (secondInterpolatedTimeTag.Index != secondTimeTagIndex.Index)
+                    yield return new KeyValuePair<double, TextIndex>(secondTimeTagTime - INTERPOLATION_TIMING, secondInterpolatedTimeTag);
+            }
         }
 
         private float getTextIndexPosition(TextIndex index)
