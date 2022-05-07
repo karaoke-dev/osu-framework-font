@@ -78,7 +78,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
                 var startTime = Clock.CurrentTime;
 
                 karaokeSpriteText.TimeTags = TestCaseTagHelper.ParseTimeTags(timeTags)
-                                                              .ToDictionary(k => k.Key, v => v.Value + startTime);
+                                                              .ToDictionary(k => k.Key + startTime, v => v.Value);
             });
         }
 
