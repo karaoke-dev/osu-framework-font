@@ -29,6 +29,25 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
+        private bool filterDuplicatedTimeTags = true;
+
+        /// <summary>
+        /// Will add extra time-tag for let the transformers become better.
+        /// </summary>
+        public bool FilterDuplicatedTimeTags
+        {
+            get => filterDuplicatedTimeTags;
+            set
+            {
+                if (filterDuplicatedTimeTags == value)
+                    return;
+
+                filterDuplicatedTimeTags = value;
+
+                Invalidate(Invalidation.Layout);
+            }
+        }
+
         public virtual void RefreshStateTransforms()
         {
             // reset masking transform.
@@ -80,6 +99,11 @@ namespace osu.Framework.Graphics.Sprites
         {
             var validTimeTags = GetInTheRangeTimeTags(TimeTags, Text);
 
+            if (FilterDuplicatedTimeTags)
+            {
+                validTimeTags = GetNonDuplicatedTimeTags(validTimeTags);
+            }
+
             if (InterpolateTimeTags)
             {
                 validTimeTags = GetInterpolatedTimeTags(validTimeTags);
@@ -92,6 +116,19 @@ namespace osu.Framework.Graphics.Sprites
             => timeTags
                .Where(x => x.Value.Index >= 0 && x.Value.Index < text.Length)
                .ToDictionary(k => k.Key, v => v.Value);
+
+        internal static IReadOnlyDictionary<double, TextIndex> GetNonDuplicatedTimeTags(IReadOnlyDictionary<double, TextIndex> timeTags)
+        {
+            var orderedTimeTags = timeTags.OrderBy(x => x.Key);
+            return orderedTimeTags.Aggregate(new Dictionary<double, TextIndex>(), (collections, lastTimeTag) =>
+            {
+                if (collections.Any() && collections.LastOrDefault().Value == lastTimeTag.Value)
+                    return collections;
+
+                collections.Add(lastTimeTag.Key, lastTimeTag.Value);
+                return collections;
+            });
+        }
 
         internal static IReadOnlyDictionary<double, TextIndex> GetInterpolatedTimeTags(IReadOnlyDictionary<double, TextIndex> timeTags)
         {
