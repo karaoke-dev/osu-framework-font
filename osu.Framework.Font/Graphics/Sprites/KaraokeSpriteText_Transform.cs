@@ -17,7 +17,7 @@ namespace osu.Framework.Graphics.Sprites
             rightLyricTextContainer.ClearTransforms();
 
             // filter valid time-tag with order.
-            var validTimeTag = GetInterpolatedTimeTags();
+            var validTimeTag = getValidTimeTags();
 
             // not initialize if no time-tag or text.
             var hasTimeTag = validTimeTag.Any();
@@ -57,12 +57,21 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
-        internal IReadOnlyDictionary<double, TextIndex> GetInterpolatedTimeTags()
+        private IReadOnlyDictionary<double, TextIndex> getValidTimeTags()
         {
-            var orderedTimeTags = TimeTags
-                                  .Where(x => x.Value.Index >= 0 && x.Value.Index < Text.Length)
-                                  .OrderBy(x => x.Key).ToArray();
+            var validTimeTags = GetInTheRangeTimeTags(TimeTags, Text);
 
+            return GetInterpolatedTimeTags(validTimeTags);
+        }
+
+        internal static IReadOnlyDictionary<double, TextIndex> GetInTheRangeTimeTags(IReadOnlyDictionary<double, TextIndex> timeTags, string text)
+            => timeTags
+               .Where(x => x.Value.Index >= 0 && x.Value.Index < text.Length)
+               .ToDictionary(k => k.Key, v => v.Value);
+
+        internal static IReadOnlyDictionary<double, TextIndex> GetInterpolatedTimeTags(IReadOnlyDictionary<double, TextIndex> timeTags)
+        {
+            var orderedTimeTags = timeTags.OrderBy(x => x.Key);
             return orderedTimeTags.Aggregate(new Dictionary<double, TextIndex>(), (collections, lastTimeTag) =>
             {
                 if (collections.Count == 0)
