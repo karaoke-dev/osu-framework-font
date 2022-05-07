@@ -83,6 +83,7 @@ namespace osu.Framework.Graphics.Sprites
             foreach ((double time, var textIndex) in validTimeTag)
             {
                 // calculate position and duration relative to precious time-tag time.
+                // todo: deal with the case if got the duplicated time-tag.
                 var position = getTextIndexPosition(textIndex);
                 var duration = Math.Max(time - relativeTime, 0);
 
