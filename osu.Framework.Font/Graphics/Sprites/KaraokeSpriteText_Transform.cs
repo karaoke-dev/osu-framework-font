@@ -10,6 +10,25 @@ namespace osu.Framework.Graphics.Sprites
 {
     public partial class KaraokeSpriteText<T>
     {
+        private bool interpolateTimeTags = true;
+
+        /// <summary>
+        /// Will add extra time-tag for let the transformers become better.
+        /// </summary>
+        public bool InterpolateTimeTags
+        {
+            get => interpolateTimeTags;
+            set
+            {
+                if (interpolateTimeTags == value)
+                    return;
+
+                interpolateTimeTags = value;
+
+                Invalidate(Invalidation.Layout);
+            }
+        }
+
         public virtual void RefreshStateTransforms()
         {
             // reset masking transform.
@@ -61,7 +80,12 @@ namespace osu.Framework.Graphics.Sprites
         {
             var validTimeTags = GetInTheRangeTimeTags(TimeTags, Text);
 
-            return GetInterpolatedTimeTags(validTimeTags);
+            if (InterpolateTimeTags)
+            {
+                validTimeTags = GetInterpolatedTimeTags(validTimeTags);
+            }
+
+            return validTimeTags;
         }
 
         internal static IReadOnlyDictionary<double, TextIndex> GetInTheRangeTimeTags(IReadOnlyDictionary<double, TextIndex> timeTags, string text)
