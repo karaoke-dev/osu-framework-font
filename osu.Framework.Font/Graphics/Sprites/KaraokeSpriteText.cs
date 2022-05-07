@@ -448,8 +448,8 @@ namespace osu.Framework.Graphics.Sprites
 
             // filter valid time-tag with order.
             var validTimeTag = TimeTags
-                               .Where(x => x.Key.Index >= 0 && x.Key.Index < Text.Length)
-                               .OrderBy(x => x.Value).ToArray();
+                               .Where(x => x.Value.Index >= 0 && x.Value.Index < Text.Length)
+                               .OrderBy(x => x.Key).ToArray();
 
             // not initialize if no time-tag or text.
             var hasTimeTag = validTimeTag.Any();
@@ -467,14 +467,14 @@ namespace osu.Framework.Graphics.Sprites
 
             // get first time-tag relative start time.
             var currentTime = Time.Current;
-            var relativeTime = validTimeTag.FirstOrDefault().Value;
+            var relativeTime = validTimeTag.FirstOrDefault().Key;
 
             // get transform sequence and set initial delay time.
             var delay = relativeTime - currentTime;
             var leftTransformSequence = leftLyricTextContainer.Delay(delay).ResizeWidthTo(startPosition).Then();
             var rightTransformSequence = rightLyricTextContainer.Delay(delay).ResizeWidthTo(endPosition).Then();
 
-            foreach ((var textIndex, double time) in validTimeTag)
+            foreach ((double time, var textIndex) in validTimeTag)
             {
                 // calculate position and duration relative to precious time-tag time.
                 var position = getTextIndexPosition(textIndex);
