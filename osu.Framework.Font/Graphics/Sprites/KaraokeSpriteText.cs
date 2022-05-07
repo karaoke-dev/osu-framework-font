@@ -447,9 +447,7 @@ namespace osu.Framework.Graphics.Sprites
             rightLyricTextContainer.ClearTransforms();
 
             // filter valid time-tag with order.
-            var validTimeTag = TimeTags
-                               .Where(x => x.Value.Index >= 0 && x.Value.Index < Text.Length)
-                               .OrderBy(x => x.Key).ToArray();
+            var validTimeTag = GetInterpolatedTimeTags();
 
             // not initialize if no time-tag or text.
             var hasTimeTag = validTimeTag.Any();
@@ -487,6 +485,17 @@ namespace osu.Framework.Graphics.Sprites
                 // save current time-tag time for letting next time-tag able to calculate duration.
                 relativeTime = time;
             }
+        }
+
+        internal IReadOnlyDictionary<double, TextIndex> GetInterpolatedTimeTags()
+        {
+            var orderedTimeTags = TimeTags
+                                  .Where(x => x.Value.Index >= 0 && x.Value.Index < Text.Length)
+                                  .OrderBy(x => x.Key).ToArray();
+
+            // todo: do the algorithm.
+
+            return orderedTimeTags.ToDictionary(k => k.Key, v => v.Value);
         }
 
         private float getTextIndexPosition(TextIndex index)
