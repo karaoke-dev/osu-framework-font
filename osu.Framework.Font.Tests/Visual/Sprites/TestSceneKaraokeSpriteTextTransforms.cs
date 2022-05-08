@@ -29,7 +29,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
 
         private const double start_time = 1000;
         private const double end_time = 5000;
-        private const double exrea_time = 500;
+        private const double extra_time = 500;
 
         private readonly ManualClock manualClock = new();
         private readonly TestKaraokeSpriteText karaokeSpriteText;
@@ -64,7 +64,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
 
             AddLabel("Timing");
 
-            AddSliderStep("Adjust clock time", start_time - exrea_time, end_time + exrea_time, start_time, time =>
+            AddSliderStep("Adjust clock time", start_time - extra_time, end_time + extra_time, start_time, time =>
             {
                 manualClock.CurrentTime = time;
             });
