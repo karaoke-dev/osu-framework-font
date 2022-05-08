@@ -52,7 +52,7 @@ namespace osu.Framework.Font.Tests.Shaders
             const float pi = 3.14159265359f;
             double angle = 0.0f;
 
-            Console.WriteLine($"lowp float outlineAlpha(sampler2D tex, float radius, mediump vec2 texCoord, mediump vec2 texSize)");
+            Console.WriteLine("lowp float outlineAlpha(sampler2D tex, float radius, mediump vec2 texCoord, mediump vec2 texSize)");
             Console.WriteLine("{");
             Console.WriteLine("    mediump vec2 offset = mediump vec2(radius) / texSize;");
             Console.WriteLine("    lowp float alpha = 0.0;");
