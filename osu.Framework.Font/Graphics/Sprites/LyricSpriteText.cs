@@ -717,14 +717,14 @@ namespace osu.Framework.Graphics.Sprites
         protected virtual PositionTextBuilder CreateRubyTextBuilder(ITexturedGlyphLookupStore store)
         {
             const int builder_max_width = int.MaxValue;
-            return new PositionTextBuilder(store, Font, RubyFont, builder_max_width, UseFullGlyphHeight,
+            return new PositionTextBuilder(store, RubyFont, builder_max_width, UseFullGlyphHeight,
                 new Vector2(0, -rubyMargin), rubySpacing, charactersBacking, FixedWidthExcludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter, RelativePosition.Top, rubyAlignment);
         }
 
         protected virtual PositionTextBuilder CreateRomajiTextBuilder(ITexturedGlyphLookupStore store)
         {
             const int builder_max_width = int.MaxValue;
-            return new PositionTextBuilder(store, Font, RomajiFont, builder_max_width, UseFullGlyphHeight,
+            return new PositionTextBuilder(store, RomajiFont, builder_max_width, UseFullGlyphHeight,
                 new Vector2(0, romajiMargin), romajiSpacing, charactersBacking, FixedWidthExcludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter, RelativePosition.Bottom, romajiAlignment);
         }
 
