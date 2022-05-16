@@ -5,7 +5,7 @@ using System;
 
 namespace osu.Framework.Graphics.Sprites
 {
-    public struct PositionText : IEquatable<PositionText>
+    public readonly struct PositionText : IEquatable<PositionText>
     {
         public PositionText(string text, int startIndex, int endIndex)
         {
@@ -14,11 +14,11 @@ namespace osu.Framework.Graphics.Sprites
             EndIndex = endIndex;
         }
 
-        public string Text { get; set; }
+        public string Text { get; }
 
-        public int StartIndex { get; set; }
+        public int StartIndex { get; }
 
-        public int EndIndex { get; set; }
+        public int EndIndex { get; }
 
         public bool Equals(PositionText other)
             => StartIndex == other.StartIndex && EndIndex == other.EndIndex && Text == other.Text;
