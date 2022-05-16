@@ -4,7 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using osu.Framework.Extensions.IEnumerableExtensions;
 using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Shaders;
 using osu.Framework.Layout;
@@ -67,13 +66,13 @@ namespace osu.Framework.Graphics.Sprites
                 textBuilder.AddText(displayedText);
                 textBounds = textBuilder.Bounds;
 
-                if (rubies?.Any() ?? false)
+                if (rubies.Any())
                 {
                     var rubyTextBuilder = CreateRubyTextBuilder(store);
                     rubies.ForEach(x => rubyTextBuilder.AddText(x));
                 }
 
-                if (romajies?.Any() ?? false)
+                if (romajies.Any())
                 {
                     var romajiTextBuilder = CreateRomajiTextBuilder(store);
                     romajies.ForEach(x => romajiTextBuilder.AddText(x));
@@ -86,7 +85,7 @@ namespace osu.Framework.Graphics.Sprites
 
                 if (requiresAutoSizedHeight)
                 {
-                    var romajiHeight = ReserveRomajiHeight || (Romajies?.Any() ?? false) ? RomajiFont.Size : 0;
+                    var romajiHeight = ReserveRomajiHeight || Romajies.Any() ? RomajiFont.Size : 0;
                     base.Height = textBounds.Y + romajiHeight + Padding.Bottom;
                 }
 
