@@ -366,7 +366,7 @@ namespace osu.Framework.Graphics.Sprites
 
         #endregion
 
-        private readonly Dictionary<double, TextIndex> timeTags = new Dictionary<double, TextIndex>();
+        private readonly SortedDictionary<double, TextIndex> timeTags = new SortedDictionary<double, TextIndex>();
 
         public IReadOnlyDictionary<double, TextIndex> TimeTags
         {
