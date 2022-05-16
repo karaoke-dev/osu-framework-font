@@ -66,16 +66,19 @@ namespace osu.Framework.Graphics.Sprites
                 textBuilder.AddText(displayedText);
                 textBounds = textBuilder.Bounds;
 
-                if (rubies.Any())
+                var fixedRubies = getFixedPositionText(rubies, displayedText);
+                var fixedRomajies = getFixedPositionText(romajies, displayedText);
+
+                if (fixedRubies.Any())
                 {
                     var rubyTextBuilder = CreateRubyTextBuilder(store);
-                    rubies.ForEach(x => rubyTextBuilder.AddText(x));
+                    fixedRubies.ForEach(x => rubyTextBuilder.AddText(x));
                 }
 
-                if (romajies.Any())
+                if (fixedRomajies.Any())
                 {
                     var romajiTextBuilder = CreateRomajiTextBuilder(store);
-                    romajies.ForEach(x => romajiTextBuilder.AddText(x));
+                    fixedRomajies.ForEach(x => romajiTextBuilder.AddText(x));
                 }
             }
             finally
@@ -93,6 +96,19 @@ namespace osu.Framework.Graphics.Sprites
 
                 charactersCache.Validate();
             }
+
+            static List<PositionText> getFixedPositionText(IEnumerable<PositionText> positionTexts, string lyricText)
+                => positionTexts
+                   .Where(x => !string.IsNullOrEmpty(x.Text))
+                   .Select(x => GetFixedPositionText(x, lyricText))
+                   .ToList();
+        }
+
+        internal static PositionText GetFixedPositionText(PositionText positionText, string lyricText)
+        {
+            var startIndex = Math.Clamp(positionText.StartIndex, 0, lyricText.Length);
+            var endIndex = Math.Clamp(positionText.EndIndex, 0, lyricText.Length);
+            return new PositionText(positionText.Text, Math.Min(startIndex, endIndex), Math.Max(startIndex, endIndex));
         }
 
         private readonly LayoutValue parentScreenSpaceCache = new LayoutValue(Invalidation.DrawSize | Invalidation.Presence | Invalidation.DrawInfo, InvalidationSource.Parent);
