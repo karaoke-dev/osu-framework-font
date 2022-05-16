@@ -34,12 +34,7 @@ namespace osu.Framework.Font.Tests.Helper
             var endIndex = int.Parse(result.Groups["end"].Value);
             var text = result.Groups["ruby"].Value;
 
-            return new PositionText
-            {
-                StartIndex = startIndex,
-                EndIndex = endIndex,
-                Text = text
-            };
+            return new PositionText(text, startIndex, endIndex);
         }
 
         /// <summary>

@@ -83,13 +83,8 @@ namespace osu.Framework.Font.Tests.Text
         [TestCase('A', false)]
         public void TestAddPositionTextHasChar(char c, bool equal)
         {
-            var builder = new PositionTextBuilder(fontStore, normal_font, normal_font, characterList: characterList);
-            builder.AddText(new PositionText
-            {
-                StartIndex = 0,
-                EndIndex = 1,
-                Text = c.ToString()
-            });
+            var builder = new PositionTextBuilder(fontStore, normal_font, characterList: characterList);
+            builder.AddText(new PositionText(c.ToString(), 0, 1));
 
             var character = builder.Characters.LastOrDefault();
 
@@ -108,13 +103,8 @@ namespace osu.Framework.Font.Tests.Text
         [TestCase('ら', 9.0f, 6.5f)]
         public void TestAddPositionTextPosition(char c, float x, float y)
         {
-            var builder = new PositionTextBuilder(fontStore, normal_font, normal_font, characterList: characterList);
-            builder.AddText(new PositionText
-            {
-                StartIndex = 0,
-                EndIndex = 1,
-                Text = c.ToString()
-            });
+            var builder = new PositionTextBuilder(fontStore, normal_font, characterList: characterList);
+            builder.AddText(new PositionText(c.ToString(), 0, 1));
 
             var character = builder.Characters.LastOrDefault();
             var topLeftPosition = character.DrawRectangle.TopLeft;

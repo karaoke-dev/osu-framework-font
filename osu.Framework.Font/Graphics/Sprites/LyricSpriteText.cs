@@ -159,7 +159,7 @@ namespace osu.Framework.Graphics.Sprites
 
         private string displayedText => Text;
 
-        private IReadOnlyList<PositionText> rubies;
+        private readonly List<PositionText> rubies = new List<PositionText>();
 
         /// <summary>
         /// Gets or sets the ruby text to be displayed.
@@ -169,13 +169,18 @@ namespace osu.Framework.Graphics.Sprites
             get => rubies;
             set
             {
-                rubies = filterValidValues(value);
+                rubies.Clear();
+
+                if (value != null)
+                {
+                    rubies.AddRange(value);
+                }
 
                 invalidate(true);
             }
         }
 
-        private IReadOnlyList<PositionText> romajies;
+        private readonly List<PositionText> romajies = new List<PositionText>();
 
         /// <summary>
         /// Gets or sets the romaji text to be displayed.
@@ -185,17 +190,15 @@ namespace osu.Framework.Graphics.Sprites
             get => romajies;
             set
             {
-                romajies = filterValidValues(value);
+                romajies.Clear();
+
+                if (value != null)
+                {
+                    romajies.AddRange(value);
+                }
 
                 invalidate(true);
             }
-        }
-
-        private IReadOnlyList<PositionText> filterValidValues(IEnumerable<PositionText> texts)
-        {
-            return texts?.Where(positionText => Math.Min(positionText.StartIndex, positionText.EndIndex) >= 0
-                                                && Math.Max(positionText.StartIndex, positionText.EndIndex) <= text.Length
-                                                && positionText.EndIndex > positionText.StartIndex).ToArray();
         }
 
         #endregion
@@ -689,8 +692,8 @@ namespace osu.Framework.Graphics.Sprites
         {
             var excludeCharacters = FixedWidthExcludeCharacters ?? default_never_fixed_width_characters;
 
-            var rubyHeight = ReserveRubyHeight || (Rubies?.Any() ?? false) ? RubyFont.Size : 0;
-            var romajiHeight = ReserveRomajiHeight || (Romajies?.Any() ?? false) ? RomajiFont.Size : 0;
+            var rubyHeight = ReserveRubyHeight || Rubies.Any() ? RubyFont.Size : 0;
+            var romajiHeight = ReserveRomajiHeight || Romajies.Any() ? RomajiFont.Size : 0;
             var startOffset = new Vector2(Padding.Left, Padding.Top + rubyHeight);
             var spacing = Spacing + new Vector2(0, rubyHeight + romajiHeight);
 
@@ -717,14 +720,14 @@ namespace osu.Framework.Graphics.Sprites
         protected virtual PositionTextBuilder CreateRubyTextBuilder(ITexturedGlyphLookupStore store)
         {
             const int builder_max_width = int.MaxValue;
-            return new PositionTextBuilder(store, Font, RubyFont, builder_max_width, UseFullGlyphHeight,
+            return new PositionTextBuilder(store, RubyFont, builder_max_width, UseFullGlyphHeight,
                 new Vector2(0, -rubyMargin), rubySpacing, charactersBacking, FixedWidthExcludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter, RelativePosition.Top, rubyAlignment);
         }
 
         protected virtual PositionTextBuilder CreateRomajiTextBuilder(ITexturedGlyphLookupStore store)
         {
             const int builder_max_width = int.MaxValue;
-            return new PositionTextBuilder(store, Font, RomajiFont, builder_max_width, UseFullGlyphHeight,
+            return new PositionTextBuilder(store, RomajiFont, builder_max_width, UseFullGlyphHeight,
                 new Vector2(0, romajiMargin), romajiSpacing, charactersBacking, FixedWidthExcludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter, RelativePosition.Bottom, romajiAlignment);
         }
 

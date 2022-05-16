@@ -12,12 +12,11 @@ namespace osu.Framework.Text
 {
     public class PositionTextBuilder : TextBuilder
     {
-        private readonly char fallbackCharacter;
         private readonly ITexturedGlyphLookupStore store;
-        private readonly FontUsage mainTextFont;
         private readonly FontUsage font;
         private readonly Vector2 startOffset;
         private readonly Vector2 spacing;
+        private readonly char fallbackCharacter;
 
         private readonly RelativePosition relativePosition;
         private readonly LyricTextAlignment alignment;
@@ -26,7 +25,6 @@ namespace osu.Framework.Text
         /// Creates a new <see cref="TextBuilder"/>.
         /// </summary>
         /// <param name="store">The store from which glyphs are to be retrieved from.</param>
-        /// <param name="mainTextFont">The main text's font.<paramref name="store"/>.</param>
         /// <param name="font">The font to use for glyph lookups from <paramref name="store"/>.</param>
         /// <param name="useFontSizeAsHeight">True to use the provided <see cref="font"/> size as the height for each line. False if the height of each individual glyph should be used.</param>
         /// <param name="startOffset">The offset at which characters should begin being added at.</param>
@@ -38,7 +36,7 @@ namespace osu.Framework.Text
         /// <param name="fixedWidthReferenceCharacter">The character to use to calculate the fixed width width. Defaults to 'm'.</param>
         /// <param name="relativePosition">Should be added into top or bottom.</param>
         /// <param name="alignment">Lyric text alignment.</param>
-        public PositionTextBuilder(ITexturedGlyphLookupStore store, FontUsage mainTextFont, FontUsage font, float maxWidth = int.MaxValue, bool useFontSizeAsHeight = true,
+        public PositionTextBuilder(ITexturedGlyphLookupStore store, FontUsage font, float maxWidth = int.MaxValue, bool useFontSizeAsHeight = true,
                                    Vector2 startOffset = default,
                                    Vector2 spacing = default, List<TextBuilderGlyph> characterList = null, char[] neverFixedWidthCharacters = null,
                                    char fallbackCharacter = '?', char fixedWidthReferenceCharacter = 'm', RelativePosition relativePosition = RelativePosition.Top,
@@ -46,7 +44,6 @@ namespace osu.Framework.Text
             : base(store, font, maxWidth, useFontSizeAsHeight, startOffset, spacing, characterList, neverFixedWidthCharacters, fallbackCharacter, fixedWidthReferenceCharacter)
         {
             this.store = store;
-            this.mainTextFont = mainTextFont;
             this.font = font;
             this.startOffset = startOffset;
             this.spacing = spacing;
