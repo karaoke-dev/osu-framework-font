@@ -162,18 +162,18 @@ namespace osu.Framework.Graphics.Sprites
             return index.State == TextIndex.IndexState.Start ? computedRectangle.Left : computedRectangle.Right;
         }
 
-        public RectangleF GetCharacterRectangle(int index)
+        public RectangleF GetCharacterRectangle(int index, bool drawSizeOnly = false)
         {
             int charIndex = Math.Clamp(index, 0, Text.Length - 1);
             if (charIndex != index)
                 throw new ArgumentOutOfRangeException(nameof(index));
 
             var character = characters[charIndex];
-            var drawRectangle = character.DrawRectangle;
+            var drawRectangle = getCharacterRectangle(character, drawSizeOnly);
             return getComputeCharacterDrawRectangle(drawRectangle);
         }
 
-        public RectangleF GetRubyTagPosition(PositionText rubyTag)
+        public RectangleF GetRubyTagPosition(PositionText rubyTag, bool drawSizeOnly = false)
         {
             int rubyIndex = Rubies.ToList().IndexOf(rubyTag);
             if (rubyIndex < 0)
@@ -183,12 +183,12 @@ namespace osu.Framework.Graphics.Sprites
             int count = rubyTag.Text.Length;
             var drawRectangle = characters.ToList()
                                           .GetRange(startCharacterIndex, count)
-                                          .Select(x => x.DrawRectangle)
+                                          .Select(x => getCharacterRectangle(x, drawSizeOnly))
                                           .Aggregate(RectangleF.Union);
             return getComputeCharacterDrawRectangle(drawRectangle);
         }
 
-        public RectangleF GetRomajiTagPosition(PositionText romajiTag)
+        public RectangleF GetRomajiTagPosition(PositionText romajiTag, bool drawSizeOnly = false)
         {
             int romajiIndex = Romajies.ToList().IndexOf(romajiTag);
             if (romajiIndex < 0)
@@ -198,9 +198,24 @@ namespace osu.Framework.Graphics.Sprites
             int count = romajiTag.Text.Length;
             var drawRectangle = characters.ToList()
                                           .GetRange(startCharacterIndex, count)
-                                          .Select(x => x.DrawRectangle)
+                                          .Select(x => getCharacterRectangle(x, drawSizeOnly))
                                           .Aggregate(RectangleF.Union);
             return getComputeCharacterDrawRectangle(drawRectangle);
+        }
+
+        private static RectangleF getCharacterRectangle(TextBuilderGlyph character, bool drawSizeOnly)
+        {
+            if (drawSizeOnly)
+                return character.DrawRectangle;
+
+            // todo: should get the real value.
+            var topReduce = character.Baseline * 0.3f;
+            var bottomIncrease = character.Baseline * 0.2f;
+            return character.DrawRectangle.Inflate(new MarginPadding
+            {
+                Top = character.YOffset - topReduce,
+                Bottom = character.Baseline - character.Height - character.YOffset + bottomIncrease,
+            });
         }
 
         private int skinIndex(IEnumerable<PositionText> positionTexts, int endIndex)
