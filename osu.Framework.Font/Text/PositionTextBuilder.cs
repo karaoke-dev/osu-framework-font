@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using osu.Framework.Graphics.Sprites;
+using osu.Framework.Utils;
 using osuTK;
 
 namespace osu.Framework.Text
@@ -98,8 +99,8 @@ namespace osu.Framework.Text
         {
             var starCharacter = Characters[startCharIndex];
             var endCharacter = Characters[endCharIndex - 1];
-            var startCharacterRectangle = starCharacter.DrawRectangle;
-            var endCharacterRectangle = endCharacter.DrawRectangle;
+            var startCharacterRectangle = TextBuilderGlyphUtils.GetCharacterRectangle(starCharacter, false);
+            var endCharacterRectangle = TextBuilderGlyphUtils.GetCharacterRectangle(endCharacter, false);
 
             // if center position is between two lines, then should let canter position in the first line.
             var leftX = startCharacterRectangle.Left;
