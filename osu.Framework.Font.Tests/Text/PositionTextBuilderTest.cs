@@ -99,8 +99,8 @@ namespace osu.Framework.Font.Tests.Text
             }
         }
 
-        [TestCase('か', 5.5f, 6.5f)]
-        [TestCase('ら', 9.0f, 6.5f)]
+        [TestCase('か', 5.5f, 12.5f)]
+        [TestCase('ら', 9.0f, 12.5f)]
         public void TestAddPositionTextPosition(char c, float x, float y)
         {
             var builder = new PositionTextBuilder(fontStore, normal_font, characterList: characterList);

@@ -5,7 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Sprites;
+using osu.Framework.Utils;
 using osuTK;
 
 namespace osu.Framework.Text
@@ -64,14 +66,12 @@ namespace osu.Framework.Text
                 return;
 
             // get some position relative params.
-            var canterPosition = getCenterPosition(positionText.StartIndex, positionText.EndIndex);
-            var mainFontHeight = getMainTextHeight();
+            var mainCharacterRect = getMainCharacterRectangleF(positionText.StartIndex, positionText.EndIndex);
             var subTextWidth = getSubTextWidth(text);
             var subTextHeight = getSubTextHeight(text);
 
-            // calculate the start text position.
-            var yOffset = relativePosition == RelativePosition.Top ? -mainFontHeight / 2 - subTextHeight : mainFontHeight / 2;
-            var position = new Vector2(canterPosition.X - subTextWidth / 2, canterPosition.Y + yOffset);
+            // calculate the start draw position.
+            var position = getPositionTextDrawPosition(mainCharacterRect, new Vector2(subTextWidth, subTextHeight), relativePosition);
 
             // set start render position
             setCurrentPosition(position + startOffset);
@@ -94,12 +94,27 @@ namespace osu.Framework.Text
             prop.SetValue(this, position);
         }
 
-        private Vector2 getCenterPosition(int startCharIndex, int endCharIndex)
+        private static Vector2 getPositionTextDrawPosition(RectangleF mainTextPosition, Vector2 positionTextSize, RelativePosition relativePosition)
+        {
+            var subTextWidth = positionTextSize.X;
+            var subTextHeight = positionTextSize.Y;
+
+            return relativePosition switch
+            {
+                RelativePosition.Top => new Vector2(mainTextPosition.Centre.X, mainTextPosition.Top) + new Vector2(-subTextWidth / 2, -subTextHeight),
+                RelativePosition.Bottom => new Vector2(mainTextPosition.Centre.X, mainTextPosition.Bottom) + new Vector2(-subTextWidth / 2, 0),
+                _ => throw new ArgumentOutOfRangeException(nameof(relativePosition), relativePosition, null)
+            };
+        }
+
+        private RectangleF getMainCharacterRectangleF(int startCharIndex, int endCharIndex)
         {
             var starCharacter = Characters[startCharIndex];
             var endCharacter = Characters[endCharIndex - 1];
-            var startCharacterRectangle = starCharacter.DrawRectangle;
-            var endCharacterRectangle = endCharacter.DrawRectangle;
+            var startCharacterRectangle = TextBuilderGlyphUtils.GetCharacterRectangle(starCharacter, false);
+            var endCharacterRectangle = TextBuilderGlyphUtils.GetCharacterRectangle(endCharacter, false);
+
+            var position = startCharacterRectangle.TopLeft;
 
             // if center position is between two lines, then should let canter position in the first line.
             var leftX = startCharacterRectangle.Left;
@@ -108,17 +123,11 @@ namespace osu.Framework.Text
                 : Characters.Max(c => c.DrawRectangle.Right);
 
             // because each character has different height, so we need to get base text height from here.
-            var x = (leftX + rightX) / 2;
-            var y = startCharacterRectangle.Centre.Y;
+            var width = rightX - leftX;
+            var height = Math.Max(startCharacterRectangle.Height, endCharacterRectangle.Height);
 
             // return center position.
-            return new Vector2(x, y);
-        }
-
-        private float getMainTextHeight()
-        {
-            // note: base line in here already include font size. see TextBuilderGlyph.
-            return Characters.Max(x => x.Baseline);
+            return new RectangleF(position, new Vector2(width, height));
         }
 
         private float getSubTextWidth(string text)
