@@ -8,6 +8,7 @@ using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Shaders;
 using osu.Framework.Layout;
 using osu.Framework.Text;
+using osu.Framework.Utils;
 using osuTK;
 
 namespace osu.Framework.Graphics.Sprites
@@ -169,7 +170,7 @@ namespace osu.Framework.Graphics.Sprites
                 throw new ArgumentOutOfRangeException(nameof(index));
 
             var character = characters[charIndex];
-            var drawRectangle = getCharacterRectangle(character, drawSizeOnly);
+            var drawRectangle = TextBuilderGlyphUtils.GetCharacterRectangle(character, drawSizeOnly);
             return getComputeCharacterDrawRectangle(drawRectangle);
         }
 
@@ -183,7 +184,7 @@ namespace osu.Framework.Graphics.Sprites
             int count = rubyTag.Text.Length;
             var drawRectangle = characters.ToList()
                                           .GetRange(startCharacterIndex, count)
-                                          .Select(x => getCharacterRectangle(x, drawSizeOnly))
+                                          .Select(x => TextBuilderGlyphUtils.GetCharacterRectangle(x, drawSizeOnly))
                                           .Aggregate(RectangleF.Union);
             return getComputeCharacterDrawRectangle(drawRectangle);
         }
@@ -198,24 +199,9 @@ namespace osu.Framework.Graphics.Sprites
             int count = romajiTag.Text.Length;
             var drawRectangle = characters.ToList()
                                           .GetRange(startCharacterIndex, count)
-                                          .Select(x => getCharacterRectangle(x, drawSizeOnly))
+                                          .Select(x => TextBuilderGlyphUtils.GetCharacterRectangle(x, drawSizeOnly))
                                           .Aggregate(RectangleF.Union);
             return getComputeCharacterDrawRectangle(drawRectangle);
-        }
-
-        private static RectangleF getCharacterRectangle(TextBuilderGlyph character, bool drawSizeOnly)
-        {
-            if (drawSizeOnly)
-                return character.DrawRectangle;
-
-            // todo: should get the real value.
-            var topReduce = character.Baseline * 0.3f;
-            var bottomIncrease = character.Baseline * 0.2f;
-            return character.DrawRectangle.Inflate(new MarginPadding
-            {
-                Top = character.YOffset - topReduce,
-                Bottom = character.Baseline - character.Height - character.YOffset + bottomIncrease,
-            });
         }
 
         private int skinIndex(IEnumerable<PositionText> positionTexts, int endIndex)
