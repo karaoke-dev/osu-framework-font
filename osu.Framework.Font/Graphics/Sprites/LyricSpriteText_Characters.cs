@@ -33,11 +33,18 @@ namespace osu.Framework.Graphics.Sprites
         protected virtual char FallbackCharacter => '?';
 
         private readonly LayoutValue<TextBuilder> textBuilderCache = new LayoutValue<TextBuilder>(Invalidation.DrawSize, InvalidationSource.Parent);
+        private readonly LayoutValue<TextBuilder> rubyTextBuilderCache = new LayoutValue<TextBuilder>(Invalidation.DrawSize, InvalidationSource.Parent);
+        private readonly LayoutValue<TextBuilder> romajiTextBuilderCache = new LayoutValue<TextBuilder>(Invalidation.DrawSize, InvalidationSource.Parent);
 
         /// <summary>
         /// Invalidates the current <see cref="TextBuilder"/>, causing a new one to be created next time it's required via <see cref="CreateTextBuilder"/>.
         /// </summary>
-        protected void InvalidateTextBuilder() => textBuilderCache.Invalidate();
+        protected void InvalidateTextBuilder()
+        {
+            textBuilderCache.Invalidate();
+            rubyTextBuilderCache.Invalidate();
+            romajiTextBuilderCache.Invalidate();
+        }
 
         /// <summary>
         /// Creates a <see cref="TextBuilder"/> to generate the character layout for this <see cref="LyricSpriteText"/>.
@@ -73,18 +80,22 @@ namespace osu.Framework.Graphics.Sprites
                 excludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter);
         }
 
-        protected virtual PositionTextBuilder CreateRubyTextBuilder(ITexturedGlyphLookupStore store)
+        protected virtual TextBuilder CreateRubyTextBuilder(ITexturedGlyphLookupStore store)
         {
             const int builder_max_width = int.MaxValue;
-            return new PositionTextBuilder(store, RubyFont, builder_max_width, UseFullGlyphHeight,
-                new Vector2(0, -rubyMargin), rubySpacing, charactersBacking, FixedWidthExcludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter, RelativePosition.Top, rubyAlignment);
+            var excludeCharacters = FixedWidthExcludeCharacters ?? default_never_fixed_width_characters;
+
+            return new TextBuilder(store, RubyFont, builder_max_width, UseFullGlyphHeight,
+                new Vector2(), rubySpacing, null, excludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter);
         }
 
-        protected virtual PositionTextBuilder CreateRomajiTextBuilder(ITexturedGlyphLookupStore store)
+        protected virtual TextBuilder CreateRomajiTextBuilder(ITexturedGlyphLookupStore store)
         {
             const int builder_max_width = int.MaxValue;
-            return new PositionTextBuilder(store, RomajiFont, builder_max_width, UseFullGlyphHeight,
-                new Vector2(0, romajiMargin), romajiSpacing, charactersBacking, FixedWidthExcludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter, RelativePosition.Bottom, romajiAlignment);
+            var excludeCharacters = FixedWidthExcludeCharacters ?? default_never_fixed_width_characters;
+
+            return new TextBuilder(store, RomajiFont, builder_max_width, UseFullGlyphHeight,
+                new Vector2(), romajiSpacing, null, excludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter);
         }
 
         private TextBuilder getTextBuilder()
@@ -93,6 +104,22 @@ namespace osu.Framework.Graphics.Sprites
                 textBuilderCache.Value = CreateTextBuilder(store);
 
             return textBuilderCache.Value;
+        }
+
+        private TextBuilder getRubyTextBuilder()
+        {
+            if (!rubyTextBuilderCache.IsValid)
+                rubyTextBuilderCache.Value = CreateRubyTextBuilder(store);
+
+            return rubyTextBuilderCache.Value;
+        }
+
+        private TextBuilder getRomajiTextBuilder()
+        {
+            if (!romajiTextBuilderCache.IsValid)
+                romajiTextBuilderCache.Value = CreateRomajiTextBuilder(store);
+
+            return romajiTextBuilderCache.Value;
         }
 
         public float LineBaseHeight
@@ -165,13 +192,13 @@ namespace osu.Framework.Graphics.Sprites
 
                 if (fixedRubies.Any())
                 {
-                    var rubyTextBuilder = CreateRubyTextBuilder(store);
+                    var rubyTextBuilder = getRubyTextBuilder();
                     fixedRubies.ForEach(x => rubyTextBuilder.AddText(x));
                 }
 
                 if (fixedRomajies.Any())
                 {
-                    var romajiTextBuilder = CreateRomajiTextBuilder(store);
+                    var romajiTextBuilder = getRomajiTextBuilder();
                     fixedRomajies.ForEach(x => romajiTextBuilder.AddText(x));
                 }
             }

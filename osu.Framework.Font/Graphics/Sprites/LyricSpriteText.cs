@@ -43,6 +43,8 @@ namespace osu.Framework.Graphics.Sprites
             AddLayout(parentScreenSpaceCache);
             AddLayout(localScreenSpaceCache);
             AddLayout(textBuilderCache);
+            AddLayout(rubyTextBuilderCache);
+            AddLayout(romajiTextBuilderCache);
         }
 
         [BackgroundDependencyLoader]
