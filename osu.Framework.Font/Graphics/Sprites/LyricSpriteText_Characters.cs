@@ -155,6 +155,40 @@ namespace osu.Framework.Graphics.Sprites
         }
 
         /// <summary>
+        /// Glyph list to be passed to <see cref="TextBuilder"/>.
+        /// </summary>
+        private readonly Dictionary<PositionText, PositionTextBuilderGlyph[]> rubyCharactersBacking = new Dictionary<PositionText, PositionTextBuilderGlyph[]>();
+
+        /// <summary>
+        /// The characters in local space.
+        /// </summary>
+        private IReadOnlyDictionary<PositionText, PositionTextBuilderGlyph[]> rubyCharacters
+        {
+            get
+            {
+                computeCharacters();
+                return rubyCharactersBacking;
+            }
+        }
+
+        /// <summary>
+        /// Glyph list to be passed to <see cref="TextBuilder"/>.
+        /// </summary>
+        private readonly Dictionary<PositionText, PositionTextBuilderGlyph[]> romajiCharactersBacking = new Dictionary<PositionText, PositionTextBuilderGlyph[]>();
+
+        /// <summary>
+        /// The characters in local space.
+        /// </summary>
+        private IReadOnlyDictionary<PositionText, PositionTextBuilderGlyph[]> romajiCharacters
+        {
+            get
+            {
+                computeCharacters();
+                return romajiCharactersBacking;
+            }
+        }
+
+        /// <summary>
         /// Compute character textures and positions.
         /// </summary>
         private void computeCharacters()
