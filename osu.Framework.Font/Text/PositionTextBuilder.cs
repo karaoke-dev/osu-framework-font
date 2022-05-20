@@ -172,11 +172,4 @@ namespace osu.Framework.Text
                    ?? store.Get(null, fallbackCharacter);
         }
     }
-
-    public enum RelativePosition
-    {
-        Top,
-
-        Bottom
-    }
 }
