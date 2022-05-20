@@ -258,13 +258,13 @@ namespace osu.Framework.Graphics.Sprites
 
         #region Character position
 
-        public float GetTextIndexPosition(TextIndex index)
+        public float GetTextIndexXPosition(TextIndex index)
         {
-            var computedRectangle = GetCharacterRectangle(index.Index);
+            var computedRectangle = GetCharacterDrawRectangle(index.Index);
             return index.State == TextIndex.IndexState.Start ? computedRectangle.Left : computedRectangle.Right;
         }
 
-        public RectangleF GetCharacterRectangle(int index, bool drawSizeOnly = false)
+        public RectangleF GetCharacterDrawRectangle(int index, bool drawSizeOnly = false)
         {
             int charIndex = Math.Clamp(index, 0, Text.Length - 1);
             if (charIndex != index)
@@ -275,7 +275,7 @@ namespace osu.Framework.Graphics.Sprites
             return getComputeCharacterDrawRectangle(drawRectangle);
         }
 
-        public RectangleF GetRubyTagPosition(PositionText rubyTag, bool drawSizeOnly = false)
+        public RectangleF GetRubyTagDrawRectangle(PositionText rubyTag, bool drawSizeOnly = false)
         {
             int rubyIndex = Rubies.ToList().IndexOf(rubyTag);
             if (rubyIndex < 0)
@@ -290,7 +290,7 @@ namespace osu.Framework.Graphics.Sprites
             return getComputeCharacterDrawRectangle(drawRectangle);
         }
 
-        public RectangleF GetRomajiTagPosition(PositionText romajiTag, bool drawSizeOnly = false)
+        public RectangleF GetRomajiTagDrawRectangle(PositionText romajiTag, bool drawSizeOnly = false)
         {
             int romajiIndex = Romajies.ToList().IndexOf(romajiTag);
             if (romajiIndex < 0)
