@@ -36,8 +36,8 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
                     Text = "カラオケ！",
-                    Rubies = TestCaseTagHelper.ParseParsePositionTexts(new[] { "[0,1]:か", "[2,3]:お" }),
-                    Romajies = TestCaseTagHelper.ParseParsePositionTexts(new[] { "[1,2]:ra", "[3,4]:ke" }),
+                    Rubies = TestCaseTagHelper.ParsePositionTexts(new[] { "[0,1]:か", "[2,3]:お" }),
+                    Romajies = TestCaseTagHelper.ParsePositionTexts(new[] { "[1,2]:ra", "[3,4]:ke" }),
                     LeftTextColour = Color4.Green,
                     RightTextColour = Color4.Red,
                     Scale = new Vector2(2),
@@ -96,7 +96,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
         {
             AddStep("Change ruby", () =>
             {
-                var ruby = TestCaseTagHelper.ParseParsePositionTexts(rubyTags);
+                var ruby = TestCaseTagHelper.ParsePositionTexts(rubyTags);
                 karaokeSpriteText.Rubies = ruby;
             });
         }
@@ -106,7 +106,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
         {
             AddStep("Change romaji", () =>
             {
-                var romajies = TestCaseTagHelper.ParseParsePositionTexts(romajiTags);
+                var romajies = TestCaseTagHelper.ParsePositionTexts(romajiTags);
                 karaokeSpriteText.Romajies = romajies;
             });
         }

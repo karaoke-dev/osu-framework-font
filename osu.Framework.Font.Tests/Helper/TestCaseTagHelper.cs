@@ -62,7 +62,7 @@ namespace osu.Framework.Font.Tests.Helper
             return new Tuple<double, TextIndex>(time, new TextIndex(index, state));
         }
 
-        public static PositionText[] ParseParsePositionTexts(IEnumerable<string> strings)
+        public static PositionText[] ParsePositionTexts(IEnumerable<string> strings)
             => strings?.Select(ParsePositionText).ToArray();
 
         public static IReadOnlyDictionary<double, TextIndex> ParseTimeTags(IEnumerable<string> strings)

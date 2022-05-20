@@ -29,8 +29,8 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
             AddStep("Create lyric", () => setContents(() => new LyricSpriteText
             {
                 Text = text,
-                Rubies = TestCaseTagHelper.ParseParsePositionTexts(rubyTags),
-                Romajies = TestCaseTagHelper.ParseParsePositionTexts(romajiTags),
+                Rubies = TestCaseTagHelper.ParsePositionTexts(rubyTags),
+                Romajies = TestCaseTagHelper.ParsePositionTexts(romajiTags),
             }));
         }
 
@@ -238,12 +238,12 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
 
                 if (ruby)
                 {
-                    Rubies = TestCaseTagHelper.ParseParsePositionTexts(new[] { "[0,1]:か", "[1,2]:ら", "[2,3]:お", "[3,4]:け" });
+                    Rubies = TestCaseTagHelper.ParsePositionTexts(new[] { "[0,1]:か", "[1,2]:ら", "[2,3]:お", "[3,4]:け" });
                 }
 
                 if (romaji)
                 {
-                    Romajies = TestCaseTagHelper.ParseParsePositionTexts(new[] { "[0,1]:ka", "[1,2]:ra", "[2,3]:o", "[3,4]:ke" });
+                    Romajies = TestCaseTagHelper.ParsePositionTexts(new[] { "[0,1]:ka", "[1,2]:ra", "[2,3]:o", "[3,4]:ke" });
                 }
             }
         }
