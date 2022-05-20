@@ -106,6 +106,8 @@ namespace osu.Framework.Graphics.Sprites
 
         #endregion
 
+        #region Characters
+
         private readonly LayoutValue charactersCache = new LayoutValue(Invalidation.DrawSize | Invalidation.Presence, InvalidationSource.Parent);
 
         /// <summary>
@@ -203,6 +205,10 @@ namespace osu.Framework.Graphics.Sprites
             return new PositionText(positionText.Text, Math.Min(startIndex, endIndex), Math.Max(startIndex, endIndex));
         }
 
+        #endregion
+
+        #region Screen space characters
+
         private readonly LayoutValue parentScreenSpaceCache = new LayoutValue(Invalidation.DrawSize | Invalidation.Presence | Invalidation.DrawInfo, InvalidationSource.Parent);
         private readonly LayoutValue localScreenSpaceCache = new LayoutValue(Invalidation.MiscGeometry, InvalidationSource.Self);
 
@@ -247,6 +253,10 @@ namespace osu.Framework.Graphics.Sprites
 
             localScreenSpaceCache.Validate();
         }
+
+        #endregion
+
+        #region Character position
 
         public float GetTextIndexPosition(TextIndex index)
         {
@@ -305,5 +315,7 @@ namespace osu.Framework.Graphics.Sprites
                           .Select(x => x.ComputeCharacterDrawRectangle(originalCharacterDrawRectangle))
                           .Aggregate(originalCharacterDrawRectangle, RectangleF.Union);
         }
+
+        #endregion
     }
 }
