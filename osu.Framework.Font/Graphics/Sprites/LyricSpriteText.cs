@@ -58,7 +58,7 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
-        #region frame buffer
+        #region Frame buffer
 
         public DrawColourInfo? FrameBufferDrawColour => new DrawColourInfo(Color4.White);
 
@@ -124,7 +124,7 @@ namespace osu.Framework.Graphics.Sprites
 
         #endregion
 
-        #region text
+        #region Text
 
         private string text = string.Empty;
 
@@ -201,7 +201,7 @@ namespace osu.Framework.Graphics.Sprites
 
         #endregion
 
-        #region font
+        #region Font
 
         private FontUsage font = FontUsage.Default;
 
@@ -253,7 +253,7 @@ namespace osu.Framework.Graphics.Sprites
 
         #endregion
 
-        #region style
+        #region Style
 
         private bool allowMultiline = true;
 
@@ -380,7 +380,7 @@ namespace osu.Framework.Graphics.Sprites
 
         #endregion
 
-        #region size
+        #region Size
 
         private bool requiresAutoSizedWidth => explicitWidth == null && (RelativeSizeAxes & Axes.X) == 0;
 
@@ -477,7 +477,7 @@ namespace osu.Framework.Graphics.Sprites
 
         #endregion
 
-        #region text spacing
+        #region Text spacing
 
         private Vector2 spacing;
 
@@ -538,7 +538,7 @@ namespace osu.Framework.Graphics.Sprites
 
         #endregion
 
-        #region margin/padding
+        #region Margin/padding
 
         private MarginPadding padding;
 

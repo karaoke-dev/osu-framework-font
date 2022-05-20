@@ -67,7 +67,7 @@ namespace osu.Framework.Graphics.Sprites
             RoundedTextureShader = shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, FragmentShaderDescriptor.TEXTURE_ROUNDED);
         }
 
-        #region frame buffer
+        #region Frame buffer
 
         public DrawColourInfo? FrameBufferDrawColour => base.DrawColourInfo;
 
@@ -168,7 +168,7 @@ namespace osu.Framework.Graphics.Sprites
 
         #endregion
 
-        #region text
+        #region Text
 
         public string Text
         {
@@ -208,7 +208,7 @@ namespace osu.Framework.Graphics.Sprites
 
         #endregion
 
-        #region font
+        #region Font
 
         public FontUsage Font
         {
@@ -248,7 +248,7 @@ namespace osu.Framework.Graphics.Sprites
 
         #endregion
 
-        #region style
+        #region Style
 
         public ColourInfo LeftTextColour
         {
@@ -298,7 +298,7 @@ namespace osu.Framework.Graphics.Sprites
 
         #endregion
 
-        #region text spacing
+        #region Text spacing
 
         public Vector2 Spacing
         {
@@ -338,7 +338,7 @@ namespace osu.Framework.Graphics.Sprites
 
         #endregion
 
-        #region margin/padding
+        #region Margin/padding
 
         public int RubyMargin
         {
