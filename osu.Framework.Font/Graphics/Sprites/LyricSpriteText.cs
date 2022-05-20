@@ -11,8 +11,6 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shaders;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.IO.Stores;
-using osu.Framework.Layout;
-using osu.Framework.Text;
 using osu.Framework.Utils;
 using osuTK;
 using osuTK.Graphics;
@@ -60,7 +58,7 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
-        #region frame buffer
+        #region Frame buffer
 
         public DrawColourInfo? FrameBufferDrawColour => new DrawColourInfo(Color4.White);
 
@@ -126,7 +124,7 @@ namespace osu.Framework.Graphics.Sprites
 
         #endregion
 
-        #region text
+        #region Text
 
         private string text = string.Empty;
 
@@ -203,7 +201,7 @@ namespace osu.Framework.Graphics.Sprites
 
         #endregion
 
-        #region font
+        #region Font
 
         private FontUsage font = FontUsage.Default;
 
@@ -255,7 +253,7 @@ namespace osu.Framework.Graphics.Sprites
 
         #endregion
 
-        #region style
+        #region Style
 
         private bool allowMultiline = true;
 
@@ -382,7 +380,7 @@ namespace osu.Framework.Graphics.Sprites
 
         #endregion
 
-        #region size
+        #region Size
 
         private bool requiresAutoSizedWidth => explicitWidth == null && (RelativeSizeAxes & Axes.X) == 0;
 
@@ -479,7 +477,7 @@ namespace osu.Framework.Graphics.Sprites
 
         #endregion
 
-        #region text spacing
+        #region Text spacing
 
         private Vector2 spacing;
 
@@ -540,7 +538,7 @@ namespace osu.Framework.Graphics.Sprites
 
         #endregion
 
-        #region margin/padding
+        #region Margin/padding
 
         private MarginPadding padding;
 
@@ -661,94 +659,7 @@ namespace osu.Framework.Graphics.Sprites
 
         #endregion
 
-        /// <summary>
-        /// The characters that should be excluded from fixed-width application. Defaults to (".", ",", ":", " ") if null.
-        /// </summary>
-        protected virtual char[] FixedWidthExcludeCharacters => null;
-
-        /// <summary>
-        /// The character to use to calculate the fixed width width. Defaults to 'm'.
-        /// </summary>
-        protected virtual char FixedWidthReferenceCharacter => 'm';
-
-        /// <summary>
-        /// The character to fallback to use if a character glyph lookup failed.
-        /// </summary>
-        protected virtual char FallbackCharacter => '?';
-
-        private readonly LayoutValue<TextBuilder> textBuilderCache = new LayoutValue<TextBuilder>(Invalidation.DrawSize, InvalidationSource.Parent);
-
-        /// <summary>
-        /// Invalidates the current <see cref="TextBuilder"/>, causing a new one to be created next time it's required via <see cref="CreateTextBuilder"/>.
-        /// </summary>
-        protected void InvalidateTextBuilder() => textBuilderCache.Invalidate();
-
-        /// <summary>
-        /// Creates a <see cref="TextBuilder"/> to generate the character layout for this <see cref="LyricSpriteText"/>.
-        /// </summary>
-        /// <param name="store">The <see cref="ITexturedGlyphLookupStore"/> where characters should be retrieved from.</param>
-        /// <returns>The <see cref="TextBuilder"/>.</returns>
-        protected virtual TextBuilder CreateTextBuilder(ITexturedGlyphLookupStore store)
-        {
-            var excludeCharacters = FixedWidthExcludeCharacters ?? default_never_fixed_width_characters;
-
-            var rubyHeight = ReserveRubyHeight || Rubies.Any() ? RubyFont.Size : 0;
-            var romajiHeight = ReserveRomajiHeight || Romajies.Any() ? RomajiFont.Size : 0;
-            var startOffset = new Vector2(Padding.Left, Padding.Top + rubyHeight);
-            var spacing = Spacing + new Vector2(0, rubyHeight + romajiHeight);
-
-            float builderMaxWidth = requiresAutoSizedWidth
-                ? MaxWidth
-                : ApplyRelativeAxes(RelativeSizeAxes, new Vector2(Math.Min(MaxWidth, base.Width), base.Height), FillMode).X - Padding.Right;
-
-            if (AllowMultiline)
-            {
-                return new MultilineTextBuilder(store, Font, builderMaxWidth, UseFullGlyphHeight, startOffset, spacing, charactersBacking,
-                    excludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter);
-            }
-
-            if (Truncate)
-            {
-                return new TruncatingTextBuilder(store, Font, builderMaxWidth, ellipsisString, UseFullGlyphHeight, startOffset, spacing, charactersBacking,
-                    excludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter);
-            }
-
-            return new TextBuilder(store, Font, builderMaxWidth, UseFullGlyphHeight, startOffset, spacing, charactersBacking,
-                excludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter);
-        }
-
-        protected virtual PositionTextBuilder CreateRubyTextBuilder(ITexturedGlyphLookupStore store)
-        {
-            const int builder_max_width = int.MaxValue;
-            return new PositionTextBuilder(store, RubyFont, builder_max_width, UseFullGlyphHeight,
-                new Vector2(0, -rubyMargin), rubySpacing, charactersBacking, FixedWidthExcludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter, RelativePosition.Top, rubyAlignment);
-        }
-
-        protected virtual PositionTextBuilder CreateRomajiTextBuilder(ITexturedGlyphLookupStore store)
-        {
-            const int builder_max_width = int.MaxValue;
-            return new PositionTextBuilder(store, RomajiFont, builder_max_width, UseFullGlyphHeight,
-                new Vector2(0, romajiMargin), romajiSpacing, charactersBacking, FixedWidthExcludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter, RelativePosition.Bottom, romajiAlignment);
-        }
-
-        private TextBuilder getTextBuilder()
-        {
-            if (!textBuilderCache.IsValid)
-                textBuilderCache.Value = CreateTextBuilder(store);
-
-            return textBuilderCache.Value;
-        }
-
         public override string ToString() => $@"""{displayedText}"" " + base.ToString();
-
-        public float LineBaseHeight
-        {
-            get
-            {
-                computeCharacters();
-                return textBuilderCache.Value.LineBaseHeight;
-            }
-        }
 
         public IEnumerable<string> FilterTerms => displayedText.Yield();
     }

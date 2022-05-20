@@ -179,8 +179,8 @@ namespace osu.Framework.Graphics.Sprites
 
         private float getTextIndexPosition(TextIndex index)
         {
-            var leftTextIndexPosition = leftLyricText.GetTextIndexPosition(index);
-            var rightTextIndexPosition = rightLyricText.GetTextIndexPosition(index);
+            var leftTextIndexPosition = leftLyricText.GetTextIndexXPosition(index);
+            var rightTextIndexPosition = rightLyricText.GetTextIndexXPosition(index);
             return index.State == TextIndex.IndexState.Start
                 ? Math.Min(leftTextIndexPosition, rightTextIndexPosition)
                 : Math.Max(leftTextIndexPosition, rightTextIndexPosition);

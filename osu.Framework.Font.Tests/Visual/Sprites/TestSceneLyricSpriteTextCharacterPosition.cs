@@ -93,11 +93,11 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
         [TestCase(6, TextIndex.IndexState.End, true)]
         [TestCase(-1, TextIndex.IndexState.End, false)]
         [TestCase(7, TextIndex.IndexState.Start, false)]
-        public void TestGetTextIndexPosition(int index, TextIndex.IndexState state, bool valid)
+        public void TestGetTextIndexXPosition(int index, TextIndex.IndexState state, bool valid)
         {
             prepareTestCase(() =>
             {
-                var position = lyricSpriteText.GetTextIndexPosition(new TextIndex(index, state));
+                var position = lyricSpriteText.GetTextIndexXPosition(new TextIndex(index, state));
                 return new RectangleF(position, 20, 1, 64);
             }, valid);
         }
@@ -106,9 +106,9 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
         [TestCase(6, true)]
         [TestCase(-1, false)]
         [TestCase(7, false)]
-        public void TestGetCharacterRectangle(int index, bool valid)
+        public void TestGetCharacterDrawRectangle(int index, bool valid)
         {
-            prepareTestCase(() => lyricSpriteText.GetCharacterRectangle(index), valid);
+            prepareTestCase(() => lyricSpriteText.GetCharacterDrawRectangle(index), valid);
         }
 
         [TestCase("[0,1]:か", true)]
@@ -119,9 +119,9 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
         [TestCase("[-1,1]:か", false)]
         [TestCase("[0,2]:か", false)]
         [TestCase("[0,1]:?", false)]
-        public void TestGetRubyTagPosition(string rubyTag, bool valid)
+        public void TestGetRubyTagDrawRectangle(string rubyTag, bool valid)
         {
-            prepareTestCase(() => lyricSpriteText.GetRubyTagPosition(TestCaseTagHelper.ParsePositionText(rubyTag)), valid);
+            prepareTestCase(() => lyricSpriteText.GetRubyTagDrawRectangle(TestCaseTagHelper.ParsePositionText(rubyTag)), valid);
         }
 
         [TestCase("[0,1]:ka", true)]
@@ -132,9 +132,9 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
         [TestCase("[-1,1]:ka", false)]
         [TestCase("[0,2]:ka", false)]
         [TestCase("[0,1]:?", false)]
-        public void TestGetRomajiTagPosition(string rubyTag, bool valid)
+        public void TestGetRomajiTagDrawRectangle(string rubyTag, bool valid)
         {
-            prepareTestCase(() => lyricSpriteText.GetRomajiTagPosition(TestCaseTagHelper.ParsePositionText(rubyTag)), valid);
+            prepareTestCase(() => lyricSpriteText.GetRomajiTagDrawRectangle(TestCaseTagHelper.ParsePositionText(rubyTag)), valid);
         }
 
         private void prepareTestCase(Func<RectangleF> func, bool valid)
