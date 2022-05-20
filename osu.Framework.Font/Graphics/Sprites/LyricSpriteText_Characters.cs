@@ -158,8 +158,8 @@ namespace osu.Framework.Graphics.Sprites
                 textBuilder.AddText(displayedText);
                 textBounds = textBuilder.Bounds;
 
-                var fixedRubies = getFixedPositionText(rubies, displayedText);
-                var fixedRomajies = getFixedPositionText(romajies, displayedText);
+                var fixedRubies = getFixedPositionTexts(rubies, displayedText);
+                var fixedRomajies = getFixedPositionTexts(romajies, displayedText);
 
                 if (fixedRubies.Any())
                 {
@@ -189,7 +189,7 @@ namespace osu.Framework.Graphics.Sprites
                 charactersCache.Validate();
             }
 
-            static List<PositionText> getFixedPositionText(IEnumerable<PositionText> positionTexts, string lyricText)
+            static List<PositionText> getFixedPositionTexts(IEnumerable<PositionText> positionTexts, string lyricText)
                 => positionTexts
                    .Where(x => !string.IsNullOrEmpty(x.Text))
                    .Select(x => GetFixedPositionText(x, lyricText))
