@@ -204,6 +204,8 @@ namespace osu.Framework.Graphics.Sprites
                 return;
 
             charactersBacking.Clear();
+            rubyCharactersBacking.Clear();
+            romajiCharactersBacking.Clear();
 
             // Todo: Re-enable this assert after autosize is split into two passes.
             // Debug.Assert(!isComputingCharacters, "Cyclic invocation of computeCharacters()!");
@@ -215,26 +217,29 @@ namespace osu.Framework.Graphics.Sprites
                 if (string.IsNullOrEmpty(displayedText))
                     return;
 
-                TextBuilder textBuilder = getTextBuilder();
+                // Main text
+                var textBuilder = getTextBuilder();
+                charactersBacking.AddRange(applyTextToBuilder(textBuilder, displayedText));
 
-                textBuilder.Reset();
-                textBuilder.AddText(displayedText);
+                // Ruby
+                var rubyTextBuilder = getRubyTextBuilder();
+                var rubyTextFormatter = new PositionTextFormatter(charactersBacking, RelativePosition.Top, rubyAlignment, rubySpacing, rubyMargin);
+
+                foreach (var (positionText, textBuilderGlyphs) in applyPositionTextToBuilder(rubyTextBuilder, displayedText, rubies))
+                {
+                    rubyCharactersBacking.Add(positionText, rubyTextFormatter.Calculate(positionText, textBuilderGlyphs));
+                }
+
+                // Romaji
+                var romajiTextBuilder = getRomajiTextBuilder();
+                var romajiTextFormatter = new PositionTextFormatter(charactersBacking, RelativePosition.Bottom, romajiAlignment, romajiSpacing, romajiMargin);
+
+                foreach (var (positionText, textBuilderGlyphs) in applyPositionTextToBuilder(romajiTextBuilder, displayedText, romajies))
+                {
+                    romajiCharactersBacking.Add(positionText, romajiTextFormatter.Calculate(positionText, textBuilderGlyphs));
+                }
+
                 textBounds = textBuilder.Bounds;
-
-                var fixedRubies = getFixedPositionTexts(rubies, displayedText);
-                var fixedRomajies = getFixedPositionTexts(romajies, displayedText);
-
-                if (fixedRubies.Any())
-                {
-                    var rubyTextBuilder = getRubyTextBuilder();
-                    fixedRubies.ForEach(x => rubyTextBuilder.AddText(x));
-                }
-
-                if (fixedRomajies.Any())
-                {
-                    var romajiTextBuilder = getRomajiTextBuilder();
-                    fixedRomajies.ForEach(x => romajiTextBuilder.AddText(x));
-                }
             }
             finally
             {
@@ -251,13 +256,39 @@ namespace osu.Framework.Graphics.Sprites
 
                 charactersCache.Validate();
             }
-
-            static List<PositionText> getFixedPositionTexts(IEnumerable<PositionText> positionTexts, string lyricText)
-                => positionTexts
-                   .Where(x => !string.IsNullOrEmpty(x.Text))
-                   .Select(x => GetFixedPositionText(x, lyricText))
-                   .ToList();
         }
+
+        private static IEnumerable<TextBuilderGlyph> applyTextToBuilder(TextBuilder textBuilder, string text)
+        {
+            textBuilder.Reset();
+            textBuilder.AddText(text);
+
+            return textBuilder.Characters;
+        }
+
+        private static Dictionary<PositionText, TextBuilderGlyph[]> applyPositionTextToBuilder(TextBuilder textBuilder, string text, IEnumerable<PositionText> positionTexts)
+        {
+            var fixedPositionTexts = GetFixedPositionTexts(positionTexts, text);
+
+            var texts = new Dictionary<PositionText, TextBuilderGlyph[]>();
+
+            foreach (var positionText in fixedPositionTexts)
+            {
+                textBuilder.Reset();
+                textBuilder.AddText(positionText.Text);
+
+                texts.Add(positionText, textBuilder.Characters.ToArray());
+            }
+
+            return texts;
+        }
+
+        internal static List<PositionText> GetFixedPositionTexts(IEnumerable<PositionText> positionTexts, string lyricText)
+            => positionTexts
+               .Where(x => !string.IsNullOrEmpty(x.Text))
+               .Select(x => GetFixedPositionText(x, lyricText))
+               .Distinct()
+               .ToList();
 
         internal static PositionText GetFixedPositionText(PositionText positionText, string lyricText)
         {

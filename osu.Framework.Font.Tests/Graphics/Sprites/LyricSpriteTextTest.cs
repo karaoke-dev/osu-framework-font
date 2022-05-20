@@ -9,6 +9,18 @@ namespace osu.Framework.Font.Tests.Graphics.Sprites
 {
     public class LyricSpriteTextTest
     {
+        [TestCase("カラオケ", new[] { "[0,1]:か" }, new[] { "[0,1]:か" })]
+        [TestCase("カラオケ", new[] { "[0,1]:", "[0,1]:" }, new string[] { })] // will filter those empty text time-tags.
+        [TestCase("カラオケ", new[] { "[0,1]:か", "[0,1]:か" }, new[] { "[0,1]:か" })] // will filter the duplicated
+        [TestCase("カラオケ", new[] { "[0,1]:か", "[0,1]:ら" }, new[] { "[0,1]:か", "[0,1]:ら" })] // will not filter even if index are same.
+        [TestCase("カラオケ", new[] { "[0,1]:か", "[1,0]:か" }, new[] { "[0,1]:か" })] // will give it a fix and filter the duplicated.
+        public void TestGetFixedPositionTexts(string lyric, string[] positionTexts, string[] fixedPositionTexts)
+        {
+            var expected = TestCaseTagHelper.ParsePositionTexts(fixedPositionTexts);
+            var actual = LyricSpriteText.GetFixedPositionTexts(TestCaseTagHelper.ParsePositionTexts(positionTexts), lyric);
+            Assert.AreEqual(expected, actual);
+        }
+
         [TestCase("カラオケ", "[0,1]:か", "[0,1]:か")]
         [TestCase("カラオケ", "[3,4]:か", "[3,4]:か")]
         [TestCase("カラオケ", "[-1,1]:か", "[0,1]:か")] // fix out of range issue.
