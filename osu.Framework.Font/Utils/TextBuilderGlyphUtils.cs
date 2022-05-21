@@ -7,20 +7,23 @@ using osu.Framework.Text;
 
 namespace osu.Framework.Utils
 {
-    public class TextBuilderGlyphUtils
+    public static class TextBuilderGlyphUtils
     {
+        private static float getCharacterTopOffset(ICharacterGlyph character)
+            => character.Baseline * 0.3f;
+
+        private static float getCharacterBottomOffset(ICharacterGlyph character)
+            => character.Baseline * 0.03f;
+
         public static RectangleF GetCharacterRectangle(TextBuilderGlyph character, bool drawSizeOnly)
         {
             if (drawSizeOnly)
                 return character.DrawRectangle;
 
-            // todo: should get the real value.
-            var topReduce = character.Baseline * 0.3f;
-            var bottomIncrease = character.Baseline * 0.2f;
             return character.DrawRectangle.Inflate(new MarginPadding
             {
-                Top = character.YOffset - topReduce,
-                Bottom = character.Baseline - character.Height - character.YOffset + bottomIncrease,
+                Top = character.YOffset - getCharacterTopOffset(character),
+                Bottom = character.Baseline - character.Height - character.YOffset + getCharacterBottomOffset(character),
             });
         }
 
@@ -29,13 +32,10 @@ namespace osu.Framework.Utils
             if (drawSizeOnly)
                 return character.DrawRectangle;
 
-            // todo: should get the real value.
-            var topReduce = character.Baseline * 0.3f;
-            var bottomIncrease = character.Baseline * 0.2f;
             return character.DrawRectangle.Inflate(new MarginPadding
             {
-                Top = character.YOffset - topReduce,
-                Bottom = character.Baseline - character.Height - character.YOffset + bottomIncrease,
+                Top = character.YOffset - getCharacterTopOffset(character),
+                Bottom = character.Baseline - character.Height - character.YOffset + getCharacterBottomOffset(character),
             });
         }
     }
