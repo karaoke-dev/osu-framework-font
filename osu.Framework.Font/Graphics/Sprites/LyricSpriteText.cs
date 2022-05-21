@@ -11,6 +11,7 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shaders;
 using osu.Framework.Graphics.UserInterface;
 using osu.Framework.IO.Stores;
+using osu.Framework.Localisation;
 using osu.Framework.Utils;
 using osuTK;
 using osuTK.Graphics;
@@ -663,6 +664,6 @@ namespace osu.Framework.Graphics.Sprites
 
         public override string ToString() => $@"""{displayedText}"" " + base.ToString();
 
-        public IEnumerable<string> FilterTerms => displayedText.Yield();
+        public IEnumerable<LocalisableString> FilterTerms => new LocalisableString(displayedText).Yield();
     }
 }
