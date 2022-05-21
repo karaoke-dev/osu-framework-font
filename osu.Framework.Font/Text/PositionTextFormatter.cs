@@ -70,15 +70,15 @@ namespace osu.Framework.Text
         }
 
         private static Vector2 getPositionTextSize(TextBuilderGlyph[] glyphs)
-            => glyphs.Select(x => TextBuilderGlyphUtils.GetCharacterRectangle(x, false))
+            => glyphs.Select(TextBuilderGlyphUtils.GetCharacterSizeRectangle)
                      .Aggregate(RectangleF.Union).Size;
 
         private RectangleF getMainCharacterRectangleF(int startCharIndex, int endCharIndex)
         {
             var starCharacter = characterList[startCharIndex];
             var endCharacter = characterList[endCharIndex - 1];
-            var startCharacterRectangle = TextBuilderGlyphUtils.GetCharacterRectangle(starCharacter, false);
-            var endCharacterRectangle = TextBuilderGlyphUtils.GetCharacterRectangle(endCharacter, false);
+            var startCharacterRectangle = TextBuilderGlyphUtils.GetCharacterSizeRectangle(starCharacter);
+            var endCharacterRectangle = TextBuilderGlyphUtils.GetCharacterSizeRectangle(endCharacter);
 
             var position = startCharacterRectangle.TopLeft;
 
