@@ -343,6 +343,20 @@ namespace osu.Framework.Graphics.Sprites
                 });
             }
 
+            var positionCharacters = new List<PositionTextBuilderGlyph>()
+                                     .Concat(rubyCharacters.SelectMany(x => x.Value))
+                                     .Concat(romajiCharacters.SelectMany(x => x.Value));
+
+            foreach (var character in positionCharacters)
+            {
+                screenSpaceCharactersBacking.Add(new ScreenSpaceCharacterPart
+                {
+                    DrawQuad = ToScreenSpace(character.DrawRectangle.Inflate(inflationAmount)),
+                    InflationPercentage = Vector2.Divide(inflationAmount, character.DrawRectangle.Size),
+                    Texture = character.Texture
+                });
+            }
+
             localScreenSpaceCache.Validate();
         }
 
