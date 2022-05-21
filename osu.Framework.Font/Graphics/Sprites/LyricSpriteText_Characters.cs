@@ -369,31 +369,21 @@ namespace osu.Framework.Graphics.Sprites
 
         public RectangleF GetRubyTagDrawRectangle(PositionText rubyTag, bool drawSizeOnly = false)
         {
-            int rubyIndex = Rubies.ToList().IndexOf(rubyTag);
-            if (rubyIndex < 0)
-                throw new ArgumentOutOfRangeException(nameof(rubyIndex));
+            if (!rubyCharactersBacking.TryGetValue(rubyTag, out var glyphs))
+                throw new ArgumentOutOfRangeException(nameof(rubyTag));
 
-            int startCharacterIndex = Text.Length + skinIndex(Rubies, rubyIndex);
-            int count = rubyTag.Text.Length;
-            var drawRectangle = characters.ToList()
-                                          .GetRange(startCharacterIndex, count)
-                                          .Select(x => TextBuilderGlyphUtils.GetCharacterRectangle(x, drawSizeOnly))
-                                          .Aggregate(RectangleF.Union);
+            var drawRectangle = glyphs.Select(x => TextBuilderGlyphUtils.GetCharacterRectangle(x, drawSizeOnly))
+                                      .Aggregate(RectangleF.Union);
             return getComputeCharacterDrawRectangle(drawRectangle);
         }
 
         public RectangleF GetRomajiTagDrawRectangle(PositionText romajiTag, bool drawSizeOnly = false)
         {
-            int romajiIndex = Romajies.ToList().IndexOf(romajiTag);
-            if (romajiIndex < 0)
-                throw new ArgumentOutOfRangeException(nameof(romajiIndex));
+            if (!romajiCharactersBacking.TryGetValue(romajiTag, out var glyphs))
+                throw new ArgumentOutOfRangeException(nameof(romajiTag));
 
-            int startCharacterIndex = Text.Length + skinIndex(Rubies, Rubies.Count) + skinIndex(Romajies, romajiIndex);
-            int count = romajiTag.Text.Length;
-            var drawRectangle = characters.ToList()
-                                          .GetRange(startCharacterIndex, count)
-                                          .Select(x => TextBuilderGlyphUtils.GetCharacterRectangle(x, drawSizeOnly))
-                                          .Aggregate(RectangleF.Union);
+            var drawRectangle = glyphs.Select(x => TextBuilderGlyphUtils.GetCharacterRectangle(x, drawSizeOnly))
+                                      .Aggregate(RectangleF.Union);
             return getComputeCharacterDrawRectangle(drawRectangle);
         }
 
