@@ -27,8 +27,8 @@ public class TestSceneLyricSpriteTextWithColour : BackgroundGridTestScene
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
                     Text = "カラオケ",
-                    Rubies = TestCaseTagHelper.ParseParsePositionTexts(new[] { "[0,1]:か", "[1,2]:ら", "[2,3]:お", "[3,4]:け" }),
-                    Romajies = TestCaseTagHelper.ParseParsePositionTexts(new[] { "[0,1]:ka", "[1,2]:ra", "[2,3]:o", "[3,4]:ke" }),
+                    Rubies = TestCaseTagHelper.ParsePositionTexts(new[] { "[0,1]:か", "[1,2]:ら", "[2,3]:お", "[3,4]:け" }),
+                    Romajies = TestCaseTagHelper.ParsePositionTexts(new[] { "[0,1]:ka", "[1,2]:ra", "[2,3]:o", "[3,4]:ke" }),
                     Y = 60,
                 },
                 new BufferedContainer

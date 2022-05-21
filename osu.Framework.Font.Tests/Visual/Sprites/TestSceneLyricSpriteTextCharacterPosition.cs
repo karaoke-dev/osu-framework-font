@@ -40,8 +40,8 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
                         Anchor = Anchor.Centre,
                         Origin = Anchor.Centre,
                         Text = "カラオケyo－",
-                        Rubies = TestCaseTagHelper.ParseParsePositionTexts(new[] { "[0,1]:か", "[1,2]:ら", "[2,3]:お", "[3,4]:け", "[4,5]:－" }),
-                        Romajies = TestCaseTagHelper.ParseParsePositionTexts(new[] { "[0,1]:ka", "[1,2]:ra", "[2,3]:o", "[3,4]:ke", "[4,5]:yo" }),
+                        Rubies = TestCaseTagHelper.ParsePositionTexts(new[] { "[0,1]:か", "[1,2]:ら", "[2,3]:お", "[3,4]:け", "[4,5]:－" }),
+                        Romajies = TestCaseTagHelper.ParsePositionTexts(new[] { "[0,1]:ka", "[1,2]:ra", "[2,3]:o", "[3,4]:ke", "[4,5]:yo" }),
                     },
                 }
             };

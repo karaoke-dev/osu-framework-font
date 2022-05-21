@@ -33,11 +33,18 @@ namespace osu.Framework.Graphics.Sprites
         protected virtual char FallbackCharacter => '?';
 
         private readonly LayoutValue<TextBuilder> textBuilderCache = new LayoutValue<TextBuilder>(Invalidation.DrawSize, InvalidationSource.Parent);
+        private readonly LayoutValue<TextBuilder> rubyTextBuilderCache = new LayoutValue<TextBuilder>(Invalidation.DrawSize, InvalidationSource.Parent);
+        private readonly LayoutValue<TextBuilder> romajiTextBuilderCache = new LayoutValue<TextBuilder>(Invalidation.DrawSize, InvalidationSource.Parent);
 
         /// <summary>
         /// Invalidates the current <see cref="TextBuilder"/>, causing a new one to be created next time it's required via <see cref="CreateTextBuilder"/>.
         /// </summary>
-        protected void InvalidateTextBuilder() => textBuilderCache.Invalidate();
+        protected void InvalidateTextBuilder()
+        {
+            textBuilderCache.Invalidate();
+            rubyTextBuilderCache.Invalidate();
+            romajiTextBuilderCache.Invalidate();
+        }
 
         /// <summary>
         /// Creates a <see cref="TextBuilder"/> to generate the character layout for this <see cref="LyricSpriteText"/>.
@@ -59,32 +66,36 @@ namespace osu.Framework.Graphics.Sprites
 
             if (AllowMultiline)
             {
-                return new MultilineTextBuilder(store, Font, builderMaxWidth, UseFullGlyphHeight, startOffset, spacing, charactersBacking,
+                return new MultilineTextBuilder(store, Font, builderMaxWidth, UseFullGlyphHeight, startOffset, spacing, null,
                     excludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter);
             }
 
             if (Truncate)
             {
-                return new TruncatingTextBuilder(store, Font, builderMaxWidth, ellipsisString, UseFullGlyphHeight, startOffset, spacing, charactersBacking,
+                return new TruncatingTextBuilder(store, Font, builderMaxWidth, ellipsisString, UseFullGlyphHeight, startOffset, spacing, null,
                     excludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter);
             }
 
-            return new TextBuilder(store, Font, builderMaxWidth, UseFullGlyphHeight, startOffset, spacing, charactersBacking,
+            return new TextBuilder(store, Font, builderMaxWidth, UseFullGlyphHeight, startOffset, spacing, null,
                 excludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter);
         }
 
-        protected virtual PositionTextBuilder CreateRubyTextBuilder(ITexturedGlyphLookupStore store)
+        protected virtual TextBuilder CreateRubyTextBuilder(ITexturedGlyphLookupStore store)
         {
             const int builder_max_width = int.MaxValue;
-            return new PositionTextBuilder(store, RubyFont, builder_max_width, UseFullGlyphHeight,
-                new Vector2(0, -rubyMargin), rubySpacing, charactersBacking, FixedWidthExcludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter, RelativePosition.Top, rubyAlignment);
+            var excludeCharacters = FixedWidthExcludeCharacters ?? default_never_fixed_width_characters;
+
+            return new TextBuilder(store, RubyFont, builder_max_width, UseFullGlyphHeight,
+                new Vector2(), rubySpacing, null, excludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter);
         }
 
-        protected virtual PositionTextBuilder CreateRomajiTextBuilder(ITexturedGlyphLookupStore store)
+        protected virtual TextBuilder CreateRomajiTextBuilder(ITexturedGlyphLookupStore store)
         {
             const int builder_max_width = int.MaxValue;
-            return new PositionTextBuilder(store, RomajiFont, builder_max_width, UseFullGlyphHeight,
-                new Vector2(0, romajiMargin), romajiSpacing, charactersBacking, FixedWidthExcludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter, RelativePosition.Bottom, romajiAlignment);
+            var excludeCharacters = FixedWidthExcludeCharacters ?? default_never_fixed_width_characters;
+
+            return new TextBuilder(store, RomajiFont, builder_max_width, UseFullGlyphHeight,
+                new Vector2(), romajiSpacing, null, excludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter);
         }
 
         private TextBuilder getTextBuilder()
@@ -93,6 +104,22 @@ namespace osu.Framework.Graphics.Sprites
                 textBuilderCache.Value = CreateTextBuilder(store);
 
             return textBuilderCache.Value;
+        }
+
+        private TextBuilder getRubyTextBuilder()
+        {
+            if (!rubyTextBuilderCache.IsValid)
+                rubyTextBuilderCache.Value = CreateRubyTextBuilder(store);
+
+            return rubyTextBuilderCache.Value;
+        }
+
+        private TextBuilder getRomajiTextBuilder()
+        {
+            if (!romajiTextBuilderCache.IsValid)
+                romajiTextBuilderCache.Value = CreateRomajiTextBuilder(store);
+
+            return romajiTextBuilderCache.Value;
         }
 
         public float LineBaseHeight
@@ -128,6 +155,40 @@ namespace osu.Framework.Graphics.Sprites
         }
 
         /// <summary>
+        /// Glyph list to be passed to <see cref="TextBuilder"/>.
+        /// </summary>
+        private readonly Dictionary<PositionText, PositionTextBuilderGlyph[]> rubyCharactersBacking = new Dictionary<PositionText, PositionTextBuilderGlyph[]>();
+
+        /// <summary>
+        /// The characters in local space.
+        /// </summary>
+        private IReadOnlyDictionary<PositionText, PositionTextBuilderGlyph[]> rubyCharacters
+        {
+            get
+            {
+                computeCharacters();
+                return rubyCharactersBacking;
+            }
+        }
+
+        /// <summary>
+        /// Glyph list to be passed to <see cref="TextBuilder"/>.
+        /// </summary>
+        private readonly Dictionary<PositionText, PositionTextBuilderGlyph[]> romajiCharactersBacking = new Dictionary<PositionText, PositionTextBuilderGlyph[]>();
+
+        /// <summary>
+        /// The characters in local space.
+        /// </summary>
+        private IReadOnlyDictionary<PositionText, PositionTextBuilderGlyph[]> romajiCharacters
+        {
+            get
+            {
+                computeCharacters();
+                return romajiCharactersBacking;
+            }
+        }
+
+        /// <summary>
         /// Compute character textures and positions.
         /// </summary>
         private void computeCharacters()
@@ -143,6 +204,8 @@ namespace osu.Framework.Graphics.Sprites
                 return;
 
             charactersBacking.Clear();
+            rubyCharactersBacking.Clear();
+            romajiCharactersBacking.Clear();
 
             // Todo: Re-enable this assert after autosize is split into two passes.
             // Debug.Assert(!isComputingCharacters, "Cyclic invocation of computeCharacters()!");
@@ -154,26 +217,29 @@ namespace osu.Framework.Graphics.Sprites
                 if (string.IsNullOrEmpty(displayedText))
                     return;
 
-                TextBuilder textBuilder = getTextBuilder();
+                // Main text
+                var textBuilder = getTextBuilder();
+                charactersBacking.AddRange(applyTextToBuilder(textBuilder, displayedText));
 
-                textBuilder.Reset();
-                textBuilder.AddText(displayedText);
+                // Ruby
+                var rubyTextBuilder = getRubyTextBuilder();
+                var rubyTextFormatter = new PositionTextFormatter(charactersBacking, RelativePosition.Top, rubyAlignment, rubySpacing, rubyMargin);
+
+                foreach (var (positionText, textBuilderGlyphs) in applyPositionTextToBuilder(rubyTextBuilder, displayedText, rubies))
+                {
+                    rubyCharactersBacking.Add(positionText, rubyTextFormatter.Calculate(positionText, textBuilderGlyphs));
+                }
+
+                // Romaji
+                var romajiTextBuilder = getRomajiTextBuilder();
+                var romajiTextFormatter = new PositionTextFormatter(charactersBacking, RelativePosition.Bottom, romajiAlignment, romajiSpacing, romajiMargin);
+
+                foreach (var (positionText, textBuilderGlyphs) in applyPositionTextToBuilder(romajiTextBuilder, displayedText, romajies))
+                {
+                    romajiCharactersBacking.Add(positionText, romajiTextFormatter.Calculate(positionText, textBuilderGlyphs));
+                }
+
                 textBounds = textBuilder.Bounds;
-
-                var fixedRubies = getFixedPositionTexts(rubies, displayedText);
-                var fixedRomajies = getFixedPositionTexts(romajies, displayedText);
-
-                if (fixedRubies.Any())
-                {
-                    var rubyTextBuilder = CreateRubyTextBuilder(store);
-                    fixedRubies.ForEach(x => rubyTextBuilder.AddText(x));
-                }
-
-                if (fixedRomajies.Any())
-                {
-                    var romajiTextBuilder = CreateRomajiTextBuilder(store);
-                    fixedRomajies.ForEach(x => romajiTextBuilder.AddText(x));
-                }
             }
             finally
             {
@@ -190,13 +256,39 @@ namespace osu.Framework.Graphics.Sprites
 
                 charactersCache.Validate();
             }
-
-            static List<PositionText> getFixedPositionTexts(IEnumerable<PositionText> positionTexts, string lyricText)
-                => positionTexts
-                   .Where(x => !string.IsNullOrEmpty(x.Text))
-                   .Select(x => GetFixedPositionText(x, lyricText))
-                   .ToList();
         }
+
+        private static IEnumerable<TextBuilderGlyph> applyTextToBuilder(TextBuilder textBuilder, string text)
+        {
+            textBuilder.Reset();
+            textBuilder.AddText(text);
+
+            return textBuilder.Characters;
+        }
+
+        private static Dictionary<PositionText, TextBuilderGlyph[]> applyPositionTextToBuilder(TextBuilder textBuilder, string text, IEnumerable<PositionText> positionTexts)
+        {
+            var fixedPositionTexts = GetFixedPositionTexts(positionTexts, text);
+
+            var texts = new Dictionary<PositionText, TextBuilderGlyph[]>();
+
+            foreach (var positionText in fixedPositionTexts)
+            {
+                textBuilder.Reset();
+                textBuilder.AddText(positionText.Text);
+
+                texts.Add(positionText, textBuilder.Characters.ToArray());
+            }
+
+            return texts;
+        }
+
+        internal static List<PositionText> GetFixedPositionTexts(IEnumerable<PositionText> positionTexts, string lyricText)
+            => positionTexts
+               .Where(x => !string.IsNullOrEmpty(x.Text))
+               .Select(x => GetFixedPositionText(x, lyricText))
+               .Distinct()
+               .ToList();
 
         internal static PositionText GetFixedPositionText(PositionText positionText, string lyricText)
         {
@@ -251,6 +343,20 @@ namespace osu.Framework.Graphics.Sprites
                 });
             }
 
+            var positionCharacters = new List<PositionTextBuilderGlyph>()
+                                     .Concat(rubyCharacters.SelectMany(x => x.Value))
+                                     .Concat(romajiCharacters.SelectMany(x => x.Value));
+
+            foreach (var character in positionCharacters)
+            {
+                screenSpaceCharactersBacking.Add(new ScreenSpaceCharacterPart
+                {
+                    DrawQuad = ToScreenSpace(character.DrawRectangle.Inflate(inflationAmount)),
+                    InflationPercentage = Vector2.Divide(inflationAmount, character.DrawRectangle.Size),
+                    Texture = character.Texture
+                });
+            }
+
             localScreenSpaceCache.Validate();
         }
 
@@ -277,31 +383,21 @@ namespace osu.Framework.Graphics.Sprites
 
         public RectangleF GetRubyTagDrawRectangle(PositionText rubyTag, bool drawSizeOnly = false)
         {
-            int rubyIndex = Rubies.ToList().IndexOf(rubyTag);
-            if (rubyIndex < 0)
-                throw new ArgumentOutOfRangeException(nameof(rubyIndex));
+            if (!rubyCharactersBacking.TryGetValue(rubyTag, out var glyphs))
+                throw new ArgumentOutOfRangeException(nameof(rubyTag));
 
-            int startCharacterIndex = Text.Length + skinIndex(Rubies, rubyIndex);
-            int count = rubyTag.Text.Length;
-            var drawRectangle = characters.ToList()
-                                          .GetRange(startCharacterIndex, count)
-                                          .Select(x => TextBuilderGlyphUtils.GetCharacterRectangle(x, drawSizeOnly))
-                                          .Aggregate(RectangleF.Union);
+            var drawRectangle = glyphs.Select(x => TextBuilderGlyphUtils.GetCharacterRectangle(x, drawSizeOnly))
+                                      .Aggregate(RectangleF.Union);
             return getComputeCharacterDrawRectangle(drawRectangle);
         }
 
         public RectangleF GetRomajiTagDrawRectangle(PositionText romajiTag, bool drawSizeOnly = false)
         {
-            int romajiIndex = Romajies.ToList().IndexOf(romajiTag);
-            if (romajiIndex < 0)
-                throw new ArgumentOutOfRangeException(nameof(romajiIndex));
+            if (!romajiCharactersBacking.TryGetValue(romajiTag, out var glyphs))
+                throw new ArgumentOutOfRangeException(nameof(romajiTag));
 
-            int startCharacterIndex = Text.Length + skinIndex(Rubies, Rubies.Count) + skinIndex(Romajies, romajiIndex);
-            int count = romajiTag.Text.Length;
-            var drawRectangle = characters.ToList()
-                                          .GetRange(startCharacterIndex, count)
-                                          .Select(x => TextBuilderGlyphUtils.GetCharacterRectangle(x, drawSizeOnly))
-                                          .Aggregate(RectangleF.Union);
+            var drawRectangle = glyphs.Select(x => TextBuilderGlyphUtils.GetCharacterRectangle(x, drawSizeOnly))
+                                      .Aggregate(RectangleF.Union);
             return getComputeCharacterDrawRectangle(drawRectangle);
         }
 
