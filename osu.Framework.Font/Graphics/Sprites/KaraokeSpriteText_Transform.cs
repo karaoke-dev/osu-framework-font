@@ -57,10 +57,8 @@ namespace osu.Framework.Graphics.Sprites
             // filter valid time-tag with order.
             var validTimeTag = getValidTimeTags();
 
-            // not initialize if no time-tag or text.
-            var hasTimeTag = validTimeTag.Any();
-            var hasText = !string.IsNullOrEmpty(Text);
-            if (!hasTimeTag || !hasText)
+            // not initialize if no text.
+            if (string.IsNullOrEmpty(Text))
                 return;
 
             // set initial width.
@@ -70,6 +68,10 @@ namespace osu.Framework.Graphics.Sprites
             var endPosition = width - startPosition;
             leftLyricTextContainer.Width = startPosition;
             rightLyricTextContainer.Width = endPosition;
+
+            // not initialize if no time-tag or text.
+            if (!validTimeTag.Any())
+                return;
 
             // get first time-tag relative start time.
             var currentTime = Time.Current;
