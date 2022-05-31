@@ -64,6 +64,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
             }
         }
 
+        [TestCase("No", new string[] { })] // No time-tags.
         [TestCase("Normal", new[] { "[0,start]:500", "[1,start]:600", "[2,start]:1000", "[3,start]:1500", "[4,start]:2000" })] // Normal time-tag.
         [TestCase("Normal 2", new[] { "[0,start]:0", "[0,end]:100", "[1,start]:1000", "[1,end]:1100", "[2,start]:2000", "[2,end]:2100", "[3,start]:3000", "[3,end]:3100", "[4,start]:4000", "[4,end]:4100" })]
         [TestCase("Out of range", new[] { "[-1,start]:0", "[0,start]:500", "[1,end]:600", "[2,start]:1000", "[3,end]:1500", "[4,end]:2000", "[8,end]:2500" })] // Out-of-range time-tag, but it's acceptable now.
