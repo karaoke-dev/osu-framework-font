@@ -383,7 +383,7 @@ namespace osu.Framework.Graphics.Sprites
 
         public RectangleF GetRubyTagDrawRectangle(PositionText rubyTag, bool drawSizeOnly = false)
         {
-            if (!rubyCharactersBacking.TryGetValue(rubyTag, out var glyphs))
+            if (!rubyCharacters.TryGetValue(rubyTag, out var glyphs))
                 throw new ArgumentOutOfRangeException(nameof(rubyTag));
 
             var drawRectangle = glyphs.Select(x => drawSizeOnly ? x.DrawRectangle : TextBuilderGlyphUtils.GetCharacterSizeRectangle(x))
@@ -393,7 +393,7 @@ namespace osu.Framework.Graphics.Sprites
 
         public RectangleF GetRomajiTagDrawRectangle(PositionText romajiTag, bool drawSizeOnly = false)
         {
-            if (!romajiCharactersBacking.TryGetValue(romajiTag, out var glyphs))
+            if (!romajiCharacters.TryGetValue(romajiTag, out var glyphs))
                 throw new ArgumentOutOfRangeException(nameof(romajiTag));
 
             var drawRectangle = glyphs.Select(x => drawSizeOnly ? x.DrawRectangle : TextBuilderGlyphUtils.GetCharacterSizeRectangle(x))
