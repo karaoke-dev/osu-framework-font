@@ -104,8 +104,8 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
 
         protected class TestShaderContainer : Container, IMultiShaderBufferedDrawable
         {
-            public IShader TextureShader { get; private set; }
-            public IShader RoundedTextureShader { get; private set; }
+            public IShader TextureShader { get; private set; } = null!;
+            public IShader RoundedTextureShader { get; private set; } = null!;
 
             private readonly List<IShader> shaders = new();
 

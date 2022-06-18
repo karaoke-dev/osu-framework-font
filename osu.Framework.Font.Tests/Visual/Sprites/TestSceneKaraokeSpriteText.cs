@@ -222,7 +222,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
 
         private class TestKaraokeSpriteText : KaraokeSpriteText
         {
-            public Action TransformAction;
+            public Action? TransformAction;
 
             public override void RefreshStateTransforms()
             {
