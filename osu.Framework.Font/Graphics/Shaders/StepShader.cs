@@ -12,7 +12,7 @@ namespace osu.Framework.Graphics.Shaders
     {
         public string Name { get; set; } = null!;
 
-        public IShader FromShader { get; set; } = null!;
+        public IShader? FromShader { get; set; }
 
         private readonly List<ICustomizedShader> shaders = new List<ICustomizedShader>();
 
