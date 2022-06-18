@@ -1,7 +1,8 @@
-﻿// Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
+// Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using NUnit.Framework;
 using osu.Framework.Allocation;
@@ -24,7 +25,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
 
         private int transformAmount;
 
-        [Resolved]
+        [Resolved, AllowNull]
         private ShaderManager shaderManager { get; set; }
 
         public TestSceneKaraokeSpriteText()
@@ -215,14 +216,14 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
 
             AddStep("Clear shader", () =>
             {
-                karaokeSpriteText.LeftLyricTextShaders = null;
-                karaokeSpriteText.RightLyricTextShaders = null;
+                karaokeSpriteText.LeftLyricTextShaders = Array.Empty<IShader>();
+                karaokeSpriteText.RightLyricTextShaders = Array.Empty<IShader>();
             });
         }
 
         private class TestKaraokeSpriteText : KaraokeSpriteText
         {
-            public Action TransformAction;
+            public Action? TransformAction;
 
             public override void RefreshStateTransforms()
             {

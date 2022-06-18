@@ -20,7 +20,7 @@ namespace osu.Framework.Graphics.Sprites
         /// <summary>
         /// The characters that should be excluded from fixed-width application. Defaults to (".", ",", ":", " ") if null.
         /// </summary>
-        protected virtual char[] FixedWidthExcludeCharacters => null;
+        protected virtual char[] FixedWidthExcludeCharacters => null!;
 
         /// <summary>
         /// The character to use to calculate the fixed width width. Defaults to 'm'.

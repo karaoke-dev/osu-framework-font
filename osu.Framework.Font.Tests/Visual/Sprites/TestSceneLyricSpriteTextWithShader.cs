@@ -1,6 +1,7 @@
 ﻿// Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
+using System;
 using NUnit.Framework;
 using osu.Framework.Extensions;
 using osu.Framework.Font.Tests.Helper;
@@ -64,7 +65,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
                 },
             });
 
-            AddStep("Remove all shader", () => lyricSpriteText.Shaders = null);
+            AddStep("Remove all shader", () => lyricSpriteText.Shaders = Array.Empty<IShader>());
         }
     }
 }

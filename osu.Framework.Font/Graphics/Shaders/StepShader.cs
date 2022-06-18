@@ -10,9 +10,9 @@ namespace osu.Framework.Graphics.Shaders
 {
     public class StepShader : IStepShader, IApplicableToCharacterSize, IApplicableToDrawRectangle
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = null!;
 
-        public IShader FromShader { get; set; }
+        public IShader? FromShader { get; set; }
 
         private readonly List<ICustomizedShader> shaders = new List<ICustomizedShader>();
 

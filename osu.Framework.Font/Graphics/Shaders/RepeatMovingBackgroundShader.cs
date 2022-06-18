@@ -12,7 +12,7 @@ namespace osu.Framework.Graphics.Shaders
     {
         public override string ShaderName => "RepeatMovingBackground";
 
-        public Texture Texture { get; set; }
+        public Texture? Texture { get; set; }
 
         public Vector2 TextureDisplaySize { get; set; } = new Vector2(10);
 

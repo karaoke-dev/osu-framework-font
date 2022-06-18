@@ -17,9 +17,9 @@ namespace osu.Framework.Graphics
 
         public IShader[] Shaders => shaderBuffers.Keys.ToArray();
 
-        private readonly RenderbufferInternalFormat[] formats;
+        private readonly RenderbufferInternalFormat[]? formats;
 
-        public MultiShaderBufferedDrawNodeSharedData(RenderbufferInternalFormat[] formats = null, bool pixelSnapping = false)
+        public MultiShaderBufferedDrawNodeSharedData(RenderbufferInternalFormat[]? formats = null, bool pixelSnapping = false)
             : base(0, formats, pixelSnapping)
         {
             this.formats = formats;

@@ -3,6 +3,7 @@
   <PropertyGroup Label="Project">
     <OutputType>Library</OutputType>
     <TargetFramework>netstandard2.1</TargetFramework>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
   <PropertyGroup Label="Nuget">
     <GenerateProgramFile>false</GenerateProgramFile>
@@ -13,7 +14,7 @@
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Version>1.8.3</Version>
     <Description>Unofficial support extra font effect for osu!framework.</Description>
-    <Copyright>https://github.com/karaoke-dev/osu-framework-fontk</Copyright>
+    <Copyright>https://github.com/karaoke-dev/osu-framework-font</Copyright>
     <PackageProjectUrl>https://github.com/karaoke-dev/osu-framework-font</PackageProjectUrl>
     <PackageLicenseUrl>https://github.com/karaoke-dev/osu-framework-font</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/karaoke-dev/osu-framework-font.git</RepositoryUrl>

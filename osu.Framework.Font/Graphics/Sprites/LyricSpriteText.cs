@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
@@ -29,11 +30,11 @@ namespace osu.Framework.Graphics.Sprites
         // todo: should have a better way to let user able to customize formats?
         private readonly BufferedDrawNodeSharedData sharedData = new BufferedDrawNodeSharedData(2);
 
-        [Resolved]
+        [Resolved, AllowNull]
         private FontStore store { get; set; }
 
-        public IShader TextureShader { get; private set; }
-        public IShader RoundedTextureShader { get; private set; }
+        public IShader TextureShader { get; private set; } = null!;
+        public IShader RoundedTextureShader { get; private set; } = null!;
 
         public LyricSpriteText()
         {
