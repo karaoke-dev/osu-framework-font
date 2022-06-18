@@ -62,10 +62,10 @@ namespace osu.Framework.Font.Tests.Helper
             return new Tuple<double, TextIndex>(time, new TextIndex(index, state));
         }
 
-        public static PositionText[] ParsePositionTexts(IEnumerable<string> strings)
-            => strings?.Select(ParsePositionText).ToArray();
+        public static PositionText[] ParsePositionTexts(IEnumerable<string>? strings)
+            => strings?.Select(ParsePositionText).ToArray() ?? Array.Empty<PositionText>();
 
-        public static IReadOnlyDictionary<double, TextIndex> ParseTimeTags(IEnumerable<string> strings)
-            => strings?.Select(ParseTimeTag).ToDictionary(k => k.Item1, k => k.Item2);
+        public static IReadOnlyDictionary<double, TextIndex> ParseTimeTags(IEnumerable<string>? strings)
+            => strings?.Select(ParseTimeTag).ToDictionary(k => k.Item1, k => k.Item2) ?? new Dictionary<double, TextIndex>();
     }
 }
