@@ -32,8 +32,8 @@ namespace osu.Framework.Graphics.Sprites
         [Resolved]
         private FontStore store { get; set; }
 
-        public IShader TextureShader { get; private set; }
-        public IShader RoundedTextureShader { get; private set; }
+        public IShader TextureShader { get; private set; } = null!;
+        public IShader RoundedTextureShader { get; private set; } = null!;
 
         public LyricSpriteText()
         {

@@ -10,11 +10,11 @@ namespace osu.Framework.Graphics.Shaders
     /// </summary>
     public abstract class CustomizedShader : ICustomizedShader
     {
-        private IShader shader;
+        private IShader shader = null!;
 
         public void AttachOriginShader(IShader originShader)
         {
-            shader = originShader;
+            shader = originShader ?? throw new ArgumentNullException(nameof(originShader));
         }
 
         public void Bind() => shader.Bind();
