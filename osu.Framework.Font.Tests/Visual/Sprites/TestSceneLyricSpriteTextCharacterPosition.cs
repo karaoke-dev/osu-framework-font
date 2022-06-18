@@ -50,7 +50,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
 
             AddStep("Clear shader", () =>
             {
-                lyricSpriteText.Shaders = null;
+                lyricSpriteText.Shaders = Array.Empty<IShader>();
             });
 
             AddStep("Apply single shader", () =>

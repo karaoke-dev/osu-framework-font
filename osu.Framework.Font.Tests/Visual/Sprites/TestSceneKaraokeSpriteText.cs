@@ -1,4 +1,4 @@
-﻿// Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
+// Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
@@ -215,8 +215,8 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
 
             AddStep("Clear shader", () =>
             {
-                karaokeSpriteText.LeftLyricTextShaders = null;
-                karaokeSpriteText.RightLyricTextShaders = null;
+                karaokeSpriteText.LeftLyricTextShaders = Array.Empty<IShader>();
+                karaokeSpriteText.RightLyricTextShaders = Array.Empty<IShader>();
             });
         }
 

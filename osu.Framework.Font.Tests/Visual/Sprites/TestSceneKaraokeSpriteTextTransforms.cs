@@ -1,6 +1,7 @@
 // Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
+using System;
 using NUnit.Framework;
 using osu.Framework.Extensions;
 using osu.Framework.Extensions.Color4Extensions;
@@ -87,8 +88,8 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
             {
                 karaokeSpriteText.LeftTextColour = Color4Extensions.FromHex(left_text_color);
                 karaokeSpriteText.RightTextColour = Color4Extensions.FromHex(right_text_color);
-                karaokeSpriteText.LeftLyricTextShaders = null;
-                karaokeSpriteText.RightLyricTextShaders = null;
+                karaokeSpriteText.LeftLyricTextShaders = Array.Empty<IShader>();
+                karaokeSpriteText.RightLyricTextShaders = Array.Empty<IShader>();
             });
         }
 

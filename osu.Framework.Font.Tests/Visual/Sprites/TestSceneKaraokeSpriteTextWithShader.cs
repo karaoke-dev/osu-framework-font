@@ -1,6 +1,7 @@
 ﻿// Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
+using System;
 using NUnit.Framework;
 using osu.Framework.Extensions;
 using osu.Framework.Font.Tests.Helper;
@@ -49,7 +50,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
                 GetShader("CRT"),
             });
 
-            AddStep("Clear shader", () => karaokeSpriteText.Shaders = null);
+            AddStep("Clear shader", () => karaokeSpriteText.Shaders = Array.Empty<IShader>());
         }
 
         [Test]
@@ -71,7 +72,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
             AddStep("Clear shader from left text", () =>
             {
                 karaokeSpriteText.LeftTextColour = Color4.Green;
-                karaokeSpriteText.LeftLyricTextShaders = null;
+                karaokeSpriteText.LeftLyricTextShaders = Array.Empty<IShader>();
             });
         }
 
@@ -108,7 +109,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
             AddStep("Clear shader from right text", () =>
             {
                 karaokeSpriteText.RightTextColour = Color4.Red;
-                karaokeSpriteText.RightLyricTextShaders = null;
+                karaokeSpriteText.RightLyricTextShaders = Array.Empty<IShader>();
             });
         }
 
