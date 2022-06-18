@@ -19,6 +19,9 @@ namespace osu.Framework.Utils
         /// <exception cref="NullReferenceException"></exception>
         public static void ScheduleDisposal<T>(Action<T> disposalAction, T target)
         {
+            if (target == null)
+                throw new ArgumentNullException(nameof(target));
+
             var prop = typeof(GLWrapper).GetRuntimeMethods().FirstOrDefault(x => x.Name == "ScheduleDisposal");
             if (prop == null)
                 throw new NullReferenceException();
