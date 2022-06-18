@@ -2,6 +2,7 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using NUnit.Framework;
 using osu.Framework.Allocation;
@@ -24,7 +25,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
 
         private int transformAmount;
 
-        [Resolved]
+        [Resolved, AllowNull]
         private ShaderManager shaderManager { get; set; }
 
         public TestSceneKaraokeSpriteText()
