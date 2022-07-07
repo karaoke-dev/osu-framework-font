@@ -22,10 +22,10 @@ namespace osu.Framework.Graphics.Sprites
     {
         internal const double INTERPOLATION_TIMING = 1;
 
-        private readonly MaskingContainer<T> leftLyricTextContainer;
+        private readonly Container<T> leftLyricTextContainer;
         private readonly T leftLyricText;
 
-        private readonly MaskingContainer<T> rightLyricTextContainer;
+        private readonly Container<T> rightLyricTextContainer;
         private readonly T rightLyricText;
 
         // todo: should have a better way to let user able to customize formats?
@@ -39,22 +39,22 @@ namespace osu.Framework.Graphics.Sprites
             AutoSizeAxes = Axes.Both;
             InternalChildren = new Drawable[]
             {
-                rightLyricTextContainer = new MaskingContainer<T>
+                rightLyricTextContainer = new Container<T>
                 {
                     AutoSizeAxes = Axes.Y,
                     Anchor = Anchor.CentreRight,
                     Origin = Anchor.CentreRight,
-                    MaskingEdges = Edges.Left,
+                    Masking = true,
                     Child = rightLyricText = new T
                     {
                         Anchor = Anchor.CentreRight,
                         Origin = Anchor.CentreRight,
                     }
                 },
-                leftLyricTextContainer = new MaskingContainer<T>
+                leftLyricTextContainer = new Container<T>
                 {
                     AutoSizeAxes = Axes.Y,
-                    MaskingEdges = Edges.Right,
+                    Masking = true,
                     Child = leftLyricText = new T(),
                 }
             };
