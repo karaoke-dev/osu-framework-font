@@ -58,7 +58,7 @@ namespace osu.Framework.Graphics.Sprites
             var rubyHeight = ReserveRubyHeight || Rubies.Any() ? RubyFont.Size : 0;
             var romajiHeight = ReserveRomajiHeight || Romajies.Any() ? RomajiFont.Size : 0;
             var startOffset = new Vector2(Padding.Left, Padding.Top + rubyHeight);
-            var spacing = Spacing + new Vector2(0, rubyHeight + romajiHeight);
+            var mainTextSpacing = Spacing + new Vector2(0, rubyHeight + romajiHeight);
 
             float builderMaxWidth = requiresAutoSizedWidth
                 ? MaxWidth
@@ -66,17 +66,17 @@ namespace osu.Framework.Graphics.Sprites
 
             if (AllowMultiline)
             {
-                return new MultilineTextBuilder(store, Font, builderMaxWidth, UseFullGlyphHeight, startOffset, spacing, null,
+                return new MultilineTextBuilder(store, Font, builderMaxWidth, UseFullGlyphHeight, startOffset, mainTextSpacing, null,
                     excludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter);
             }
 
             if (Truncate)
             {
-                return new TruncatingTextBuilder(store, Font, builderMaxWidth, ellipsisString, UseFullGlyphHeight, startOffset, spacing, null,
+                return new TruncatingTextBuilder(store, Font, builderMaxWidth, ellipsisString, UseFullGlyphHeight, startOffset, mainTextSpacing, null,
                     excludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter);
             }
 
-            return new TextBuilder(store, Font, builderMaxWidth, UseFullGlyphHeight, startOffset, spacing, null,
+            return new TextBuilder(store, Font, builderMaxWidth, UseFullGlyphHeight, startOffset, mainTextSpacing, null,
                 excludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter);
         }
 
