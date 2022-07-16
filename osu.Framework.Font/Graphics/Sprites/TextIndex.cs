@@ -50,7 +50,7 @@ namespace osu.Framework.Graphics.Sprites
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return HashCode.Combine(Index, State);
         }
 
         public static bool operator ==(TextIndex index1, TextIndex index2) => index1.Equals(index2);
