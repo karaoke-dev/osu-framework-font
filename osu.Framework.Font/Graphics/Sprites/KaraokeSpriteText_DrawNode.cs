@@ -36,8 +36,8 @@ namespace osu.Framework.Graphics.Sprites
 
             protected new CompositeDrawableDrawNode Child => (CompositeDrawableDrawNode)base.Child;
 
-            private IShader leftLyricShader = null!;
-            private IShader rightLyricShader = null!;
+            private IShader? leftLyricShader;
+            private IShader? rightLyricShader;
 
             public KaraokeSpriteTextShaderEffectDrawNode(KaraokeSpriteText<T> source, BufferedDrawNodeSharedData sharedData)
                 : base(source, new CompositeDrawableDrawNode(source), sharedData)
@@ -55,7 +55,10 @@ namespace osu.Framework.Graphics.Sprites
             protected override long GetDrawVersion()
             {
                 // if contains shader that need to apply time, then need to force run populate contents in each frame.
-                if (ContainTimePropertyShader(leftLyricShader) || ContainTimePropertyShader(rightLyricShader))
+                var leftLyricShaderRequestDraw = leftLyricShader != null && ContainTimePropertyShader(leftLyricShader);
+                var rightLyricShaderRequestDraw = rightLyricShader != null && ContainTimePropertyShader(rightLyricShader);
+
+                if (leftLyricShaderRequestDraw || rightLyricShaderRequestDraw)
                 {
                     ResetDrawVersion();
                 }
