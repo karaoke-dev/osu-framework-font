@@ -130,13 +130,10 @@ namespace osu.Framework.Graphics.Sprites
             {
                 shaders.Clear();
 
-                if (value != null)
-                {
-                    if (value.Count > 1)
-                        throw new NotSupportedException($"{nameof(LyricSpriteText)} does not support more than one shaders now.");
+                if (value.Count > 1)
+                    throw new NotSupportedException($"{nameof(LyricSpriteText)} does not support more than one shaders now.");
 
-                    shaders.AddRange(value);
-                }
+                shaders.AddRange(value);
 
                 Invalidate(Invalidation.DrawNode);
             }
@@ -375,12 +372,9 @@ namespace osu.Framework.Graphics.Sprites
             {
                 timeTags.Clear();
 
-                if (value != null)
+                foreach (var (timeTag, time) in value)
                 {
-                    foreach (var (timeTag, time) in value)
-                    {
-                        timeTags.Add(timeTag, time);
-                    }
+                    timeTags.Add(timeTag, time);
                 }
 
                 Invalidate(Invalidation.Layout);

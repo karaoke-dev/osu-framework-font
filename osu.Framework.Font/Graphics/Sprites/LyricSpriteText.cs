@@ -112,13 +112,10 @@ namespace osu.Framework.Graphics.Sprites
             {
                 shaders.Clear();
 
-                if (value != null)
-                {
-                    if (value.Count > 1)
-                        throw new NotSupportedException($"{nameof(LyricSpriteText)} does not support more than one shaders now.");
+                if (value.Count > 1)
+                    throw new NotSupportedException($"{nameof(LyricSpriteText)} does not support more than one shaders now.");
 
-                    shaders.AddRange(value);
-                }
+                shaders.AddRange(value);
 
                 Invalidate();
             }
@@ -172,11 +169,7 @@ namespace osu.Framework.Graphics.Sprites
             set
             {
                 rubies.Clear();
-
-                if (value != null)
-                {
-                    rubies.AddRange(value);
-                }
+                rubies.AddRange(value);
 
                 invalidate(true);
             }
@@ -193,11 +186,7 @@ namespace osu.Framework.Graphics.Sprites
             set
             {
                 romajies.Clear();
-
-                if (value != null)
-                {
-                    romajies.AddRange(value);
-                }
+                romajies.AddRange(value);
 
                 invalidate(true);
             }
