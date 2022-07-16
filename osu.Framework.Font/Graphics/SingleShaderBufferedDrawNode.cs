@@ -17,7 +17,7 @@ namespace osu.Framework.Graphics
         protected override long GetDrawVersion()
         {
             // if contains shader that need to apply time, then need to force run populate contents in each frame.
-            if (ContainTimePropertyShader(Source.Shader))
+            if (Source.Shader != null && ContainTimePropertyShader(Source.Shader))
             {
                 ResetDrawVersion();
             }
@@ -29,7 +29,8 @@ namespace osu.Framework.Graphics
         {
             base.PopulateContents();
 
-            drawFrameBuffer(Source.Shader);
+            if (Source.Shader != null)
+                drawFrameBuffer(Source.Shader);
         }
 
         protected override void DrawContents()

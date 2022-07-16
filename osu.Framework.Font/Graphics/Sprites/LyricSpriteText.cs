@@ -121,7 +121,7 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
-        public IShader Shader => Shaders.FirstOrDefault();
+        public IShader? Shader => Shaders.FirstOrDefault();
 
         #endregion
 
