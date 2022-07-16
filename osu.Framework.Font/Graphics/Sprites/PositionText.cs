@@ -32,7 +32,10 @@ namespace osu.Framework.Graphics.Sprites
             return false;
         }
 
-        public override int GetHashCode() => base.GetHashCode();
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Text, StartIndex, EndIndex);
+        }
 
         public static bool operator ==(PositionText first, PositionText second) => first.Equals(second);
 

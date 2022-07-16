@@ -15,16 +15,16 @@ namespace osu.Framework.Text
     public readonly struct PositionTextBuilderGlyph : ITexturedCharacterGlyph
     {
         public Texture Texture => glyph.Texture;
-        public readonly float XOffset => glyph.XOffset;
+        public float XOffset => glyph.XOffset;
 
-        public readonly float YOffset => glyph.YOffset;
-        public readonly float XAdvance => glyph.XAdvance;
+        public float YOffset => glyph.YOffset;
+        public float XAdvance => glyph.XAdvance;
 
-        public readonly float Baseline => glyph.Baseline;
+        public float Baseline => glyph.Baseline;
         public float Width => glyph.Width;
 
         public float Height => glyph.Height;
-        public readonly char Character => glyph.Character;
+        public char Character => glyph.Character;
 
         private readonly TextBuilderGlyph glyph;
 

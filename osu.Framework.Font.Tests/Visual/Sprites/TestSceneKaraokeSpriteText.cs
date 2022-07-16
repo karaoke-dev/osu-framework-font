@@ -2,6 +2,7 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using NUnit.Framework;
@@ -60,6 +61,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
 
             void updateTransformerCountText()
             {
+                Debug.Assert(transformAmountSpriteText != null);
                 transformAmountSpriteText.Text = $"Transform has been triggered {transformAmount} times";
                 transformAmountSpriteText.FadeColour(Color4.Red, 100).Then().FadeColour(Color4.White);
             }
