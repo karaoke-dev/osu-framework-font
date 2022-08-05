@@ -26,6 +26,12 @@ namespace osu.Framework.Graphics.Shaders
 
         public bool IsLoaded => shader.IsLoaded;
 
+        public bool IsBound { get; private set; }
+
         public abstract void ApplyValue();
+
+        public void Dispose()
+        {
+        }
     }
 }

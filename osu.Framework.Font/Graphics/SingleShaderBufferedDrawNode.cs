@@ -1,6 +1,7 @@
 // Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
+using osu.Framework.Graphics.Rendering;
 using osu.Framework.Graphics.Shaders;
 
 namespace osu.Framework.Graphics
@@ -25,20 +26,20 @@ namespace osu.Framework.Graphics
             return base.GetDrawVersion();
         }
 
-        protected override void PopulateContents()
+        protected override void PopulateContents(IRenderer renderer)
         {
-            base.PopulateContents();
+            base.PopulateContents(renderer);
 
             if (Source.Shader != null)
-                drawFrameBuffer(Source.Shader);
+                drawFrameBuffer(renderer, Source.Shader);
         }
 
-        protected override void DrawContents()
+        protected override void DrawContents(IRenderer renderer)
         {
-            DrawFrameBuffer(SharedData.CurrentEffectBuffer, DrawRectangle, DrawColourInfo.Colour);
+            renderer.DrawFrameBuffer(SharedData.CurrentEffectBuffer, DrawRectangle, DrawColourInfo.Colour);
         }
 
-        private void drawFrameBuffer(IShader shader)
+        private void drawFrameBuffer(IRenderer renderer, IShader shader)
         {
             switch (shader)
             {
@@ -51,7 +52,7 @@ namespace osu.Framework.Graphics
 
                     foreach (var s in stepShaders)
                     {
-                        drawFrameBuffer(s);
+                        drawFrameBuffer(renderer, s);
                     }
 
                     break;
@@ -60,7 +61,7 @@ namespace osu.Framework.Graphics
                 default:
                     var current = SharedData.CurrentEffectBuffer;
                     var target = SharedData.GetNextEffectBuffer();
-                    RenderShader(shader, current, target);
+                    RenderShader(renderer, shader, current, target);
                     break;
             }
         }

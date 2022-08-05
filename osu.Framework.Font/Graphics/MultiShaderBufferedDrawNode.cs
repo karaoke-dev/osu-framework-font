@@ -2,6 +2,7 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System.Linq;
+using osu.Framework.Graphics.Rendering;
 using osu.Framework.Graphics.Shaders;
 using osuTK.Graphics;
 
@@ -21,7 +22,9 @@ namespace osu.Framework.Graphics
         public override void ApplyState()
         {
             base.ApplyState();
-            SharedData.UpdateFrameBuffers(Source.Shaders.ToArray());
+
+            // re-initialize the shader buffer size because the shader size might be changed.
+            SharedData.IsLatestFrameBuffer = false;
         }
 
         protected override long GetDrawVersion()
@@ -35,13 +38,17 @@ namespace osu.Framework.Graphics
             return base.GetDrawVersion();
         }
 
-        protected override void PopulateContents()
+        protected override void PopulateContents(IRenderer renderer)
         {
-            base.PopulateContents();
-            drawFrameBuffer();
+            base.PopulateContents(renderer);
+
+            if (!SharedData.IsLatestFrameBuffer)
+                SharedData.UpdateFrameBuffers(renderer, Source.Shaders.ToArray());
+
+            drawFrameBuffer(renderer);
         }
 
-        protected override void DrawContents()
+        protected override void DrawContents(IRenderer renderer)
         {
             var drawFrameBuffers = SharedData.GetDrawFrameBuffers().Reverse().ToArray();
 
@@ -49,17 +56,17 @@ namespace osu.Framework.Graphics
             {
                 foreach (var frameBuffer in drawFrameBuffers)
                 {
-                    DrawFrameBuffer(frameBuffer, DrawRectangle, Color4.White);
+                    renderer.DrawFrameBuffer(frameBuffer, DrawRectangle, Color4.White);
                 }
             }
             else
             {
                 // should draw origin content if no shader effects.
-                base.DrawContents();
+                base.DrawContents(renderer);
             }
         }
 
-        private void drawFrameBuffer()
+        private void drawFrameBuffer(IRenderer renderer)
         {
             var shaders = SharedData.Shaders;
             if (!shaders.Any())
@@ -77,12 +84,12 @@ namespace osu.Framework.Graphics
                     for (int i = 0; i < stepShaders.Count; i++)
                     {
                         // todo: it will cause the render issue if set the current and target shader into same shader.
-                        RenderShader(stepShaders[i], i == 0 ? current : target, target);
+                        RenderShader(renderer, stepShaders[i], i == 0 ? current : target, target);
                     }
                 }
                 else
                 {
-                    RenderShader(shader, current, target);
+                    RenderShader(renderer, shader, current, target);
                 }
 
                 SharedData.UpdateBuffer(shader, target);

@@ -27,7 +27,7 @@ namespace osu.Framework.Graphics.Shaders
             if (Texture == null)
                 return;
 
-            Texture.TextureGL.Bind(TextureUnit.Texture1);
+            Texture.Bind(1);
 
             var unitId = TextureUnit.Texture1 - TextureUnit.Texture0;
             GetUniform<int>(@"g_RepeatSample").UpdateValue(ref unitId);
