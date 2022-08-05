@@ -43,6 +43,8 @@ namespace osu.Framework.Graphics.Shaders
         public bool IsLoaded
             => throw new NotSupportedException();
 
+        public bool IsBound { get; private set; }
+
         public void ApplyValue()
             => throw new NotSupportedException();
 
@@ -53,5 +55,9 @@ namespace osu.Framework.Graphics.Shaders
         public RectangleF ComputeDrawRectangle(RectangleF originDrawRectangle) =>
             StepShaders.OfType<IApplicableToDrawRectangle>()
                        .Aggregate(originDrawRectangle, (quad, shader) => shader.ComputeDrawRectangle(quad));
+
+        public void Dispose()
+        {
+        }
     }
 }
