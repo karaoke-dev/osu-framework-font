@@ -2,9 +2,8 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
-using osu.Framework.Graphics.OpenGL;
-using osu.Framework.Graphics.OpenGL.Vertices;
 using osu.Framework.Graphics.Primitives;
+using osu.Framework.Graphics.Rendering;
 
 namespace osu.Framework.Graphics.Containers
 {
@@ -79,28 +78,28 @@ namespace osu.Framework.Graphics.Containers
                 }
             }
 
-            public override void Draw(Action<TexturedVertex2D> vertexAction)
+            public override void Draw(IRenderer renderer)
             {
                 // will not working if not adding masking info into here.
                 if (maskingInfo != null)
-                    GLWrapper.PushMaskingInfo(maskingInfo.Value);
+                    renderer.PushMaskingInfo(maskingInfo.Value);
 
-                base.Draw(vertexAction);
+                base.Draw(renderer);
 
                 if (maskingInfo != null)
-                    GLWrapper.PopMaskingInfo();
+                    renderer.PopMaskingInfo();
             }
 
-            protected override void DrawChildrenOpaqueInteriors(DepthValue depthValue, Action<TexturedVertex2D> vertexAction)
+            protected override void DrawChildrenOpaqueInteriors(IRenderer renderer, DepthValue depthValue)
             {
                 // will have black border if not adding masking info into here.
                 if (maskingInfo != null)
-                    GLWrapper.PushMaskingInfo(maskingInfo.Value);
+                    renderer.PushMaskingInfo(maskingInfo.Value);
 
-                base.DrawChildrenOpaqueInteriors(depthValue, vertexAction);
+                base.DrawChildrenOpaqueInteriors(renderer, depthValue);
 
                 if (maskingInfo != null)
-                    GLWrapper.PopMaskingInfo();
+                    renderer.PopMaskingInfo();
             }
         }
     }
