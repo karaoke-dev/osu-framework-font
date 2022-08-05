@@ -4,29 +4,36 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using osu.Framework.Graphics.OpenGL.Buffers;
+using osu.Framework.Graphics.Rendering;
 using osu.Framework.Graphics.Shaders;
-using osu.Framework.Utils;
-using osuTK.Graphics.ES30;
+using osu.Framework.Graphics.Textures;
 
 namespace osu.Framework.Graphics
 {
     public class MultiShaderBufferedDrawNodeSharedData : BufferedDrawNodeSharedData
     {
-        private readonly Dictionary<IShader, FrameBuffer> shaderBuffers = new Dictionary<IShader, FrameBuffer>();
+        private readonly Dictionary<IShader, IFrameBuffer> shaderBuffers = new Dictionary<IShader, IFrameBuffer>();
+
+        public bool IsLatestFrameBuffer { get; set; }
 
         public IShader[] Shaders => shaderBuffers.Keys.ToArray();
 
-        private readonly RenderbufferInternalFormat[]? formats;
+        private readonly RenderBufferFormat[]? formats;
 
-        public MultiShaderBufferedDrawNodeSharedData(RenderbufferInternalFormat[]? formats = null, bool pixelSnapping = false)
+        public MultiShaderBufferedDrawNodeSharedData(RenderBufferFormat[]? formats = null, bool pixelSnapping = false)
             : base(0, formats, pixelSnapping)
         {
             this.formats = formats;
         }
 
-        public void UpdateFrameBuffers(IShader[] shaders)
+        public void UpdateFrameBuffers(IRenderer renderer, IShader[] shaders)
         {
+            if (IsLatestFrameBuffer)
+                return;
+
+            IsLatestFrameBuffer = true;
+
+            // will not re-initialize if shader is not changed.
             if (shaderBuffers.Keys.SequenceEqual(shaders))
                 return;
 
@@ -36,17 +43,17 @@ namespace osu.Framework.Graphics
 
             foreach (var shader in shaders)
             {
-                var filterMode = PixelSnapping ? All.Nearest : All.Linear;
-                shaderBuffers.Add(shader, new FrameBuffer(formats, filterMode));
+                TextureFilteringMode filterMode = PixelSnapping ? TextureFilteringMode.Nearest : TextureFilteringMode.Linear;
+                shaderBuffers.Add(shader, renderer.CreateFrameBuffer(formats, filterMode));
             }
 
-            GLWrapperUtils.ScheduleDisposal(s =>
+            renderer.ScheduleDisposal(s =>
             {
                 s.clearBuffers(disposedFrameBuffer);
             }, this);
         }
 
-        public FrameBuffer GetSourceFrameBuffer(IShader shader)
+        public IFrameBuffer GetSourceFrameBuffer(IShader shader)
         {
             if (!(shader is IStepShader stepShader))
                 return CurrentEffectBuffer;
@@ -61,7 +68,7 @@ namespace osu.Framework.Graphics
             return shaderBuffers[fromShader];
         }
 
-        public FrameBuffer GetTargetFrameBuffer(IShader shader)
+        public IFrameBuffer GetTargetFrameBuffer(IShader shader)
         {
             if (!shaderBuffers.ContainsKey(shader))
                 throw new KeyNotFoundException();
@@ -69,7 +76,7 @@ namespace osu.Framework.Graphics
             return shaderBuffers[shader];
         }
 
-        public void UpdateBuffer(IShader shader, FrameBuffer frameBuffer)
+        public void UpdateBuffer(IShader shader, IFrameBuffer frameBuffer)
         {
             if (!shaderBuffers.ContainsKey(shader))
                 throw new Exception();
@@ -77,7 +84,7 @@ namespace osu.Framework.Graphics
             shaderBuffers[shader] = frameBuffer;
         }
 
-        public FrameBuffer[] GetDrawFrameBuffers()
+        public IFrameBuffer[] GetDrawFrameBuffers()
             => shaderBuffers.Where(x =>
             {
                 var (shader, frameBuffer) = x;
@@ -99,7 +106,7 @@ namespace osu.Framework.Graphics
             clearBuffers(shaderBuffers.Values.ToArray());
         }
 
-        private void clearBuffers(FrameBuffer[] effectBuffers)
+        private void clearBuffers(IFrameBuffer[] effectBuffers)
         {
             // dispose all frame buffer in array.
             foreach (var shaderBuffer in effectBuffers)

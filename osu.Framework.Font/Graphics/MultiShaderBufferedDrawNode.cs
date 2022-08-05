@@ -22,7 +22,9 @@ namespace osu.Framework.Graphics
         public override void ApplyState()
         {
             base.ApplyState();
-            SharedData.UpdateFrameBuffers(Source.Shaders.ToArray());
+
+            // re-initialize the shader buffer size because the shader size might be changed.
+            SharedData.IsLatestFrameBuffer = false;
         }
 
         protected override long GetDrawVersion()
@@ -39,6 +41,10 @@ namespace osu.Framework.Graphics
         protected override void PopulateContents(IRenderer renderer)
         {
             base.PopulateContents(renderer);
+
+            if (!SharedData.IsLatestFrameBuffer)
+                SharedData.UpdateFrameBuffers(renderer, Source.Shaders.ToArray());
+
             drawFrameBuffer(renderer);
         }
 
