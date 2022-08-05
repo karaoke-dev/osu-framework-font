@@ -5,9 +5,8 @@ using System;
 using System.Linq;
 using System.Reflection;
 using osu.Framework.Graphics.Colour;
-using osu.Framework.Graphics.OpenGL;
-using osu.Framework.Graphics.OpenGL.Buffers;
 using osu.Framework.Graphics.Primitives;
+using osu.Framework.Graphics.Rendering;
 using osu.Framework.Graphics.Shaders;
 using osuTK;
 using osuTK.Graphics;
@@ -47,9 +46,9 @@ namespace osu.Framework.Graphics
             prop.SetValue(SharedData, -1);
         }
 
-        protected void RenderShader(IShader shader, FrameBuffer current, FrameBuffer target)
+        protected void RenderShader(IRenderer renderer, IShader shader, IFrameBuffer current, IFrameBuffer target)
         {
-            GLWrapper.SetBlend(BlendingParameters.None);
+            renderer.SetBlend(BlendingParameters.None);
 
             using (BindFrameBuffer(target))
             {
@@ -75,7 +74,7 @@ namespace osu.Framework.Graphics
                     customizedShader.ApplyValue();
 
                 shader.Bind();
-                DrawFrameBuffer(current, new RectangleF(0, 0, current.Texture.Width, current.Texture.Height), ColourInfo.SingleColour(Color4.White));
+                renderer.DrawFrameBuffer(current, new RectangleF(0, 0, current.Texture.Width, current.Texture.Height), ColourInfo.SingleColour(Color4.White));
                 shader.Unbind();
             }
         }
