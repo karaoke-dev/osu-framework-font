@@ -87,14 +87,8 @@ namespace osu.Framework.Graphics
         public IFrameBuffer[] GetDrawFrameBuffers()
             => shaderBuffers.Where(x =>
             {
-                var (shader, frameBuffer) = x;
-
-                // should not render disposed or not created frame buffer.
-                if (frameBuffer.Texture == null)
-                    return false;
-
                 // should not draw the step shader if there's no content.
-                if (shader is IStepShader stepShader)
+                if (x.Key is IStepShader stepShader)
                     return stepShader.StepShaders.Any() && stepShader.Draw;
 
                 return true;
