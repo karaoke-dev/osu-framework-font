@@ -4,7 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Extensions.IEnumerableExtensions;
@@ -117,8 +116,6 @@ namespace osu.Framework.Graphics.Sprites
                 Invalidate();
             }
         }
-
-        public IShader? Shader => Shaders.FirstOrDefault();
 
         #endregion
 

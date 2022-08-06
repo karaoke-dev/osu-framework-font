@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using osu.Framework.Allocation;
 using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
@@ -135,8 +134,6 @@ namespace osu.Framework.Graphics.Sprites
                 Invalidate(Invalidation.DrawNode);
             }
         }
-
-        public IShader? Shader => Shaders.FirstOrDefault();
 
         public IReadOnlyList<IShader> LeftLyricTextShaders
         {
