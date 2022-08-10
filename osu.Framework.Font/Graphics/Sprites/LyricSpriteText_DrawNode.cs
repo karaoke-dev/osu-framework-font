@@ -29,9 +29,9 @@ namespace osu.Framework.Graphics.Sprites
         /// <summary>
         /// <see cref="BufferedDrawNode"/> to apply <see cref="IShader"/>.
         /// </summary>
-        protected class LyricSpriteTextShaderEffectDrawNode : SingleShaderBufferedDrawNode
+        protected class LyricSpriteTextShaderEffectDrawNode : MultiShaderBufferedDrawNode
         {
-            public LyricSpriteTextShaderEffectDrawNode(LyricSpriteText source, BufferedDrawNodeSharedData sharedData)
+            public LyricSpriteTextShaderEffectDrawNode(LyricSpriteText source, MultiShaderBufferedDrawNodeSharedData sharedData)
                 : base(source, new LyricSpriteTextDrawNode(source), sharedData)
             {
             }

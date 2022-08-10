@@ -30,16 +30,16 @@ namespace osu.Framework.Graphics.Sprites
         /// <summary>
         /// <see cref="BufferedDrawNode"/> to apply <see cref="IShader"/>.
         /// </summary>
-        protected class KaraokeSpriteTextShaderEffectDrawNode : SingleShaderBufferedDrawNode, ICompositeDrawNode
+        protected class KaraokeSpriteTextShaderEffectDrawNode : MultiShaderBufferedDrawNode, ICompositeDrawNode
         {
             protected new KaraokeSpriteText<T> Source => (KaraokeSpriteText<T>)base.Source;
 
             protected new CompositeDrawableDrawNode Child => (CompositeDrawableDrawNode)base.Child;
 
-            private IShader? leftLyricShader;
-            private IShader? rightLyricShader;
+            private IShader[] leftLyricShaders = null!;
+            private IShader[] rightLyricShaders = null!;
 
-            public KaraokeSpriteTextShaderEffectDrawNode(KaraokeSpriteText<T> source, BufferedDrawNodeSharedData sharedData)
+            public KaraokeSpriteTextShaderEffectDrawNode(KaraokeSpriteText<T> source, MultiShaderBufferedDrawNodeSharedData sharedData)
                 : base(source, new CompositeDrawableDrawNode(source), sharedData)
             {
             }
@@ -48,15 +48,15 @@ namespace osu.Framework.Graphics.Sprites
             {
                 base.ApplyState();
 
-                leftLyricShader = Source.LeftLyricTextShaders.FirstOrDefault();
-                rightLyricShader = Source.RightLyricTextShaders.FirstOrDefault();
+                leftLyricShaders = Source.LeftLyricTextShaders.ToArray();
+                rightLyricShaders = Source.RightLyricTextShaders.ToArray();
             }
 
             protected override long GetDrawVersion()
             {
                 // if contains shader that need to apply time, then need to force run populate contents in each frame.
-                var leftLyricShaderRequestDraw = leftLyricShader != null && ContainTimePropertyShader(leftLyricShader);
-                var rightLyricShaderRequestDraw = rightLyricShader != null && ContainTimePropertyShader(rightLyricShader);
+                var leftLyricShaderRequestDraw = leftLyricShaders.Any(ContainTimePropertyShader);
+                var rightLyricShaderRequestDraw = rightLyricShaders.Any(ContainTimePropertyShader);
 
                 if (leftLyricShaderRequestDraw || rightLyricShaderRequestDraw)
                 {

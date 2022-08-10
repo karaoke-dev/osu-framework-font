@@ -84,12 +84,11 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
                 karaokeSpriteText.RightTextColour = Color4.White;
                 karaokeSpriteText.RightLyricTextShaders = new IShader[]
                 {
-                    // comment the shader out until lyric sprite text support multiple shader.
-                    // GetShaderByType<OutlineShader>().With(s =>
-                    // {
-                    //     s.Radius = 1;
-                    //     s.OutlineColour = Color4.Blue;
-                    // }),
+                    GetShaderByType<OutlineShader>().With(s =>
+                    {
+                        s.Radius = 1;
+                        s.OutlineColour = Color4.Blue;
+                    }),
                     new StepShader
                     {
                         Name = "Outline with rainbow effect",
