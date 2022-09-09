@@ -45,11 +45,6 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
         [Test]
         public void ApplyShader()
         {
-            AddStep("Apply CRT shader", () => karaokeSpriteText.Shaders = new[]
-            {
-                GetShader("CRT"),
-            });
-
             AddStep("Clear shader", () => karaokeSpriteText.Shaders = Array.Empty<ICustomizedShader>());
         }
 

@@ -83,9 +83,6 @@ namespace osu.Framework.Font.Tests.Visual
             });
         }
 
-        protected IShader GetShader(string shaderName)
-            => shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, shaderName);
-
         protected T GetShaderByType<T>() where T : InternalShader, new()
             => shaderManager.LocalInternalShader<T>();
 
