@@ -12,7 +12,7 @@ namespace osu.Framework.Graphics.Shaders
     {
         public string Name { get; set; } = null!;
 
-        public IShader? FromShader { get; set; }
+        public ICustomizedShader? FromShader { get; set; }
 
         private readonly List<ICustomizedShader> shaders = new List<ICustomizedShader>();
 
@@ -37,7 +37,7 @@ namespace osu.Framework.Graphics.Shaders
         public void Unbind()
             => throw new NotSupportedException();
 
-        public Uniform<T> GetUniform<T>(string name) where T : struct, IEquatable<T>
+        public Uniform<T> GetUniform<T>(string name) where T : unmanaged, IEquatable<T>
             => throw new NotSupportedException();
 
         public bool IsLoaded

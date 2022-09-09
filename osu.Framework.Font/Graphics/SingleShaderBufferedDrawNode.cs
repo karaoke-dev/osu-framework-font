@@ -39,7 +39,7 @@ namespace osu.Framework.Graphics
             renderer.DrawFrameBuffer(SharedData.CurrentEffectBuffer, DrawRectangle, DrawColourInfo.Colour);
         }
 
-        private void drawFrameBuffer(IRenderer renderer, IShader shader)
+        private void drawFrameBuffer(IRenderer renderer, ICustomizedShader shader)
         {
             switch (shader)
             {

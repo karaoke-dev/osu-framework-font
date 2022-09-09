@@ -7,6 +7,6 @@ namespace osu.Framework.Graphics
 {
     public interface ISingleShaderBufferedDrawable : IBufferedDrawable
     {
-        IShader? Shader { get; }
+        ICustomizedShader? Shader { get; }
     }
 }

@@ -18,7 +18,7 @@ namespace osu.Framework.Extensions
         /// <param name="adjustment">The adjustment function.</param>
         /// <returns>The given <see cref="IShader"/>.</returns>
         public static T With<T>(this T drawable, Action<T> adjustment)
-            where T : IShader
+            where T : ICustomizedShader
         {
             adjustment?.Invoke(drawable);
             return drawable;

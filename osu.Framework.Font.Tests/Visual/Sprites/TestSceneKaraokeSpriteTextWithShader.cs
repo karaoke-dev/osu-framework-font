@@ -45,12 +45,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
         [Test]
         public void ApplyShader()
         {
-            AddStep("Apply CRT shader", () => karaokeSpriteText.Shaders = new[]
-            {
-                GetShader("CRT"),
-            });
-
-            AddStep("Clear shader", () => karaokeSpriteText.Shaders = Array.Empty<IShader>());
+            AddStep("Clear shader", () => karaokeSpriteText.Shaders = Array.Empty<ICustomizedShader>());
         }
 
         [Test]
@@ -72,7 +67,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
             AddStep("Clear shader from left text", () =>
             {
                 karaokeSpriteText.LeftTextColour = Color4.Green;
-                karaokeSpriteText.LeftLyricTextShaders = Array.Empty<IShader>();
+                karaokeSpriteText.LeftLyricTextShaders = Array.Empty<ICustomizedShader>();
             });
         }
 
@@ -82,7 +77,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
             AddStep("Apply Outline shader in right text", () =>
             {
                 karaokeSpriteText.RightTextColour = Color4.White;
-                karaokeSpriteText.RightLyricTextShaders = new IShader[]
+                karaokeSpriteText.RightLyricTextShaders = new ICustomizedShader[]
                 {
                     GetShaderByType<OutlineShader>().With(s =>
                     {
@@ -108,7 +103,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
             AddStep("Clear shader from right text", () =>
             {
                 karaokeSpriteText.RightTextColour = Color4.Red;
-                karaokeSpriteText.RightLyricTextShaders = Array.Empty<IShader>();
+                karaokeSpriteText.RightLyricTextShaders = Array.Empty<ICustomizedShader>();
             });
         }
 

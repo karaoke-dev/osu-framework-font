@@ -120,9 +120,9 @@ namespace osu.Framework.Graphics.Sprites
 
         #region Shader
 
-        private readonly List<IShader> shaders = new List<IShader>();
+        private readonly List<ICustomizedShader> shaders = new List<ICustomizedShader>();
 
-        public IReadOnlyList<IShader> Shaders
+        public IReadOnlyList<ICustomizedShader> Shaders
         {
             get => shaders;
             set
@@ -135,7 +135,7 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
-        public IReadOnlyList<IShader> LeftLyricTextShaders
+        public IReadOnlyList<ICustomizedShader> LeftLyricTextShaders
         {
             get => leftLyricText.Shaders;
             set
@@ -146,7 +146,7 @@ namespace osu.Framework.Graphics.Sprites
             }
         }
 
-        public IReadOnlyList<IShader> RightLyricTextShaders
+        public IReadOnlyList<ICustomizedShader> RightLyricTextShaders
         {
             get => rightLyricText.Shaders;
             set

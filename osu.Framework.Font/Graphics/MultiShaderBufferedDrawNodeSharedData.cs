@@ -12,11 +12,11 @@ namespace osu.Framework.Graphics
 {
     public class MultiShaderBufferedDrawNodeSharedData : BufferedDrawNodeSharedData
     {
-        private readonly Dictionary<IShader, IFrameBuffer> shaderBuffers = new Dictionary<IShader, IFrameBuffer>();
+        private readonly Dictionary<ICustomizedShader, IFrameBuffer> shaderBuffers = new Dictionary<ICustomizedShader, IFrameBuffer>();
 
         public bool IsLatestFrameBuffer { get; set; }
 
-        public IShader[] Shaders => shaderBuffers.Keys.ToArray();
+        public ICustomizedShader[] Shaders => shaderBuffers.Keys.ToArray();
 
         private readonly RenderBufferFormat[]? formats;
 
@@ -26,7 +26,7 @@ namespace osu.Framework.Graphics
             this.formats = formats;
         }
 
-        public void UpdateFrameBuffers(IRenderer renderer, IShader[] shaders)
+        public void UpdateFrameBuffers(IRenderer renderer, ICustomizedShader[] shaders)
         {
             if (IsLatestFrameBuffer)
                 return;
@@ -53,7 +53,7 @@ namespace osu.Framework.Graphics
             }, this);
         }
 
-        public IFrameBuffer GetSourceFrameBuffer(IShader shader)
+        public IFrameBuffer GetSourceFrameBuffer(ICustomizedShader shader)
         {
             if (!(shader is IStepShader stepShader))
                 return CurrentEffectBuffer;
@@ -68,7 +68,7 @@ namespace osu.Framework.Graphics
             return shaderBuffers[fromShader];
         }
 
-        public IFrameBuffer GetTargetFrameBuffer(IShader shader)
+        public IFrameBuffer GetTargetFrameBuffer(ICustomizedShader shader)
         {
             if (!shaderBuffers.ContainsKey(shader))
                 throw new KeyNotFoundException();
@@ -76,7 +76,7 @@ namespace osu.Framework.Graphics
             return shaderBuffers[shader];
         }
 
-        public void UpdateBuffer(IShader shader, IFrameBuffer frameBuffer)
+        public void UpdateBuffer(ICustomizedShader shader, IFrameBuffer frameBuffer)
         {
             if (!shaderBuffers.ContainsKey(shader))
                 throw new Exception();

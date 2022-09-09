@@ -23,7 +23,7 @@ namespace osu.Framework.Graphics
             loadTime = Source.Clock.CurrentTime;
         }
 
-        protected static bool ContainTimePropertyShader(IShader shader)
+        protected static bool ContainTimePropertyShader(ICustomizedShader shader)
         {
             switch (shader)
             {
@@ -46,7 +46,7 @@ namespace osu.Framework.Graphics
             prop.SetValue(SharedData, -1);
         }
 
-        protected void RenderShader(IRenderer renderer, IShader shader, IFrameBuffer current, IFrameBuffer target)
+        protected void RenderShader(IRenderer renderer, ICustomizedShader shader, IFrameBuffer current, IFrameBuffer target)
         {
             renderer.SetBlend(BlendingParameters.None);
 

@@ -107,12 +107,12 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
             public IShader TextureShader { get; private set; } = null!;
             public IShader RoundedTextureShader { get; private set; } = null!;
 
-            private readonly List<IShader> shaders = new();
+            private readonly List<ICustomizedShader> shaders = new();
 
             // todo: should have a better way to let user able to customize formats?
             private readonly MultiShaderBufferedDrawNodeSharedData sharedData = new();
 
-            public IReadOnlyList<IShader> Shaders
+            public IReadOnlyList<ICustomizedShader> Shaders
             {
                 get => shaders;
                 set
