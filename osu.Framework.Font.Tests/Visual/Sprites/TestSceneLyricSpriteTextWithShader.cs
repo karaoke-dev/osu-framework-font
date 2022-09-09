@@ -42,7 +42,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
                 })
             });
 
-            AddStep("Apply rainbow shader", () => lyricSpriteText.Shaders = new IShader[]
+            AddStep("Apply rainbow shader", () => lyricSpriteText.Shaders = new ICustomizedShader[]
             {
                 GetShaderByType<OutlineShader>().With(s =>
                 {
@@ -64,7 +64,7 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
                 },
             });
 
-            AddStep("Remove all shader", () => lyricSpriteText.Shaders = Array.Empty<IShader>());
+            AddStep("Remove all shader", () => lyricSpriteText.Shaders = Array.Empty<ICustomizedShader>());
         }
     }
 }

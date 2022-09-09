@@ -88,8 +88,8 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
             {
                 karaokeSpriteText.LeftTextColour = Color4Extensions.FromHex(left_text_color);
                 karaokeSpriteText.RightTextColour = Color4Extensions.FromHex(right_text_color);
-                karaokeSpriteText.LeftLyricTextShaders = Array.Empty<IShader>();
-                karaokeSpriteText.RightLyricTextShaders = Array.Empty<IShader>();
+                karaokeSpriteText.LeftLyricTextShaders = Array.Empty<ICustomizedShader>();
+                karaokeSpriteText.RightLyricTextShaders = Array.Empty<ICustomizedShader>();
             });
         }
 

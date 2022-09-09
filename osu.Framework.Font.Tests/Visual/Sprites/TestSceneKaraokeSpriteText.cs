@@ -218,8 +218,8 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
 
             AddStep("Clear shader", () =>
             {
-                karaokeSpriteText.LeftLyricTextShaders = Array.Empty<IShader>();
-                karaokeSpriteText.RightLyricTextShaders = Array.Empty<IShader>();
+                karaokeSpriteText.LeftLyricTextShaders = Array.Empty<ICustomizedShader>();
+                karaokeSpriteText.RightLyricTextShaders = Array.Empty<ICustomizedShader>();
             });
         }
 
