@@ -37,7 +37,7 @@ namespace osu.Framework.Graphics.Shaders
         public void Unbind()
             => throw new NotSupportedException();
 
-        public Uniform<T> GetUniform<T>(string name) where T : struct, IEquatable<T>
+        public Uniform<T> GetUniform<T>(string name) where T : unmanaged, IEquatable<T>
             => throw new NotSupportedException();
 
         public bool IsLoaded

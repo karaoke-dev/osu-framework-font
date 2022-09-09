@@ -2,7 +2,6 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System.Collections.Generic;
-using osu.Framework.Graphics.OpenGL.Buffers;
 
 namespace osu.Framework.Graphics.Shaders
 {
