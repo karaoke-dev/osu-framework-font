@@ -10,7 +10,7 @@ namespace osu.Framework.Graphics.Shaders
         /// <summary>
         /// Render <see cref="FrameBuffer"/> from target <see cref="IShader"/> result.
         /// </summary>
-        IShader? FromShader { get; }
+        ICustomizedShader? FromShader { get; }
 
         /// <summary>
         /// List if <see cref="ICustomizedShader"/>, will pass <see cref="FrameBuffer"/> to each shaders.

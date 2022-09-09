@@ -102,9 +102,9 @@ namespace osu.Framework.Graphics.Sprites
 
         #region Shader
 
-        private readonly List<IShader> shaders = new List<IShader>();
+        private readonly List<ICustomizedShader> shaders = new List<ICustomizedShader>();
 
-        public IReadOnlyList<IShader> Shaders
+        public IReadOnlyList<ICustomizedShader> Shaders
         {
             get => shaders;
             set
