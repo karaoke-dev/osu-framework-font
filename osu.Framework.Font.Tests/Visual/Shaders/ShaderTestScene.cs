@@ -105,7 +105,6 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
         protected class TestShaderContainer : Container, IMultiShaderBufferedDrawable
         {
             public IShader TextureShader { get; private set; } = null!;
-            public IShader RoundedTextureShader { get; private set; } = null!;
 
             private readonly List<ICustomizedShader> shaders = new();
 
@@ -131,7 +130,6 @@ namespace osu.Framework.Font.Tests.Visual.Shaders
             private void load(ShaderManager shaderManager)
             {
                 TextureShader = shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, FragmentShaderDescriptor.TEXTURE);
-                RoundedTextureShader = shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, FragmentShaderDescriptor.TEXTURE_ROUNDED);
             }
 
             protected override DrawNode CreateDrawNode()

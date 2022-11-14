@@ -31,7 +31,6 @@ namespace osu.Framework.Graphics.Sprites
         private readonly MultiShaderBufferedDrawNodeSharedData sharedData = new MultiShaderBufferedDrawNodeSharedData();
 
         public IShader TextureShader { get; private set; } = null!;
-        public IShader RoundedTextureShader { get; private set; } = null!;
 
         public KaraokeSpriteText()
         {
@@ -63,7 +62,6 @@ namespace osu.Framework.Graphics.Sprites
         private void load(ShaderManager shaderManager)
         {
             TextureShader = shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, FragmentShaderDescriptor.TEXTURE);
-            RoundedTextureShader = shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, FragmentShaderDescriptor.TEXTURE_ROUNDED);
         }
 
         #region Frame buffer
