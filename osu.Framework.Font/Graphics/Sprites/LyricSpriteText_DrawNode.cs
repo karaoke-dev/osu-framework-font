@@ -63,7 +63,7 @@ namespace osu.Framework.Graphics.Sprites
             {
                 base.Draw(renderer);
 
-                var shader = GetAppropriateShader(renderer);
+                var shader = TextureShader;
                 shader.Bind();
 
                 for (int i = 0; i < parts.Count; i++)
