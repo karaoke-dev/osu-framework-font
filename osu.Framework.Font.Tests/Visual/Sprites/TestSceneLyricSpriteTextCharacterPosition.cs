@@ -40,8 +40,8 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
                         Anchor = Anchor.Centre,
                         Origin = Anchor.Centre,
                         Text = "カラオケyo－",
-                        Rubies = TestCaseTagHelper.ParsePositionTexts(new[] { "[0,1]:か", "[1,2]:ら", "[2,3]:お", "[3,4]:け", "[4,5]:－" }),
-                        Romajies = TestCaseTagHelper.ParsePositionTexts(new[] { "[0,1]:ka", "[1,2]:ra", "[2,3]:o", "[3,4]:ke", "[4,5]:yo" }),
+                        Rubies = TestCaseTagHelper.ParsePositionTexts(new[] { "[0,1]:か", "[1,2]:ら", "[2,3]:お", "[3,4]:け", "[4,5]:－", "[4,5]:" }),
+                        Romajies = TestCaseTagHelper.ParsePositionTexts(new[] { "[0,1]:ka", "[1,2]:ra", "[2,3]:o", "[3,4]:ke", "[4,5]:yo", "[4,5]:" }),
                     },
                 }
             };
@@ -116,7 +116,8 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
         [TestCase("[2,3]:お", true)]
         [TestCase("[3,4]:け", true)]
         [TestCase("[4,5]:－", true)]
-        [TestCase("[-1,1]:か", false)]
+        [TestCase("[4,5]:", true)] // Should be able to get the ruby/romaji text position even if text is empty.
+        [TestCase("[-1,1]:か", true)] // will be fixed into "[0,1]:か"
         [TestCase("[0,2]:か", false)]
         [TestCase("[0,1]:?", false)]
         public void TestGetRubyTagDrawRectangle(string rubyTag, bool valid)
@@ -129,7 +130,8 @@ namespace osu.Framework.Font.Tests.Visual.Sprites
         [TestCase("[2,3]:o", true)]
         [TestCase("[3,4]:ke", true)]
         [TestCase("[4,5]:yo", true)]
-        [TestCase("[-1,1]:ka", false)]
+        [TestCase("[4,5]:", true)] // Should be able to get the ruby/romaji text position even if text is empty.
+        [TestCase("[-1,1]:ka", true)] // will be fixed into "[0,1]:ka"
         [TestCase("[0,2]:ka", false)]
         [TestCase("[0,1]:?", false)]
         public void TestGetRomajiTagDrawRectangle(string rubyTag, bool valid)

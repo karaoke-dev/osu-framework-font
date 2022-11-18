@@ -285,7 +285,6 @@ namespace osu.Framework.Graphics.Sprites
 
         internal static List<PositionText> GetFixedPositionTexts(IEnumerable<PositionText> positionTexts, string lyricText)
             => positionTexts
-               .Where(x => !string.IsNullOrEmpty(x.Text))
                .Select(x => GetFixedPositionText(x, lyricText))
                .Distinct()
                .ToList();
@@ -294,7 +293,8 @@ namespace osu.Framework.Graphics.Sprites
         {
             var startIndex = Math.Clamp(positionText.StartIndex, 0, lyricText.Length);
             var endIndex = Math.Clamp(positionText.EndIndex, 0, lyricText.Length);
-            return new PositionText(positionText.Text, Math.Min(startIndex, endIndex), Math.Max(startIndex, endIndex));
+            var text = string.IsNullOrEmpty(positionText.Text) ? " " : positionText.Text;
+            return new PositionText(text, Math.Min(startIndex, endIndex), Math.Max(startIndex, endIndex));
         }
 
         #endregion
@@ -383,8 +383,9 @@ namespace osu.Framework.Graphics.Sprites
 
         public RectangleF GetRubyTagDrawRectangle(PositionText rubyTag, bool drawSizeOnly = false)
         {
-            if (!rubyCharacters.TryGetValue(rubyTag, out var glyphs))
-                throw new ArgumentOutOfRangeException(nameof(rubyTag));
+            var fixedRubyTag = GetFixedPositionText(rubyTag, displayedText);
+            if (!rubyCharacters.TryGetValue(fixedRubyTag, out var glyphs))
+                throw new ArgumentOutOfRangeException(nameof(fixedRubyTag));
 
             var drawRectangle = glyphs.Select(x => drawSizeOnly ? x.DrawRectangle : TextBuilderGlyphUtils.GetCharacterSizeRectangle(x))
                                       .Aggregate(RectangleF.Union);
@@ -393,8 +394,9 @@ namespace osu.Framework.Graphics.Sprites
 
         public RectangleF GetRomajiTagDrawRectangle(PositionText romajiTag, bool drawSizeOnly = false)
         {
-            if (!romajiCharacters.TryGetValue(romajiTag, out var glyphs))
-                throw new ArgumentOutOfRangeException(nameof(romajiTag));
+            var fixedRomajiTag = GetFixedPositionText(romajiTag, displayedText);
+            if (!romajiCharacters.TryGetValue(fixedRomajiTag, out var glyphs))
+                throw new ArgumentOutOfRangeException(nameof(fixedRomajiTag));
 
             var drawRectangle = glyphs.Select(x => drawSizeOnly ? x.DrawRectangle : TextBuilderGlyphUtils.GetCharacterSizeRectangle(x))
                                       .Aggregate(RectangleF.Union);
