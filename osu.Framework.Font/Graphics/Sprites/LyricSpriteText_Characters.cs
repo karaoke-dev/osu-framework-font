@@ -285,7 +285,6 @@ namespace osu.Framework.Graphics.Sprites
 
         internal static List<PositionText> GetFixedPositionTexts(IEnumerable<PositionText> positionTexts, string lyricText)
             => positionTexts
-               .Where(x => !string.IsNullOrEmpty(x.Text))
                .Select(x => GetFixedPositionText(x, lyricText))
                .Distinct()
                .ToList();
@@ -294,7 +293,8 @@ namespace osu.Framework.Graphics.Sprites
         {
             var startIndex = Math.Clamp(positionText.StartIndex, 0, lyricText.Length);
             var endIndex = Math.Clamp(positionText.EndIndex, 0, lyricText.Length);
-            return new PositionText(positionText.Text, Math.Min(startIndex, endIndex), Math.Max(startIndex, endIndex));
+            var text = string.IsNullOrEmpty(positionText.Text) ? " " : positionText.Text;
+            return new PositionText(text, Math.Min(startIndex, endIndex), Math.Max(startIndex, endIndex));
         }
 
         #endregion
