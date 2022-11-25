@@ -14,7 +14,7 @@ public class StepShader : IStepShader, IApplicableToCharacterSize, IApplicableTo
 
     public ICustomizedShader? FromShader { get; set; }
 
-    private readonly List<ICustomizedShader> shaders = new List<ICustomizedShader>();
+    private readonly List<ICustomizedShader> shaders = new();
 
     public IReadOnlyList<ICustomizedShader> StepShaders
     {

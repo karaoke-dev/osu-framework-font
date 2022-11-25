@@ -12,7 +12,7 @@ namespace osu.Framework.Graphics;
 
 public class MultiShaderBufferedDrawNodeSharedData : BufferedDrawNodeSharedData
 {
-    private readonly Dictionary<ICustomizedShader, IFrameBuffer> shaderBuffers = new Dictionary<ICustomizedShader, IFrameBuffer>();
+    private readonly Dictionary<ICustomizedShader, IFrameBuffer> shaderBuffers = new();
 
     public bool IsLatestFrameBuffer { get; set; }
 

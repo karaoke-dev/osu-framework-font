@@ -28,7 +28,7 @@ public partial class KaraokeSpriteText<T> : CompositeDrawable, IMultiShaderBuffe
     private readonly T rightLyricText;
 
     // todo: should have a better way to let user able to customize formats?
-    private readonly MultiShaderBufferedDrawNodeSharedData sharedData = new MultiShaderBufferedDrawNodeSharedData();
+    private readonly MultiShaderBufferedDrawNodeSharedData sharedData = new();
 
     public IShader TextureShader { get; private set; } = null!;
 
@@ -81,7 +81,7 @@ public partial class KaraokeSpriteText<T> : CompositeDrawable, IMultiShaderBuffe
         }
     }
 
-    private Color4 backgroundColour = new Color4(0, 0, 0, 0);
+    private Color4 backgroundColour = new(0, 0, 0, 0);
 
     /// <summary>
     /// The background colour of the framebuffer. Transparent black by default.
@@ -118,7 +118,7 @@ public partial class KaraokeSpriteText<T> : CompositeDrawable, IMultiShaderBuffe
 
     #region Shader
 
-    private readonly List<ICustomizedShader> shaders = new List<ICustomizedShader>();
+    private readonly List<ICustomizedShader> shaders = new();
 
     public IReadOnlyList<ICustomizedShader> Shaders
     {
@@ -355,7 +355,7 @@ public partial class KaraokeSpriteText<T> : CompositeDrawable, IMultiShaderBuffe
 
     #endregion
 
-    private readonly SortedDictionary<double, TextIndex> timeTags = new SortedDictionary<double, TextIndex>();
+    private readonly SortedDictionary<double, TextIndex> timeTags = new();
 
     public IReadOnlyDictionary<double, TextIndex> TimeTags
     {

@@ -27,7 +27,7 @@ public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, I
     private static readonly char[] default_never_fixed_width_characters = { '.', ',', ':', ' ' };
 
     // todo: should have a better way to let user able to customize formats?
-    private readonly MultiShaderBufferedDrawNodeSharedData sharedData = new MultiShaderBufferedDrawNodeSharedData();
+    private readonly MultiShaderBufferedDrawNodeSharedData sharedData = new();
 
     [Resolved, AllowNull]
     private FontStore store { get; set; }
@@ -63,7 +63,7 @@ public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, I
 
     public DrawColourInfo? FrameBufferDrawColour => new DrawColourInfo(Color4.White);
 
-    private Color4 backgroundColour = new Color4(0, 0, 0, 0);
+    private Color4 backgroundColour = new(0, 0, 0, 0);
 
     /// <summary>
     /// The background colour of the framebuffer. Transparent black by default.
@@ -100,7 +100,7 @@ public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, I
 
     #region Shader
 
-    private readonly List<ICustomizedShader> shaders = new List<ICustomizedShader>();
+    private readonly List<ICustomizedShader> shaders = new();
 
     public IReadOnlyList<ICustomizedShader> Shaders
     {
@@ -140,7 +140,7 @@ public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, I
         }
     }
 
-    private readonly BindableWithCurrent<string> current = new BindableWithCurrent<string>();
+    private readonly BindableWithCurrent<string> current = new();
 
     public Bindable<string> Current
     {
@@ -150,7 +150,7 @@ public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, I
 
     private string displayedText => Text;
 
-    private readonly List<PositionText> rubies = new List<PositionText>();
+    private readonly List<PositionText> rubies = new();
 
     /// <summary>
     /// Gets or sets the ruby text to be displayed.
@@ -167,7 +167,7 @@ public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, I
         }
     }
 
-    private readonly List<PositionText> romajies = new List<PositionText>();
+    private readonly List<PositionText> romajies = new();
 
     /// <summary>
     /// Gets or sets the romaji text to be displayed.

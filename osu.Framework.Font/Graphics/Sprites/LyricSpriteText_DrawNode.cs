@@ -44,7 +44,7 @@ public partial class LyricSpriteText
     {
         protected new LyricSpriteText Source => (LyricSpriteText)base.Source;
 
-        private readonly List<ScreenSpaceCharacterPart> parts = new List<ScreenSpaceCharacterPart>();
+        private readonly List<ScreenSpaceCharacterPart> parts = new();
 
         public LyricSpriteTextDrawNode(LyricSpriteText source)
             : base(source)
