@@ -55,7 +55,7 @@ public class MultiShaderBufferedDrawNodeSharedData : BufferedDrawNodeSharedData
 
     public IFrameBuffer GetSourceFrameBuffer(ICustomizedShader shader)
     {
-        if (!(shader is IStepShader stepShader))
+        if (shader is not IStepShader stepShader)
             return CurrentEffectBuffer;
 
         var fromShader = stepShader.FromShader;
