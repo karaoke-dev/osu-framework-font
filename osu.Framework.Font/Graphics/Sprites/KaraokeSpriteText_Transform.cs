@@ -153,7 +153,7 @@ namespace osu.Framework.Graphics.Sprites
                 return collections;
             });
 
-            IEnumerable<KeyValuePair<double, TextIndex>> getInterpolatedTimeTagBetweenTwoTimeTag(KeyValuePair<double, TextIndex> firstTimeTag, KeyValuePair<double, TextIndex> secondTimeTag)
+            static IEnumerable<KeyValuePair<double, TextIndex>> getInterpolatedTimeTagBetweenTwoTimeTag(KeyValuePair<double, TextIndex> firstTimeTag, KeyValuePair<double, TextIndex> secondTimeTag)
             {
                 // we should not add the interpolation if timing is too small between two time-tags.
                 var firstTimeTagTime = firstTimeTag.Key;
