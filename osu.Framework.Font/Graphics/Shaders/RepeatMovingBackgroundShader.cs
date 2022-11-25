@@ -14,7 +14,7 @@ public class RepeatMovingBackgroundShader : InternalShader, IHasCurrentTime, IHa
 
     public Texture? Texture { get; set; }
 
-    public Vector2 TextureDisplaySize { get; set; } = new Vector2(10);
+    public Vector2 TextureDisplaySize { get; set; } = new(10);
 
     public Vector2 TextureDisplayBorder { get; set; }
 

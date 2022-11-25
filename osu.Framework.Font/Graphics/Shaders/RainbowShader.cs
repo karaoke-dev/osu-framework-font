@@ -9,7 +9,7 @@ public class RainbowShader : InternalShader, IHasCurrentTime
 {
     public override string ShaderName => "Rainbow";
 
-    public Vector2 Uv { get; set; } = new Vector2(0, 1);
+    public Vector2 Uv { get; set; } = new(0, 1);
 
     public float Speed { get; set; } = 1;
 

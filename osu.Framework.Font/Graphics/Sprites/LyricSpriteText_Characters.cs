@@ -32,9 +32,9 @@ public partial class LyricSpriteText
     /// </summary>
     protected virtual char FallbackCharacter => '?';
 
-    private readonly LayoutValue<TextBuilder> textBuilderCache = new LayoutValue<TextBuilder>(Invalidation.DrawSize, InvalidationSource.Parent);
-    private readonly LayoutValue<TextBuilder> rubyTextBuilderCache = new LayoutValue<TextBuilder>(Invalidation.DrawSize, InvalidationSource.Parent);
-    private readonly LayoutValue<TextBuilder> romajiTextBuilderCache = new LayoutValue<TextBuilder>(Invalidation.DrawSize, InvalidationSource.Parent);
+    private readonly LayoutValue<TextBuilder> textBuilderCache = new(Invalidation.DrawSize, InvalidationSource.Parent);
+    private readonly LayoutValue<TextBuilder> rubyTextBuilderCache = new(Invalidation.DrawSize, InvalidationSource.Parent);
+    private readonly LayoutValue<TextBuilder> romajiTextBuilderCache = new(Invalidation.DrawSize, InvalidationSource.Parent);
 
     /// <summary>
     /// Invalidates the current <see cref="TextBuilder"/>, causing a new one to be created next time it's required via <see cref="CreateTextBuilder"/>.

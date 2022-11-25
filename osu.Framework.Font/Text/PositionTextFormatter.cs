@@ -22,7 +22,7 @@ public class PositionTextFormatter
     public PositionTextFormatter(List<TextBuilderGlyph> characterList,
                                  RelativePosition relativePosition,
                                  LyricTextAlignment alignment = LyricTextAlignment.Auto,
-                                 Vector2 spacing = new Vector2(),
+                                 Vector2 spacing = new(),
                                  int margin = 0)
     {
         this.characterList = characterList;

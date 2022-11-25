@@ -9,7 +9,7 @@ public class PixelShader : InternalShader, IHasTextureSize, IHasInflationPercent
 {
     public override string ShaderName => "Pixel";
 
-    public Vector2 Size { get; set; } = new Vector2(5);
+    public Vector2 Size { get; set; } = new(5);
 
     public override void ApplyValue()
     {
