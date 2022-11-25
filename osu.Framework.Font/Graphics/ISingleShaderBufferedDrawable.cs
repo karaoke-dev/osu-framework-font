@@ -3,10 +3,9 @@
 
 using osu.Framework.Graphics.Shaders;
 
-namespace osu.Framework.Graphics
+namespace osu.Framework.Graphics;
+
+public interface ISingleShaderBufferedDrawable : IBufferedDrawable
 {
-    public interface ISingleShaderBufferedDrawable : IBufferedDrawable
-    {
-        ICustomizedShader? Shader { get; }
-    }
+    ICustomizedShader? Shader { get; }
 }

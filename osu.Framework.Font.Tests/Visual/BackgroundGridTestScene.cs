@@ -15,83 +15,82 @@ using osu.Framework.Testing;
 using osuTK;
 using osuTK.Graphics;
 
-namespace osu.Framework.Font.Tests.Visual
+namespace osu.Framework.Font.Tests.Visual;
+
+public abstract class BackgroundGridTestScene : TestScene
 {
-    public abstract class BackgroundGridTestScene : TestScene
+    protected const int GRID_SIZE = 30;
+
+    private const int column = 12;
+    private const int row = 6;
+    private const int spacing = 5;
+
+    protected const string RED = "#AF0000";
+    protected const string GREEN = "#00AF00";
+    protected const string BLUE = "#0000AF";
+
+    [Resolved, AllowNull]
+    private ShaderManager shaderManager { get; set; }
+
+    private readonly Container content;
+
+    protected override Container<Drawable> Content => content;
+
+    protected BackgroundGridTestScene()
     {
-        protected const int GRID_SIZE = 30;
+        const int x = (GRID_SIZE + spacing) * column - spacing;
+        const int y = (GRID_SIZE + spacing) * row - spacing;
 
-        private const int column = 12;
-        private const int row = 6;
-        private const int spacing = 5;
-
-        protected const string RED = "#AF0000";
-        protected const string GREEN = "#00AF00";
-        protected const string BLUE = "#0000AF";
-
-        [Resolved, AllowNull]
-        private ShaderManager shaderManager { get; set; }
-
-        private readonly Container content;
-
-        protected override Container<Drawable> Content => content;
-
-        protected BackgroundGridTestScene()
+        base.Content.Add(new Container
         {
-            const int x = (GRID_SIZE + spacing) * column - spacing;
-            const int y = (GRID_SIZE + spacing) * row - spacing;
-
-            base.Content.Add(new Container
+            Anchor = Anchor.Centre,
+            Origin = Anchor.Centre,
+            Size = new Vector2(x, y),
+            Children = new Drawable[]
             {
-                Anchor = Anchor.Centre,
-                Origin = Anchor.Centre,
-                Size = new Vector2(x, y),
-                Children = new Drawable[]
+                new FillFlowContainer<Box>
                 {
-                    new FillFlowContainer<Box>
+                    Name = "Background",
+                    RelativeSizeAxes = Axes.Both,
+                    Spacing = new Vector2(spacing),
+                    Children = Enumerable.Range(0, column * row).Select(_ => new Box
                     {
-                        Name = "Background",
-                        RelativeSizeAxes = Axes.Both,
-                        Spacing = new Vector2(spacing),
-                        Children = Enumerable.Range(0, column * row).Select(_ => new Box
-                        {
-                            Colour = Color4.DarkBlue,
-                            Size = new Vector2(GRID_SIZE),
-                        }).ToArray()
-                    },
-                    new DraggableCircle
-                    {
-                        Name = "Test background change object",
-                        Size = new Vector2(50),
-                        Anchor = Anchor.Centre,
-                        Origin = Anchor.Centre,
-                        Colour = Color4.Purple,
-                    },
-                    content = new Container
-                    {
-                        RelativeSizeAxes = Axes.Both,
-                    },
-                    new DraggableCircle
-                    {
-                        Name = "Test background change object",
+                        Colour = Color4.DarkBlue,
                         Size = new Vector2(GRID_SIZE),
-                        Anchor = Anchor.BottomRight,
-                        Origin = Anchor.BottomRight,
-                        Colour = Color4Extensions.FromHex(GREEN)
-                    },
-                }
-            });
-        }
+                    }).ToArray()
+                },
+                new DraggableCircle
+                {
+                    Name = "Test background change object",
+                    Size = new Vector2(50),
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
+                    Colour = Color4.Purple,
+                },
+                content = new Container
+                {
+                    RelativeSizeAxes = Axes.Both,
+                },
+                new DraggableCircle
+                {
+                    Name = "Test background change object",
+                    Size = new Vector2(GRID_SIZE),
+                    Anchor = Anchor.BottomRight,
+                    Origin = Anchor.BottomRight,
+                    Colour = Color4Extensions.FromHex(GREEN)
+                },
+            }
+        });
+    }
 
-        protected T GetShaderByType<T>() where T : InternalShader, new()
-            => shaderManager.LocalInternalShader<T>();
+    protected T GetShaderByType<T>() where T : InternalShader, new()
+        => shaderManager.LocalInternalShader<T>();
 
-        protected class DraggableCircle : Circle
-        {
-            protected override bool OnDragStart(DragStartEvent e) => true;
+    protected class DraggableCircle : Circle
+    {
+        protected override bool OnDragStart(DragStartEvent e) => true;
 
-            protected override void OnDrag(DragEvent e)
-                => Position += e.Delta;
-        }
+        protected override void OnDrag(DragEvent e)
+            => Position += e.Delta;
     }
 }

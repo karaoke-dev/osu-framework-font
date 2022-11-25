@@ -3,10 +3,9 @@
 
 using osu.Framework.Graphics.Primitives;
 
-namespace osu.Framework.Graphics.Shaders
+namespace osu.Framework.Graphics.Shaders;
+
+public interface IApplicableToDrawRectangle
 {
-    public interface IApplicableToDrawRectangle
-    {
-        RectangleF ComputeDrawRectangle(RectangleF originDrawRectangle);
-    }
+    RectangleF ComputeDrawRectangle(RectangleF originDrawRectangle);
 }

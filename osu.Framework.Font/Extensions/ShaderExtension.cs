@@ -4,24 +4,23 @@
 using System;
 using osu.Framework.Graphics.Shaders;
 
-namespace osu.Framework.Extensions
+namespace osu.Framework.Extensions;
+
+/// <summary>
+/// Holds extension methods for <see cref="IShader"/>.
+/// </summary>
+public static class ShaderExtension
 {
     /// <summary>
-    /// Holds extension methods for <see cref="IShader"/>.
+    /// Adjusts specified properties of a <see cref="IShader"/>.
     /// </summary>
-    public static class ShaderExtension
+    /// <param name="drawable">The <see cref="IShader"/> whose properties should be adjusted.</param>
+    /// <param name="adjustment">The adjustment function.</param>
+    /// <returns>The given <see cref="IShader"/>.</returns>
+    public static T With<T>(this T drawable, Action<T> adjustment)
+        where T : ICustomizedShader
     {
-        /// <summary>
-        /// Adjusts specified properties of a <see cref="IShader"/>.
-        /// </summary>
-        /// <param name="drawable">The <see cref="IShader"/> whose properties should be adjusted.</param>
-        /// <param name="adjustment">The adjustment function.</param>
-        /// <returns>The given <see cref="IShader"/>.</returns>
-        public static T With<T>(this T drawable, Action<T> adjustment)
-            where T : ICustomizedShader
-        {
-            adjustment?.Invoke(drawable);
-            return drawable;
-        }
+        adjustment?.Invoke(drawable);
+        return drawable;
     }
 }

@@ -4,10 +4,9 @@
 using System.Collections.Generic;
 using osu.Framework.Graphics.Shaders;
 
-namespace osu.Framework.Graphics
+namespace osu.Framework.Graphics;
+
+public interface IMultiShaderBufferedDrawable : IBufferedDrawable
 {
-    public interface IMultiShaderBufferedDrawable : IBufferedDrawable
-    {
-        IReadOnlyList<ICustomizedShader> Shaders { get; }
-    }
+    IReadOnlyList<ICustomizedShader> Shaders { get; }
 }

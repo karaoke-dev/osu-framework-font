@@ -3,18 +3,17 @@
 
 using osuTK;
 
-namespace osu.Framework.Graphics.Shaders
+namespace osu.Framework.Graphics.Shaders;
+
+public class PixelShader : InternalShader, IHasTextureSize, IHasInflationPercentage
 {
-    public class PixelShader : InternalShader, IHasTextureSize, IHasInflationPercentage
+    public override string ShaderName => "Pixel";
+
+    public Vector2 Size { get; set; } = new Vector2(5);
+
+    public override void ApplyValue()
     {
-        public override string ShaderName => "Pixel";
-
-        public Vector2 Size { get; set; } = new Vector2(5);
-
-        public override void ApplyValue()
-        {
-            var size = Size;
-            GetUniform<Vector2>(@"g_Size").UpdateValue(ref size);
-        }
+        var size = Size;
+        GetUniform<Vector2>(@"g_Size").UpdateValue(ref size);
     }
 }

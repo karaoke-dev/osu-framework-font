@@ -11,60 +11,59 @@ using osu.Framework.Graphics.Sprites;
 using osuTK;
 using osuTK.Graphics;
 
-namespace osu.Framework.Font.Tests.Visual.Sprites
+namespace osu.Framework.Font.Tests.Visual.Sprites;
+
+public class TestSceneLyricSpriteTextWithShader : BackgroundGridTestScene
 {
-    public class TestSceneLyricSpriteTextWithShader : BackgroundGridTestScene
+    private readonly LyricSpriteText lyricSpriteText;
+
+    public TestSceneLyricSpriteTextWithShader()
     {
-        private readonly LyricSpriteText lyricSpriteText;
-
-        public TestSceneLyricSpriteTextWithShader()
+        Child = lyricSpriteText = new LyricSpriteText
         {
-            Child = lyricSpriteText = new LyricSpriteText
-            {
-                Anchor = Anchor.Centre,
-                Origin = Anchor.Centre,
-                Text = "カラオケ",
-                Rubies = TestCaseTagHelper.ParsePositionTexts(new[] { "[0,1]:か", "[1,2]:ら", "[2,3]:お", "[3,4]:け" }),
-                Romajies = TestCaseTagHelper.ParsePositionTexts(new[] { "[0,1]:ka", "[1,2]:ra", "[2,3]:o", "[3,4]:ke" }),
-                Scale = new Vector2(2)
-            };
-        }
+            Anchor = Anchor.Centre,
+            Origin = Anchor.Centre,
+            Text = "カラオケ",
+            Rubies = TestCaseTagHelper.ParsePositionTexts(new[] { "[0,1]:か", "[1,2]:ら", "[2,3]:お", "[3,4]:け" }),
+            Romajies = TestCaseTagHelper.ParsePositionTexts(new[] { "[0,1]:ka", "[1,2]:ra", "[2,3]:o", "[3,4]:ke" }),
+            Scale = new Vector2(2)
+        };
+    }
 
-        [Test]
-        public void ApplyShader()
+    [Test]
+    public void ApplyShader()
+    {
+        AddStep("Apply static shader", () => lyricSpriteText.Shaders = new[]
         {
-            AddStep("Apply static shader", () => lyricSpriteText.Shaders = new[]
+            GetShaderByType<OutlineShader>().With(s =>
             {
-                GetShaderByType<OutlineShader>().With(s =>
-                {
-                    s.Radius = 3;
-                    s.OutlineColour = Color4.Green;
-                })
-            });
+                s.Radius = 3;
+                s.OutlineColour = Color4.Green;
+            })
+        });
 
-            AddStep("Apply rainbow shader", () => lyricSpriteText.Shaders = new ICustomizedShader[]
+        AddStep("Apply rainbow shader", () => lyricSpriteText.Shaders = new ICustomizedShader[]
+        {
+            GetShaderByType<OutlineShader>().With(s =>
             {
-                GetShaderByType<OutlineShader>().With(s =>
+                s.Radius = 1;
+                s.OutlineColour = Color4.Blue;
+            }),
+            new StepShader
+            {
+                Name = "Outline with rainbow effect",
+                StepShaders = new ICustomizedShader[]
                 {
-                    s.Radius = 1;
-                    s.OutlineColour = Color4.Blue;
-                }),
-                new StepShader
-                {
-                    Name = "Outline with rainbow effect",
-                    StepShaders = new ICustomizedShader[]
+                    GetShaderByType<OutlineShader>().With(s =>
                     {
-                        GetShaderByType<OutlineShader>().With(s =>
-                        {
-                            s.Radius = 3;
-                            s.OutlineColour = Color4.White;
-                        }),
-                        GetShaderByType<RainbowShader>()
-                    }
-                },
-            });
+                        s.Radius = 3;
+                        s.OutlineColour = Color4.White;
+                    }),
+                    GetShaderByType<RainbowShader>()
+                }
+            },
+        });
 
-            AddStep("Remove all shader", () => lyricSpriteText.Shaders = Array.Empty<ICustomizedShader>());
-        }
+        AddStep("Remove all shader", () => lyricSpriteText.Shaders = Array.Empty<ICustomizedShader>());
     }
 }
