@@ -5,50 +5,49 @@ using osu.Framework.Extensions.EnumExtensions;
 using osu.Framework.Graphics.Primitives;
 using osuTK;
 
-namespace osu.Framework.Graphics.Extensions
+namespace osu.Framework.Graphics.Extensions;
+
+public static class RectangleFExtensions
 {
-    public static class RectangleFExtensions
+    public static RectangleF Scale(this RectangleF source, float scale, Anchor origin = Anchor.Centre)
+        => source.Scale(new Vector2(scale), origin);
+
+    public static RectangleF Scale(this RectangleF source, Vector2 scale, Anchor origin = Anchor.Centre)
     {
-        public static RectangleF Scale(this RectangleF source, float scale, Anchor origin = Anchor.Centre)
-            => source.Scale(new Vector2(scale), origin);
+        var newWidth = source.Width * scale.X;
+        var newHeight = source.Height * scale.Y;
 
-        public static RectangleF Scale(this RectangleF source, Vector2 scale, Anchor origin = Anchor.Centre)
+        var x = source.X - getXScale(origin) * (newWidth - source.Width);
+        var y = source.Y - getYScale(origin) * (newHeight - source.Height);
+
+        return new RectangleF(x, y, newWidth, newHeight);
+
+        static float getXScale(Anchor origin)
         {
-            var newWidth = source.Width * scale.X;
-            var newHeight = source.Height * scale.Y;
+            if (origin.HasFlagFast(Anchor.x0))
+                return 0;
 
-            var x = source.X - getXScale(origin) * (newWidth - source.Width);
-            var y = source.Y - getYScale(origin) * (newHeight - source.Height);
+            if (origin.HasFlagFast(Anchor.x1))
+                return 0.5f;
 
-            return new RectangleF(x, y, newWidth, newHeight);
+            if (origin.HasFlagFast(Anchor.x2))
+                return 1f;
 
-            static float getXScale(Anchor origin)
-            {
-                if (origin.HasFlagFast(Anchor.x0))
-                    return 0;
+            return 100;
+        }
 
-                if (origin.HasFlagFast(Anchor.x1))
-                    return 0.5f;
+        static float getYScale(Anchor origin)
+        {
+            if (origin.HasFlagFast(Anchor.y0))
+                return 0;
 
-                if (origin.HasFlagFast(Anchor.x2))
-                    return 1f;
+            if (origin.HasFlagFast(Anchor.y1))
+                return 0.5f;
 
-                return 100;
-            }
+            if (origin.HasFlagFast(Anchor.y2))
+                return 1f;
 
-            static float getYScale(Anchor origin)
-            {
-                if (origin.HasFlagFast(Anchor.y0))
-                    return 0;
-
-                if (origin.HasFlagFast(Anchor.y1))
-                    return 0.5f;
-
-                if (origin.HasFlagFast(Anchor.y2))
-                    return 1f;
-
-                return 100;
-            }
+            return 100;
         }
     }
 }

@@ -6,58 +6,57 @@ using System.Collections.Generic;
 using System.Linq;
 using osu.Framework.Graphics.Primitives;
 
-namespace osu.Framework.Graphics.Shaders
+namespace osu.Framework.Graphics.Shaders;
+
+public class StepShader : IStepShader, IApplicableToCharacterSize, IApplicableToDrawRectangle
 {
-    public class StepShader : IStepShader, IApplicableToCharacterSize, IApplicableToDrawRectangle
+    public string Name { get; set; } = null!;
+
+    public ICustomizedShader? FromShader { get; set; }
+
+    private readonly List<ICustomizedShader> shaders = new List<ICustomizedShader>();
+
+    public IReadOnlyList<ICustomizedShader> StepShaders
     {
-        public string Name { get; set; } = null!;
-
-        public ICustomizedShader? FromShader { get; set; }
-
-        private readonly List<ICustomizedShader> shaders = new List<ICustomizedShader>();
-
-        public IReadOnlyList<ICustomizedShader> StepShaders
+        get => shaders;
+        set
         {
-            get => shaders;
-            set
-            {
-                if (value.OfType<IStepShader>().Any())
-                    throw new InvalidCastException($"Cannot have any {nameof(IStepShader)} as step.");
+            if (value.OfType<IStepShader>().Any())
+                throw new InvalidCastException($"Cannot have any {nameof(IStepShader)} as step.");
 
-                shaders.Clear();
-                shaders.AddRange(value);
-            }
+            shaders.Clear();
+            shaders.AddRange(value);
         }
+    }
 
-        public bool Draw { get; set; } = true;
+    public bool Draw { get; set; } = true;
 
-        public void Bind()
-            => throw new NotSupportedException();
+    public void Bind()
+        => throw new NotSupportedException();
 
-        public void Unbind()
-            => throw new NotSupportedException();
+    public void Unbind()
+        => throw new NotSupportedException();
 
-        public Uniform<T> GetUniform<T>(string name) where T : unmanaged, IEquatable<T>
-            => throw new NotSupportedException();
+    public Uniform<T> GetUniform<T>(string name) where T : unmanaged, IEquatable<T>
+        => throw new NotSupportedException();
 
-        public bool IsLoaded
-            => throw new NotSupportedException();
+    public bool IsLoaded
+        => throw new NotSupportedException();
 
-        public bool IsBound { get; private set; }
+    public bool IsBound { get; private set; }
 
-        public void ApplyValue()
-            => throw new NotSupportedException();
+    public void ApplyValue()
+        => throw new NotSupportedException();
 
-        public RectangleF ComputeCharacterDrawRectangle(RectangleF originalCharacterDrawRectangle) =>
-            StepShaders.OfType<IApplicableToCharacterSize>()
-                       .Aggregate(originalCharacterDrawRectangle, (rectangle, shader) => shader.ComputeCharacterDrawRectangle(rectangle));
+    public RectangleF ComputeCharacterDrawRectangle(RectangleF originalCharacterDrawRectangle) =>
+        StepShaders.OfType<IApplicableToCharacterSize>()
+                   .Aggregate(originalCharacterDrawRectangle, (rectangle, shader) => shader.ComputeCharacterDrawRectangle(rectangle));
 
-        public RectangleF ComputeDrawRectangle(RectangleF originDrawRectangle) =>
-            StepShaders.OfType<IApplicableToDrawRectangle>()
-                       .Aggregate(originDrawRectangle, (quad, shader) => shader.ComputeDrawRectangle(quad));
+    public RectangleF ComputeDrawRectangle(RectangleF originDrawRectangle) =>
+        StepShaders.OfType<IApplicableToDrawRectangle>()
+                   .Aggregate(originDrawRectangle, (quad, shader) => shader.ComputeDrawRectangle(quad));
 
-        public void Dispose()
-        {
-        }
+    public void Dispose()
+    {
     }
 }

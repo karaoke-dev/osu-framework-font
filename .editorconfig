@@ -191,6 +191,9 @@ csharp_style_prefer_index_operator = true:warning
 csharp_style_prefer_range_operator = true:warning
 csharp_style_prefer_switch_expression = false:none
 
+#Style - C# 10 features
+csharp_style_namespace_declarations = file_scoped:warning
+
 #Supressing roslyn built-in analyzers
 # Suppress: EC112
 

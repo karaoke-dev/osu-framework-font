@@ -6,25 +6,24 @@ using osu.Framework.Extensions;
 using osu.Framework.Graphics.Shaders;
 using osuTK;
 
-namespace osu.Framework.Font.Tests.Visual.Shaders
+namespace osu.Framework.Font.Tests.Visual.Shaders;
+
+public class TestScenePixelShader : InternalShaderTestScene
 {
-    public class TestScenePixelShader : InternalShaderTestScene
+    [TestCase(5, 5)]
+    [TestCase(5, 20)]
+    [TestCase(20, 20)]
+    public void TestProperty(float x, float y)
     {
-        [TestCase(5, 5)]
-        [TestCase(5, 20)]
-        [TestCase(20, 20)]
-        public void TestProperty(float x, float y)
+        AddStep("Apply shader", () =>
         {
-            AddStep("Apply shader", () =>
+            ShaderContainer.Shaders = new[]
             {
-                ShaderContainer.Shaders = new[]
+                GetShaderByType<PixelShader>().With(s =>
                 {
-                    GetShaderByType<PixelShader>().With(s =>
-                    {
-                        s.Size = new Vector2(x, y);
-                    })
-                };
-            });
-        }
+                    s.Size = new Vector2(x, y);
+                })
+            };
+        });
     }
 }

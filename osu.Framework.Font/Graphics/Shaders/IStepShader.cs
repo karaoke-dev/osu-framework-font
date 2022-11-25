@@ -3,23 +3,22 @@
 
 using System.Collections.Generic;
 
-namespace osu.Framework.Graphics.Shaders
+namespace osu.Framework.Graphics.Shaders;
+
+public interface IStepShader : ICustomizedShader
 {
-    public interface IStepShader : ICustomizedShader
-    {
-        /// <summary>
-        /// Render <see cref="FrameBuffer"/> from target <see cref="IShader"/> result.
-        /// </summary>
-        ICustomizedShader? FromShader { get; }
+    /// <summary>
+    /// Render <see cref="FrameBuffer"/> from target <see cref="IShader"/> result.
+    /// </summary>
+    ICustomizedShader? FromShader { get; }
 
-        /// <summary>
-        /// List if <see cref="ICustomizedShader"/>, will pass <see cref="FrameBuffer"/> to each shaders.
-        /// </summary>
-        IReadOnlyList<ICustomizedShader> StepShaders { get; }
+    /// <summary>
+    /// List if <see cref="ICustomizedShader"/>, will pass <see cref="FrameBuffer"/> to each shaders.
+    /// </summary>
+    IReadOnlyList<ICustomizedShader> StepShaders { get; }
 
-        /// <summary>
-        /// Should draw <see cref="FrameBuffer"/> or not.
-        /// </summary>
-        bool Draw { get; }
-    }
+    /// <summary>
+    /// Should draw <see cref="FrameBuffer"/> or not.
+    /// </summary>
+    bool Draw { get; }
 }

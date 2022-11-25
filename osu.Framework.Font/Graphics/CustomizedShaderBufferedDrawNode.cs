@@ -11,72 +11,71 @@ using osu.Framework.Graphics.Shaders;
 using osuTK;
 using osuTK.Graphics;
 
-namespace osu.Framework.Graphics
+namespace osu.Framework.Graphics;
+
+public abstract class CustomizedShaderBufferedDrawNode : BufferedDrawNode
 {
-    public abstract class CustomizedShaderBufferedDrawNode : BufferedDrawNode
+    private readonly double loadTime;
+
+    protected CustomizedShaderBufferedDrawNode(IBufferedDrawable source, DrawNode child, BufferedDrawNodeSharedData sharedData)
+        : base(source, child, sharedData)
     {
-        private readonly double loadTime;
+        loadTime = Source.Clock.CurrentTime;
+    }
 
-        protected CustomizedShaderBufferedDrawNode(IBufferedDrawable source, DrawNode child, BufferedDrawNodeSharedData sharedData)
-            : base(source, child, sharedData)
+    protected static bool ContainTimePropertyShader(ICustomizedShader shader)
+    {
+        switch (shader)
         {
-            loadTime = Source.Clock.CurrentTime;
+            case IHasCurrentTime _:
+            case IStepShader stepShader when stepShader.StepShaders.Any(s => s is IHasCurrentTime):
+                return true;
+
+            default:
+                return false;
         }
+    }
 
-        protected static bool ContainTimePropertyShader(ICustomizedShader shader)
+    protected void ResetDrawVersion()
+    {
+        // todo : use better way to reset draw version.
+        var prop = typeof(BufferedDrawNodeSharedData).GetField("DrawVersion", BindingFlags.Instance | BindingFlags.NonPublic);
+        if (prop == null)
+            throw new NullReferenceException();
+
+        prop.SetValue(SharedData, -1);
+    }
+
+    protected void RenderShader(IRenderer renderer, ICustomizedShader shader, IFrameBuffer current, IFrameBuffer target)
+    {
+        renderer.SetBlend(BlendingParameters.None);
+
+        using (BindFrameBuffer(target))
         {
-            switch (shader)
+            if (shader is IHasTextureSize)
             {
-                case IHasCurrentTime _:
-                case IStepShader stepShader when stepShader.StepShaders.Any(s => s is IHasCurrentTime):
-                    return true;
-
-                default:
-                    return false;
+                var size = current.Size;
+                shader.GetUniform<Vector2>(@"g_TexSize").UpdateValue(ref size);
             }
-        }
 
-        protected void ResetDrawVersion()
-        {
-            // todo : use better way to reset draw version.
-            var prop = typeof(BufferedDrawNodeSharedData).GetField("DrawVersion", BindingFlags.Instance | BindingFlags.NonPublic);
-            if (prop == null)
-                throw new NullReferenceException();
-
-            prop.SetValue(SharedData, -1);
-        }
-
-        protected void RenderShader(IRenderer renderer, ICustomizedShader shader, IFrameBuffer current, IFrameBuffer target)
-        {
-            renderer.SetBlend(BlendingParameters.None);
-
-            using (BindFrameBuffer(target))
+            if (shader is IHasInflationPercentage)
             {
-                if (shader is IHasTextureSize)
-                {
-                    var size = current.Size;
-                    shader.GetUniform<Vector2>(@"g_TexSize").UpdateValue(ref size);
-                }
-
-                if (shader is IHasInflationPercentage)
-                {
-                    var localInflationAmount = DrawInfo.Matrix.ExtractScale().X;
-                    shader.GetUniform<float>(@"g_InflationPercentage").UpdateValue(ref localInflationAmount);
-                }
-
-                if (shader is IHasCurrentTime)
-                {
-                    var currentTime = (float)(Source.Clock.CurrentTime - loadTime) / 1000;
-                    shader.GetUniform<float>("g_Time").UpdateValue(ref currentTime);
-                }
-
-                if (shader is ICustomizedShader customizedShader)
-                    customizedShader.ApplyValue();
-
-                shader.Bind();
-                renderer.DrawFrameBuffer(current, new RectangleF(0, 0, current.Texture.Width, current.Texture.Height), ColourInfo.SingleColour(Color4.White));
-                shader.Unbind();
+                var localInflationAmount = DrawInfo.Matrix.ExtractScale().X;
+                shader.GetUniform<float>(@"g_InflationPercentage").UpdateValue(ref localInflationAmount);
             }
+
+            if (shader is IHasCurrentTime)
+            {
+                var currentTime = (float)(Source.Clock.CurrentTime - loadTime) / 1000;
+                shader.GetUniform<float>("g_Time").UpdateValue(ref currentTime);
+            }
+
+            if (shader is ICustomizedShader customizedShader)
+                customizedShader.ApplyValue();
+
+            shader.Bind();
+            renderer.DrawFrameBuffer(current, new RectangleF(0, 0, current.Texture.Width, current.Texture.Height), ColourInfo.SingleColour(Color4.White));
+            shader.Unbind();
         }
     }
 }

@@ -4,18 +4,17 @@
 using System.Collections.Generic;
 using osuTK;
 
-namespace osu.Framework.Graphics.Sprites
+namespace osu.Framework.Graphics.Sprites;
+
+public interface IHasRuby : IDrawable
 {
-    public interface IHasRuby : IDrawable
-    {
-        IReadOnlyList<PositionText> Rubies { get; set; }
+    IReadOnlyList<PositionText> Rubies { get; set; }
 
-        FontUsage RubyFont { get; set; }
+    FontUsage RubyFont { get; set; }
 
-        int RubyMargin { get; set; }
+    int RubyMargin { get; set; }
 
-        Vector2 RubySpacing { get; set; }
+    Vector2 RubySpacing { get; set; }
 
-        LyricTextAlignment RubyAlignment { get; set; }
-    }
+    LyricTextAlignment RubyAlignment { get; set; }
 }

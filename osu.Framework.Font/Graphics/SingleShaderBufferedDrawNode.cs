@@ -4,66 +4,65 @@
 using osu.Framework.Graphics.Rendering;
 using osu.Framework.Graphics.Shaders;
 
-namespace osu.Framework.Graphics
+namespace osu.Framework.Graphics;
+
+public class SingleShaderBufferedDrawNode : CustomizedShaderBufferedDrawNode
 {
-    public class SingleShaderBufferedDrawNode : CustomizedShaderBufferedDrawNode
+    protected new ISingleShaderBufferedDrawable Source => (ISingleShaderBufferedDrawable)base.Source;
+
+    public SingleShaderBufferedDrawNode(ISingleShaderBufferedDrawable source, DrawNode child, BufferedDrawNodeSharedData sharedData)
+        : base(source, child, sharedData)
     {
-        protected new ISingleShaderBufferedDrawable Source => (ISingleShaderBufferedDrawable)base.Source;
+    }
 
-        public SingleShaderBufferedDrawNode(ISingleShaderBufferedDrawable source, DrawNode child, BufferedDrawNodeSharedData sharedData)
-            : base(source, child, sharedData)
+    protected override long GetDrawVersion()
+    {
+        // if contains shader that need to apply time, then need to force run populate contents in each frame.
+        if (Source.Shader != null && ContainTimePropertyShader(Source.Shader))
         {
+            ResetDrawVersion();
         }
 
-        protected override long GetDrawVersion()
+        return base.GetDrawVersion();
+    }
+
+    protected override void PopulateContents(IRenderer renderer)
+    {
+        base.PopulateContents(renderer);
+
+        if (Source.Shader != null)
+            drawFrameBuffer(renderer, Source.Shader);
+    }
+
+    protected override void DrawContents(IRenderer renderer)
+    {
+        renderer.DrawFrameBuffer(SharedData.CurrentEffectBuffer, DrawRectangle, DrawColourInfo.Colour);
+    }
+
+    private void drawFrameBuffer(IRenderer renderer, ICustomizedShader shader)
+    {
+        switch (shader)
         {
-            // if contains shader that need to apply time, then need to force run populate contents in each frame.
-            if (Source.Shader != null && ContainTimePropertyShader(Source.Shader))
+            case null:
+                return;
+
+            case IStepShader stepShader:
             {
-                ResetDrawVersion();
-            }
+                var stepShaders = stepShader.StepShaders;
 
-            return base.GetDrawVersion();
-        }
-
-        protected override void PopulateContents(IRenderer renderer)
-        {
-            base.PopulateContents(renderer);
-
-            if (Source.Shader != null)
-                drawFrameBuffer(renderer, Source.Shader);
-        }
-
-        protected override void DrawContents(IRenderer renderer)
-        {
-            renderer.DrawFrameBuffer(SharedData.CurrentEffectBuffer, DrawRectangle, DrawColourInfo.Colour);
-        }
-
-        private void drawFrameBuffer(IRenderer renderer, ICustomizedShader shader)
-        {
-            switch (shader)
-            {
-                case null:
-                    return;
-
-                case IStepShader stepShader:
+                foreach (var s in stepShaders)
                 {
-                    var stepShaders = stepShader.StepShaders;
-
-                    foreach (var s in stepShaders)
-                    {
-                        drawFrameBuffer(renderer, s);
-                    }
-
-                    break;
+                    drawFrameBuffer(renderer, s);
                 }
 
-                default:
-                    var current = SharedData.CurrentEffectBuffer;
-                    var target = SharedData.GetNextEffectBuffer();
-                    RenderShader(renderer, shader, current, target);
-                    break;
+                break;
             }
+
+            default:
+                var current = SharedData.CurrentEffectBuffer;
+                var target = SharedData.GetNextEffectBuffer();
+                RenderShader(renderer, shader, current, target);
+                break;
         }
     }
 }

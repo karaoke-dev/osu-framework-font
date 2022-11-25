@@ -12,104 +12,103 @@ using osu.Framework.Timing;
 using osuTK;
 using osuTK.Graphics;
 
-namespace osu.Framework.Font.Tests.Visual.Sprites
+namespace osu.Framework.Font.Tests.Visual.Sprites;
+
+public class TestSceneKaraokeSpriteTextWithShader : BackgroundGridTestScene
 {
-    public class TestSceneKaraokeSpriteTextWithShader : BackgroundGridTestScene
+    private readonly ManualClock manualClock = new();
+
+    private readonly TestKaraokeSpriteText karaokeSpriteText;
+
+    public TestSceneKaraokeSpriteTextWithShader()
     {
-        private readonly ManualClock manualClock = new();
-
-        private readonly TestKaraokeSpriteText karaokeSpriteText;
-
-        public TestSceneKaraokeSpriteTextWithShader()
+        Child = karaokeSpriteText = new TestKaraokeSpriteText
         {
-            Child = karaokeSpriteText = new TestKaraokeSpriteText
+            Anchor = Anchor.Centre,
+            Origin = Anchor.Centre,
+            Text = "カラオケ！",
+            Rubies = TestCaseTagHelper.ParsePositionTexts(new[] { "[0,1]:か", "[1,2]:ら", "[2,3]:お", "[3,4]:け" }),
+            Romajies = TestCaseTagHelper.ParsePositionTexts(new[] { "[0,1]:ka", "[1,2]:ra", "[2,3]:o", "[3,4]:ke" }),
+            TimeTags = TestCaseTagHelper.ParseTimeTags(new[] { "[0,start]:500", "[1,start]:600", "[2,start]:1000", "[3,start]:1500", "[4,start]:2000" }),
+            Scale = new Vector2(2),
+            LeftTextColour = Color4.Green,
+            RightTextColour = Color4.Red,
+            Clock = new FramedClock(manualClock),
+        };
+
+        AddSliderStep("Adjust clock time", 0, 3000, 1000, time =>
+        {
+            manualClock.CurrentTime = time;
+        });
+    }
+
+    [Test]
+    public void ApplyShader()
+    {
+        AddStep("Clear shader", () => karaokeSpriteText.Shaders = Array.Empty<ICustomizedShader>());
+    }
+
+    [Test]
+    public void ApplyLeftLyricTextShader()
+    {
+        AddStep("Apply Outline shader in left text", () =>
+        {
+            karaokeSpriteText.LeftTextColour = Color4.White;
+            karaokeSpriteText.LeftLyricTextShaders = new[]
             {
-                Anchor = Anchor.Centre,
-                Origin = Anchor.Centre,
-                Text = "カラオケ！",
-                Rubies = TestCaseTagHelper.ParsePositionTexts(new[] { "[0,1]:か", "[1,2]:ら", "[2,3]:お", "[3,4]:け" }),
-                Romajies = TestCaseTagHelper.ParsePositionTexts(new[] { "[0,1]:ka", "[1,2]:ra", "[2,3]:o", "[3,4]:ke" }),
-                TimeTags = TestCaseTagHelper.ParseTimeTags(new[] { "[0,start]:500", "[1,start]:600", "[2,start]:1000", "[3,start]:1500", "[4,start]:2000" }),
-                Scale = new Vector2(2),
-                LeftTextColour = Color4.Green,
-                RightTextColour = Color4.Red,
-                Clock = new FramedClock(manualClock),
+                GetShaderByType<OutlineShader>().With(s =>
+                {
+                    s.Radius = 2;
+                    s.OutlineColour = Color4.Green;
+                })
             };
+        });
 
-            AddSliderStep("Adjust clock time", 0, 3000, 1000, time =>
-            {
-                manualClock.CurrentTime = time;
-            });
-        }
-
-        [Test]
-        public void ApplyShader()
+        AddStep("Clear shader from left text", () =>
         {
-            AddStep("Clear shader", () => karaokeSpriteText.Shaders = Array.Empty<ICustomizedShader>());
-        }
+            karaokeSpriteText.LeftTextColour = Color4.Green;
+            karaokeSpriteText.LeftLyricTextShaders = Array.Empty<ICustomizedShader>();
+        });
+    }
 
-        [Test]
-        public void ApplyLeftLyricTextShader()
+    [Test]
+    public void ApplyRightLyricTextShader()
+    {
+        AddStep("Apply Outline shader in right text", () =>
         {
-            AddStep("Apply Outline shader in left text", () =>
+            karaokeSpriteText.RightTextColour = Color4.White;
+            karaokeSpriteText.RightLyricTextShaders = new ICustomizedShader[]
             {
-                karaokeSpriteText.LeftTextColour = Color4.White;
-                karaokeSpriteText.LeftLyricTextShaders = new[]
+                GetShaderByType<OutlineShader>().With(s =>
                 {
-                    GetShaderByType<OutlineShader>().With(s =>
-                    {
-                        s.Radius = 2;
-                        s.OutlineColour = Color4.Green;
-                    })
-                };
-            });
-
-            AddStep("Clear shader from left text", () =>
-            {
-                karaokeSpriteText.LeftTextColour = Color4.Green;
-                karaokeSpriteText.LeftLyricTextShaders = Array.Empty<ICustomizedShader>();
-            });
-        }
-
-        [Test]
-        public void ApplyRightLyricTextShader()
-        {
-            AddStep("Apply Outline shader in right text", () =>
-            {
-                karaokeSpriteText.RightTextColour = Color4.White;
-                karaokeSpriteText.RightLyricTextShaders = new ICustomizedShader[]
+                    s.Radius = 1;
+                    s.OutlineColour = Color4.Blue;
+                }),
+                new StepShader
                 {
-                    GetShaderByType<OutlineShader>().With(s =>
+                    Name = "Outline with rainbow effect",
+                    StepShaders = new ICustomizedShader[]
                     {
-                        s.Radius = 1;
-                        s.OutlineColour = Color4.Blue;
-                    }),
-                    new StepShader
-                    {
-                        Name = "Outline with rainbow effect",
-                        StepShaders = new ICustomizedShader[]
+                        GetShaderByType<OutlineShader>().With(s =>
                         {
-                            GetShaderByType<OutlineShader>().With(s =>
-                            {
-                                s.Radius = 3;
-                                s.OutlineColour = Color4.White;
-                            }),
-                            GetShaderByType<RainbowShader>()
-                        }
-                    },
-                };
-            });
+                            s.Radius = 3;
+                            s.OutlineColour = Color4.White;
+                        }),
+                        GetShaderByType<RainbowShader>()
+                    }
+                },
+            };
+        });
 
-            AddStep("Clear shader from right text", () =>
-            {
-                karaokeSpriteText.RightTextColour = Color4.Red;
-                karaokeSpriteText.RightLyricTextShaders = Array.Empty<ICustomizedShader>();
-            });
-        }
-
-        private class TestKaraokeSpriteText : KaraokeSpriteText
+        AddStep("Clear shader from right text", () =>
         {
-            public override bool RemoveCompletedTransforms => false;
-        }
+            karaokeSpriteText.RightTextColour = Color4.Red;
+            karaokeSpriteText.RightLyricTextShaders = Array.Empty<ICustomizedShader>();
+        });
+    }
+
+    private class TestKaraokeSpriteText : KaraokeSpriteText
+    {
+        public override bool RemoveCompletedTransforms => false;
     }
 }

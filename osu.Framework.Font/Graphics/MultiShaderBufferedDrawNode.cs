@@ -6,94 +6,93 @@ using osu.Framework.Graphics.Rendering;
 using osu.Framework.Graphics.Shaders;
 using osuTK.Graphics;
 
-namespace osu.Framework.Graphics
+namespace osu.Framework.Graphics;
+
+public class MultiShaderBufferedDrawNode : CustomizedShaderBufferedDrawNode
 {
-    public class MultiShaderBufferedDrawNode : CustomizedShaderBufferedDrawNode
+    protected new IMultiShaderBufferedDrawable Source => (IMultiShaderBufferedDrawable)base.Source;
+
+    protected new MultiShaderBufferedDrawNodeSharedData SharedData => (MultiShaderBufferedDrawNodeSharedData)base.SharedData;
+
+    public MultiShaderBufferedDrawNode(IMultiShaderBufferedDrawable source, DrawNode child, MultiShaderBufferedDrawNodeSharedData sharedData)
+        : base(source, child, sharedData)
     {
-        protected new IMultiShaderBufferedDrawable Source => (IMultiShaderBufferedDrawable)base.Source;
+    }
 
-        protected new MultiShaderBufferedDrawNodeSharedData SharedData => (MultiShaderBufferedDrawNodeSharedData)base.SharedData;
+    public override void ApplyState()
+    {
+        base.ApplyState();
 
-        public MultiShaderBufferedDrawNode(IMultiShaderBufferedDrawable source, DrawNode child, MultiShaderBufferedDrawNodeSharedData sharedData)
-            : base(source, child, sharedData)
+        // re-initialize the shader buffer size because the shader size might be changed.
+        SharedData.IsLatestFrameBuffer = false;
+    }
+
+    protected override long GetDrawVersion()
+    {
+        // if contains shader that need to apply time, then need to force run populate contents in each frame.
+        if (SharedData.Shaders.Any(ContainTimePropertyShader))
         {
+            ResetDrawVersion();
         }
 
-        public override void ApplyState()
-        {
-            base.ApplyState();
+        return base.GetDrawVersion();
+    }
 
-            // re-initialize the shader buffer size because the shader size might be changed.
-            SharedData.IsLatestFrameBuffer = false;
-        }
+    protected override void PopulateContents(IRenderer renderer)
+    {
+        base.PopulateContents(renderer);
 
-        protected override long GetDrawVersion()
+        if (!SharedData.IsLatestFrameBuffer)
+            SharedData.UpdateFrameBuffers(renderer, Source.Shaders.ToArray());
+
+        drawFrameBuffer(renderer);
+    }
+
+    protected override void DrawContents(IRenderer renderer)
+    {
+        var drawFrameBuffers = SharedData.GetDrawFrameBuffers().Reverse().ToArray();
+
+        if (drawFrameBuffers.Any())
         {
-            // if contains shader that need to apply time, then need to force run populate contents in each frame.
-            if (SharedData.Shaders.Any(ContainTimePropertyShader))
+            foreach (var frameBuffer in drawFrameBuffers)
             {
-                ResetDrawVersion();
+                renderer.DrawFrameBuffer(frameBuffer, DrawRectangle, Color4.White);
             }
-
-            return base.GetDrawVersion();
         }
-
-        protected override void PopulateContents(IRenderer renderer)
+        else
         {
-            base.PopulateContents(renderer);
-
-            if (!SharedData.IsLatestFrameBuffer)
-                SharedData.UpdateFrameBuffers(renderer, Source.Shaders.ToArray());
-
-            drawFrameBuffer(renderer);
+            // should draw origin content if no shader effects.
+            base.DrawContents(renderer);
         }
+    }
 
-        protected override void DrawContents(IRenderer renderer)
+    private void drawFrameBuffer(IRenderer renderer)
+    {
+        var shaders = SharedData.Shaders;
+        if (!shaders.Any())
+            return;
+
+        foreach (var shader in shaders)
         {
-            var drawFrameBuffers = SharedData.GetDrawFrameBuffers().Reverse().ToArray();
+            var current = SharedData.GetSourceFrameBuffer(shader);
+            var target = SharedData.GetTargetFrameBuffer(shader);
 
-            if (drawFrameBuffers.Any())
+            if (shader is IStepShader stepShader)
             {
-                foreach (var frameBuffer in drawFrameBuffers)
+                var stepShaders = stepShader.StepShaders;
+
+                for (int i = 0; i < stepShaders.Count; i++)
                 {
-                    renderer.DrawFrameBuffer(frameBuffer, DrawRectangle, Color4.White);
+                    // todo: it will cause the render issue if set the current and target shader into same shader.
+                    RenderShader(renderer, stepShaders[i], i == 0 ? current : target, target);
                 }
             }
             else
             {
-                // should draw origin content if no shader effects.
-                base.DrawContents(renderer);
+                RenderShader(renderer, shader, current, target);
             }
-        }
 
-        private void drawFrameBuffer(IRenderer renderer)
-        {
-            var shaders = SharedData.Shaders;
-            if (!shaders.Any())
-                return;
-
-            foreach (var shader in shaders)
-            {
-                var current = SharedData.GetSourceFrameBuffer(shader);
-                var target = SharedData.GetTargetFrameBuffer(shader);
-
-                if (shader is IStepShader stepShader)
-                {
-                    var stepShaders = stepShader.StepShaders;
-
-                    for (int i = 0; i < stepShaders.Count; i++)
-                    {
-                        // todo: it will cause the render issue if set the current and target shader into same shader.
-                        RenderShader(renderer, stepShaders[i], i == 0 ? current : target, target);
-                    }
-                }
-                else
-                {
-                    RenderShader(renderer, shader, current, target);
-                }
-
-                SharedData.UpdateBuffer(shader, target);
-            }
+            SharedData.UpdateBuffer(shader, target);
         }
     }
 }

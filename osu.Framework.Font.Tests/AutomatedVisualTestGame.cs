@@ -3,13 +3,12 @@
 
 using osu.Framework.Testing;
 
-namespace osu.Framework.Font.Tests
+namespace osu.Framework.Font.Tests;
+
+internal class AutomatedVisualTestGame : TestGame
 {
-    internal class AutomatedVisualTestGame : TestGame
+    public AutomatedVisualTestGame()
     {
-        public AutomatedVisualTestGame()
-        {
-            Add(new TestBrowserTestRunner(new TestBrowser()));
-        }
+        Add(new TestBrowserTestRunner(new TestBrowser()));
     }
 }

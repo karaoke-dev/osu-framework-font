@@ -3,38 +3,37 @@
 
 using System;
 
-namespace osu.Framework.Graphics.Shaders
+namespace osu.Framework.Graphics.Shaders;
+
+public interface ICustomizedShader
 {
-    public interface ICustomizedShader
-    {
-        void ApplyValue();
+    void ApplyValue();
 
-        /// <summary>
-        /// Binds this shader to be used for rendering.
-        /// </summary>
-        void Bind();
+    /// <summary>
+    /// Binds this shader to be used for rendering.
+    /// </summary>
+    void Bind();
 
-        /// <summary>
-        /// Unbinds this shader.
-        /// </summary>
-        void Unbind();
+    /// <summary>
+    /// Unbinds this shader.
+    /// </summary>
+    void Unbind();
 
-        /// <summary>
-        /// Whether this shader is ready for use.
-        /// </summary>
-        bool IsLoaded { get; }
+    /// <summary>
+    /// Whether this shader is ready for use.
+    /// </summary>
+    bool IsLoaded { get; }
 
-        /// <summary>
-        /// Whether this shader is currently bound.
-        /// </summary>
-        bool IsBound { get; }
+    /// <summary>
+    /// Whether this shader is currently bound.
+    /// </summary>
+    bool IsBound { get; }
 
-        /// <summary>
-        /// Retrieves a uniform from the shader.
-        /// </summary>
-        /// <param name="name">The name of the uniform.</param>
-        /// <returns>The retrieved uniform.</returns>
-        Uniform<T> GetUniform<T>(string name)
-            where T : unmanaged, IEquatable<T>;
-    }
+    /// <summary>
+    /// Retrieves a uniform from the shader.
+    /// </summary>
+    /// <param name="name">The name of the uniform.</param>
+    /// <returns>The retrieved uniform.</returns>
+    Uniform<T> GetUniform<T>(string name)
+        where T : unmanaged, IEquatable<T>;
 }

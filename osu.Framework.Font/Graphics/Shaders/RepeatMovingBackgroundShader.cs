@@ -6,49 +6,48 @@ using osu.Framework.Graphics.Textures;
 using osuTK;
 using osuTK.Graphics.ES30;
 
-namespace osu.Framework.Graphics.Shaders
+namespace osu.Framework.Graphics.Shaders;
+
+public class RepeatMovingBackgroundShader : InternalShader, IHasCurrentTime, IHasTextureSize
 {
-    public class RepeatMovingBackgroundShader : InternalShader, IHasCurrentTime, IHasTextureSize
+    public override string ShaderName => "RepeatMovingBackground";
+
+    public Texture? Texture { get; set; }
+
+    public Vector2 TextureDisplaySize { get; set; } = new Vector2(10);
+
+    public Vector2 TextureDisplayBorder { get; set; }
+
+    public Vector2 Speed { get; set; }
+
+    public float Mix { get; set; } = 1f;
+
+    public override void ApplyValue()
     {
-        public override string ShaderName => "RepeatMovingBackground";
+        if (Texture == null)
+            return;
 
-        public Texture? Texture { get; set; }
+        Texture.Bind(1);
 
-        public Vector2 TextureDisplaySize { get; set; } = new Vector2(10);
+        var unitId = TextureUnit.Texture1 - TextureUnit.Texture0;
+        GetUniform<int>(@"g_RepeatSample").UpdateValue(ref unitId);
 
-        public Vector2 TextureDisplayBorder { get; set; }
+        var textureCoord = Texture.GetTextureRect().TopLeft;
+        GetUniform<Vector2>(@"g_RepeatSampleCoord").UpdateValue(ref textureCoord);
 
-        public Vector2 Speed { get; set; }
+        var textureSize = Texture.GetTextureRect().Size;
+        GetUniform<Vector2>(@"g_RepeatSampleSize").UpdateValue(ref textureSize);
 
-        public float Mix { get; set; } = 1f;
+        var textureDisplaySize = TextureDisplaySize;
+        GetUniform<Vector2>("g_DisplaySize").UpdateValue(ref textureDisplaySize);
 
-        public override void ApplyValue()
-        {
-            if (Texture == null)
-                return;
+        var textureDisplayBorder = TextureDisplayBorder;
+        GetUniform<Vector2>("g_DisplayBorder").UpdateValue(ref textureDisplayBorder);
 
-            Texture.Bind(1);
+        var speed = Speed;
+        GetUniform<Vector2>("g_Speed").UpdateValue(ref speed);
 
-            var unitId = TextureUnit.Texture1 - TextureUnit.Texture0;
-            GetUniform<int>(@"g_RepeatSample").UpdateValue(ref unitId);
-
-            var textureCoord = Texture.GetTextureRect().TopLeft;
-            GetUniform<Vector2>(@"g_RepeatSampleCoord").UpdateValue(ref textureCoord);
-
-            var textureSize = Texture.GetTextureRect().Size;
-            GetUniform<Vector2>(@"g_RepeatSampleSize").UpdateValue(ref textureSize);
-
-            var textureDisplaySize = TextureDisplaySize;
-            GetUniform<Vector2>("g_DisplaySize").UpdateValue(ref textureDisplaySize);
-
-            var textureDisplayBorder = TextureDisplayBorder;
-            GetUniform<Vector2>("g_DisplayBorder").UpdateValue(ref textureDisplayBorder);
-
-            var speed = Speed;
-            GetUniform<Vector2>("g_Speed").UpdateValue(ref speed);
-
-            var mix = Math.Clamp(Mix, 0, 1);
-            GetUniform<float>(@"g_Mix").UpdateValue(ref mix);
-        }
+        var mix = Math.Clamp(Mix, 0, 1);
+        GetUniform<float>(@"g_Mix").UpdateValue(ref mix);
     }
 }

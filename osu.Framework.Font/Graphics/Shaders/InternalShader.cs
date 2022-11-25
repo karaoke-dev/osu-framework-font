@@ -1,10 +1,9 @@
 ﻿// Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
-namespace osu.Framework.Graphics.Shaders
+namespace osu.Framework.Graphics.Shaders;
+
+public abstract class InternalShader : CustomizedShader
 {
-    public abstract class InternalShader : CustomizedShader
-    {
-        public abstract string ShaderName { get; }
-    }
+    public abstract string ShaderName { get; }
 }

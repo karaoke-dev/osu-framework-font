@@ -7,111 +7,110 @@ using osu.Framework.Graphics.Shaders;
 using osuTK;
 using osuTK.Graphics;
 
-namespace osu.Framework.Font.Tests.Visual.Shaders
+namespace osu.Framework.Font.Tests.Visual.Shaders;
+
+public class TestSceneStepShader : ShaderTestScene
 {
-    public class TestSceneStepShader : ShaderTestScene
+    [Test]
+    public void ApplySingleStepShader()
     {
-        [Test]
-        public void ApplySingleStepShader()
+        var stepShader = new StepShader
         {
-            var stepShader = new StepShader
+            Name = "Step 1",
+            StepShaders = new[]
             {
-                Name = "Step 1",
-                StepShaders = new[]
+                GetShaderByType<OutlineShader>().With(s =>
                 {
-                    GetShaderByType<OutlineShader>().With(s =>
-                    {
-                        s.Radius = 3;
-                        s.OutlineColour = Color4.Yellow;
-                    }),
-                    GetShaderByType<OutlineShader>().With(s =>
-                    {
-                        s.Radius = 3;
-                        s.OutlineColour = Color4.Red;
-                    })
-                }
-            };
-
-            AddStep("Apply shader", () =>
-            {
-                ShaderContainer.Shaders = new[]
+                    s.Radius = 3;
+                    s.OutlineColour = Color4.Yellow;
+                }),
+                GetShaderByType<OutlineShader>().With(s =>
                 {
-                    stepShader
-                };
-            });
+                    s.Radius = 3;
+                    s.OutlineColour = Color4.Red;
+                })
+            }
+        };
 
-            AddStep("Not drawing", () =>
-            {
-                stepShader.Draw = false;
-            });
-
-            AddStep("Drawing", () =>
-            {
-                stepShader.Draw = true;
-            });
-        }
-
-        [Test]
-        public void ApplyMultiStepShader()
+        AddStep("Apply shader", () =>
         {
-            var outlineStepShader = new StepShader
+            ShaderContainer.Shaders = new[]
             {
-                Name = "Step create outline",
-                StepShaders = new[]
-                {
-                    GetShaderByType<OutlineShader>().With(s =>
-                    {
-                        s.Radius = 3;
-                        s.OutlineColour = Color4.Yellow;
-                    })
-                }
+                stepShader
             };
+        });
 
-            var shadowStepShader = new StepShader
+        AddStep("Not drawing", () =>
+        {
+            stepShader.Draw = false;
+        });
+
+        AddStep("Drawing", () =>
+        {
+            stepShader.Draw = true;
+        });
+    }
+
+    [Test]
+    public void ApplyMultiStepShader()
+    {
+        var outlineStepShader = new StepShader
+        {
+            Name = "Step create outline",
+            StepShaders = new[]
             {
-                Name = "Step create shadow",
-                StepShaders = new[]
+                GetShaderByType<OutlineShader>().With(s =>
                 {
-                    GetShaderByType<ShadowShader>().With(s =>
-                    {
-                        s.ShadowColour = Color4.Red;
-                        s.ShadowOffset = new Vector2(3);
-                    })
-                }
+                    s.Radius = 3;
+                    s.OutlineColour = Color4.Yellow;
+                })
+            }
+        };
+
+        var shadowStepShader = new StepShader
+        {
+            Name = "Step create shadow",
+            StepShaders = new[]
+            {
+                GetShaderByType<ShadowShader>().With(s =>
+                {
+                    s.ShadowColour = Color4.Red;
+                    s.ShadowOffset = new Vector2(3);
+                })
+            }
+        };
+
+        AddStep("Apply shader", () =>
+        {
+            ShaderContainer.Shaders = new[]
+            {
+                outlineStepShader,
+                shadowStepShader
             };
+        });
 
-            AddStep("Apply shader", () =>
+        AddStep("Shadow shader should after outline", () =>
+        {
+            shadowStepShader.FromShader = outlineStepShader;
+
+            // should re-assign shaders.
+            ShaderContainer.Shaders = new[]
             {
-                ShaderContainer.Shaders = new[]
-                {
-                    outlineStepShader,
-                    shadowStepShader
-                };
-            });
+                outlineStepShader,
+                shadowStepShader
+            };
+        });
 
-            AddStep("Shadow shader should after outline", () =>
+        AddStep("Shadow shader not after outline", () =>
+        {
+            shadowStepShader.FromShader = null;
+
+            // should re-assign shaders.
+            ShaderContainer.Shaders = new[]
             {
-                shadowStepShader.FromShader = outlineStepShader;
-
-                // should re-assign shaders.
-                ShaderContainer.Shaders = new[]
-                {
-                    outlineStepShader,
-                    shadowStepShader
-                };
-            });
-
-            AddStep("Shadow shader not after outline", () =>
-            {
-                shadowStepShader.FromShader = null;
-
-                // should re-assign shaders.
-                ShaderContainer.Shaders = new[]
-                {
-                    outlineStepShader,
-                    shadowStepShader
-                };
-            });
-        }
+                outlineStepShader,
+                shadowStepShader
+            };
+        });
     }
 }

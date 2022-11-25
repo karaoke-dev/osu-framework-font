@@ -4,18 +4,17 @@
 using System.Collections.Generic;
 using osuTK;
 
-namespace osu.Framework.Graphics.Sprites
+namespace osu.Framework.Graphics.Sprites;
+
+public interface IHasRomaji : IDrawable
 {
-    public interface IHasRomaji : IDrawable
-    {
-        IReadOnlyList<PositionText> Romajies { get; set; }
+    IReadOnlyList<PositionText> Romajies { get; set; }
 
-        FontUsage RomajiFont { get; set; }
+    FontUsage RomajiFont { get; set; }
 
-        int RomajiMargin { get; set; }
+    int RomajiMargin { get; set; }
 
-        Vector2 RomajiSpacing { get; set; }
+    Vector2 RomajiSpacing { get; set; }
 
-        LyricTextAlignment RomajiAlignment { get; set; }
-    }
+    LyricTextAlignment RomajiAlignment { get; set; }
 }

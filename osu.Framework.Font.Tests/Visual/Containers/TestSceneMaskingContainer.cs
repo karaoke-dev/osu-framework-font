@@ -8,53 +8,52 @@ using osu.Framework.Graphics.Shapes;
 using osuTK;
 using osuTK.Graphics;
 
-namespace osu.Framework.Font.Tests.Visual.Containers
+namespace osu.Framework.Font.Tests.Visual.Containers;
+
+public class TestSceneMaskingContainer : BackgroundGridTestScene
 {
-    public class TestSceneMaskingContainer : BackgroundGridTestScene
+    private readonly MaskingContainer<Drawable> maskingContainer;
+
+    public TestSceneMaskingContainer()
     {
-        private readonly MaskingContainer<Drawable> maskingContainer;
-
-        public TestSceneMaskingContainer()
+        Child = maskingContainer = new MaskingContainer<Drawable>
         {
-            Child = maskingContainer = new MaskingContainer<Drawable>
+            Anchor = Anchor.Centre,
+            Origin = Anchor.Centre,
+            Size = new Vector2(200),
+            Children = new Drawable[]
             {
-                Anchor = Anchor.Centre,
-                Origin = Anchor.Centre,
-                Size = new Vector2(200),
-                Children = new Drawable[]
+                new Box
                 {
-                    new Box
-                    {
-                        Anchor = Anchor.Centre,
-                        Origin = Anchor.Centre,
-                        Size = new Vector2(250),
-                        Colour = Colour4.Red
-                    },
-                    new DraggableCircle
-                    {
-                        Anchor = Anchor.Centre,
-                        Origin = Anchor.Centre,
-                        Colour = Color4.Blue,
-                        Size = new Vector2(100)
-                    }
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
+                    Size = new Vector2(250),
+                    Colour = Colour4.Red
+                },
+                new DraggableCircle
+                {
+                    Anchor = Anchor.Centre,
+                    Origin = Anchor.Centre,
+                    Colour = Color4.Blue,
+                    Size = new Vector2(100)
                 }
-            };
-        }
+            }
+        };
+    }
 
-        [TestCase(Edges.None)]
-        [TestCase(Edges.Left)]
-        [TestCase(Edges.Right)]
-        [TestCase(Edges.Top)]
-        [TestCase(Edges.Bottom)]
-        [TestCase(Edges.Vertical)]
-        [TestCase(Edges.Horizontal)]
-        [TestCase(Edges.Left | Edges.Top)]
-        public void TestMasking(Edges edges)
+    [TestCase(Edges.None)]
+    [TestCase(Edges.Left)]
+    [TestCase(Edges.Right)]
+    [TestCase(Edges.Top)]
+    [TestCase(Edges.Bottom)]
+    [TestCase(Edges.Vertical)]
+    [TestCase(Edges.Horizontal)]
+    [TestCase(Edges.Left | Edges.Top)]
+    public void TestMasking(Edges edges)
+    {
+        AddStep("apply masking", () =>
         {
-            AddStep("apply masking", () =>
-            {
-                maskingContainer.MaskingEdges = edges;
-            });
-        }
+            maskingContainer.MaskingEdges = edges;
+        });
     }
 }

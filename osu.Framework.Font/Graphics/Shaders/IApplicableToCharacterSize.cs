@@ -3,10 +3,9 @@
 
 using osu.Framework.Graphics.Primitives;
 
-namespace osu.Framework.Graphics.Shaders
+namespace osu.Framework.Graphics.Shaders;
+
+public interface IApplicableToCharacterSize
 {
-    public interface IApplicableToCharacterSize
-    {
-        RectangleF ComputeCharacterDrawRectangle(RectangleF originalCharacterDrawRectangle);
-    }
+    RectangleF ComputeCharacterDrawRectangle(RectangleF originalCharacterDrawRectangle);
 }

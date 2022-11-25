@@ -8,105 +8,104 @@ using osu.Framework.Graphics.Rendering;
 using osu.Framework.Graphics.Shaders;
 using osu.Framework.Graphics.Textures;
 
-namespace osu.Framework.Graphics
+namespace osu.Framework.Graphics;
+
+public class MultiShaderBufferedDrawNodeSharedData : BufferedDrawNodeSharedData
 {
-    public class MultiShaderBufferedDrawNodeSharedData : BufferedDrawNodeSharedData
+    private readonly Dictionary<ICustomizedShader, IFrameBuffer> shaderBuffers = new Dictionary<ICustomizedShader, IFrameBuffer>();
+
+    public bool IsLatestFrameBuffer { get; set; }
+
+    public ICustomizedShader[] Shaders => shaderBuffers.Keys.ToArray();
+
+    private readonly RenderBufferFormat[]? formats;
+
+    public MultiShaderBufferedDrawNodeSharedData(RenderBufferFormat[]? formats = null, bool pixelSnapping = false)
+        : base(0, formats, pixelSnapping)
     {
-        private readonly Dictionary<ICustomizedShader, IFrameBuffer> shaderBuffers = new Dictionary<ICustomizedShader, IFrameBuffer>();
+        this.formats = formats;
+    }
 
-        public bool IsLatestFrameBuffer { get; set; }
+    public void UpdateFrameBuffers(IRenderer renderer, ICustomizedShader[] shaders)
+    {
+        if (IsLatestFrameBuffer)
+            return;
 
-        public ICustomizedShader[] Shaders => shaderBuffers.Keys.ToArray();
+        IsLatestFrameBuffer = true;
 
-        private readonly RenderBufferFormat[]? formats;
+        // will not re-initialize if shader is not changed.
+        if (shaderBuffers.Keys.SequenceEqual(shaders))
+            return;
 
-        public MultiShaderBufferedDrawNodeSharedData(RenderBufferFormat[]? formats = null, bool pixelSnapping = false)
-            : base(0, formats, pixelSnapping)
+        // collect all frame buffer that needs to be disposed.
+        var disposedFrameBuffer = shaderBuffers.Values.ToArray();
+        shaderBuffers.Clear();
+
+        foreach (var shader in shaders)
         {
-            this.formats = formats;
+            TextureFilteringMode filterMode = PixelSnapping ? TextureFilteringMode.Nearest : TextureFilteringMode.Linear;
+            shaderBuffers.Add(shader, renderer.CreateFrameBuffer(formats, filterMode));
         }
 
-        public void UpdateFrameBuffers(IRenderer renderer, ICustomizedShader[] shaders)
+        renderer.ScheduleDisposal(s =>
         {
-            if (IsLatestFrameBuffer)
-                return;
+            s.clearBuffers(disposedFrameBuffer);
+        }, this);
+    }
 
-            IsLatestFrameBuffer = true;
+    public IFrameBuffer GetSourceFrameBuffer(ICustomizedShader shader)
+    {
+        if (!(shader is IStepShader stepShader))
+            return CurrentEffectBuffer;
 
-            // will not re-initialize if shader is not changed.
-            if (shaderBuffers.Keys.SequenceEqual(shaders))
-                return;
+        var fromShader = stepShader.FromShader;
+        if (fromShader == null)
+            return CurrentEffectBuffer;
 
-            // collect all frame buffer that needs to be disposed.
-            var disposedFrameBuffer = shaderBuffers.Values.ToArray();
-            shaderBuffers.Clear();
+        if (!shaderBuffers.ContainsKey(fromShader))
+            throw new KeyNotFoundException();
 
-            foreach (var shader in shaders)
-            {
-                TextureFilteringMode filterMode = PixelSnapping ? TextureFilteringMode.Nearest : TextureFilteringMode.Linear;
-                shaderBuffers.Add(shader, renderer.CreateFrameBuffer(formats, filterMode));
-            }
+        return shaderBuffers[fromShader];
+    }
 
-            renderer.ScheduleDisposal(s =>
-            {
-                s.clearBuffers(disposedFrameBuffer);
-            }, this);
-        }
+    public IFrameBuffer GetTargetFrameBuffer(ICustomizedShader shader)
+    {
+        if (!shaderBuffers.ContainsKey(shader))
+            throw new KeyNotFoundException();
 
-        public IFrameBuffer GetSourceFrameBuffer(ICustomizedShader shader)
+        return shaderBuffers[shader];
+    }
+
+    public void UpdateBuffer(ICustomizedShader shader, IFrameBuffer frameBuffer)
+    {
+        if (!shaderBuffers.ContainsKey(shader))
+            throw new Exception();
+
+        shaderBuffers[shader] = frameBuffer;
+    }
+
+    public IFrameBuffer[] GetDrawFrameBuffers()
+        => shaderBuffers.Where(x =>
         {
-            if (!(shader is IStepShader stepShader))
-                return CurrentEffectBuffer;
+            // should not draw the step shader if there's no content.
+            if (x.Key is IStepShader stepShader)
+                return stepShader.StepShaders.Any() && stepShader.Draw;
 
-            var fromShader = stepShader.FromShader;
-            if (fromShader == null)
-                return CurrentEffectBuffer;
+            return true;
+        }).Select(x => x.Value).ToArray();
 
-            if (!shaderBuffers.ContainsKey(fromShader))
-                throw new KeyNotFoundException();
+    protected override void Dispose(bool isDisposing)
+    {
+        base.Dispose(isDisposing);
+        clearBuffers(shaderBuffers.Values.ToArray());
+    }
 
-            return shaderBuffers[fromShader];
-        }
-
-        public IFrameBuffer GetTargetFrameBuffer(ICustomizedShader shader)
+    private void clearBuffers(IFrameBuffer[] effectBuffers)
+    {
+        // dispose all frame buffer in array.
+        foreach (var shaderBuffer in effectBuffers)
         {
-            if (!shaderBuffers.ContainsKey(shader))
-                throw new KeyNotFoundException();
-
-            return shaderBuffers[shader];
-        }
-
-        public void UpdateBuffer(ICustomizedShader shader, IFrameBuffer frameBuffer)
-        {
-            if (!shaderBuffers.ContainsKey(shader))
-                throw new Exception();
-
-            shaderBuffers[shader] = frameBuffer;
-        }
-
-        public IFrameBuffer[] GetDrawFrameBuffers()
-            => shaderBuffers.Where(x =>
-            {
-                // should not draw the step shader if there's no content.
-                if (x.Key is IStepShader stepShader)
-                    return stepShader.StepShaders.Any() && stepShader.Draw;
-
-                return true;
-            }).Select(x => x.Value).ToArray();
-
-        protected override void Dispose(bool isDisposing)
-        {
-            base.Dispose(isDisposing);
-            clearBuffers(shaderBuffers.Values.ToArray());
-        }
-
-        private void clearBuffers(IFrameBuffer[] effectBuffers)
-        {
-            // dispose all frame buffer in array.
-            foreach (var shaderBuffer in effectBuffers)
-            {
-                shaderBuffer.Dispose();
-            }
+            shaderBuffer.Dispose();
         }
     }
 }

@@ -7,26 +7,25 @@ using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Font.Tests.Helper;
 using osu.Framework.Graphics.Shaders;
 
-namespace osu.Framework.Font.Tests.Visual.Shaders
+namespace osu.Framework.Font.Tests.Visual.Shaders;
+
+public class TestSceneShadowShader : InternalShaderTestScene
 {
-    public class TestSceneShadowShader : InternalShaderTestScene
+    [TestCase(RED, "(3,3)")]
+    [TestCase(GREEN, "(-4,-4)")]
+    [TestCase(BLUE, "(0,0)")]
+    public void TestProperty(string colour, string offset)
     {
-        [TestCase(RED, "(3,3)")]
-        [TestCase(GREEN, "(-4,-4)")]
-        [TestCase(BLUE, "(0,0)")]
-        public void TestProperty(string colour, string offset)
+        AddStep("Apply shader", () =>
         {
-            AddStep("Apply shader", () =>
+            ShaderContainer.Shaders = new[]
             {
-                ShaderContainer.Shaders = new[]
+                GetShaderByType<ShadowShader>().With(s =>
                 {
-                    GetShaderByType<ShadowShader>().With(s =>
-                    {
-                        s.ShadowColour = Color4Extensions.FromHex(colour);
-                        s.ShadowOffset = TestCaseVectorHelper.ParseVector2(offset);
-                    })
-                };
-            });
-        }
+                    s.ShadowColour = Color4Extensions.FromHex(colour);
+                    s.ShadowOffset = TestCaseVectorHelper.ParseVector2(offset);
+                })
+            };
+        });
     }
 }
