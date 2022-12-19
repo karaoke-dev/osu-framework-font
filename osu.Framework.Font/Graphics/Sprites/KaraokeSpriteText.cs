@@ -13,7 +13,7 @@ using osuTK.Graphics;
 
 namespace osu.Framework.Graphics.Sprites;
 
-public class KaraokeSpriteText : KaraokeSpriteText<LyricSpriteText>
+public partial class KaraokeSpriteText : KaraokeSpriteText<LyricSpriteText>
 {
 }
 

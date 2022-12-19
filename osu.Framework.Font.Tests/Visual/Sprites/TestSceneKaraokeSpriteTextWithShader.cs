@@ -14,7 +14,7 @@ using osuTK.Graphics;
 
 namespace osu.Framework.Font.Tests.Visual.Sprites;
 
-public class TestSceneKaraokeSpriteTextWithShader : BackgroundGridTestScene
+public partial class TestSceneKaraokeSpriteTextWithShader : BackgroundGridTestScene
 {
     private readonly ManualClock manualClock = new();
 

@@ -11,7 +11,7 @@ namespace osu.Framework.Graphics.Containers;
 /// It's a container that only masking target direction.
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public class MaskingContainer<T> : Container<T> where T : Drawable
+public partial class MaskingContainer<T> : Container<T> where T : Drawable
 {
     /// <summary>
     /// If enabled, only the portion of children that falls within this <see cref="Container"/>'s

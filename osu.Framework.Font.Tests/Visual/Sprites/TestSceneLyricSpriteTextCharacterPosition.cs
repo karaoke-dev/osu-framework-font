@@ -16,7 +16,7 @@ using osuTK.Graphics;
 
 namespace osu.Framework.Font.Tests.Visual.Sprites;
 
-public class TestSceneLyricSpriteTextCharacterPosition : BackgroundGridTestScene
+public partial class TestSceneLyricSpriteTextCharacterPosition : BackgroundGridTestScene
 {
     private readonly Box showSizeBox;
     private readonly LyricSpriteText lyricSpriteText;

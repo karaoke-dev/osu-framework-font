@@ -17,7 +17,7 @@ using osuTK.Graphics;
 
 namespace osu.Framework.Font.Tests.Visual;
 
-public abstract class BackgroundGridTestScene : TestScene
+public abstract partial class BackgroundGridTestScene : TestScene
 {
     protected const int GRID_SIZE = 30;
 
@@ -86,7 +86,7 @@ public abstract class BackgroundGridTestScene : TestScene
     protected T GetShaderByType<T>() where T : InternalShader, new()
         => shaderManager.LocalInternalShader<T>();
 
-    protected class DraggableCircle : Circle
+    protected partial class DraggableCircle : Circle
     {
         protected override bool OnDragStart(DragStartEvent e) => true;
 

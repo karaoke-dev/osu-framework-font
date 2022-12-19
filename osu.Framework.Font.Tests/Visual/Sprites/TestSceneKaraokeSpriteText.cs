@@ -19,7 +19,7 @@ using osuTK.Graphics;
 
 namespace osu.Framework.Font.Tests.Visual.Sprites;
 
-public class TestSceneKaraokeSpriteText : TestScene
+public partial class TestSceneKaraokeSpriteText : TestScene
 {
     private readonly TestKaraokeSpriteText karaokeSpriteText;
     private readonly SpriteText transformAmountSpriteText;
