@@ -15,7 +15,7 @@ using osuTK.Graphics;
 
 namespace osu.Framework.Font.Tests.Visual.Sprites;
 
-public class TestSceneKaraokeSpriteTextTransforms : BackgroundGridTestScene
+public partial class TestSceneKaraokeSpriteTextTransforms : BackgroundGridTestScene
 {
     private const string left_text_color = "#FFDD77";
     private const string left_outline_color = "#CCA532";

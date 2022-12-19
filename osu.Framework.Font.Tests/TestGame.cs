@@ -7,7 +7,7 @@ using osu.Framework.IO.Stores;
 
 namespace osu.Framework.Font.Tests;
 
-internal class TestGame : Game
+internal partial class TestGame : Game
 {
     [BackgroundDependencyLoader]
     private void load()

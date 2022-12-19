@@ -15,7 +15,7 @@ using osuTK.Graphics;
 
 namespace osu.Framework.Font.Tests.Visual.Shaders;
 
-public abstract class ShaderTestScene : BackgroundGridTestScene
+public abstract partial class ShaderTestScene : BackgroundGridTestScene
 {
     protected readonly TestShaderContainer ShaderContainer;
 
@@ -78,7 +78,7 @@ public abstract class ShaderTestScene : BackgroundGridTestScene
             };
     }
 
-    protected class DraggableBox : Box
+    protected partial class DraggableBox : Box
     {
         protected override bool OnDragStart(DragStartEvent e) => true;
 
@@ -86,7 +86,7 @@ public abstract class ShaderTestScene : BackgroundGridTestScene
             => Position += e.Delta;
     }
 
-    protected class DraggableTriangle : Triangle
+    protected partial class DraggableTriangle : Triangle
     {
         protected override bool OnDragStart(DragStartEvent e) => true;
 
@@ -94,7 +94,7 @@ public abstract class ShaderTestScene : BackgroundGridTestScene
             => Position += e.Delta;
     }
 
-    protected class DraggableText : SpriteText
+    protected partial class DraggableText : SpriteText
     {
         protected override bool OnDragStart(DragStartEvent e) => true;
 
@@ -102,7 +102,7 @@ public abstract class ShaderTestScene : BackgroundGridTestScene
             => Position += e.Delta;
     }
 
-    protected class TestShaderContainer : Container, IMultiShaderBufferedDrawable
+    protected partial class TestShaderContainer : Container, IMultiShaderBufferedDrawable
     {
         public IShader TextureShader { get; private set; } = null!;
 

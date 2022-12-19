@@ -11,7 +11,7 @@ using osuTK;
 
 namespace osu.Framework.Font.Tests.Visual.Sprites;
 
-public class TestSceneLyricSpriteText : TestScene
+public partial class TestSceneLyricSpriteText : TestScene
 {
     [TestCase("karaoke", null, null)]
     [TestCase("カラオケ", new[] { "[0,1]:か", "[1,2]:ら", "[2,3]:お", "[3,4]:け" }, null)]

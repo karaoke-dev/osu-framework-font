@@ -3,6 +3,6 @@
 
 namespace osu.Framework.Font.Tests.Visual.Shaders;
 
-public abstract class InternalShaderTestScene : ShaderTestScene
+public abstract partial class InternalShaderTestScene : ShaderTestScene
 {
 }
