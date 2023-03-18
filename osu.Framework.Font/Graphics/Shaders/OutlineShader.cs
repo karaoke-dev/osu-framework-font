@@ -2,8 +2,10 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
+using System.Runtime.InteropServices;
 using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Rendering;
+using osu.Framework.Graphics.Shaders.Types;
 using osuTK;
 using osuTK.Graphics;
 
@@ -15,20 +17,24 @@ public class OutlineShader : InternalShader, IApplicableToCharacterSize, IApplic
 
     public Color4 Colour { get; set; }
 
+    public Color4 OutlineColour { get; set; }
+
     public float Radius { get; set; }
 
-    public Color4 OutlineColour { get; set; }
+    private IUniformBuffer<OutlineParameters>? outlineParametersBuffer;
 
     public override void ApplyValue(IRenderer renderer)
     {
-        var colourMatrix = new Vector4(Colour.R, Colour.G, Colour.B, Colour.A);
-        GetUniform<Vector4>(@"g_Colour").UpdateValue(ref colourMatrix);
+        outlineParametersBuffer ??= renderer.CreateUniformBuffer<OutlineParameters>();
 
-        float radius = Radius;
-        GetUniform<float>(@"g_Radius").UpdateValue(ref radius);
+        outlineParametersBuffer.Data = new OutlineParameters
+        {
+            Colour = new Vector4(Colour.R, Colour.G, Colour.B, Colour.A),
+            OutlineColour = new Vector4(OutlineColour.R, OutlineColour.G, OutlineColour.B, OutlineColour.A),
+            Radius = Radius,
+        };
 
-        var outlineColourMatrix = new Vector4(OutlineColour.R, OutlineColour.G, OutlineColour.B, OutlineColour.A);
-        GetUniform<Vector4>(@"g_OutlineColour").UpdateValue(ref outlineColourMatrix);
+        BindUniformBlock("m_OutlineParameters", outlineParametersBuffer);
     }
 
     public RectangleF ComputeCharacterDrawRectangle(RectangleF originalCharacterDrawRectangle)
@@ -36,4 +42,13 @@ public class OutlineShader : InternalShader, IApplicableToCharacterSize, IApplic
 
     public RectangleF ComputeDrawRectangle(RectangleF originDrawRectangle)
         => ComputeCharacterDrawRectangle(originDrawRectangle);
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    private record struct OutlineParameters
+    {
+        public UniformVector4 Colour;
+        public UniformVector4 OutlineColour;
+        public UniformFloat Radius;
+        private readonly UniformPadding12 pad1;
+    }
 }
