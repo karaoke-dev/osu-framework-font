@@ -2,12 +2,13 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
+using osu.Framework.Graphics.Rendering;
 
 namespace osu.Framework.Graphics.Shaders;
 
 public interface ICustomizedShader
 {
-    void ApplyValue();
+    void ApplyValue(IRenderer renderer);
 
     /// <summary>
     /// Binds this shader to be used for rendering.

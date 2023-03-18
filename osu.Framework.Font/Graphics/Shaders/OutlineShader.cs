@@ -3,6 +3,7 @@
 
 using System;
 using osu.Framework.Graphics.Primitives;
+using osu.Framework.Graphics.Rendering;
 using osuTK;
 using osuTK.Graphics;
 
@@ -18,7 +19,7 @@ public class OutlineShader : InternalShader, IApplicableToCharacterSize, IApplic
 
     public Color4 OutlineColour { get; set; }
 
-    public override void ApplyValue()
+    public override void ApplyValue(IRenderer renderer)
     {
         var colourMatrix = new Vector4(Colour.R, Colour.G, Colour.B, Colour.A);
         GetUniform<Vector4>(@"g_Colour").UpdateValue(ref colourMatrix);

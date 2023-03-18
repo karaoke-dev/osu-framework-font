@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using osu.Framework.Graphics.Primitives;
+using osu.Framework.Graphics.Rendering;
 
 namespace osu.Framework.Graphics.Shaders;
 
@@ -45,7 +46,7 @@ public class StepShader : IStepShader, IApplicableToCharacterSize, IApplicableTo
 
     public bool IsBound { get; private set; }
 
-    public void ApplyValue()
+    public void ApplyValue(IRenderer renderer)
         => throw new NotSupportedException();
 
     public RectangleF ComputeCharacterDrawRectangle(RectangleF originalCharacterDrawRectangle) =>

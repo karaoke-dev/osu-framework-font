@@ -1,6 +1,7 @@
 ﻿// Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
+using osu.Framework.Graphics.Rendering;
 using osuTK;
 
 namespace osu.Framework.Graphics.Shaders;
@@ -22,7 +23,7 @@ public class RainbowShader : InternalShader, IHasCurrentTime
 
     public float Mix { get; set; } = 0.5f;
 
-    public override void ApplyValue()
+    public override void ApplyValue(IRenderer renderer)
     {
         var uv = Uv;
         GetUniform<Vector2>(@"g_Uv").UpdateValue(ref uv);

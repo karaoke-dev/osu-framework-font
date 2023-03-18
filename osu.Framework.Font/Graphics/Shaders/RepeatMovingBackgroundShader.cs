@@ -2,6 +2,7 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
+using osu.Framework.Graphics.Rendering;
 using osu.Framework.Graphics.Textures;
 using osuTK;
 using osuTK.Graphics.ES30;
@@ -22,7 +23,7 @@ public class RepeatMovingBackgroundShader : InternalShader, IHasCurrentTime, IHa
 
     public float Mix { get; set; } = 1f;
 
-    public override void ApplyValue()
+    public override void ApplyValue(IRenderer renderer)
     {
         if (Texture == null)
             return;

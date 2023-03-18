@@ -3,6 +3,7 @@
 
 using System;
 using osu.Framework.Graphics.Primitives;
+using osu.Framework.Graphics.Rendering;
 using osuTK;
 using osuTK.Graphics;
 
@@ -16,7 +17,7 @@ public class ShadowShader : InternalShader, IApplicableToDrawRectangle, IHasText
 
     public Vector2 ShadowOffset { get; set; }
 
-    public override void ApplyValue()
+    public override void ApplyValue(IRenderer renderer)
     {
         var shadowColour = new Vector4(ShadowColour.R, ShadowColour.G, ShadowColour.B, ShadowColour.A);
         GetUniform<Vector4>(@"g_Colour").UpdateValue(ref shadowColour);
