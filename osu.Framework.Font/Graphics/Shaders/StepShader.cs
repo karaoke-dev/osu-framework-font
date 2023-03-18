@@ -41,6 +41,9 @@ public class StepShader : IStepShader, IApplicableToCharacterSize, IApplicableTo
     public Uniform<T> GetUniform<T>(string name) where T : unmanaged, IEquatable<T>
         => throw new NotSupportedException();
 
+    public void BindUniformBlock(string blockName, IUniformBuffer buffer)
+        => throw new NotSupportedException();
+
     public bool IsLoaded
         => throw new NotSupportedException();
 

@@ -25,6 +25,9 @@ public abstract class CustomizedShader : ICustomizedShader
     public Uniform<T> GetUniform<T>(string name) where T : unmanaged, IEquatable<T>
         => shader.GetUniform<T>(name);
 
+    public void BindUniformBlock(string blockName, IUniformBuffer buffer)
+        => shader.BindUniformBlock(blockName, buffer);
+
     public bool IsLoaded => shader.IsLoaded;
 
     public bool IsBound { get; private set; }

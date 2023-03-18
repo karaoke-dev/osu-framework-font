@@ -37,4 +37,11 @@ public interface ICustomizedShader
     /// <returns>The retrieved uniform.</returns>
     Uniform<T> GetUniform<T>(string name)
         where T : unmanaged, IEquatable<T>;
+
+    /// <summary>
+    /// Binds an <see cref="IUniformBuffer"/> to a uniform block of the given name.
+    /// </summary>
+    /// <param name="blockName">The uniform block name.</param>
+    /// <param name="buffer">The buffer to bind to the block.</param>
+    void BindUniformBlock(string blockName, IUniformBuffer buffer);
 }
