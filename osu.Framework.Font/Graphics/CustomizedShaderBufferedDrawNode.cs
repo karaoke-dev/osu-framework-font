@@ -4,11 +4,12 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Rendering;
 using osu.Framework.Graphics.Shaders;
-using osuTK;
+using osu.Framework.Graphics.Shaders.Types;
 using osuTK.Graphics;
 
 namespace osu.Framework.Graphics;
@@ -46,8 +47,12 @@ public abstract class CustomizedShaderBufferedDrawNode : BufferedDrawNode
         prop.SetValue(SharedData, -1);
     }
 
+    private IUniformBuffer<SharedParameters>? sharedParametersBuffer;
+
     protected void RenderShader(IRenderer renderer, ICustomizedShader shader, IFrameBuffer current, IFrameBuffer target)
     {
+        sharedParametersBuffer ??= renderer.CreateUniformBuffer<SharedParameters>();
+
         renderer.SetBlend(BlendingParameters.None);
 
         using (BindFrameBuffer(target))
@@ -55,27 +60,45 @@ public abstract class CustomizedShaderBufferedDrawNode : BufferedDrawNode
             if (shader is IHasTextureSize)
             {
                 var size = current.Size;
-                shader.GetUniform<Vector2>(@"g_TexSize").UpdateValue(ref size);
+                sharedParametersBuffer.Data = sharedParametersBuffer.Data with
+                {
+                    TexSize = size
+                };
             }
 
             if (shader is IHasInflationPercentage)
             {
                 var localInflationAmount = DrawInfo.Matrix.ExtractScale().X;
-                shader.GetUniform<float>(@"g_InflationPercentage").UpdateValue(ref localInflationAmount);
+                sharedParametersBuffer.Data = sharedParametersBuffer.Data with
+                {
+                    InflationPercentage = localInflationAmount
+                };
             }
 
             if (shader is IHasCurrentTime)
             {
                 var currentTime = (float)(Source.Clock.CurrentTime - loadTime) / 1000;
-                shader.GetUniform<float>("g_Time").UpdateValue(ref currentTime);
+                sharedParametersBuffer.Data = sharedParametersBuffer.Data with
+                {
+                    Time = currentTime
+                };
             }
 
             if (shader is ICustomizedShader customizedShader)
                 customizedShader.ApplyValue(renderer);
 
             shader.Bind();
+            shader.BindUniformBlock("m_SharedParameters", sharedParametersBuffer);
             renderer.DrawFrameBuffer(current, new RectangleF(0, 0, current.Texture.Width, current.Texture.Height), ColourInfo.SingleColour(Color4.White));
             shader.Unbind();
         }
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    private record struct SharedParameters
+    {
+        public UniformVector2 TexSize;
+        public UniformFloat InflationPercentage;
+        public UniformFloat Time;
     }
 }
