@@ -1,14 +1,18 @@
 // see the demo: https://www.geeks3d.com/20101029/shader-library-pixelation-post-processing-effect-glsl/
+#include "sh_CustomizedShaderGlobalUniforms.h"
 #include "sh_Utils.h"
 
-varying mediump vec2 v_TexCoord;
+layout(location = 2) in mediump vec2 v_TexCoord;
 
-uniform lowp sampler2D m_Sampler;
+layout(std140, set = 2, binding = 0) uniform m_PixelParameters
+{
+	mediump vec2 g_Size;
+};
 
-uniform mediump vec2 g_TexSize;
-uniform mediump vec2 g_Size;
-uniform float g_InflationPercentage;
+layout(set = 1, binding = 0) uniform lowp texture2D m_Texture;
+layout(set = 1, binding = 1) uniform lowp sampler m_Sampler;
 
+layout(location = 0) out vec4 o_Colour;
 
 void main(void) 
 { 
@@ -17,5 +21,5 @@ void main(void)
 	uv = uv * separaorParts;
     uv = floor(uv);
     uv = uv / separaorParts;
-    gl_FragColor = toSRGB(texture2D(m_Sampler, uv));
+    o_Colour = toSRGB(texture(sampler2D(m_Texture, m_Sampler), uv));
 }

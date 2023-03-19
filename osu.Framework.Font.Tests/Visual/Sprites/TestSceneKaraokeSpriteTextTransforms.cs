@@ -203,7 +203,7 @@ public partial class TestSceneKaraokeSpriteTextTransforms : BackgroundGridTestSc
     private static string getApplyDescription(bool applyDifferentSizing)
         => applyDifferentSizing ? "Apply shader with different sizing" : "Apply shader";
 
-    private class TestKaraokeSpriteText : KaraokeSpriteText
+    private partial class TestKaraokeSpriteText : KaraokeSpriteText
     {
         public override bool RemoveCompletedTransforms => false;
     }

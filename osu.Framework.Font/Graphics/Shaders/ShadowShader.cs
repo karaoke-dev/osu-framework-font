@@ -2,7 +2,10 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
+using System.Runtime.InteropServices;
 using osu.Framework.Graphics.Primitives;
+using osu.Framework.Graphics.Rendering;
+using osu.Framework.Graphics.Shaders.Types;
 using osuTK;
 using osuTK.Graphics;
 
@@ -16,13 +19,21 @@ public class ShadowShader : InternalShader, IApplicableToDrawRectangle, IHasText
 
     public Vector2 ShadowOffset { get; set; }
 
-    public override void ApplyValue()
-    {
-        var shadowColour = new Vector4(ShadowColour.R, ShadowColour.G, ShadowColour.B, ShadowColour.A);
-        GetUniform<Vector4>(@"g_Colour").UpdateValue(ref shadowColour);
+    private IUniformBuffer<ShadowParameters>? shadowParametersBuffer;
 
+    public override void ApplyValue(IRenderer renderer)
+    {
+        shadowParametersBuffer ??= renderer.CreateUniformBuffer<ShadowParameters>();
+
+        var shadowColour = new Vector4(ShadowColour.R, ShadowColour.G, ShadowColour.B, ShadowColour.A);
         var shadowOffset = new Vector2(-ShadowOffset.X, ShadowOffset.Y);
-        GetUniform<Vector2>(@"g_Offset").UpdateValue(ref shadowOffset);
+        shadowParametersBuffer.Data = new ShadowParameters
+        {
+            Colour = shadowColour,
+            Offset = shadowOffset,
+        };
+
+        BindUniformBlock("m_ShadowParameters", shadowParametersBuffer);
     }
 
     public RectangleF ComputeDrawRectangle(RectangleF originDrawRectangle)
@@ -33,4 +44,12 @@ public class ShadowShader : InternalShader, IApplicableToDrawRectangle, IHasText
             Top = Math.Max(-ShadowOffset.Y, 0),
             Bottom = Math.Max(ShadowOffset.Y, 0),
         });
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    private record struct ShadowParameters
+    {
+        public UniformVector4 Colour;
+        public UniformVector2 Offset;
+        private UniformPadding8 pad1;
+    }
 }

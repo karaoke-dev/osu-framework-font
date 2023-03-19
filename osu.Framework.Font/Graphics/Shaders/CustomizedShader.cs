@@ -2,6 +2,7 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
+using osu.Framework.Graphics.Rendering;
 
 namespace osu.Framework.Graphics.Shaders;
 
@@ -24,11 +25,14 @@ public abstract class CustomizedShader : ICustomizedShader
     public Uniform<T> GetUniform<T>(string name) where T : unmanaged, IEquatable<T>
         => shader.GetUniform<T>(name);
 
+    public void BindUniformBlock(string blockName, IUniformBuffer buffer)
+        => shader.BindUniformBlock(blockName, buffer);
+
     public bool IsLoaded => shader.IsLoaded;
 
     public bool IsBound { get; private set; }
 
-    public abstract void ApplyValue();
+    public abstract void ApplyValue(IRenderer renderer);
 
     public void Dispose()
     {

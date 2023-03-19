@@ -1,6 +1,9 @@
 ﻿// Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
+using System.Runtime.InteropServices;
+using osu.Framework.Graphics.Rendering;
+using osu.Framework.Graphics.Shaders.Types;
 using osuTK;
 
 namespace osu.Framework.Graphics.Shaders;
@@ -22,24 +25,34 @@ public class RainbowShader : InternalShader, IHasCurrentTime
 
     public float Mix { get; set; } = 0.5f;
 
-    public override void ApplyValue()
+    private IUniformBuffer<RainbowParameters>? rainbowParametersBuffer;
+
+    public override void ApplyValue(IRenderer renderer)
     {
-        var uv = Uv;
-        GetUniform<Vector2>(@"g_Uv").UpdateValue(ref uv);
+        rainbowParametersBuffer ??= renderer.CreateUniformBuffer<RainbowParameters>();
 
-        var speed = Speed;
-        GetUniform<float>(@"g_Speed").UpdateValue(ref speed);
+        rainbowParametersBuffer.Data = new RainbowParameters
+        {
+            Uv = Uv,
+            Speed = Speed,
+            Saturation = Saturation,
+            Brightness = Brightness,
+            Section = Section,
+            Mix = Mix,
+        };
 
-        var saturation = Saturation;
-        GetUniform<float>(@"g_Saturation").UpdateValue(ref saturation);
+        BindUniformBlock("m_RainbowParameters", rainbowParametersBuffer);
+    }
 
-        var brightness = Brightness;
-        GetUniform<float>(@"g_Brightness").UpdateValue(ref brightness);
-
-        var section = Section;
-        GetUniform<float>(@"g_Section").UpdateValue(ref section);
-
-        var mix = Mix;
-        GetUniform<float>(@"g_Mix").UpdateValue(ref mix);
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    private record struct RainbowParameters
+    {
+        public UniformVector2 Uv;
+        public UniformFloat Speed;
+        public UniformFloat Saturation;
+        public UniformFloat Brightness;
+        public UniformFloat Section;
+        public UniformFloat Mix;
+        private readonly UniformPadding4 pad1;
     }
 }

@@ -11,13 +11,12 @@ using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shaders;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Input.Events;
-using osu.Framework.Testing;
 using osuTK;
 using osuTK.Graphics;
 
 namespace osu.Framework.Font.Tests.Visual;
 
-public abstract partial class BackgroundGridTestScene : TestScene
+public abstract partial class BackgroundGridTestScene : FrameworkTestScene
 {
     protected const int GRID_SIZE = 30;
 
