@@ -107,7 +107,7 @@ public partial class TestSceneKaraokeSpriteTextWithShader : BackgroundGridTestSc
         });
     }
 
-    private class TestKaraokeSpriteText : KaraokeSpriteText
+    private partial class TestKaraokeSpriteText : KaraokeSpriteText
     {
         public override bool RemoveCompletedTransforms => false;
     }

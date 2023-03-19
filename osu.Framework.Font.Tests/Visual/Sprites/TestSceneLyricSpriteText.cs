@@ -230,7 +230,7 @@ public partial class TestSceneLyricSpriteText : TestScene
         Child = creationFunction().With(x => x.Scale = new Vector2(2));
     }
 
-    internal class DefaultLyricSpriteText : LyricSpriteText
+    internal partial class DefaultLyricSpriteText : LyricSpriteText
     {
         public DefaultLyricSpriteText(bool ruby = true, bool romaji = true)
         {
