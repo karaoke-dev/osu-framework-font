@@ -42,7 +42,7 @@ public abstract class CustomizedShaderBufferedDrawNode : BufferedDrawNode
         // todo : use better way to reset draw version.
         var prop = typeof(BufferedDrawNodeSharedData).GetField("DrawVersion", BindingFlags.Instance | BindingFlags.NonPublic);
         if (prop == null)
-            throw new NullReferenceException();
+            throw new NotSupportedException("Underlying data structure has changed, KaraokeFont needs an update");
 
         prop.SetValue(SharedData, -1);
     }

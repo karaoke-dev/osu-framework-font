@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup Label="Project">
     <OutputType>Library</OutputType>
@@ -17,7 +17,6 @@
     <Description>Unofficial support extra font effect for osu!framework.</Description>
     <Copyright>https://github.com/karaoke-dev/osu-framework-font</Copyright>
     <PackageProjectUrl>https://github.com/karaoke-dev/osu-framework-font</PackageProjectUrl>
-    <PackageLicenseUrl>https://github.com/karaoke-dev/osu-framework-font</PackageLicenseUrl>
     <RepositoryUrl>https://github.com/karaoke-dev/osu-framework-font.git</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
     <PackageTags>osu-framework karaoke andy840119</PackageTags>
