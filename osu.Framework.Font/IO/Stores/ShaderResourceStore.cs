@@ -14,7 +14,7 @@ public class ShaderResourceStore : DllResourceStore
     {
         var property = typeof(DllResourceStore).GetField("prefix", BindingFlags.NonPublic | BindingFlags.Instance);
         if (property == null)
-            throw new Exception();
+            throw new NotSupportedException("Underlying implementation has changed, KaraokeFont needs an update");
 
         property.SetValue(this, "osu.Framework");
     }

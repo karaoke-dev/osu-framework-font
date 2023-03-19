@@ -60,6 +60,6 @@ public class RepeatMovingBackgroundShader : InternalShader, IHasCurrentTime, IHa
         public UniformVector2 DisplayBorder;
         public UniformVector2 Speed;
         public UniformFloat Mix;
-        private UniformPadding4 pad1;
+        private readonly UniformPadding4 pad1;
     }
 }

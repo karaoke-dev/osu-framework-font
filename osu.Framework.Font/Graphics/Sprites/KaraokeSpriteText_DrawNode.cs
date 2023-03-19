@@ -66,7 +66,7 @@ public partial class KaraokeSpriteText<T>
             return base.GetDrawVersion();
         }
 
-        public List<DrawNode> Children
+        public List<DrawNode>? Children
         {
             get => Child.Children;
             set => Child.Children = value;

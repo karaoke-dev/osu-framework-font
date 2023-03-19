@@ -23,7 +23,7 @@ public readonly struct PositionText : IEquatable<PositionText>
     public bool Equals(PositionText other)
         => StartIndex == other.StartIndex && EndIndex == other.EndIndex && Text == other.Text;
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (obj is PositionText positionText)
             return Equals(positionText);

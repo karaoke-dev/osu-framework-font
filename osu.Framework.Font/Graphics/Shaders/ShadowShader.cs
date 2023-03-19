@@ -50,6 +50,6 @@ public class ShadowShader : InternalShader, IApplicableToDrawRectangle, IHasText
     {
         public UniformVector4 Colour;
         public UniformVector2 Offset;
-        private UniformPadding8 pad1;
+        private readonly UniformPadding8 pad1;
     }
 }

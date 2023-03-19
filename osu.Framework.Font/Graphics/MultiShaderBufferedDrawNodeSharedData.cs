@@ -79,7 +79,7 @@ public class MultiShaderBufferedDrawNodeSharedData : BufferedDrawNodeSharedData
     public void UpdateBuffer(ICustomizedShader shader, IFrameBuffer frameBuffer)
     {
         if (!shaderBuffers.ContainsKey(shader))
-            throw new Exception();
+            throw new NotSupportedException("Underlying data structure has changed, KaraokeFont needs an update");
 
         shaderBuffers[shader] = frameBuffer;
     }

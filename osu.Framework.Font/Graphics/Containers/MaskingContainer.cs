@@ -2,6 +2,7 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
+using osu.Framework.Extensions.EnumExtensions;
 using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Rendering;
 
@@ -74,7 +75,7 @@ public partial class MaskingContainer<T> : Container<T> where T : Drawable
             int getExtendSize(Edges flag)
             {
                 const int extend_size = 1000;
-                return edges.HasFlag(flag) ? 0 : extend_size;
+                return edges.HasFlagFast(flag) ? 0 : extend_size;
             }
         }
 

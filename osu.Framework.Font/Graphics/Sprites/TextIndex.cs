@@ -39,7 +39,7 @@ public readonly struct TextIndex : IComparable<TextIndex>, IEquatable<TextIndex>
         return Index == other.Index && State == other.State;
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (obj is TextIndex textIndex)
             return Equals(textIndex);
