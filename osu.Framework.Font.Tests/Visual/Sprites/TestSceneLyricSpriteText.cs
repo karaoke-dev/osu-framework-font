@@ -6,12 +6,11 @@ using NUnit.Framework;
 using osu.Framework.Font.Tests.Helper;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Sprites;
-using osu.Framework.Testing;
 using osuTK;
 
 namespace osu.Framework.Font.Tests.Visual.Sprites;
 
-public partial class TestSceneLyricSpriteText : TestScene
+public partial class TestSceneLyricSpriteText : FrameworkTestScene
 {
     [TestCase("karaoke", null, null)]
     [TestCase("カラオケ", new[] { "[0,1]:か", "[1,2]:ら", "[2,3]:お", "[3,4]:け" }, null)]
@@ -235,6 +234,7 @@ public partial class TestSceneLyricSpriteText : TestScene
         public DefaultLyricSpriteText(bool ruby = true, bool romaji = true)
         {
             Text = "カラオケ";
+            Font = FontUsage.Default;
 
             if (ruby)
             {

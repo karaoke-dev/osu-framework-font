@@ -13,13 +13,12 @@ using osu.Framework.Font.Tests.Helper;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Shaders;
 using osu.Framework.Graphics.Sprites;
-using osu.Framework.Testing;
 using osuTK;
 using osuTK.Graphics;
 
 namespace osu.Framework.Font.Tests.Visual.Sprites;
 
-public partial class TestSceneKaraokeSpriteText : TestScene
+public partial class TestSceneKaraokeSpriteText : FrameworkTestScene
 {
     private readonly TestKaraokeSpriteText karaokeSpriteText;
     private readonly SpriteText transformAmountSpriteText;
