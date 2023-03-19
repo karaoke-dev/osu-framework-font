@@ -83,7 +83,7 @@ public abstract partial class BackgroundGridTestScene : TestScene
         });
     }
 
-    protected T GetShaderByType<T>() where T : ICustomizedShader
+    protected T GetShaderByType<T>() where T : ICustomizedShader, new()
         => shaderManager.LocalCustomizedShader<T>();
 
     protected partial class DraggableCircle : Circle
