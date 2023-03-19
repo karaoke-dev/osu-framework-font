@@ -223,7 +223,7 @@ public partial class TestSceneKaraokeSpriteText : TestScene
         });
     }
 
-    private class TestKaraokeSpriteText : KaraokeSpriteText
+    private partial class TestKaraokeSpriteText : KaraokeSpriteText
     {
         public Action? TransformAction;
 
