@@ -5,5 +5,5 @@ namespace osu.Framework.Graphics.Shaders;
 
 public interface IHasInflationPercentage
 {
-	float InflationPercentage { set; }
+    float InflationPercentage { set; }
 }

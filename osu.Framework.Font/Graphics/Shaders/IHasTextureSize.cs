@@ -7,5 +7,5 @@ namespace osu.Framework.Graphics.Shaders;
 
 public interface IHasTextureSize
 {
-	Vector2 TextureSize { set; }
+    Vector2 TextureSize { set; }
 }
