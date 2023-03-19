@@ -2,10 +2,7 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using osuTK;
-
-using System;
 using System.Runtime.InteropServices;
-using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Shaders.Types;
 
 namespace osu.Framework.Graphics.Shaders;

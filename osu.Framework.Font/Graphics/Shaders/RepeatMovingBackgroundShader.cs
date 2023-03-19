@@ -6,7 +6,6 @@ using System.Runtime.InteropServices;
 using osu.Framework.Graphics.Textures;
 using osu.Framework.Graphics.Shaders.Types;
 using osuTK;
-using osuTK.Graphics.ES30;
 
 namespace osu.Framework.Graphics.Shaders;
 
