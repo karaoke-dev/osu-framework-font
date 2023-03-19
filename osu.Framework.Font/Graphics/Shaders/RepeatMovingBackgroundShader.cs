@@ -2,23 +2,42 @@
 // See the LICENCE file in the repository root for full licence text.
 
 using System;
+using System.Runtime.InteropServices;
 using osu.Framework.Graphics.Textures;
+using osu.Framework.Graphics.Shaders.Types;
 using osuTK;
 using osuTK.Graphics.ES30;
 
 namespace osu.Framework.Graphics.Shaders;
 
-public class RepeatMovingBackgroundShader : InternalShader, IHasCurrentTime, IHasTextureSize
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public record struct RepeatMovingBackgroundParameters
+{
+    public UniformVector2 TexSize;
+    public UniformVector2 RepeatSampleCoord;
+    public UniformVector2 RepeatSampleSize;
+    public UniformVector2 DisplaySize;
+    public UniformVector2 DisplayBorder;
+    public UniformVector2 Speed;
+    public UniformFloat Time;
+    public UniformFloat Mix;
+}
+
+public class RepeatMovingBackgroundShader : CustomizedShader<RepeatMovingBackgroundParameters>, IHasCurrentTime, IHasTextureSize
 {
     public override string ShaderName => "RepeatMovingBackground";
 
     public Texture? Texture { get; set; }
+
+    public Vector2 TextureSize { get; set; }
 
     public Vector2 TextureDisplaySize { get; set; } = new(10);
 
     public Vector2 TextureDisplayBorder { get; set; }
 
     public Vector2 Speed { get; set; }
+
+    public float CurrentTime { get; set; }
 
     public float Mix { get; set; } = 1f;
 
@@ -27,27 +46,21 @@ public class RepeatMovingBackgroundShader : InternalShader, IHasCurrentTime, IHa
         if (Texture == null)
             return;
 
+        // where this 1 is from? I have no clue.
         Texture.Bind(1);
 
-        var unitId = TextureUnit.Texture1 - TextureUnit.Texture0;
-        GetUniform<int>(@"g_RepeatSample").UpdateValue(ref unitId);
+        UniformBuffer.Data = new RepeatMovingBackgroundParameters
+        {
+            TexSize = TextureSize,
+            RepeatSampleCoord = Texture.GetTextureRect().TopLeft,
+            RepeatSampleSize = Texture.GetTextureRect().Size,
+            DisplaySize = TextureDisplaySize,
+            DisplayBorder = TextureDisplayBorder,
+            Speed = Speed,
+            Time = CurrentTime,
+            Mix = Math.Clamp(Mix, 0, 1),
+        };
 
-        var textureCoord = Texture.GetTextureRect().TopLeft;
-        GetUniform<Vector2>(@"g_RepeatSampleCoord").UpdateValue(ref textureCoord);
-
-        var textureSize = Texture.GetTextureRect().Size;
-        GetUniform<Vector2>(@"g_RepeatSampleSize").UpdateValue(ref textureSize);
-
-        var textureDisplaySize = TextureDisplaySize;
-        GetUniform<Vector2>("g_DisplaySize").UpdateValue(ref textureDisplaySize);
-
-        var textureDisplayBorder = TextureDisplayBorder;
-        GetUniform<Vector2>("g_DisplayBorder").UpdateValue(ref textureDisplayBorder);
-
-        var speed = Speed;
-        GetUniform<Vector2>("g_Speed").UpdateValue(ref speed);
-
-        var mix = Math.Clamp(Mix, 0, 1);
-        GetUniform<float>(@"g_Mix").UpdateValue(ref mix);
+        OriginShader.BindUniformBlock("m_RepeatMovingBackgroundParameters", UniformBuffer);
     }
 }

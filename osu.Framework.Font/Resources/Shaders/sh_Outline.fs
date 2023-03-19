@@ -1,66 +1,77 @@
 #include "sh_Utils.h"
 
-varying mediump vec2 v_TexCoord;
+layout(location = 2) in highp vec2 v_TexCoord;
 
-uniform lowp sampler2D m_Sampler;
-
-uniform mediump vec2 g_TexSize;
-uniform vec4 g_Colour;
-uniform float g_Radius;
-uniform vec4 g_OutlineColour;
-uniform float g_InflationPercentage;
-
-lowp float outlineAlpha(sampler2D tex, float radius, mediump vec2 texCoord, mediump vec2 texSize)
+layout(std140, set = 0, binding = 0) uniform m_OutlineParameters
 {
-    mediump vec2 offset = mediump vec2(radius) / texSize;
-    lowp float alpha = 0.0;
+	mediump vec4 g_Colour;
+	mediump vec4 g_OutlineColour;
+	mediump vec2 g_TexSize;
+	mediump float g_Radius;
+	mediump float g_InflationPercentage;
+};
 
-    alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(0.20, 0.98) * offset).a);
-    alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(0.38, 0.92) * offset).a);
-    alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(0.56, 0.83) * offset).a);
-    alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(0.71, 0.71) * offset).a);
-    alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(0.83, 0.56) * offset).a);
-    alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(0.92, 0.38) * offset).a);
-    alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(0.98, 0.20) * offset).a);
-    alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(1.00, -0.00) * offset).a);
-    alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(0.98, -0.20) * offset).a);
-    alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(0.92, -0.38) * offset).a);
-    alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(0.83, -0.56) * offset).a);
-    alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(0.71, -0.71) * offset).a);
-    alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(0.56, -0.83) * offset).a);
-    alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(0.38, -0.92) * offset).a);
-    alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(0.20, -0.98) * offset).a);
-    alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(-0.00, -1.00) * offset).a);
-    alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(-0.20, -0.98) * offset).a);
-    alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(-0.38, -0.92) * offset).a);
-    alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(-0.56, -0.83) * offset).a);
-    alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(-0.71, -0.71) * offset).a);
-    alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(-0.83, -0.56) * offset).a);
-    alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(-0.92, -0.38) * offset).a);
-    alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(-0.98, -0.20) * offset).a);
-    alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(-1.00, 0.00) * offset).a);
-    alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(-0.98, 0.20) * offset).a);
-    alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(-0.92, 0.38) * offset).a);
-    alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(-0.83, 0.56) * offset).a);
-    alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(-0.71, 0.71) * offset).a);
-    alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(-0.56, 0.83) * offset).a);
-    alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(-0.38, 0.92) * offset).a);
-    alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(-0.20, 0.98) * offset).a);
-    alpha = max(alpha, texture2D(tex, texCoord - lowp vec2(0.00, 1.00) * offset).a);
-    return alpha;
+layout(set = 1, binding = 0) uniform lowp texture2D m_Texture;
+layout(set = 1, binding = 1) uniform lowp sampler m_Sampler;
+
+layout(location = 0) out vec4 o_Colour;
+
+mediump vec4 tex(in mediump vec2 texCoord)
+{
+	return texture(sampler2D(m_Texture, m_Sampler), texCoord);
 }
 
-lowp vec4 outline(sampler2D tex, float radius, mediump vec2 texCoord, mediump vec2 texSize, mediump vec4 colour)
+lowp float outlineAlpha(in float radius, in mediump vec2 texCoord, in mediump vec2 texSize)
 {
-	lowp float outlineAlpha = max(outlineAlpha(tex, radius, texCoord, texSize), outlineAlpha(tex, radius / 2.0, texCoord, texSize));
-	return mix(vec4(0.0), colour, outlineAlpha);
+	mediump vec2 offset = vec2(radius) / texSize;
+	lowp float alpha = 0.0;
+
+	alpha = max(alpha, tex(texCoord - vec2(0.20, 0.98) * offset).a);
+	alpha = max(alpha, tex(texCoord - vec2(0.38, 0.92) * offset).a);
+	alpha = max(alpha, tex(texCoord - vec2(0.56, 0.83) * offset).a);
+	alpha = max(alpha, tex(texCoord - vec2(0.71, 0.71) * offset).a);
+	alpha = max(alpha, tex(texCoord - vec2(0.83, 0.56) * offset).a);
+	alpha = max(alpha, tex(texCoord - vec2(0.92, 0.38) * offset).a);
+	alpha = max(alpha, tex(texCoord - vec2(0.98, 0.20) * offset).a);
+	alpha = max(alpha, tex(texCoord - vec2(1.00, -0.00) * offset).a);
+	alpha = max(alpha, tex(texCoord - vec2(0.98, -0.20) * offset).a);
+	alpha = max(alpha, tex(texCoord - vec2(0.92, -0.38) * offset).a);
+	alpha = max(alpha, tex(texCoord - vec2(0.83, -0.56) * offset).a);
+	alpha = max(alpha, tex(texCoord - vec2(0.71, -0.71) * offset).a);
+	alpha = max(alpha, tex(texCoord - vec2(0.56, -0.83) * offset).a);
+	alpha = max(alpha, tex(texCoord - vec2(0.38, -0.92) * offset).a);
+	alpha = max(alpha, tex(texCoord - vec2(0.20, -0.98) * offset).a);
+	alpha = max(alpha, tex(texCoord - vec2(-0.00, -1.00) * offset).a);
+	alpha = max(alpha, tex(texCoord - vec2(-0.20, -0.98) * offset).a);
+	alpha = max(alpha, tex(texCoord - vec2(-0.38, -0.92) * offset).a);
+	alpha = max(alpha, tex(texCoord - vec2(-0.56, -0.83) * offset).a);
+	alpha = max(alpha, tex(texCoord - vec2(-0.71, -0.71) * offset).a);
+	alpha = max(alpha, tex(texCoord - vec2(-0.83, -0.56) * offset).a);
+	alpha = max(alpha, tex(texCoord - vec2(-0.92, -0.38) * offset).a);
+	alpha = max(alpha, tex(texCoord - vec2(-0.98, -0.20) * offset).a);
+	alpha = max(alpha, tex(texCoord - vec2(-1.00, 0.00) * offset).a);
+	alpha = max(alpha, tex(texCoord - vec2(-0.98, 0.20) * offset).a);
+	alpha = max(alpha, tex(texCoord - vec2(-0.92, 0.38) * offset).a);
+	alpha = max(alpha, tex(texCoord - vec2(-0.83, 0.56) * offset).a);
+	alpha = max(alpha, tex(texCoord - vec2(-0.71, 0.71) * offset).a);
+	alpha = max(alpha, tex(texCoord - vec2(-0.56, 0.83) * offset).a);
+	alpha = max(alpha, tex(texCoord - vec2(-0.38, 0.92) * offset).a);
+	alpha = max(alpha, tex(texCoord - vec2(-0.20, 0.98) * offset).a);
+	alpha = max(alpha, tex(texCoord - vec2(0.00, 1.00) * offset).a);
+	return alpha;
+}
+
+lowp vec4 outline(float radius, mediump vec2 texCoord, mediump vec2 texSize, mediump vec4 colour)
+{
+	lowp float res = max(outlineAlpha(radius, texCoord, texSize), outlineAlpha(radius / 2.0, texCoord, texSize));
+	return mix(vec4(0.0), colour, res);
 }
 
 void main(void)
 {
-	lowp vec4 sample = toSRGB(texture2D(m_Sampler, v_TexCoord));
-	lowp vec4 originColur = vec4(mix(sample.rgb, g_Colour.rgb, g_Colour.a), sample.a);
-	lowp vec4 outlineColour = outline(m_Sampler, g_Radius * g_InflationPercentage, v_TexCoord, g_TexSize, g_OutlineColour);
+	lowp vec4 texColour = toSRGB(texture(sampler2D(m_Texture, m_Sampler), v_TexCoord));
+	lowp vec4 originColour = vec4(mix(texColour.rgb, g_Colour.rgb, g_Colour.a), texColour.a);
+	lowp vec4 outlineColour = outline(g_Radius * g_InflationPercentage, v_TexCoord, g_TexSize, g_OutlineColour);
 
-	gl_FragColor = mix(outlineColour, originColur, originColur.a);
+	o_Colour = mix(outlineColour, originColour, originColour.a);
 }

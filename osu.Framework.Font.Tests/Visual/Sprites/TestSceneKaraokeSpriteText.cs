@@ -198,7 +198,7 @@ public partial class TestSceneKaraokeSpriteText : TestScene
         {
             karaokeSpriteText.LeftLyricTextShaders = new[]
             {
-                shaderManager.LocalInternalShader<OutlineShader>().With(s =>
+                shaderManager.LocalCustomizedShader<OutlineShader>().With(s =>
                 {
                     s.Radius = 3;
                     s.Colour = Color4Extensions.FromHex("#FFDD77");
@@ -207,7 +207,7 @@ public partial class TestSceneKaraokeSpriteText : TestScene
             };
             karaokeSpriteText.RightLyricTextShaders = new[]
             {
-                shaderManager.LocalInternalShader<OutlineShader>().With(s =>
+                shaderManager.LocalCustomizedShader<OutlineShader>().With(s =>
                 {
                     s.Radius = 3;
                     s.Colour = Color4Extensions.FromHex("#AA88FF");

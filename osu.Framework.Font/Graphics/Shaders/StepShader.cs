@@ -5,12 +5,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using osu.Framework.Graphics.Primitives;
+using osu.Framework.Graphics.Rendering;
 
 namespace osu.Framework.Graphics.Shaders;
 
 public class StepShader : IStepShader, IApplicableToCharacterSize, IApplicableToDrawRectangle
 {
     public string Name { get; set; } = null!;
+
+    // TODO: unused, remove this variable (IStepShader should probably not inherit from ICustomizedShader)
+    public string ShaderName => throw new NotSupportedException();
 
     public ICustomizedShader? FromShader { get; set; }
 
@@ -31,19 +35,22 @@ public class StepShader : IStepShader, IApplicableToCharacterSize, IApplicableTo
 
     public bool Draw { get; set; } = true;
 
+    public void PrepareUniforms(IRenderer renderer)
+        => throw new NotSupportedException();
+
     public void Bind()
         => throw new NotSupportedException();
 
     public void Unbind()
         => throw new NotSupportedException();
 
-    public Uniform<T> GetUniform<T>(string name) where T : unmanaged, IEquatable<T>
-        => throw new NotSupportedException();
-
     public bool IsLoaded
         => throw new NotSupportedException();
 
     public bool IsBound { get; private set; }
+
+    public void AttachOriginShader(IShader renderer)
+        => throw new NotSupportedException();
 
     public void ApplyValue()
         => throw new NotSupportedException();

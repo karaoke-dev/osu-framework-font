@@ -1,22 +1,28 @@
 #include "sh_Utils.h"
 
-varying mediump vec2 v_TexCoord;
+layout(location = 2) in highp vec2 v_TexCoord;
 
-uniform lowp sampler2D m_Sampler;
-
-uniform mediump vec2 g_TexSize;
-uniform vec4 g_Colour;
-uniform vec2 g_Offset;
-uniform float g_InflationPercentage;
-
-lowp vec4 shadow(sampler2D tex, mediump vec2 texCoord, mediump vec2 texSize, mediump vec4 colour, mediump vec2 offset)
+layout(std140, set = 0, binding = 0) uniform m_ShadowParameters
 {
-    return texture2D(tex, texCoord + offset / texSize).a * colour;
+	mediump vec4 g_Colour;
+	mediump vec2 g_TexSize;
+	mediump vec2 g_Offset;
+	mediump float g_InflationPercentage;
+};
+
+layout(set = 1, binding = 0) uniform lowp texture2D m_Texture;
+layout(set = 1, binding = 1) uniform lowp sampler m_Sampler;
+
+layout(location = 0) out vec4 o_Colour;
+
+lowp vec4 shadow(texture2D tex, mediump vec2 texCoord, mediump vec2 texSize, mediump vec4 colour, mediump vec2 offset)
+{
+	return texture(sampler2D(tex, m_Sampler), texCoord + offset / texSize).a * colour;
 }
 
 void main(void)
 {
-	lowp vec4 texture = toSRGB(texture2D(m_Sampler, v_TexCoord));
-	lowp vec4 shadow = shadow(m_Sampler, v_TexCoord, g_TexSize, g_Colour, g_Offset * g_InflationPercentage);
-	gl_FragColor = mix(shadow, texture, texture.a);
+	lowp vec4 texture = toSRGB(texture(sampler2D(m_Texture, m_Sampler), v_TexCoord));
+	lowp vec4 shadow = shadow(m_Texture, v_TexCoord, g_TexSize, g_Colour, g_Offset * g_InflationPercentage);
+	o_Colour = mix(shadow, texture, texture.a);
 }

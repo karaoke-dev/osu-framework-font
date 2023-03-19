@@ -11,7 +11,7 @@ using osuTK;
 
 namespace osu.Framework.Font.Tests.Visual.Shaders;
 
-public partial class TestSceneRepeatMovingBackgroundShader : InternalShaderTestScene
+public partial class TestSceneRepeatMovingBackgroundShader : CustomizedShaderTestScene
 {
     [Resolved, AllowNull]
     private TextureStore textures { get; set; }

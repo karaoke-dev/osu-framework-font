@@ -8,7 +8,7 @@ using osu.Framework.Graphics.Shaders;
 
 namespace osu.Framework.Font.Tests.Visual.Shaders;
 
-public partial class TestSceneOutlineShader : InternalShaderTestScene
+public partial class TestSceneOutlineShader : CustomizedShaderTestScene
 {
     [TestCase(RED)] // will make the inner texture red
     [TestCase(GREEN)] // will make the inner texture green

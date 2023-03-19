@@ -8,7 +8,7 @@ using osu.Framework.Graphics.Shaders;
 
 namespace osu.Framework.Font.Tests.Visual.Shaders;
 
-public partial class TestSceneRainbowShader : InternalShaderTestScene
+public partial class TestSceneRainbowShader : CustomizedShaderTestScene
 {
     [TestCase("(0,1)", 1, 1, 1, 1, 1)] // normal state.
     [TestCase("(0.5,0.7)", 1, 1, 1, 1, 1)] // restrict color range?

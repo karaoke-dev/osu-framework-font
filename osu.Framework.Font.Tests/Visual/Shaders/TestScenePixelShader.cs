@@ -8,7 +8,7 @@ using osuTK;
 
 namespace osu.Framework.Font.Tests.Visual.Shaders;
 
-public partial class TestScenePixelShader : InternalShaderTestScene
+public partial class TestScenePixelShader : CustomizedShaderTestScene
 {
     [TestCase(5, 5)]
     [TestCase(5, 20)]

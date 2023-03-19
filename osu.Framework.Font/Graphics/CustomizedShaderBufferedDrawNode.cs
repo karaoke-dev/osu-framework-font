@@ -50,30 +50,23 @@ public abstract class CustomizedShaderBufferedDrawNode : BufferedDrawNode
     {
         renderer.SetBlend(BlendingParameters.None);
 
+        shader.PrepareUniforms(renderer);
+
         using (BindFrameBuffer(target))
         {
-            if (shader is IHasTextureSize)
-            {
-                var size = current.Size;
-                shader.GetUniform<Vector2>(@"g_TexSize").UpdateValue(ref size);
-            }
+            if (shader is IHasTextureSize ts)
+                ts.TextureSize = current.Size;
 
-            if (shader is IHasInflationPercentage)
-            {
-                var localInflationAmount = DrawInfo.Matrix.ExtractScale().X;
-                shader.GetUniform<float>(@"g_InflationPercentage").UpdateValue(ref localInflationAmount);
-            }
+            if (shader is IHasInflationPercentage ip)
+                ip.InflationPercentage = DrawInfo.Matrix.ExtractScale().X;
 
-            if (shader is IHasCurrentTime)
-            {
-                var currentTime = (float)(Source.Clock.CurrentTime - loadTime) / 1000;
-                shader.GetUniform<float>("g_Time").UpdateValue(ref currentTime);
-            }
+            if (shader is IHasCurrentTime ct)
+                ct.CurrentTime = (float)(Source.Clock.CurrentTime - loadTime) / 1000;
 
+            shader.Bind();
             if (shader is ICustomizedShader customizedShader)
                 customizedShader.ApplyValue();
 
-            shader.Bind();
             renderer.DrawFrameBuffer(current, new RectangleF(0, 0, current.Texture.Width, current.Texture.Height), ColourInfo.SingleColour(Color4.White));
             shader.Unbind();
         }

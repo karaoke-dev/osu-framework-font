@@ -5,4 +5,5 @@ namespace osu.Framework.Graphics.Shaders;
 
 public interface IHasCurrentTime
 {
+	float CurrentTime { set; }
 }

@@ -3,11 +3,28 @@
 
 using System;
 
+using osu.Framework.Graphics.Rendering;
+
 namespace osu.Framework.Graphics.Shaders;
 
 public interface ICustomizedShader
 {
+    /// <summary>
+    /// Fragment shader name to load (`sh_` prefix is implicitly added)
+    /// </summary>
+    string ShaderName { get; }
+
     void ApplyValue();
+
+    /// <summary>
+    /// Make sure shader uniforms are ready for initialization and upload.
+    /// </summary>
+    void PrepareUniforms(IRenderer renderer);
+
+    /// <summary>
+    /// Sets the original shader that is going to be uniform-tweaked.
+    /// </summary>
+    void AttachOriginShader(IShader originShader);
 
     /// <summary>
     /// Binds this shader to be used for rendering.
@@ -28,12 +45,4 @@ public interface ICustomizedShader
     /// Whether this shader is currently bound.
     /// </summary>
     bool IsBound { get; }
-
-    /// <summary>
-    /// Retrieves a uniform from the shader.
-    /// </summary>
-    /// <param name="name">The name of the uniform.</param>
-    /// <returns>The retrieved uniform.</returns>
-    Uniform<T> GetUniform<T>(string name)
-        where T : unmanaged, IEquatable<T>;
 }

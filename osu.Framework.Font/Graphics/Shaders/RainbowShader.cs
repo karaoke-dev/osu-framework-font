@@ -3,15 +3,34 @@
 
 using osuTK;
 
+using System;
+using System.Runtime.InteropServices;
+using osu.Framework.Graphics.Primitives;
+using osu.Framework.Graphics.Shaders.Types;
+
 namespace osu.Framework.Graphics.Shaders;
 
-public class RainbowShader : InternalShader, IHasCurrentTime
+[StructLayout(LayoutKind.Sequential, Pack = 1)]
+public record struct RainbowParameters
+{
+    public UniformVector2 Uv;
+    public UniformFloat Speed;
+    public UniformFloat Time;
+    public UniformFloat Saturation;
+    public UniformFloat Brightness;
+    public UniformFloat Section;
+    public UniformFloat Mix;
+}
+
+public class RainbowShader : CustomizedShader<RainbowParameters>, IHasCurrentTime
 {
     public override string ShaderName => "Rainbow";
 
     public Vector2 Uv { get; set; } = new(0, 1);
 
     public float Speed { get; set; } = 1;
+
+    public float CurrentTime { get; set; }
 
     public float Saturation { get; set; } = 0.5f;
 
@@ -24,22 +43,17 @@ public class RainbowShader : InternalShader, IHasCurrentTime
 
     public override void ApplyValue()
     {
-        var uv = Uv;
-        GetUniform<Vector2>(@"g_Uv").UpdateValue(ref uv);
+        UniformBuffer.Data = new RainbowParameters
+        {
+            Uv = Uv,
+            Speed = Speed,
+            Time = CurrentTime,
+            Saturation = Saturation,
+            Brightness = Brightness,
+            Section = Section,
+            Mix = Mix
+        };
 
-        var speed = Speed;
-        GetUniform<float>(@"g_Speed").UpdateValue(ref speed);
-
-        var saturation = Saturation;
-        GetUniform<float>(@"g_Saturation").UpdateValue(ref saturation);
-
-        var brightness = Brightness;
-        GetUniform<float>(@"g_Brightness").UpdateValue(ref brightness);
-
-        var section = Section;
-        GetUniform<float>(@"g_Section").UpdateValue(ref section);
-
-        var mix = Mix;
-        GetUniform<float>(@"g_Mix").UpdateValue(ref mix);
+        OriginShader.BindUniformBlock("m_RainbowParameters", UniformBuffer);
     }
 }

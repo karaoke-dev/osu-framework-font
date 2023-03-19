@@ -3,14 +3,30 @@
 
 using System;
 
+using osu.Framework.Graphics.Rendering;
+
 namespace osu.Framework.Graphics.Shaders;
 
 /// <summary>
 /// Shader with customized property
 /// </summary>
-public abstract class CustomizedShader : ICustomizedShader
+public abstract class CustomizedShader<TUniform> : ICustomizedShader
+    where TUniform : unmanaged, IEquatable<TUniform>
 {
     private IShader shader = null!;
+
+    public abstract string ShaderName { get; }
+
+    private IUniformBuffer<TUniform>? uniformBuffer;
+
+    protected IUniformBuffer<TUniform> UniformBuffer => uniformBuffer!;
+
+    protected IShader OriginShader => shader;
+
+    public void PrepareUniforms(IRenderer renderer)
+    {
+        uniformBuffer ??= renderer.CreateUniformBuffer<TUniform>();
+    }
 
     public void AttachOriginShader(IShader originShader)
     {
@@ -20,9 +36,6 @@ public abstract class CustomizedShader : ICustomizedShader
     public void Bind() => shader.Bind();
 
     public void Unbind() => shader.Unbind();
-
-    public Uniform<T> GetUniform<T>(string name) where T : unmanaged, IEquatable<T>
-        => shader.GetUniform<T>(name);
 
     public bool IsLoaded => shader.IsLoaded;
 
