@@ -2,8 +2,8 @@
 #include "sh_CustomizedShaderGlobalUniforms.h"
 #include "sh_Utils.h"
 
+layout(location = 0) in highp vec2 v_TexCoord;
 layout(location = 1) in lowp vec4 v_Colour;
-layout(location = 2) in highp vec2 v_TexCoord;
 layout(location = 3) in highp vec4 v_TexRect;
 
 layout(set = 2, binding = 0) uniform lowp texture2D m_RepeatTexture;
