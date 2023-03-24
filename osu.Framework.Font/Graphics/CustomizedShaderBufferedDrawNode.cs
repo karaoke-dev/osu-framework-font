@@ -87,9 +87,11 @@ public abstract class CustomizedShaderBufferedDrawNode : BufferedDrawNode
             if (shader is ICustomizedShader customizedShader)
                 customizedShader.ApplyValue(renderer);
 
-            shader.Bind();
             shader.BindUniformBlock("m_SharedParameters", sharedParametersBuffer);
+            shader.Bind();
+
             renderer.DrawFrameBuffer(current, new RectangleF(0, 0, current.Texture.Width, current.Texture.Height), ColourInfo.SingleColour(Color4.White));
+
             shader.Unbind();
         }
     }
