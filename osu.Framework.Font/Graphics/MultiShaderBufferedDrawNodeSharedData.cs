@@ -15,8 +15,6 @@ public class MultiShaderBufferedDrawNodeSharedData : BufferedDrawNodeSharedData
 
     public bool IsLatestFrameBuffer { get; set; }
 
-    public ICustomizedShader[] Shaders => sharedDatas.Keys.ToArray();
-
     private readonly RenderBufferFormat[]? formats;
 
     public MultiShaderBufferedDrawNodeSharedData(RenderBufferFormat[]? formats = null, bool pixelSnapping = false)

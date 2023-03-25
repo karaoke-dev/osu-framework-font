@@ -30,7 +30,7 @@ public class MultiShaderBufferedDrawNode : CustomizedShaderBufferedDrawNode
     protected override long GetDrawVersion()
     {
         // if contains shader that need to apply time, then need to force run populate contents in each frame.
-        if (SharedData.Shaders.Any(ContainTimePropertyShader))
+        if (Source.Shaders.Any(ContainTimePropertyShader))
         {
             ResetDrawVersion();
         }
@@ -68,7 +68,7 @@ public class MultiShaderBufferedDrawNode : CustomizedShaderBufferedDrawNode
 
     private void drawFrameBuffer(IRenderer renderer)
     {
-        var shaders = SharedData.Shaders;
+        var shaders = Source.Shaders;
         var mainFrameBuffer = SharedData.MainBuffer;
 
         foreach (var shader in shaders)
