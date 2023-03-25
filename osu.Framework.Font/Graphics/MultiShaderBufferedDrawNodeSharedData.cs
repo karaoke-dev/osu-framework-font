@@ -6,17 +6,16 @@ using System.Collections.Generic;
 using System.Linq;
 using osu.Framework.Graphics.Rendering;
 using osu.Framework.Graphics.Shaders;
-using osu.Framework.Graphics.Textures;
 
 namespace osu.Framework.Graphics;
 
 public class MultiShaderBufferedDrawNodeSharedData : BufferedDrawNodeSharedData
 {
-    private readonly Dictionary<ICustomizedShader, IFrameBuffer> shaderBuffers = new();
+    private readonly Dictionary<ICustomizedShader, BufferedDrawNodeSharedData> sharedDatas = new();
 
     public bool IsLatestFrameBuffer { get; set; }
 
-    public ICustomizedShader[] Shaders => shaderBuffers.Keys.ToArray();
+    public ICustomizedShader[] Shaders => sharedDatas.Keys.ToArray();
 
     private readonly RenderBufferFormat[]? formats;
 
@@ -34,58 +33,51 @@ public class MultiShaderBufferedDrawNodeSharedData : BufferedDrawNodeSharedData
         IsLatestFrameBuffer = true;
 
         // will not re-initialize if shader is not changed.
-        if (shaderBuffers.Keys.SequenceEqual(shaders))
+        if (sharedDatas.Keys.SequenceEqual(shaders))
             return;
 
         // collect all frame buffer that needs to be disposed.
-        var disposedFrameBuffer = shaderBuffers.Values.ToArray();
-        shaderBuffers.Clear();
+        var disposedFrameBuffer = sharedDatas.Values.ToArray();
+        sharedDatas.Clear();
 
         foreach (var shader in shaders)
         {
-            TextureFilteringMode filterMode = PixelSnapping ? TextureFilteringMode.Nearest : TextureFilteringMode.Linear;
-            shaderBuffers.Add(shader, renderer.CreateFrameBuffer(formats, filterMode));
+            var sharedData = createBufferedDrawNodeSharedDataByShader(shader);
+            sharedData.Initialise(renderer);
+            sharedDatas.Add(shader, sharedData);
         }
 
         renderer.ScheduleDisposal(s =>
         {
-            s.clearBuffers(disposedFrameBuffer);
+            clearSharedDatas(disposedFrameBuffer);
         }, this);
     }
 
-    public IFrameBuffer GetSourceFrameBuffer(ICustomizedShader shader)
+    private BufferedDrawNodeSharedData createBufferedDrawNodeSharedDataByShader(ICustomizedShader customizedShader)
     {
-        if (shader is not IStepShader stepShader)
-            return CurrentEffectBuffer;
+        switch (customizedShader)
+        {
+            case IStepShader stepShader:
+            {
+                var stepShaderAmount = Math.Min(stepShader.StepShaders.Count, 2);
+                return new BufferedDrawNodeSharedData(stepShaderAmount, formats, PixelSnapping, ClipToRootNode);
+            }
 
-        var fromShader = stepShader.FromShader;
-        if (fromShader == null)
-            return CurrentEffectBuffer;
+            default:
+                return new BufferedDrawNodeSharedData(formats, PixelSnapping, ClipToRootNode);
+        }
+    }
 
-        if (!shaderBuffers.ContainsKey(fromShader))
+    public BufferedDrawNodeSharedData GetBufferedDrawNodeSharedData(ICustomizedShader shader)
+    {
+        if (!sharedDatas.ContainsKey(shader))
             throw new KeyNotFoundException();
 
-        return shaderBuffers[fromShader];
+        return sharedDatas[shader];
     }
 
-    public IFrameBuffer GetTargetFrameBuffer(ICustomizedShader shader)
-    {
-        if (!shaderBuffers.ContainsKey(shader))
-            throw new KeyNotFoundException();
-
-        return shaderBuffers[shader];
-    }
-
-    public void UpdateBuffer(ICustomizedShader shader, IFrameBuffer frameBuffer)
-    {
-        if (!shaderBuffers.ContainsKey(shader))
-            throw new NotSupportedException("Underlying data structure has changed, KaraokeFont needs an update");
-
-        shaderBuffers[shader] = frameBuffer;
-    }
-
-    public IFrameBuffer[] GetDrawFrameBuffers()
-        => shaderBuffers.Where(x =>
+    public BufferedDrawNodeSharedData[] GetDrawSharedDatas()
+        => sharedDatas.Where(x =>
         {
             // should not draw the step shader if there's no content.
             if (x.Key is IStepShader stepShader)
@@ -97,10 +89,10 @@ public class MultiShaderBufferedDrawNodeSharedData : BufferedDrawNodeSharedData
     protected override void Dispose(bool isDisposing)
     {
         base.Dispose(isDisposing);
-        clearBuffers(shaderBuffers.Values.ToArray());
+        clearSharedDatas(sharedDatas.Values.ToArray());
     }
 
-    private void clearBuffers(IFrameBuffer[] effectBuffers)
+    private static void clearSharedDatas(IEnumerable<BufferedDrawNodeSharedData> effectBuffers)
     {
         // dispose all frame buffer in array.
         foreach (var shaderBuffer in effectBuffers)
