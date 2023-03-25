@@ -30,7 +30,7 @@ public class MultiShaderBufferedDrawNode : CustomizedShaderBufferedDrawNode
     protected override long GetDrawVersion()
     {
         // if contains shader that need to apply time, then need to force run populate contents in each frame.
-        if (SharedData.Shaders.Any(ContainTimePropertyShader))
+        if (Source.Shaders.Any(ContainTimePropertyShader))
         {
             ResetDrawVersion();
         }
@@ -50,13 +50,13 @@ public class MultiShaderBufferedDrawNode : CustomizedShaderBufferedDrawNode
 
     protected override void DrawContents(IRenderer renderer)
     {
-        var drawFrameBuffers = SharedData.GetDrawFrameBuffers().Reverse().ToArray();
+        var sharedDatas = SharedData.GetDrawSharedDatas().Reverse().ToArray();
 
-        if (drawFrameBuffers.Any())
+        if (sharedDatas.Any())
         {
-            foreach (var frameBuffer in drawFrameBuffers)
+            foreach (var sharedData in sharedDatas)
             {
-                renderer.DrawFrameBuffer(frameBuffer, DrawRectangle, Color4.White);
+                renderer.DrawFrameBuffer(sharedData.MainBuffer, DrawRectangle, Color4.White);
             }
         }
         else
@@ -68,31 +68,41 @@ public class MultiShaderBufferedDrawNode : CustomizedShaderBufferedDrawNode
 
     private void drawFrameBuffer(IRenderer renderer)
     {
-        var shaders = SharedData.Shaders;
-        if (!shaders.Any())
-            return;
+        var shaders = Source.Shaders;
+        var mainFrameBuffer = SharedData.MainBuffer;
 
         foreach (var shader in shaders)
         {
-            var current = SharedData.GetSourceFrameBuffer(shader);
-            var target = SharedData.GetTargetFrameBuffer(shader);
+            var sharedData = SharedData.GetBufferedDrawNodeSharedData(shader);
 
-            if (shader is IStepShader stepShader)
+            switch (shader)
             {
-                var stepShaders = stepShader.StepShaders;
-
-                for (int i = 0; i < stepShaders.Count; i++)
+                case IStepShader stepShader:
                 {
-                    // todo: it will cause the render issue if set the current and target shader into same shader.
-                    RenderShader(renderer, stepShaders[i], i == 0 ? current : target, target);
+                    var stepShaders = stepShader.StepShaders.ToArray();
+
+                    foreach (ICustomizedShader childShader in stepShaders)
+                    {
+                        var fromFrameBuffer = stepShader.FromShader != null ? SharedData.GetBufferedDrawNodeSharedData(stepShader.FromShader) : null;
+
+                        var isFirst = childShader == stepShaders.First();
+                        var isLast = childShader == stepShaders.Last();
+
+                        var source = isFirst ? fromFrameBuffer?.MainBuffer ?? mainFrameBuffer : sharedData.CurrentEffectBuffer;
+                        var target = isLast ? sharedData.MainBuffer : sharedData.GetNextEffectBuffer();
+                        RenderShader(renderer, childShader, source, target);
+                    }
+
+                    break;
+                }
+
+                default:
+                {
+                    var target = sharedData.MainBuffer;
+                    RenderShader(renderer, shader, mainFrameBuffer, target);
+                    break;
                 }
             }
-            else
-            {
-                RenderShader(renderer, shader, current, target);
-            }
-
-            SharedData.UpdateBuffer(shader, target);
         }
     }
 }
