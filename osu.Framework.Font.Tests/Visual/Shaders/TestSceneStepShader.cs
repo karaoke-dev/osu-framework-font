@@ -1,6 +1,7 @@
 ﻿// Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
+using System.Linq;
 using NUnit.Framework;
 using osu.Framework.Extensions;
 using osu.Framework.Graphics.Shaders;
@@ -12,7 +13,36 @@ namespace osu.Framework.Font.Tests.Visual.Shaders;
 public partial class TestSceneStepShader : ShaderTestScene
 {
     [Test]
-    public void ApplySingleStepShader()
+    public void TestShaderInStepShader()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            var shaderAmount = i;
+            AddStep($"Apply shader amount: {shaderAmount}", () =>
+            {
+                ShaderContainer.Shaders = new[]
+                {
+                    new StepShader
+                    {
+                        Name = "Step 1",
+                        StepShaders = Enumerable.Repeat(default(int), shaderAmount).Select((_, index) =>
+                        {
+                            var shader = GetShaderByType<OutlineShader>();
+                            var hue = (float)index * 30 / 360;
+
+                            shader.Radius = 5;
+                            shader.OutlineColour = Color4.FromHsl(new Vector4(hue, 0.6f, 0.5f, 1));
+
+                            return shader;
+                        }).ToArray()
+                    }
+                };
+            });
+        }
+    }
+
+    [Test]
+    public void TestDrawStepShader()
     {
         var stepShader = new StepShader
         {
@@ -52,7 +82,7 @@ public partial class TestSceneStepShader : ShaderTestScene
     }
 
     [Test]
-    public void ApplyMultiStepShader()
+    public void TestDrawStepShaderReferenceShader()
     {
         var outlineStepShader = new StepShader
         {
