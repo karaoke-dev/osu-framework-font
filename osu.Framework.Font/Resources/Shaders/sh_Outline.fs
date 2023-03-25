@@ -1,7 +1,7 @@
 #include "sh_CustomizedShaderGlobalUniforms.h"
 #include "sh_Utils.h"
 
-layout(location = 2) in highp vec2 v_TexCoord;
+layout(location = 0) in highp vec2 v_TexCoord;
 
 layout(std140, set = 2, binding = 0) uniform m_OutlineParameters
 {

@@ -63,15 +63,14 @@ public partial class LyricSpriteText
         {
             base.Draw(renderer);
 
-            var shader = TextureShader;
-            shader.Bind();
+            BindTextureShader(renderer);
 
             for (int i = 0; i < parts.Count; i++)
             {
                 renderer.DrawQuad(parts[i].Texture, parts[i].DrawQuad, DrawColourInfo.Colour, inflationPercentage: parts[i].InflationPercentage);
             }
 
-            shader.Unbind();
+            UnbindTextureShader(renderer);
         }
     }
 

@@ -147,7 +147,7 @@ public abstract partial class ShaderTestScene : BackgroundGridTestScene
             {
             }
 
-            public List<DrawNode> Children
+            public List<DrawNode>? Children
             {
                 get => Child.Children;
                 set => Child.Children = value;

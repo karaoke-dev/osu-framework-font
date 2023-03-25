@@ -16,7 +16,7 @@ public static class ShaderManagerExtensions
 
     public static void AttachShader<T>(this ShaderManager shaderManager, T internalShader) where T : InternalShader
     {
-        var shader = shaderManager.Load(VertexShaderDescriptor.TEXTURE_2, internalShader.ShaderName);
+        var shader = shaderManager.Load("Customized", internalShader.ShaderName);
         internalShader.AttachOriginShader(shader);
     }
 }

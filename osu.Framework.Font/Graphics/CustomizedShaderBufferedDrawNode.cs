@@ -8,9 +8,12 @@ using System.Runtime.InteropServices;
 using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Rendering;
+using osu.Framework.Graphics.Rendering.Vertices;
 using osu.Framework.Graphics.Shaders;
 using osu.Framework.Graphics.Shaders.Types;
+using osuTK;
 using osuTK.Graphics;
+using osuTK.Graphics.ES30;
 
 namespace osu.Framework.Graphics;
 
@@ -18,10 +21,21 @@ public abstract class CustomizedShaderBufferedDrawNode : BufferedDrawNode
 {
     private readonly double loadTime;
 
+    private readonly Action<TexturedVertex2D> addVertexAction;
+
     protected CustomizedShaderBufferedDrawNode(IBufferedDrawable source, DrawNode child, BufferedDrawNodeSharedData sharedData)
         : base(source, child, sharedData)
     {
         loadTime = Source.Clock.CurrentTime;
+
+        addVertexAction = v =>
+        {
+            sharedQuadBatch!.Add(new SharedVertex
+            {
+                Position = v.Position,
+                TexturePosition = v.TexturePosition
+            });
+        };
     }
 
     protected static bool ContainTimePropertyShader(ICustomizedShader shader)
@@ -48,10 +62,12 @@ public abstract class CustomizedShaderBufferedDrawNode : BufferedDrawNode
     }
 
     private IUniformBuffer<SharedParameters>? sharedParametersBuffer;
+    private IVertexBatch<SharedVertex>? sharedQuadBatch;
 
     protected void RenderShader(IRenderer renderer, ICustomizedShader shader, IFrameBuffer current, IFrameBuffer target)
     {
         sharedParametersBuffer ??= renderer.CreateUniformBuffer<SharedParameters>();
+        sharedQuadBatch ??= renderer.CreateQuadBatch<SharedVertex>(1, 1);
 
         renderer.SetBlend(BlendingParameters.None);
 
@@ -87,11 +103,20 @@ public abstract class CustomizedShaderBufferedDrawNode : BufferedDrawNode
             if (shader is ICustomizedShader customizedShader)
                 customizedShader.ApplyValue(renderer);
 
-            shader.Bind();
             shader.BindUniformBlock("m_SharedParameters", sharedParametersBuffer);
-            renderer.DrawFrameBuffer(current, new RectangleF(0, 0, current.Texture.Width, current.Texture.Height), ColourInfo.SingleColour(Color4.White));
+            shader.Bind();
+
+            renderer.DrawFrameBuffer(current, new RectangleF(0, 0, current.Texture.Width, current.Texture.Height), ColourInfo.SingleColour(Color4.White), addVertexAction);
+
             shader.Unbind();
         }
+    }
+
+    protected override void Dispose(bool isDisposing)
+    {
+        base.Dispose(isDisposing);
+        sharedParametersBuffer?.Dispose();
+        sharedQuadBatch?.Dispose();
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -100,5 +125,19 @@ public abstract class CustomizedShaderBufferedDrawNode : BufferedDrawNode
         public UniformVector2 TexSize;
         public UniformFloat InflationPercentage;
         public UniformFloat Time;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct SharedVertex : IEquatable<SharedVertex>, IVertex
+    {
+        [VertexMember(2, VertexAttribPointerType.Float)]
+        public Vector2 Position;
+
+        [VertexMember(2, VertexAttribPointerType.Float)]
+        public Vector2 TexturePosition;
+
+        public readonly bool Equals(SharedVertex other) =>
+            Position.Equals(other.Position)
+            && TexturePosition.Equals(other.TexturePosition);
     }
 }
