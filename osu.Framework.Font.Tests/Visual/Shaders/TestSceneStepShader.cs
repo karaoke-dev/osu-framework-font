@@ -75,7 +75,7 @@ public partial class TestSceneStepShader : ShaderTestScene
                 GetShaderByType<ShadowShader>().With(s =>
                 {
                     s.ShadowColour = Color4.Red;
-                    s.ShadowOffset = new Vector2(3);
+                    s.ShadowOffset = new Vector2(10);
                 })
             }
         };
