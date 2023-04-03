@@ -68,7 +68,7 @@ lowp vec4 outline(float radius, mediump vec2 texCoord, mediump vec2 texSize, med
 
 void main(void)
 {
-	lowp vec4 texColour = toSRGB(texture(sampler2D(m_Texture, m_Sampler), v_TexCoord));
+	lowp vec4 texColour = texture(sampler2D(m_Texture, m_Sampler), v_TexCoord);
 	lowp vec4 originColour = vec4(mix(texColour.rgb, g_Colour.rgb, g_Colour.a), texColour.a);
 	lowp vec4 outlineColour = outline(g_Radius * g_InflationPercentage, v_TexCoord, g_TexSize, g_OutlineColour);
 

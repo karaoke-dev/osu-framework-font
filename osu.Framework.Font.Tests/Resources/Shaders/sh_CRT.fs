@@ -58,7 +58,7 @@ void main(void)
 
 	if (insideLens(lensUV))
 	{
-		vec4 lensCol = toSRGB(texture2D(m_Sampler, lensUV * resolution));
+		vec4 lensCol = texture2D(m_Sampler, lensUV * resolution);
 		lensCol = scanlines(lensCol, lensUV);
 		float smoothEdge = smoothLensEdge(lensUV);
 		col = vec4(lensCol.rgb * smoothEdge, clamp(lensCol.a + 1.0 - smoothEdge, 0.0, 1.0));

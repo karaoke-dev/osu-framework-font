@@ -39,5 +39,5 @@ void main(void) {
     // get point colour from sample.
     vec4 texColor = texture(sampler2D(m_Texture, m_Sampler), v_TexCoord);
     vec4 repeatSampleColor = v_Colour * vec4(texture(sampler2D(m_RepeatTexture, m_RepeatSampler), fixedTexCoord).xyz, texColor.a);
-    o_Colour = toSRGB(mix(texColor, repeatSampleColor, g_Mix));
+    o_Colour = mix(texColor, repeatSampleColor, g_Mix);
 }

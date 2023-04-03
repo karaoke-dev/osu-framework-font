@@ -3,6 +3,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics.Extensions;
 using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Rendering;
@@ -28,7 +29,7 @@ public class ShadowShader : InternalShader, IApplicableToDrawRectangle, IHasText
 
         shadowParametersBuffer.Data = new ShadowParameters
         {
-            Colour = new Vector4(ShadowColour.R, ShadowColour.G, ShadowColour.B, ShadowColour.A),
+            Colour = new Vector4(ShadowColour.ToSRGB().R, ShadowColour.ToSRGB().G, ShadowColour.ToSRGB().B, ShadowColour.ToSRGB().A),
             Offset = renderer.ToShaderVector2(ShadowOffset),
         };
 

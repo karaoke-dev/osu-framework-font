@@ -21,7 +21,7 @@ lowp vec4 shadow(texture2D tex, mediump vec2 texCoord, mediump vec2 texSize, med
 
 void main(void)
 {
-	lowp vec4 texture = toSRGB(texture(sampler2D(m_Texture, m_Sampler), v_TexCoord));
+	lowp vec4 texture = texture(sampler2D(m_Texture, m_Sampler), v_TexCoord);
 	lowp vec4 shadow = shadow(m_Texture, v_TexCoord, g_TexSize, g_Colour, g_Offset * g_InflationPercentage);
 	o_Colour = mix(shadow, texture, texture.a);
 }
