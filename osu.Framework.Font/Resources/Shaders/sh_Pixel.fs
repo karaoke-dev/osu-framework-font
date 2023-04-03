@@ -21,5 +21,5 @@ void main(void)
 	uv = uv * separaorParts;
     uv = floor(uv);
     uv = uv / separaorParts;
-    o_Colour = toSRGB(texture(sampler2D(m_Texture, m_Sampler), uv));
+    o_Colour = texture(sampler2D(m_Texture, m_Sampler), uv);
 }

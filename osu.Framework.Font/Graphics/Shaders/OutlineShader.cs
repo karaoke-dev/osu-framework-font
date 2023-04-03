@@ -3,6 +3,7 @@
 
 using System;
 using System.Runtime.InteropServices;
+using osu.Framework.Extensions.Color4Extensions;
 using osu.Framework.Graphics.Primitives;
 using osu.Framework.Graphics.Rendering;
 using osu.Framework.Graphics.Shaders.Types;
@@ -29,8 +30,8 @@ public class OutlineShader : InternalShader, IApplicableToCharacterSize, IApplic
 
         outlineParametersBuffer.Data = new OutlineParameters
         {
-            Colour = new Vector4(Colour.R, Colour.G, Colour.B, Colour.A),
-            OutlineColour = new Vector4(OutlineColour.R, OutlineColour.G, OutlineColour.B, OutlineColour.A),
+            Colour = new Vector4(Colour.ToSRGB().R, Colour.ToSRGB().G, Colour.ToSRGB().B, Colour.ToSRGB().A),
+            OutlineColour = new Vector4(OutlineColour.ToSRGB().R, OutlineColour.ToSRGB().G, OutlineColour.ToSRGB().B, OutlineColour.ToSRGB().A),
             Radius = Radius,
         };
 
