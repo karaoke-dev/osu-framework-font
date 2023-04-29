@@ -1,13 +1,16 @@
-﻿#include "sh_Utils.h"
-
-varying mediump vec2 v_TexCoord;
-varying vec4 v_TexRect;
+﻿#include "sh_CustomizedShaderGlobalUniforms.h"
+#include "sh_Utils.h"
 
 const float gradient = 0.003;
 
 #define PI 3.1415926538
 
-uniform lowp sampler2D m_Sampler;
+layout(location = 0) in highp vec2 v_TexCoord;
+
+layout(set = 1, binding = 0) uniform lowp texture2D m_Texture;
+layout(set = 1, binding = 1) uniform lowp sampler m_Sampler;
+
+layout(location = 0) out vec4 o_Colour;
 
 vec2 toLensSpace(vec2 uv)
 {
@@ -50,19 +53,18 @@ vec4 scanlines(vec4 colour, vec2 uv)
 
 void main(void)
 {
-	vec2 resolution = vec2(v_TexRect[2] - v_TexRect[0], v_TexRect[1] - v_TexRect[0]);
-	vec2 uv = v_TexCoord / resolution;
+	vec2 uv = v_TexCoord;
 	vec2 lensUV = toLensSpace(uv);
 
 	vec4 col = vec4(vec3(0.0), 1.0);
 
 	if (insideLens(lensUV))
 	{
-		vec4 lensCol = texture2D(m_Sampler, lensUV * resolution);
+		vec4 lensCol = texture(sampler2D(m_Texture, m_Sampler), lensUV);
 		lensCol = scanlines(lensCol, lensUV);
 		float smoothEdge = smoothLensEdge(lensUV);
 		col = vec4(lensCol.rgb * smoothEdge, clamp(lensCol.a + 1.0 - smoothEdge, 0.0, 1.0));
 	}
 
-	gl_FragColor = col;
+	o_Colour = col;
 }
