@@ -7,6 +7,11 @@ const float gradient = 0.003;
 
 layout(location = 0) in highp vec2 v_TexCoord;
 
+layout(std140, set = 2, binding = 0) uniform m_CrtParameters
+{
+	mediump vec4 g_BackgroundColour;
+};
+
 layout(set = 1, binding = 0) uniform lowp texture2D m_Texture;
 layout(set = 1, binding = 1) uniform lowp sampler m_Sampler;
 
@@ -56,7 +61,7 @@ void main(void)
 	vec2 uv = v_TexCoord;
 	vec2 lensUV = toLensSpace(uv);
 
-	vec4 col = vec4(vec3(0.0), 1.0);
+	vec4 col = g_BackgroundColour;
 
 	if (insideLens(lensUV))
 	{
