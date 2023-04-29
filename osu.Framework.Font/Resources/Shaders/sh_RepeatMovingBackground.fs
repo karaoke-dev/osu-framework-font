@@ -3,11 +3,10 @@
 #include "sh_Utils.h"
 
 layout(location = 0) in highp vec2 v_TexCoord;
-layout(location = 1) in lowp vec4 v_Colour;
-layout(location = 3) in highp vec4 v_TexRect;
 
-layout(set = 2, binding = 0) uniform lowp texture2D m_RepeatTexture;
-layout(set = 2, binding = 1) uniform lowp sampler m_RepeatSampler;
+// repeat texture
+layout(set = 2, binding = 0) uniform lowp texture2D m_Texture1;
+layout(set = 2, binding = 1) uniform lowp sampler m_Sampler1;
 
 layout(std140, set = 3, binding = 0) uniform m_RepeatMovingBackgroundParameters
 {
@@ -38,6 +37,6 @@ void main(void) {
 
     // get point colour from sample.
     vec4 texColor = texture(sampler2D(m_Texture, m_Sampler), v_TexCoord);
-    vec4 repeatSampleColor = v_Colour * vec4(texture(sampler2D(m_RepeatTexture, m_RepeatSampler), fixedTexCoord).xyz, texColor.a);
+    vec4 repeatSampleColor = vec4(texture(sampler2D(m_Texture1, m_Sampler1), fixedTexCoord).xyz, texColor.a);
     o_Colour = mix(texColor, repeatSampleColor, g_Mix);
 }

@@ -7,6 +7,7 @@ using osu.Framework.Graphics.Rendering;
 using osu.Framework.Graphics.Shaders.Types;
 using osu.Framework.Graphics.Textures;
 using osuTK;
+using osuTK.Graphics.ES30;
 
 namespace osu.Framework.Graphics.Shaders;
 
@@ -31,10 +32,8 @@ public class RepeatMovingBackgroundShader : InternalShader, IHasCurrentTime, IHa
         if (Texture == null)
             return;
 
-        // todo: think about how to upload the texture.
-        // Texture.Bind(1);
-        // var unitId = TextureUnit.Texture1 - TextureUnit.Texture0;
-        // GetUniform<int>(@"g_RepeatSample").UpdateValue(ref unitId);
+        const int unit_id = TextureUnit.Texture1 - TextureUnit.Texture0;
+        Texture.Bind(unit_id);
 
         repeatParametersBuffer ??= renderer.CreateUniformBuffer<RepeatParameters>();
 
