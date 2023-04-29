@@ -45,6 +45,15 @@ public partial class TestSceneKaraokeSpriteTextWithShader : BackgroundGridTestSc
     [Test]
     public void ApplyShader()
     {
+        AddStep("Apply CRT shader", () => karaokeSpriteText.Shaders = new[]
+        {
+            GetShaderByType<CrtShader>().With(s =>
+            {
+                // Not showing the black background.
+                s.BackgroundColour = new Color4();
+            })
+        });
+
         AddStep("Clear shader", () => karaokeSpriteText.Shaders = Array.Empty<ICustomizedShader>());
     }
 
