@@ -286,13 +286,17 @@ public partial class LyricSpriteText
     internal static List<PositionText> GetFixedPositionTexts(IEnumerable<PositionText> positionTexts, string lyricText)
         => positionTexts
            .Select(x => GetFixedPositionText(x, lyricText))
+           .OfType<PositionText>()
            .Distinct()
            .ToList();
 
-    internal static PositionText GetFixedPositionText(PositionText positionText, string lyricText)
+    internal static PositionText? GetFixedPositionText(PositionText positionText, string lyricText)
     {
-        var startIndex = Math.Clamp(positionText.StartIndex, 0, lyricText.Length);
-        var endIndex = Math.Clamp(positionText.EndIndex, 0, lyricText.Length);
+        if (string.IsNullOrEmpty(lyricText))
+            return null;
+
+        var startIndex = Math.Clamp(positionText.StartIndex, 0, lyricText.Length - 1);
+        var endIndex = Math.Clamp(positionText.EndIndex, 0, lyricText.Length - 1);
         var text = string.IsNullOrEmpty(positionText.Text) ? " " : positionText.Text;
         return new PositionText(text, Math.Min(startIndex, endIndex), Math.Max(startIndex, endIndex));
     }
@@ -381,10 +385,13 @@ public partial class LyricSpriteText
         return getComputeCharacterDrawRectangle(drawRectangle);
     }
 
-    public RectangleF GetRubyTagDrawRectangle(PositionText rubyTag, bool drawSizeOnly = false)
+    public RectangleF? GetRubyTagDrawRectangle(PositionText rubyTag, bool drawSizeOnly = false)
     {
         var fixedRubyTag = GetFixedPositionText(rubyTag, displayedText);
-        if (!rubyCharacters.TryGetValue(fixedRubyTag, out var glyphs))
+        if (fixedRubyTag == null)
+            return null;
+
+        if (!rubyCharacters.TryGetValue(fixedRubyTag.Value, out var glyphs))
             throw new ArgumentOutOfRangeException(nameof(fixedRubyTag));
 
         var drawRectangle = glyphs.Select(x => drawSizeOnly ? x.DrawRectangle : TextBuilderGlyphUtils.GetCharacterSizeRectangle(x))
@@ -392,10 +399,13 @@ public partial class LyricSpriteText
         return getComputeCharacterDrawRectangle(drawRectangle);
     }
 
-    public RectangleF GetRomajiTagDrawRectangle(PositionText romajiTag, bool drawSizeOnly = false)
+    public RectangleF? GetRomajiTagDrawRectangle(PositionText romajiTag, bool drawSizeOnly = false)
     {
         var fixedRomajiTag = GetFixedPositionText(romajiTag, displayedText);
-        if (!romajiCharacters.TryGetValue(fixedRomajiTag, out var glyphs))
+        if (fixedRomajiTag == null)
+            return null;
+
+        if (!romajiCharacters.TryGetValue(fixedRomajiTag.Value, out var glyphs))
             throw new ArgumentOutOfRangeException(nameof(fixedRomajiTag));
 
         var drawRectangle = glyphs.Select(x => drawSizeOnly ? x.DrawRectangle : TextBuilderGlyphUtils.GetCharacterSizeRectangle(x))

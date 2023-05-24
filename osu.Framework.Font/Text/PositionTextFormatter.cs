@@ -76,7 +76,7 @@ public class PositionTextFormatter
     private RectangleF getMainCharacterRectangleF(int startCharIndex, int endCharIndex)
     {
         var starCharacter = characterList[startCharIndex];
-        var endCharacter = characterList[endCharIndex - 1];
+        var endCharacter = characterList[endCharIndex];
         var startCharacterRectangle = TextBuilderGlyphUtils.GetCharacterSizeRectangle(starCharacter);
         var endCharacterRectangle = TextBuilderGlyphUtils.GetCharacterSizeRectangle(endCharacter);
 

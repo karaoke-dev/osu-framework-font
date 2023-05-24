@@ -13,16 +13,16 @@ namespace osu.Framework.Font.Tests.Visual.Sprites;
 public partial class TestSceneLyricSpriteText : FrameworkTestScene
 {
     [TestCase("karaoke", null, null)]
-    [TestCase("カラオケ", new[] { "[0,1]:か", "[1,2]:ら", "[2,3]:お", "[3,4]:け" }, null)]
-    [TestCase("－－オケ", new[] { "[0,1]:か", "[1,2]:ら", "[2,3]:お", "[3,4]:け" }, null)]
-    [TestCase("－－－－", new[] { "[0,1]:か", "[1,2]:ら", "[2,3]:お", "[3,4]:け" }, null)]
-    [TestCase("カラオケ－－", new[] { "[0,1]:か", "[1,2]:ら", "[2,3]:お", "[3,4]:け", "[4,5]:け", "[5,6]:－" }, null)]
-    [TestCase("カラオケ－－カ", new[] { "[0,1]:か", "[1,2]:ら", "[2,3]:お", "[3,4]:け", "[4,5]:け", "[5,6]:－", "[6,7]:－" }, null)]
-    [TestCase("カラオケ", null, new[] { "[0,1]:ka", "[1,2]:ra", "[2,3]:o", "[3,4]:ke" })]
-    [TestCase("－－オケ", null, new[] { "[0,1]:ka", "[1,2]:ra", "[2,3]:o", "[3,4]:ke" })]
-    [TestCase("－－－－", null, new[] { "[0,1]:ka", "[1,2]:ra", "[2,3]:o", "[3,4]:ke" })]
-    [TestCase("カラオケ－－", null, new[] { "[0,1]:ka", "[1,2]:ra", "[2,3]:o", "[3,4]:ke", "[4,5]:ke", "[5,6]:－" })]
-    [TestCase("カラオケ－－カ", null, new[] { "[0,1]:ka", "[1,2]:ra", "[2,3]:o", "[3,4]:ke", "[4,5]:ke", "[5,6]:－", "[6,7]:－" })]
+    [TestCase("カラオケ", new[] { "[0]:か", "[1]:ら", "[2]:お", "[3]:け" }, null)]
+    [TestCase("－－オケ", new[] { "[0]:か", "[1]:ら", "[2]:お", "[3]:け" }, null)]
+    [TestCase("－－－－", new[] { "[0]:か", "[1]:ら", "[2]:お", "[3]:け" }, null)]
+    [TestCase("カラオケ－－", new[] { "[0]:か", "[1]:ら", "[2]:お", "[3]:け", "[4]:け", "[5]:－" }, null)]
+    [TestCase("カラオケ－－カ", new[] { "[0]:か", "[1]:ら", "[2]:お", "[3]:け", "[4]:け", "[5]:－", "[6]:－" }, null)]
+    [TestCase("カラオケ", null, new[] { "[0]:ka", "[1]:ra", "[2]:o", "[3]:ke" })]
+    [TestCase("－－オケ", null, new[] { "[0]:ka", "[1]:ra", "[2]:o", "[3]:ke" })]
+    [TestCase("－－－－", null, new[] { "[0]:ka", "[1]:ra", "[2]:o", "[3]:ke" })]
+    [TestCase("カラオケ－－", null, new[] { "[0]:ka", "[1]:ra", "[2]:o", "[3]:ke", "[4]:ke", "[5]:－" })]
+    [TestCase("カラオケ－－カ", null, new[] { "[0]:ka", "[1]:ra", "[2]:o", "[3]:ke", "[4]:ke", "[5]:－", "[6]:－" })]
     public void TestText(string text, string[] rubyTags, string[] romajiTags)
     {
         AddStep("Create lyric", () => setContents(() => new LyricSpriteText
@@ -238,12 +238,12 @@ public partial class TestSceneLyricSpriteText : FrameworkTestScene
 
             if (ruby)
             {
-                Rubies = TestCaseTagHelper.ParsePositionTexts(new[] { "[0,1]:か", "[1,2]:ら", "[2,3]:お", "[3,4]:け" });
+                Rubies = TestCaseTagHelper.ParsePositionTexts(new[] { "[0]:か", "[1]:ら", "[2]:お", "[3]:け" });
             }
 
             if (romaji)
             {
-                Romajies = TestCaseTagHelper.ParsePositionTexts(new[] { "[0,1]:ka", "[1,2]:ra", "[2,3]:o", "[3,4]:ke" });
+                Romajies = TestCaseTagHelper.ParsePositionTexts(new[] { "[0]:ka", "[1]:ra", "[2]:o", "[3]:ke" });
             }
         }
     }
