@@ -37,8 +37,8 @@ public partial class TestSceneKaraokeSpriteText : FrameworkTestScene
                 Anchor = Anchor.Centre,
                 Origin = Anchor.Centre,
                 Text = "カラオケ！",
-                Rubies = TestCaseTagHelper.ParsePositionTexts(new[] { "[0,1]:か", "[2,3]:お" }),
-                Romajies = TestCaseTagHelper.ParsePositionTexts(new[] { "[1,2]:ra", "[3,4]:ke" }),
+                Rubies = TestCaseTagHelper.ParsePositionTexts(new[] { "[0]:か", "[2]:お" }),
+                Romajies = TestCaseTagHelper.ParsePositionTexts(new[] { "[1]:ra", "[3]:ke" }),
                 LeftTextColour = Color4.Green,
                 RightTextColour = Color4.Red,
                 Scale = new Vector2(2),
@@ -94,7 +94,7 @@ public partial class TestSceneKaraokeSpriteText : FrameworkTestScene
         });
     }
 
-    [TestCase(new[] { "[0,1]:123aaa", "[1,2]:ら", "[2,3]:お", "[3,4]:け" }, true)]
+    [TestCase(new[] { "[0]:か", "[1]:ら", "[2]:お", "[3]:け" }, true)]
     public void TestRuby(string[] rubyTags, bool boo)
     {
         AddStep("Change ruby", () =>
@@ -104,7 +104,7 @@ public partial class TestSceneKaraokeSpriteText : FrameworkTestScene
         });
     }
 
-    [TestCase(new[] { "[0,1]:ka", "[1,2]:ra", "[2,3]:o", "[3,4]:ke" }, true)]
+    [TestCase(new[] { "[0]:ka", "[1]:ra", "[2]:o", "[3]:ke" }, true)]
     public void TestRomaji(string[] romajiTags, bool boo)
     {
         AddStep("Change romaji", () =>

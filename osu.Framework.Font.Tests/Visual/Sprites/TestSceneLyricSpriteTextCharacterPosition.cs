@@ -40,8 +40,8 @@ public partial class TestSceneLyricSpriteTextCharacterPosition : BackgroundGridT
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
                     Text = "カラオケyo－",
-                    Rubies = TestCaseTagHelper.ParsePositionTexts(new[] { "[0,1]:か", "[1,2]:ら", "[2,3]:お", "[3,4]:け", "[4,5]:－", "[4,5]:" }),
-                    Romajies = TestCaseTagHelper.ParsePositionTexts(new[] { "[0,1]:ka", "[1,2]:ra", "[2,3]:o", "[3,4]:ke", "[4,5]:yo", "[4,5]:" }),
+                    Rubies = TestCaseTagHelper.ParsePositionTexts(new[] { "[0]:か", "[1]:ら", "[2]:お", "[3]:け", "[6]:－", "[4]:" }),
+                    Romajies = TestCaseTagHelper.ParsePositionTexts(new[] { "[0]:ka", "[1]:ra", "[2]:o", "[3]:ke", "[4,5]:yo", "[4]:" }),
                 },
             }
         };
@@ -111,35 +111,35 @@ public partial class TestSceneLyricSpriteTextCharacterPosition : BackgroundGridT
         prepareTestCase(() => lyricSpriteText.GetCharacterDrawRectangle(index), valid);
     }
 
-    [TestCase("[0,1]:か", true)]
-    [TestCase("[1,2]:ら", true)]
-    [TestCase("[2,3]:お", true)]
-    [TestCase("[3,4]:け", true)]
-    [TestCase("[4,5]:－", true)]
-    [TestCase("[4,5]:", true)] // Should be able to get the ruby/romaji text position even if text is empty.
-    [TestCase("[-1,1]:か", true)] // will be fixed into "[0,1]:か"
-    [TestCase("[0,2]:か", false)]
-    [TestCase("[0,1]:?", false)]
+    [TestCase("[0]:か", true)]
+    [TestCase("[1]:ら", true)]
+    [TestCase("[2]:お", true)]
+    [TestCase("[3]:け", true)]
+    [TestCase("[6]:－", true)]
+    [TestCase("[4]:", true)] // Should be able to get the ruby/romaji text position even if text is empty.
+    [TestCase("[-1,0]:か", true)] // will be fixed into "[0]:か"
+    [TestCase("[0,1]:か", false)] // index is wrong.
+    [TestCase("[0]:?", false)]
     public void TestGetRubyTagDrawRectangle(string rubyTag, bool valid)
     {
         prepareTestCase(() => lyricSpriteText.GetRubyTagDrawRectangle(TestCaseTagHelper.ParsePositionText(rubyTag)), valid);
     }
 
-    [TestCase("[0,1]:ka", true)]
-    [TestCase("[1,2]:ra", true)]
-    [TestCase("[2,3]:o", true)]
-    [TestCase("[3,4]:ke", true)]
+    [TestCase("[0]:ka", true)]
+    [TestCase("[1]:ra", true)]
+    [TestCase("[2]:o", true)]
+    [TestCase("[3]:ke", true)]
     [TestCase("[4,5]:yo", true)]
-    [TestCase("[4,5]:", true)] // Should be able to get the ruby/romaji text position even if text is empty.
-    [TestCase("[-1,1]:ka", true)] // will be fixed into "[0,1]:ka"
-    [TestCase("[0,2]:ka", false)]
-    [TestCase("[0,1]:?", false)]
+    [TestCase("[4]:", true)] // Should be able to get the ruby/romaji text position even if text is empty.
+    [TestCase("[-1,0]:ka", true)] // will be fixed into "[0]:ka"
+    [TestCase("[0,1]:ka", false)]
+    [TestCase("[0]:?", false)]
     public void TestGetRomajiTagDrawRectangle(string rubyTag, bool valid)
     {
         prepareTestCase(() => lyricSpriteText.GetRomajiTagDrawRectangle(TestCaseTagHelper.ParsePositionText(rubyTag)), valid);
     }
 
-    private void prepareTestCase(Func<RectangleF> func, bool valid)
+    private void prepareTestCase(Func<RectangleF?> func, bool valid)
     {
         if (valid)
         {
@@ -160,10 +160,18 @@ public partial class TestSceneLyricSpriteTextCharacterPosition : BackgroundGridT
             });
         }
 
-        void moveTheBox(RectangleF rectangleF)
+        void moveTheBox(RectangleF? rectangleF)
         {
-            showSizeBox.Position = rectangleF.TopLeft;
-            showSizeBox.Size = rectangleF.Size;
+            if (rectangleF == null)
+            {
+                showSizeBox.Hide();
+            }
+            else
+            {
+                showSizeBox.Show();
+                showSizeBox.Position = rectangleF.Value.TopLeft;
+                showSizeBox.Size = rectangleF.Value.Size;
+            }
         }
     }
 }

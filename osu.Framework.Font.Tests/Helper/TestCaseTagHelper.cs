@@ -15,8 +15,9 @@ public static class TestCaseTagHelper
     /// Process test case ruby/romaji string format into <see cref="PositionText"/>
     /// </summary>
     /// <example>
-    /// [0,3]:ruby
-    /// [0,3]:romaji
+    /// [0]:ruby
+    /// [0,1]:ruby
+    /// [0,1]:romaji
     /// </example>
     /// <param name="str">Position text string format</param>
     /// <returns><see cref="PositionText"/>Position text object</returns>
@@ -25,13 +26,16 @@ public static class TestCaseTagHelper
         if (string.IsNullOrEmpty(str))
             return new PositionText();
 
-        var regex = new Regex("(?<start>[-0-9]+),(?<end>[-0-9]+)]:(?<ruby>.*$)");
+        var regex = new Regex("\\[(?<start>[-0-9]+)(?:,(?<end>[-0-9]+))?\\]:(?<ruby>.*$)");
         var result = regex.Match(str);
         if (!result.Success)
             throw new ArgumentException(null, nameof(str));
 
-        var startIndex = int.Parse(result.Groups["start"].Value);
-        var endIndex = int.Parse(result.Groups["end"].Value);
+        var startValue = result.Groups["start"].Value;
+        var endValue = result.Groups["end"].Value;
+
+        var startIndex = int.Parse(startValue);
+        var endIndex = int.Parse(string.IsNullOrEmpty(endValue) ? startValue : endValue);
         var text = result.Groups["ruby"].Value;
 
         return new PositionText(text, startIndex, endIndex);
