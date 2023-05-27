@@ -42,7 +42,7 @@ public abstract class CustomizedShaderBufferedDrawNode : BufferedDrawNode
     {
         switch (shader)
         {
-            case IHasCurrentTime _:
+            case IHasCurrentTime:
             case IStepShader stepShader when stepShader.StepShaders.Any(s => s is IHasCurrentTime):
                 return true;
 

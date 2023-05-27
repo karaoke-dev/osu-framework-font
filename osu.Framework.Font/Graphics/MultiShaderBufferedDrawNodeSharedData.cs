@@ -45,7 +45,7 @@ public class MultiShaderBufferedDrawNodeSharedData : BufferedDrawNodeSharedData
             sharedDatas.Add(shader, sharedData);
         }
 
-        renderer.ScheduleDisposal(s =>
+        renderer.ScheduleDisposal(_ =>
         {
             clearSharedDatas(disposedFrameBuffer);
         }, this);
