@@ -61,7 +61,7 @@ public partial class MaskingContainer<T> : Container<T> where T : Drawable
             base.ApplyState();
 
             maskingInfo = Source.MaskingEdges == Edges.None
-                ? (MaskingInfo?)null
+                ? null
                 : new MaskingInfo
                 {
                     ScreenSpaceAABB = generateMasking(Source.ScreenSpaceDrawQuad.AABB, Source.MaskingEdges),

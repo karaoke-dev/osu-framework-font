@@ -135,12 +135,12 @@ public partial class LyricSpriteText
 
     #region Characters
 
-    private readonly LayoutValue charactersCache = new LayoutValue(Invalidation.DrawSize | Invalidation.Presence, InvalidationSource.Parent);
+    private readonly LayoutValue charactersCache = new(Invalidation.DrawSize | Invalidation.Presence, InvalidationSource.Parent);
 
     /// <summary>
     /// Glyph list to be passed to <see cref="TextBuilder"/>.
     /// </summary>
-    private readonly List<TextBuilderGlyph> charactersBacking = new List<TextBuilderGlyph>();
+    private readonly List<TextBuilderGlyph> charactersBacking = new();
 
     /// <summary>
     /// The characters in local space.
@@ -157,7 +157,7 @@ public partial class LyricSpriteText
     /// <summary>
     /// Glyph list to be passed to <see cref="TextBuilder"/>.
     /// </summary>
-    private readonly Dictionary<PositionText, PositionTextBuilderGlyph[]> rubyCharactersBacking = new Dictionary<PositionText, PositionTextBuilderGlyph[]>();
+    private readonly Dictionary<PositionText, PositionTextBuilderGlyph[]> rubyCharactersBacking = new();
 
     /// <summary>
     /// The characters in local space.
@@ -174,7 +174,7 @@ public partial class LyricSpriteText
     /// <summary>
     /// Glyph list to be passed to <see cref="TextBuilder"/>.
     /// </summary>
-    private readonly Dictionary<PositionText, PositionTextBuilderGlyph[]> romajiCharactersBacking = new Dictionary<PositionText, PositionTextBuilderGlyph[]>();
+    private readonly Dictionary<PositionText, PositionTextBuilderGlyph[]> romajiCharactersBacking = new();
 
     /// <summary>
     /// The characters in local space.
@@ -305,10 +305,10 @@ public partial class LyricSpriteText
 
     #region Screen space characters
 
-    private readonly LayoutValue parentScreenSpaceCache = new LayoutValue(Invalidation.DrawSize | Invalidation.Presence | Invalidation.DrawInfo, InvalidationSource.Parent);
-    private readonly LayoutValue localScreenSpaceCache = new LayoutValue(Invalidation.MiscGeometry, InvalidationSource.Self);
+    private readonly LayoutValue parentScreenSpaceCache = new(Invalidation.DrawSize | Invalidation.Presence | Invalidation.DrawInfo, InvalidationSource.Parent);
+    private readonly LayoutValue localScreenSpaceCache = new(Invalidation.MiscGeometry, InvalidationSource.Self);
 
-    private readonly List<ScreenSpaceCharacterPart> screenSpaceCharactersBacking = new List<ScreenSpaceCharacterPart>();
+    private readonly List<ScreenSpaceCharacterPart> screenSpaceCharactersBacking = new();
 
     /// <summary>
     /// The characters in screen space. These are ready to be drawn.

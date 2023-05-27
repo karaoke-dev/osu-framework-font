@@ -20,7 +20,7 @@ public static class ShaderExtension
     public static T With<T>(this T drawable, Action<T> adjustment)
         where T : ICustomizedShader
     {
-        adjustment?.Invoke(drawable);
+        adjustment(drawable);
         return drawable;
     }
 }
