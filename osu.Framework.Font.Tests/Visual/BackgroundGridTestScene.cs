@@ -1,7 +1,6 @@
 ﻿// Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using osu.Framework.Allocation;
 using osu.Framework.Extensions;
@@ -28,8 +27,8 @@ public abstract partial class BackgroundGridTestScene : FrameworkTestScene
     protected const string GREEN = "#00AF00";
     protected const string BLUE = "#0000AF";
 
-    [Resolved, AllowNull]
-    private ShaderManager shaderManager { get; set; }
+    [Resolved]
+    private ShaderManager shaderManager { get; set; } = null!;
 
     private readonly Container content;
 

@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Extensions.IEnumerableExtensions;
@@ -29,8 +28,8 @@ public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, I
     // todo: should have a better way to let user able to customize formats?
     private readonly MultiShaderBufferedDrawNodeSharedData sharedData = new();
 
-    [Resolved, AllowNull]
-    private FontStore store { get; set; }
+    [Resolved]
+    private FontStore store { get; set; } = null!;
 
     public IShader TextureShader { get; private set; } = null!;
 

@@ -1,7 +1,6 @@
 ﻿// Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
-using System.Diagnostics.CodeAnalysis;
 using NUnit.Framework;
 using osu.Framework.Allocation;
 using osu.Framework.Extensions;
@@ -13,8 +12,8 @@ namespace osu.Framework.Font.Tests.Visual.Shaders;
 
 public partial class TestSceneRepeatMovingBackgroundShader : InternalShaderTestScene
 {
-    [Resolved, AllowNull]
-    private TextureStore textures { get; set; }
+    [Resolved]
+    private TextureStore textures { get; set; } = null!;
 
     [TestCase("sample-texture", 10, 10)]
     [TestCase("sample-texture", 30, 30)]
