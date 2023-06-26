@@ -3,7 +3,6 @@
 
 using System;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using NUnit.Framework;
 using osu.Framework.Allocation;
@@ -25,8 +24,8 @@ public partial class TestSceneKaraokeSpriteText : FrameworkTestScene
 
     private int transformAmount;
 
-    [Resolved, AllowNull]
-    private ShaderManager shaderManager { get; set; }
+    [Resolved]
+    private ShaderManager shaderManager { get; set; } = null!;
 
     public TestSceneKaraokeSpriteText()
     {
