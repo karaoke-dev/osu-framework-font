@@ -6,7 +6,9 @@
 [![NuGet](https://img.shields.io/nuget/v/osu.Framework.KaraokeFont.svg)](https://www.nuget.org/packages/osu.Framework.KaraokeFont)
 [![NuGet](https://img.shields.io/nuget/dt/osu.Framework.KaraokeFont.svg)](https://www.nuget.org/packages/osu.Framework.KaraokeFont)
 [![dev chat](https://discordapp.com/api/guilds/299006062323826688/widget.png?style=shield)](https://discord.gg/ga2xZXk)
-[![](https://tokei.rs/b1/github/karaoke-dev/osu-framework-font)](https://github.com/karaoke-dev/osu-framework-font)
+[![Total lines](https://tokei.rs/b1/github/karaoke-dev/osu-framework-font)](https://github.com/karaoke-dev/osu-framework-font/edit/master/README.md)
+[![Dashboard](https://img.shields.io/badge/Dashboard-stonks!-informational)](https://www.repotrends.com/karaoke-dev/osu-framework-font)
+
 
 Unofficial support for extra font effect.
 
