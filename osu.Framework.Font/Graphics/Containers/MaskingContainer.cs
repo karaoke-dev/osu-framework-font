@@ -64,7 +64,7 @@ public partial class MaskingContainer<T> : Container<T> where T : Drawable
                 ? null
                 : new MaskingInfo
                 {
-                    ScreenSpaceScissorArea = generateMasking(Source.ScreenSpaceDrawQuad.AABB, Source.MaskingEdges),
+                    ScreenSpaceAABB = generateMasking(Source.ScreenSpaceDrawQuad.AABB, Source.MaskingEdges),
                 };
         }
 
