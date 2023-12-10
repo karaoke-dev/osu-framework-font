@@ -1,74 +1,66 @@
 ﻿// Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
-using System;
 using NUnit.Framework;
-using osu.Framework.Graphics.Sprites;
+using osu.Framework.Font.Tests.Helper;
 
 namespace osu.Framework.Font.Tests.Graphics;
 
 [TestFixture]
 public class TextIndexTest
 {
-    [TestCase(1, 1)]
-    [TestCase(1.5, 1.5)]
-    [TestCase(-1.5, -1.5)]
-    public void TestOperatorEqual(double tone1, double tone2)
+    [TestCase("1,start")]
+    [TestCase("1,end")]
+    [TestCase("-1,start")]
+    public void TestOperatorEqual(string textIndex1)
     {
-        Assert.AreEqual(numberToTextIndex(tone1), numberToTextIndex(tone2));
+        Assert.AreEqual(TestCaseTextIndexHelper.ParseTextIndex(textIndex1), TestCaseTextIndexHelper.ParseTextIndex(textIndex1));
     }
 
-    [TestCase(-1, 1)]
-    [TestCase(1, -1)]
-    [TestCase(1.5, -1.5)]
-    [TestCase(1.5, 1)]
-    [TestCase(-1.5, -1)]
-    [TestCase(-1.5, -2)]
-    public void TestOperatorNotEqual(double tone1, double tone2)
+    [TestCase("-1,start", "1,start")]
+    [TestCase("1,start", "-1,start")]
+    [TestCase("1,end", "-1,end")]
+    [TestCase("1,end", "1,start")]
+    [TestCase("-2,end", "-1,start")]
+    [TestCase("-2,end", "-2,start")]
+    public void TestOperatorNotEqual(string textIndex1, string textIndex2)
     {
-        Assert.AreNotEqual(numberToTextIndex(tone1), numberToTextIndex(tone2));
+        Assert.AreNotEqual(TestCaseTextIndexHelper.ParseTextIndex(textIndex1), TestCaseTextIndexHelper.ParseTextIndex(textIndex2));
     }
 
-    [TestCase(1, 0, true)]
-    [TestCase(1, 0.5, true)]
-    [TestCase(1, 1, false)]
-    [TestCase(1, 1.5, false)]
-    public void TestOperatorGreater(double tone1, double tone2, bool match)
+    [TestCase("1,start", "0,start", true)]
+    [TestCase("1,start", "0,end", true)]
+    [TestCase("1,start", "1,start", false)]
+    [TestCase("1,start", "1,end", false)]
+    public void TestOperatorGreater(string textIndex1, string textIndex2, bool match)
     {
-        Assert.AreEqual(numberToTextIndex(tone1) > numberToTextIndex(tone2), match);
+        Assert.AreEqual(TestCaseTextIndexHelper.ParseTextIndex(textIndex1) > TestCaseTextIndexHelper.ParseTextIndex(textIndex2), match);
     }
 
-    [TestCase(1, 0, true)]
-    [TestCase(1, 0.5, true)]
-    [TestCase(1, 1, true)]
-    [TestCase(1, 1.5, false)]
-    public void TestOperatorGreaterOrEqual(double tone1, double tone2, bool match)
+    [TestCase("1,start", "0,start", true)]
+    [TestCase("1,start", "0,end", true)]
+    [TestCase("1,start", "1,start", true)]
+    [TestCase("1,start", "1,end", false)]
+    public void TestOperatorGreaterOrEqual(string textIndex1, string textIndex2, bool match)
     {
-        Assert.AreEqual(numberToTextIndex(tone1) >= numberToTextIndex(tone2), match);
+        Assert.AreEqual(TestCaseTextIndexHelper.ParseTextIndex(textIndex1) >= TestCaseTextIndexHelper.ParseTextIndex(textIndex2), match);
     }
 
-    [TestCase(-1, 0, true)]
-    [TestCase(-1, -0.5, true)]
-    [TestCase(-1, -1, false)]
-    [TestCase(-1, -1.5, false)]
-    public void TestOperatorLess(double tone1, double tone2, bool match)
+    [TestCase("-1,start", "0,start", true)]
+    [TestCase("-1,start", "-1,end", true)]
+    [TestCase("-1,start", "-1,start", false)]
+    [TestCase("-1,start", "-2,end", false)]
+    public void TestOperatorLess(string textIndex1, string textIndex2, bool match)
     {
-        Assert.AreEqual(numberToTextIndex(tone1) < numberToTextIndex(tone2), match);
+        Assert.AreEqual(TestCaseTextIndexHelper.ParseTextIndex(textIndex1) < TestCaseTextIndexHelper.ParseTextIndex(textIndex2), match);
     }
 
-    [TestCase(-1, 0, true)]
-    [TestCase(-1, -0.5, true)]
-    [TestCase(-1, -1, true)]
-    [TestCase(-1, -1.5, false)]
-    public void TestOperatorLessOrEqual(double tone1, double tone2, bool match)
+    [TestCase("-1,start", "0,start", true)]
+    [TestCase("-1,start", "-1,end", true)]
+    [TestCase("-1,start", "-1,start", true)]
+    [TestCase("-1,start", "-2,end", false)]
+    public void TestOperatorLessOrEqual(string textIndex1, string textIndex2, bool match)
     {
-        Assert.AreEqual(numberToTextIndex(tone1) <= numberToTextIndex(tone2), match);
-    }
-
-    private static TextIndex numberToTextIndex(double tone)
-    {
-        var half = Math.Abs(tone) % 1 == 0.5;
-        var scale = tone < 0 ? (int)tone - (half ? 1 : 0) : (int)tone;
-        return new TextIndex(scale, half ? TextIndex.IndexState.End : TextIndex.IndexState.Start);
+        Assert.AreEqual(TestCaseTextIndexHelper.ParseTextIndex(textIndex1) <= TestCaseTextIndexHelper.ParseTextIndex(textIndex2), match);
     }
 }
