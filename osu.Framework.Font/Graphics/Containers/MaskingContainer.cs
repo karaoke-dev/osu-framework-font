@@ -79,7 +79,7 @@ public partial class MaskingContainer<T> : Container<T> where T : Drawable
             }
         }
 
-        public override void Draw(IRenderer renderer)
+        protected override void Draw(IRenderer renderer)
         {
             // will not working if not adding masking info into here.
             if (maskingInfo != null)
@@ -91,13 +91,13 @@ public partial class MaskingContainer<T> : Container<T> where T : Drawable
                 renderer.PopMaskingInfo();
         }
 
-        protected override void DrawChildrenOpaqueInteriors(IRenderer renderer, DepthValue depthValue)
+        protected override void DrawOpaqueInterior(IRenderer renderer)
         {
             // will have black border if not adding masking info into here.
             if (maskingInfo != null)
                 renderer.PushMaskingInfo(maskingInfo.Value);
 
-            base.DrawChildrenOpaqueInteriors(renderer, depthValue);
+            base.DrawOpaqueInterior(renderer);
 
             if (maskingInfo != null)
                 renderer.PopMaskingInfo();
