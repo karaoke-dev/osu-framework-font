@@ -59,7 +59,7 @@ public partial class LyricSpriteText
             parts.AddRange(Source.screenSpaceCharacters);
         }
 
-        public override void Draw(IRenderer renderer)
+        protected override void Draw(IRenderer renderer)
         {
             base.Draw(renderer);
 
