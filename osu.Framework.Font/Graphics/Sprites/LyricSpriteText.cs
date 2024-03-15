@@ -605,7 +605,7 @@ public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, I
     private bool reserveRomajiHeight;
 
     /// <summary>
-    /// Reserve romaji height even contains no ruby.
+    /// Reserve romaji height even contains no romaji.
     /// </summary>
     public bool ReserveRomajiHeight
     {
