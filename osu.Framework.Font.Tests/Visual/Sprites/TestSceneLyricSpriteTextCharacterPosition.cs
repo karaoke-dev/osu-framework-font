@@ -134,9 +134,9 @@ public partial class TestSceneLyricSpriteTextCharacterPosition : BackgroundGridT
     [TestCase("[-1,0]:ka", true)] // will be fixed into "[0]:ka"
     [TestCase("[0,1]:ka", false)]
     [TestCase("[0]:?", false)]
-    public void TestGetRomajiTagDrawRectangle(string rubyTag, bool valid)
+    public void TestGetRomajiTagDrawRectangle(string romajiTag, bool valid)
     {
-        prepareTestCase(() => lyricSpriteText.GetRomajiTagDrawRectangle(TestCaseTagHelper.ParsePositionText(rubyTag)), valid);
+        prepareTestCase(() => lyricSpriteText.GetRomajiTagDrawRectangle(TestCaseTagHelper.ParsePositionText(romajiTag)), valid);
     }
 
     private void prepareTestCase(Func<RectangleF?> func, bool valid)
