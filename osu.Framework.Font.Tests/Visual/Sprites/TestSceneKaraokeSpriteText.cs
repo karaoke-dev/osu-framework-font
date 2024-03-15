@@ -158,7 +158,7 @@ public partial class TestSceneKaraokeSpriteText : FrameworkTestScene
     {
         AddStep("Change alignment", () =>
         {
-            karaokeSpriteText.RomajiAlignment = rubyAlignment;
+            karaokeSpriteText.RubyAlignment = rubyAlignment;
             karaokeSpriteText.RomajiAlignment = romajiAlignment;
         });
     }
