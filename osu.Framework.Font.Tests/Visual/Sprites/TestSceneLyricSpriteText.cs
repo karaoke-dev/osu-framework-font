@@ -28,7 +28,7 @@ public partial class TestSceneLyricSpriteText : FrameworkTestScene
         AddStep("Create lyric", () => setContents(() => new LyricSpriteText
         {
             Text = text,
-            Rubies = TestCaseTagHelper.ParsePositionTexts(rubyTags),
+            TopTexts = TestCaseTagHelper.ParsePositionTexts(rubyTags),
             Romajies = TestCaseTagHelper.ParsePositionTexts(romajiTags),
         }));
     }
@@ -41,7 +41,7 @@ public partial class TestSceneLyricSpriteText : FrameworkTestScene
         AddStep("Create lyric", () => setContents(() => new DefaultLyricSpriteText
         {
             Font = new FontUsage(null, mainFontSize),
-            RubyFont = new FontUsage(null, rubyFontSize),
+            TopTextFont = new FontUsage(null, rubyFontSize),
             RomajiFont = new FontUsage(null, romajiFontSize),
         }));
     }
@@ -121,7 +121,7 @@ public partial class TestSceneLyricSpriteText : FrameworkTestScene
         // todo : this feature is not implemented.
         AddStep("Create lyric", () => setContents(() => new DefaultLyricSpriteText
         {
-            RubyAlignment = rubyAlignment,
+            TopTextAlignment = rubyAlignment,
             RomajiAlignment = romajiAlignment
         }));
     }
@@ -164,7 +164,7 @@ public partial class TestSceneLyricSpriteText : FrameworkTestScene
         AddStep("Create lyric", () => setContents(() => new DefaultLyricSpriteText
         {
             Spacing = TestCaseVectorHelper.ParseVector2(spacing),
-            RubySpacing = TestCaseVectorHelper.ParseVector2(rubySpacing),
+            TopTextSpacing = TestCaseVectorHelper.ParseVector2(rubySpacing),
             RomajiSpacing = TestCaseVectorHelper.ParseVector2(romajiSpacing),
         }));
     }
@@ -176,7 +176,7 @@ public partial class TestSceneLyricSpriteText : FrameworkTestScene
     {
         AddStep("Create lyric", () => setContents(() => new DefaultLyricSpriteText
         {
-            RubyMargin = rubyMargin,
+            TopTextMargin = rubyMargin,
             RomajiMargin = romajiMargin,
         }));
     }
@@ -195,7 +195,7 @@ public partial class TestSceneLyricSpriteText : FrameworkTestScene
         {
             Width = multiLine ? 50 : 200,
             AllowMultiline = multiLine,
-            ReserveRubyHeight = reserveRubyHeight,
+            ReserveTopTextHeight = reserveRubyHeight,
             ReserveRomajiHeight = reserveRomajiHeight,
         }));
 
@@ -203,7 +203,7 @@ public partial class TestSceneLyricSpriteText : FrameworkTestScene
         {
             Width = multiLine ? 50 : 200,
             AllowMultiline = multiLine,
-            ReserveRubyHeight = reserveRubyHeight,
+            ReserveTopTextHeight = reserveRubyHeight,
             ReserveRomajiHeight = reserveRomajiHeight,
         }));
 
@@ -211,7 +211,7 @@ public partial class TestSceneLyricSpriteText : FrameworkTestScene
         {
             Width = multiLine ? 50 : 200,
             AllowMultiline = multiLine,
-            ReserveRubyHeight = reserveRubyHeight,
+            ReserveTopTextHeight = reserveRubyHeight,
             ReserveRomajiHeight = reserveRomajiHeight,
         }));
 
@@ -219,7 +219,7 @@ public partial class TestSceneLyricSpriteText : FrameworkTestScene
         {
             Width = multiLine ? 50 : 200,
             AllowMultiline = multiLine,
-            ReserveRubyHeight = reserveRubyHeight,
+            ReserveTopTextHeight = reserveRubyHeight,
             ReserveRomajiHeight = reserveRomajiHeight,
         }));
     }
@@ -238,7 +238,7 @@ public partial class TestSceneLyricSpriteText : FrameworkTestScene
 
             if (ruby)
             {
-                Rubies = TestCaseTagHelper.ParsePositionTexts(new[] { "[0]:か", "[1]:ら", "[2]:お", "[3]:け" });
+                TopTexts = TestCaseTagHelper.ParsePositionTexts(new[] { "[0]:か", "[1]:ら", "[2]:お", "[3]:け" });
             }
 
             if (romaji)

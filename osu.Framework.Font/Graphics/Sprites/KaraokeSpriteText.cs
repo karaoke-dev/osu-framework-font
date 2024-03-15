@@ -18,7 +18,7 @@ public partial class KaraokeSpriteText : KaraokeSpriteText<LyricSpriteText>
 {
 }
 
-public partial class KaraokeSpriteText<T> : CompositeDrawable, IMultiShaderBufferedDrawable, IHasRuby, IHasRomaji where T : LyricSpriteText, new()
+public partial class KaraokeSpriteText<T> : CompositeDrawable, IMultiShaderBufferedDrawable, IHasTopText, IHasRomaji where T : LyricSpriteText, new()
 {
     internal const double INTERPOLATION_TIMING = 1;
 
@@ -172,13 +172,13 @@ public partial class KaraokeSpriteText<T> : CompositeDrawable, IMultiShaderBuffe
         }
     }
 
-    public IReadOnlyList<PositionText> Rubies
+    public IReadOnlyList<PositionText> TopTexts
     {
-        get => leftLyricText.Rubies;
+        get => leftLyricText.TopTexts;
         set
         {
-            leftLyricText.Rubies = value;
-            rightLyricText.Rubies = value;
+            leftLyricText.TopTexts = value;
+            rightLyricText.TopTexts = value;
 
             Invalidate(Invalidation.Layout);
         }
@@ -212,13 +212,13 @@ public partial class KaraokeSpriteText<T> : CompositeDrawable, IMultiShaderBuffe
         }
     }
 
-    public FontUsage RubyFont
+    public FontUsage TopTextFont
     {
-        get => leftLyricText.RubyFont;
+        get => leftLyricText.TopTextFont;
         set
         {
-            leftLyricText.RubyFont = value;
-            rightLyricText.RubyFont = value;
+            leftLyricText.TopTextFont = value;
+            rightLyricText.TopTextFont = value;
 
             Invalidate(Invalidation.Layout);
         }
@@ -262,13 +262,13 @@ public partial class KaraokeSpriteText<T> : CompositeDrawable, IMultiShaderBuffe
         }
     }
 
-    public LyricTextAlignment RubyAlignment
+    public LyricTextAlignment TopTextAlignment
     {
-        get => leftLyricText.RubyAlignment;
+        get => leftLyricText.TopTextAlignment;
         set
         {
-            leftLyricText.RubyAlignment = value;
-            rightLyricText.RubyAlignment = value;
+            leftLyricText.TopTextAlignment = value;
+            rightLyricText.TopTextAlignment = value;
 
             Invalidate(Invalidation.Layout);
         }
@@ -302,13 +302,13 @@ public partial class KaraokeSpriteText<T> : CompositeDrawable, IMultiShaderBuffe
         }
     }
 
-    public Vector2 RubySpacing
+    public Vector2 TopTextSpacing
     {
-        get => leftLyricText.RubySpacing;
+        get => leftLyricText.TopTextSpacing;
         set
         {
-            leftLyricText.RubySpacing = value;
-            rightLyricText.RubySpacing = value;
+            leftLyricText.TopTextSpacing = value;
+            rightLyricText.TopTextSpacing = value;
 
             Invalidate(Invalidation.Layout);
         }
@@ -330,13 +330,13 @@ public partial class KaraokeSpriteText<T> : CompositeDrawable, IMultiShaderBuffe
 
     #region Margin/padding
 
-    public int RubyMargin
+    public int TopTextMargin
     {
-        get => leftLyricText.RubyMargin;
+        get => leftLyricText.TopTextMargin;
         set
         {
-            leftLyricText.RubyMargin = value;
-            rightLyricText.RubyMargin = value;
+            leftLyricText.TopTextMargin = value;
+            rightLyricText.TopTextMargin = value;
 
             Invalidate(Invalidation.Layout);
         }

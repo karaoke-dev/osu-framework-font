@@ -40,7 +40,7 @@ public partial class TestSceneLyricSpriteTextCharacterPosition : BackgroundGridT
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
                     Text = "カラオケyo－",
-                    Rubies = TestCaseTagHelper.ParsePositionTexts(new[] { "[0]:か", "[1]:ら", "[2]:お", "[3]:け", "[6]:－", "[4]:" }),
+                    TopTexts = TestCaseTagHelper.ParsePositionTexts(new[] { "[0]:か", "[1]:ら", "[2]:お", "[3]:け", "[6]:－", "[4]:" }),
                     Romajies = TestCaseTagHelper.ParsePositionTexts(new[] { "[0]:ka", "[1]:ra", "[2]:o", "[3]:ke", "[4,5]:yo", "[4]:" }),
                 },
             }
@@ -122,7 +122,7 @@ public partial class TestSceneLyricSpriteTextCharacterPosition : BackgroundGridT
     [TestCase("[0]:?", false)]
     public void TestGetRubyTagDrawRectangle(string rubyTag, bool valid)
     {
-        prepareTestCase(() => lyricSpriteText.GetRubyTagDrawRectangle(TestCaseTagHelper.ParsePositionText(rubyTag)), valid);
+        prepareTestCase(() => lyricSpriteText.GetTopPositionTextDrawRectangle(TestCaseTagHelper.ParsePositionText(rubyTag)), valid);
     }
 
     [TestCase("[0]:ka", true)]

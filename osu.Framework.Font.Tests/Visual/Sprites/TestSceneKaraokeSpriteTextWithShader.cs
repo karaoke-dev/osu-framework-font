@@ -27,7 +27,7 @@ public partial class TestSceneKaraokeSpriteTextWithShader : BackgroundGridTestSc
             Anchor = Anchor.Centre,
             Origin = Anchor.Centre,
             Text = "カラオケ！",
-            Rubies = TestCaseTagHelper.ParsePositionTexts(new[] { "[0]:か", "[1]:ら", "[2]:お", "[3]:け" }),
+            TopTexts = TestCaseTagHelper.ParsePositionTexts(new[] { "[0]:か", "[1]:ら", "[2]:お", "[3]:け" }),
             Romajies = TestCaseTagHelper.ParsePositionTexts(new[] { "[0]:ka", "[1]:ra", "[2]:o", "[3]:ke" }),
             TimeTags = TestCaseTagHelper.ParseTimeTags(new[] { "[0,start]:500", "[1,start]:600", "[2,start]:1000", "[3,start]:1500", "[4,start]:2000" }),
             Scale = new Vector2(2),

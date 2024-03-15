@@ -20,7 +20,7 @@ namespace osu.Framework.Graphics.Sprites;
 /// <summary>
 /// A container for simple text rendering purposes. If more complex text rendering is required, use <see cref="TextFlowContainer"/> instead.
 /// </summary>
-public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, IHasLineBaseHeight, IHasFilterTerms, IFillFlowContainer, IHasCurrentValue<string>, IHasRuby, IHasRomaji
+public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, IHasLineBaseHeight, IHasFilterTerms, IFillFlowContainer, IHasCurrentValue<string>, IHasTopText, IHasRomaji
 {
     private const float default_text_size = 48;
     private static readonly char[] default_never_fixed_width_characters = { '.', ',', ':', ' ' };
@@ -42,7 +42,7 @@ public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, I
         AddLayout(parentScreenSpaceCache);
         AddLayout(localScreenSpaceCache);
         AddLayout(textBuilderCache);
-        AddLayout(rubyTextBuilderCache);
+        AddLayout(topTextBuilderCache);
         AddLayout(romajiTextBuilderCache);
     }
 
@@ -149,18 +149,18 @@ public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, I
 
     private string displayedText => Text;
 
-    private readonly List<PositionText> rubies = new();
+    private readonly List<PositionText> topTexts = new();
 
     /// <summary>
-    /// Gets or sets the ruby text to be displayed.
+    /// Gets or sets the top text to be displayed.
     /// </summary>
-    public IReadOnlyList<PositionText> Rubies
+    public IReadOnlyList<PositionText> TopTexts
     {
-        get => rubies;
+        get => topTexts;
         set
         {
-            rubies.Clear();
-            rubies.AddRange(value);
+            topTexts.Clear();
+            topTexts.AddRange(value);
 
             invalidate(true);
         }
@@ -203,17 +203,17 @@ public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, I
         }
     }
 
-    private FontUsage rubyFont = FontUsage.Default;
+    private FontUsage topTextFont = FontUsage.Default;
 
     /// <summary>
     /// Contains information on the font used to display the text.
     /// </summary>
-    public FontUsage RubyFont
+    public FontUsage TopTextFont
     {
-        get => rubyFont;
+        get => topTextFont;
         set
         {
-            rubyFont = value;
+            topTextFont = value;
 
             invalidate(true, true);
         }
@@ -284,20 +284,20 @@ public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, I
         }
     }
 
-    private LyricTextAlignment rubyAlignment;
+    private LyricTextAlignment topTextAlignment;
 
     /// <summary>
-    /// Gets or sets the ruby alignment.
+    /// Gets or sets the top text alignment.
     /// </summary>
-    public LyricTextAlignment RubyAlignment
+    public LyricTextAlignment TopTextAlignment
     {
-        get => rubyAlignment;
+        get => topTextAlignment;
         set
         {
-            if (rubyAlignment == value)
+            if (topTextAlignment == value)
                 return;
 
-            rubyAlignment = value;
+            topTextAlignment = value;
             invalidate(true, true);
         }
     }
@@ -482,20 +482,20 @@ public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, I
         }
     }
 
-    private Vector2 rubySpacing;
+    private Vector2 topTextSpacing;
 
     /// <summary>
-    /// Gets or sets the spacing between characters of ruby text.
+    /// Gets or sets the spacing between characters of top text.
     /// </summary>
-    public Vector2 RubySpacing
+    public Vector2 TopTextSpacing
     {
-        get => rubySpacing;
+        get => topTextSpacing;
         set
         {
-            if (rubySpacing == value)
+            if (topTextSpacing == value)
                 return;
 
-            rubySpacing = value;
+            topTextSpacing = value;
 
             invalidate(true, true);
         }
@@ -545,20 +545,20 @@ public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, I
         }
     }
 
-    private int rubyMargin;
+    private int topTextMargin;
 
     /// <summary>
-    /// Shrinks the space between ruby and main text.
+    /// Shrinks the space between top and main text.
     /// </summary>
-    public int RubyMargin
+    public int TopTextMargin
     {
-        get => rubyMargin;
+        get => topTextMargin;
         set
         {
-            if (rubyMargin == value)
+            if (topTextMargin == value)
                 return;
 
-            rubyMargin = value;
+            topTextMargin = value;
 
             invalidate(true, true);
         }
@@ -583,20 +583,20 @@ public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, I
         }
     }
 
-    private bool reserveRubyHeight;
+    private bool reserveTopTextHeight;
 
     /// <summary>
-    /// Reserve ruby height even contains no ruby.
+    /// Reserve top text height even contains no text.
     /// </summary>
-    public bool ReserveRubyHeight
+    public bool ReserveTopTextHeight
     {
-        get => reserveRubyHeight;
+        get => reserveTopTextHeight;
         set
         {
-            if (reserveRubyHeight == value)
+            if (reserveTopTextHeight == value)
                 return;
 
-            reserveRubyHeight = value;
+            reserveTopTextHeight = value;
 
             invalidate(true, true);
         }

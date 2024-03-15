@@ -33,7 +33,7 @@ public partial class LyricSpriteText
     protected virtual char FallbackCharacter => '?';
 
     private readonly LayoutValue<TextBuilder> textBuilderCache = new(Invalidation.DrawSize, InvalidationSource.Parent);
-    private readonly LayoutValue<TextBuilder> rubyTextBuilderCache = new(Invalidation.DrawSize, InvalidationSource.Parent);
+    private readonly LayoutValue<TextBuilder> topTextBuilderCache = new(Invalidation.DrawSize, InvalidationSource.Parent);
     private readonly LayoutValue<TextBuilder> romajiTextBuilderCache = new(Invalidation.DrawSize, InvalidationSource.Parent);
 
     /// <summary>
@@ -42,7 +42,7 @@ public partial class LyricSpriteText
     protected void InvalidateTextBuilder()
     {
         textBuilderCache.Invalidate();
-        rubyTextBuilderCache.Invalidate();
+        topTextBuilderCache.Invalidate();
         romajiTextBuilderCache.Invalidate();
     }
 
@@ -55,10 +55,10 @@ public partial class LyricSpriteText
     {
         var excludeCharacters = FixedWidthExcludeCharacters ?? default_never_fixed_width_characters;
 
-        var rubyHeight = ReserveRubyHeight || Rubies.Any() ? RubyFont.Size : 0;
+        var topTextHeight = ReserveTopTextHeight || TopTexts.Any() ? TopTextFont.Size : 0;
         var romajiHeight = ReserveRomajiHeight || Romajies.Any() ? RomajiFont.Size : 0;
-        var startOffset = new Vector2(Padding.Left, Padding.Top + rubyHeight);
-        var mainTextSpacing = Spacing + new Vector2(0, rubyHeight + romajiHeight);
+        var startOffset = new Vector2(Padding.Left, Padding.Top + topTextHeight);
+        var mainTextSpacing = Spacing + new Vector2(0, topTextHeight + romajiHeight);
 
         float builderMaxWidth = requiresAutoSizedWidth
             ? MaxWidth
@@ -80,13 +80,13 @@ public partial class LyricSpriteText
             excludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter);
     }
 
-    protected virtual TextBuilder CreateRubyTextBuilder(ITexturedGlyphLookupStore store)
+    protected virtual TextBuilder CreateTopTextBuilder(ITexturedGlyphLookupStore store)
     {
         const int builder_max_width = int.MaxValue;
         var excludeCharacters = FixedWidthExcludeCharacters ?? default_never_fixed_width_characters;
 
-        return new TextBuilder(store, RubyFont, builder_max_width, UseFullGlyphHeight,
-            new Vector2(), rubySpacing, null, excludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter);
+        return new TextBuilder(store, TopTextFont, builder_max_width, UseFullGlyphHeight,
+            new Vector2(), topTextSpacing, null, excludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter);
     }
 
     protected virtual TextBuilder CreateRomajiTextBuilder(ITexturedGlyphLookupStore store)
@@ -106,12 +106,12 @@ public partial class LyricSpriteText
         return textBuilderCache.Value;
     }
 
-    private TextBuilder getRubyTextBuilder()
+    private TextBuilder getTopTextBuilder()
     {
-        if (!rubyTextBuilderCache.IsValid)
-            rubyTextBuilderCache.Value = CreateRubyTextBuilder(store);
+        if (!topTextBuilderCache.IsValid)
+            topTextBuilderCache.Value = CreateTopTextBuilder(store);
 
-        return rubyTextBuilderCache.Value;
+        return topTextBuilderCache.Value;
     }
 
     private TextBuilder getRomajiTextBuilder()
@@ -157,17 +157,17 @@ public partial class LyricSpriteText
     /// <summary>
     /// Glyph list to be passed to <see cref="TextBuilder"/>.
     /// </summary>
-    private readonly Dictionary<PositionText, PositionTextBuilderGlyph[]> rubyCharactersBacking = new();
+    private readonly Dictionary<PositionText, PositionTextBuilderGlyph[]> topTextCharactersBacking = new();
 
     /// <summary>
     /// The characters in local space.
     /// </summary>
-    private IReadOnlyDictionary<PositionText, PositionTextBuilderGlyph[]> rubyCharacters
+    private IReadOnlyDictionary<PositionText, PositionTextBuilderGlyph[]> topCharacters
     {
         get
         {
             computeCharacters();
-            return rubyCharactersBacking;
+            return topTextCharactersBacking;
         }
     }
 
@@ -204,7 +204,7 @@ public partial class LyricSpriteText
             return;
 
         charactersBacking.Clear();
-        rubyCharactersBacking.Clear();
+        topTextCharactersBacking.Clear();
         romajiCharactersBacking.Clear();
 
         // Todo: Re-enable this assert after autosize is split into two passes.
@@ -221,13 +221,13 @@ public partial class LyricSpriteText
             var textBuilder = getTextBuilder();
             charactersBacking.AddRange(applyTextToBuilder(textBuilder, displayedText));
 
-            // Ruby
-            var rubyTextBuilder = getRubyTextBuilder();
-            var rubyTextFormatter = new PositionTextFormatter(charactersBacking, RelativePosition.Top, rubyAlignment, rubySpacing, rubyMargin);
+            // Top text
+            var topTextBuilder = getTopTextBuilder();
+            var topTextFormatter = new PositionTextFormatter(charactersBacking, RelativePosition.Top, topTextAlignment, topTextSpacing, topTextMargin);
 
-            foreach (var (positionText, textBuilderGlyphs) in applyPositionTextToBuilder(rubyTextBuilder, displayedText, rubies))
+            foreach (var (positionText, textBuilderGlyphs) in applyPositionTextToBuilder(topTextBuilder, displayedText, topTexts))
             {
-                rubyCharactersBacking.Add(positionText, rubyTextFormatter.Calculate(positionText, textBuilderGlyphs));
+                topTextCharactersBacking.Add(positionText, topTextFormatter.Calculate(positionText, textBuilderGlyphs));
             }
 
             // Romaji
@@ -348,7 +348,7 @@ public partial class LyricSpriteText
         }
 
         var positionCharacters = new List<PositionTextBuilderGlyph>()
-                                 .Concat(rubyCharacters.SelectMany(x => x.Value))
+                                 .Concat(topCharacters.SelectMany(x => x.Value))
                                  .Concat(romajiCharacters.SelectMany(x => x.Value));
 
         foreach (var character in positionCharacters)
@@ -385,14 +385,14 @@ public partial class LyricSpriteText
         return getComputeCharacterDrawRectangle(drawRectangle);
     }
 
-    public RectangleF? GetRubyTagDrawRectangle(PositionText rubyTag, bool drawSizeOnly = false)
+    public RectangleF? GetTopPositionTextDrawRectangle(PositionText positionText, bool drawSizeOnly = false)
     {
-        var fixedRubyTag = GetFixedPositionText(rubyTag, displayedText);
-        if (fixedRubyTag == null)
+        var fixedPositionText = GetFixedPositionText(positionText, displayedText);
+        if (fixedPositionText == null)
             return null;
 
-        if (!rubyCharacters.TryGetValue(fixedRubyTag.Value, out var glyphs))
-            throw new ArgumentOutOfRangeException(nameof(fixedRubyTag));
+        if (!topCharacters.TryGetValue(fixedPositionText.Value, out var glyphs))
+            throw new ArgumentOutOfRangeException(nameof(fixedPositionText));
 
         var drawRectangle = glyphs.Select(x => drawSizeOnly ? x.DrawRectangle : TextBuilderGlyphUtils.GetCharacterSizeRectangle(x))
                                   .Aggregate(RectangleF.Union);
