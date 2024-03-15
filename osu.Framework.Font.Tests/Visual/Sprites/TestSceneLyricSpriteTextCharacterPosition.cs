@@ -116,13 +116,13 @@ public partial class TestSceneLyricSpriteTextCharacterPosition : BackgroundGridT
     [TestCase("[2]:お", true)]
     [TestCase("[3]:け", true)]
     [TestCase("[6]:－", true)]
-    [TestCase("[4]:", true)] // Should be able to get the ruby/romaji text position even if text is empty.
+    [TestCase("[4]:", true)] // Should be able to get the top/bottom text position even if text is empty.
     [TestCase("[-1,0]:か", true)] // will be fixed into "[0]:か"
     [TestCase("[0,1]:か", false)] // index is wrong.
     [TestCase("[0]:?", false)]
-    public void TestGetRubyTagDrawRectangle(string rubyTag, bool valid)
+    public void TestGetTopPositionTextDrawRectangle(string topText, bool valid)
     {
-        prepareTestCase(() => lyricSpriteText.GetTopPositionTextDrawRectangle(TestCaseTagHelper.ParsePositionText(rubyTag)), valid);
+        prepareTestCase(() => lyricSpriteText.GetTopPositionTextDrawRectangle(TestCaseTagHelper.ParsePositionText(topText)), valid);
     }
 
     [TestCase("[0]:ka", true)]
@@ -130,13 +130,13 @@ public partial class TestSceneLyricSpriteTextCharacterPosition : BackgroundGridT
     [TestCase("[2]:o", true)]
     [TestCase("[3]:ke", true)]
     [TestCase("[4,5]:yo", true)]
-    [TestCase("[4]:", true)] // Should be able to get the ruby/romaji text position even if text is empty.
+    [TestCase("[4]:", true)] // Should be able to get the top/bottom text position even if text is empty.
     [TestCase("[-1,0]:ka", true)] // will be fixed into "[0]:ka"
     [TestCase("[0,1]:ka", false)]
     [TestCase("[0]:?", false)]
-    public void TestGetRomajiTagDrawRectangle(string romajiTag, bool valid)
+    public void TestGetBottomPositionTextDrawRectangle(string bottomText, bool valid)
     {
-        prepareTestCase(() => lyricSpriteText.GetBottomPositionTextDrawRectangle(TestCaseTagHelper.ParsePositionText(romajiTag)), valid);
+        prepareTestCase(() => lyricSpriteText.GetBottomPositionTextDrawRectangle(TestCaseTagHelper.ParsePositionText(bottomText)), valid);
     }
 
     private void prepareTestCase(Func<RectangleF?> func, bool valid)

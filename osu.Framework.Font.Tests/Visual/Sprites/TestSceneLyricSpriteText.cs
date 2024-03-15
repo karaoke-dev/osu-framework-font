@@ -23,26 +23,26 @@ public partial class TestSceneLyricSpriteText : FrameworkTestScene
     [TestCase("－－－－", null, new[] { "[0]:ka", "[1]:ra", "[2]:o", "[3]:ke" })]
     [TestCase("カラオケ－－", null, new[] { "[0]:ka", "[1]:ra", "[2]:o", "[3]:ke", "[4]:ke", "[5]:－" })]
     [TestCase("カラオケ－－カ", null, new[] { "[0]:ka", "[1]:ra", "[2]:o", "[3]:ke", "[4]:ke", "[5]:－", "[6]:－" })]
-    public void TestText(string text, string[] rubyTags, string[] romajiTags)
+    public void TestText(string text, string[] topTexts, string[] bottomTexts)
     {
         AddStep("Create lyric", () => setContents(() => new LyricSpriteText
         {
             Text = text,
-            TopTexts = TestCaseTagHelper.ParsePositionTexts(rubyTags),
-            BottomTexts = TestCaseTagHelper.ParsePositionTexts(romajiTags),
+            TopTexts = TestCaseTagHelper.ParsePositionTexts(topTexts),
+            BottomTexts = TestCaseTagHelper.ParsePositionTexts(bottomTexts),
         }));
     }
 
     [TestCase(48, 24, 24)]
     [TestCase(48, 10, 24)]
     [TestCase(48, 24, 10)]
-    public void TestFont(int mainFontSize, int rubyFontSize, int romajiFontSize)
+    public void TestFont(int mainFontSize, int topTextFontSize, int bottomTextFontSize)
     {
         AddStep("Create lyric", () => setContents(() => new DefaultLyricSpriteText
         {
             Font = new FontUsage(null, mainFontSize),
-            TopTextFont = new FontUsage(null, rubyFontSize),
-            BottomTextFont = new FontUsage(null, romajiFontSize),
+            TopTextFont = new FontUsage(null, topTextFontSize),
+            BottomTextFont = new FontUsage(null, bottomTextFontSize),
         }));
     }
 
@@ -57,19 +57,19 @@ public partial class TestSceneLyricSpriteText : FrameworkTestScene
             Width = width
         }));
 
-        AddStep("Create lyric with ruby", () => setContents(() => new DefaultLyricSpriteText
+        AddStep("Create lyric with top text", () => setContents(() => new DefaultLyricSpriteText
         {
             AllowMultiline = true,
             Width = width
         }));
 
-        AddStep("Create lyric with romaji", () => setContents(() => new DefaultLyricSpriteText(false)
+        AddStep("Create lyric with bottom text", () => setContents(() => new DefaultLyricSpriteText(false)
         {
             AllowMultiline = true,
             Width = width
         }));
 
-        AddStep("Create lyric with ruby and romaji.", () => setContents(() => new DefaultLyricSpriteText
+        AddStep("Create lyric with top and bottom text.", () => setContents(() => new DefaultLyricSpriteText
         {
             AllowMultiline = true,
             Width = width
@@ -85,17 +85,17 @@ public partial class TestSceneLyricSpriteText : FrameworkTestScene
             UseFullGlyphHeight = use
         }));
 
-        AddStep("Create lyric with ruby", () => setContents(() => new DefaultLyricSpriteText
+        AddStep("Create lyric with top text", () => setContents(() => new DefaultLyricSpriteText
         {
             UseFullGlyphHeight = use
         }));
 
-        AddStep("Create lyric with romaji", () => setContents(() => new DefaultLyricSpriteText(false)
+        AddStep("Create lyric with bottom text", () => setContents(() => new DefaultLyricSpriteText(false)
         {
             UseFullGlyphHeight = use
         }));
 
-        AddStep("Create lyric with ruby and romaji.", () => setContents(() => new DefaultLyricSpriteText
+        AddStep("Create lyric with top and bottom text.", () => setContents(() => new DefaultLyricSpriteText
         {
             UseFullGlyphHeight = use
         }));
@@ -116,13 +116,13 @@ public partial class TestSceneLyricSpriteText : FrameworkTestScene
     [TestCase(LyricTextAlignment.EqualSpace, LyricTextAlignment.Auto)]
     [TestCase(LyricTextAlignment.EqualSpace, LyricTextAlignment.Center)]
     [TestCase(LyricTextAlignment.EqualSpace, LyricTextAlignment.EqualSpace)]
-    public void TestAlignment(LyricTextAlignment rubyAlignment, LyricTextAlignment romajiAlignment)
+    public void TestAlignment(LyricTextAlignment topTextAlignment, LyricTextAlignment bottomTextAlignment)
     {
         // todo : this feature is not implemented.
         AddStep("Create lyric", () => setContents(() => new DefaultLyricSpriteText
         {
-            TopTextAlignment = rubyAlignment,
-            BottomTextAlignment = romajiAlignment
+            TopTextAlignment = topTextAlignment,
+            BottomTextAlignment = bottomTextAlignment
         }));
     }
 
@@ -158,26 +158,26 @@ public partial class TestSceneLyricSpriteText : FrameworkTestScene
     [TestCase("(10,0)", null, null)]
     [TestCase(null, "(10,0)", null)]
     [TestCase(null, null, "(10,0)")]
-    public void TestSpacing(string spacing, string rubySpacing, string romajiSpacing)
+    public void TestSpacing(string spacing, string topTextSpacing, string bottomTextSpacing)
     {
-        // todo : will cause display weird in ruby or romaji.
+        // todo : will cause display weird in top or bottom text.
         AddStep("Create lyric", () => setContents(() => new DefaultLyricSpriteText
         {
             Spacing = TestCaseVectorHelper.ParseVector2(spacing),
-            TopTextSpacing = TestCaseVectorHelper.ParseVector2(rubySpacing),
-            BottomTextSpacing = TestCaseVectorHelper.ParseVector2(romajiSpacing),
+            TopTextSpacing = TestCaseVectorHelper.ParseVector2(topTextSpacing),
+            BottomTextSpacing = TestCaseVectorHelper.ParseVector2(bottomTextSpacing),
         }));
     }
 
     [TestCase(0, 0)]
     [TestCase(0, 20)]
     [TestCase(20, 0)]
-    public void TestMarginPadding(int rubyMargin, int romajiMargin)
+    public void TestMarginPadding(int topTextMargin, int bottomTextMargin)
     {
         AddStep("Create lyric", () => setContents(() => new DefaultLyricSpriteText
         {
-            TopTextMargin = rubyMargin,
-            BottomTextMargin = romajiMargin,
+            TopTextMargin = topTextMargin,
+            BottomTextMargin = bottomTextMargin,
         }));
     }
 
@@ -189,38 +189,38 @@ public partial class TestSceneLyricSpriteText : FrameworkTestScene
     [TestCase(true, true, true)]
     [TestCase(false, true, true)]
     [TestCase(true, true, true)]
-    public void TestReserveHeight(bool reserveRubyHeight, bool reserveRomajiHeight, bool multiLine)
+    public void TestReserveHeight(bool reserveTopTextHeight, bool reserveBottomTextHeight, bool multiLine)
     {
         AddStep("Create lyric with text", () => setContents(() => new DefaultLyricSpriteText(false, false)
         {
             Width = multiLine ? 50 : 200,
             AllowMultiline = multiLine,
-            ReserveTopTextHeight = reserveRubyHeight,
-            ReserveBottomTextHeight = reserveRomajiHeight,
+            ReserveTopTextHeight = reserveTopTextHeight,
+            ReserveBottomTextHeight = reserveBottomTextHeight,
         }));
 
-        AddStep("Create lyric with ruby", () => setContents(() => new DefaultLyricSpriteText
+        AddStep("Create lyric with top text", () => setContents(() => new DefaultLyricSpriteText
         {
             Width = multiLine ? 50 : 200,
             AllowMultiline = multiLine,
-            ReserveTopTextHeight = reserveRubyHeight,
-            ReserveBottomTextHeight = reserveRomajiHeight,
+            ReserveTopTextHeight = reserveTopTextHeight,
+            ReserveBottomTextHeight = reserveBottomTextHeight,
         }));
 
-        AddStep("Create lyric with romaji", () => setContents(() => new DefaultLyricSpriteText(false)
+        AddStep("Create lyric with bottom text", () => setContents(() => new DefaultLyricSpriteText(false)
         {
             Width = multiLine ? 50 : 200,
             AllowMultiline = multiLine,
-            ReserveTopTextHeight = reserveRubyHeight,
-            ReserveBottomTextHeight = reserveRomajiHeight,
+            ReserveTopTextHeight = reserveTopTextHeight,
+            ReserveBottomTextHeight = reserveBottomTextHeight,
         }));
 
-        AddStep("Create lyric with ruby and romaji.", () => setContents(() => new DefaultLyricSpriteText
+        AddStep("Create lyric with top and bottom text.", () => setContents(() => new DefaultLyricSpriteText
         {
             Width = multiLine ? 50 : 200,
             AllowMultiline = multiLine,
-            ReserveTopTextHeight = reserveRubyHeight,
-            ReserveBottomTextHeight = reserveRomajiHeight,
+            ReserveTopTextHeight = reserveTopTextHeight,
+            ReserveBottomTextHeight = reserveBottomTextHeight,
         }));
     }
 
@@ -231,17 +231,17 @@ public partial class TestSceneLyricSpriteText : FrameworkTestScene
 
     internal partial class DefaultLyricSpriteText : LyricSpriteText
     {
-        public DefaultLyricSpriteText(bool ruby = true, bool romaji = true)
+        public DefaultLyricSpriteText(bool hasTopText = true, bool hasBottomText = true)
         {
             Text = "カラオケ";
             Font = FontUsage.Default;
 
-            if (ruby)
+            if (hasTopText)
             {
                 TopTexts = TestCaseTagHelper.ParsePositionTexts(new[] { "[0]:か", "[1]:ら", "[2]:お", "[3]:け" });
             }
 
-            if (romaji)
+            if (hasBottomText)
             {
                 BottomTexts = TestCaseTagHelper.ParsePositionTexts(new[] { "[0]:ka", "[1]:ra", "[2]:o", "[3]:ke" });
             }

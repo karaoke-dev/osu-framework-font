@@ -10,7 +10,7 @@ namespace osu.Framework.Font.Tests.Graphics.Sprites;
 public class LyricSpriteTextTest
 {
     [TestCase("カラオケ", new[] { "[0]:か" }, new[] { "[0]:か" })]
-    [TestCase("カラオケ", new[] { "[0]:" }, new[] { "[0]: " })] // for able to get the empty ruby/romaji position text's position, will make the empty text with spacing instead.
+    [TestCase("カラオケ", new[] { "[0]:" }, new[] { "[0]: " })] // for able to get the empty top/bottom position text's char index, will make the empty text with spacing instead.
     [TestCase("カラオケ", new[] { "[0]:か", "[0]:か" }, new[] { "[0]:か" })] // will filter the duplicated
     [TestCase("カラオケ", new[] { "[0]:か", "[0]:ら" }, new[] { "[0]:か", "[0]:ら" })] // will not filter even if index are same.
     [TestCase("カラオケ", new[] { "[0,1]:から", "[1,0]:から" }, new[] { "[0,1]:から" })] // will give it a fix and filter the duplicated.
@@ -27,7 +27,7 @@ public class LyricSpriteTextTest
     [TestCase("カラオケ", "[-1,1]:--", "[0,1]:--")] // fix out of range issue.
     [TestCase("カラオケ", "[0,4]:からおけ", "[0,3]:からおけ")]
     [TestCase("カラオケ", "[1,0]:から", "[0,1]:から")] // fix the case that end index is small than start index.
-    [TestCase("カラオケ", "[0,1]:", "[0,1]: ")] // for able to get the empty ruby/romaji position text's position, will make the empty text with spacing instead.
+    [TestCase("カラオケ", "[0,1]:", "[0,1]: ")] // for able to get the empty top/bottom position text's char index, will make the empty text with spacing instead.
     [TestCase("カ", "[-1,1]:か", "[0]:か")] // should give it a fix.
     [TestCase("", "[0]:か", null)] // should remove all the time-tags if string is empty.
     [TestCase("", "[-1,-1]:か", null)]
