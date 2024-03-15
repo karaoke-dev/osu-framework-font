@@ -34,7 +34,7 @@ public partial class LyricSpriteText
 
     private readonly LayoutValue<TextBuilder> textBuilderCache = new(Invalidation.DrawSize, InvalidationSource.Parent);
     private readonly LayoutValue<TextBuilder> topTextBuilderCache = new(Invalidation.DrawSize, InvalidationSource.Parent);
-    private readonly LayoutValue<TextBuilder> romajiTextBuilderCache = new(Invalidation.DrawSize, InvalidationSource.Parent);
+    private readonly LayoutValue<TextBuilder> bottomTextBuilderCache = new(Invalidation.DrawSize, InvalidationSource.Parent);
 
     /// <summary>
     /// Invalidates the current <see cref="TextBuilder"/>, causing a new one to be created next time it's required via <see cref="CreateTextBuilder"/>.
@@ -43,7 +43,7 @@ public partial class LyricSpriteText
     {
         textBuilderCache.Invalidate();
         topTextBuilderCache.Invalidate();
-        romajiTextBuilderCache.Invalidate();
+        bottomTextBuilderCache.Invalidate();
     }
 
     /// <summary>
@@ -56,9 +56,9 @@ public partial class LyricSpriteText
         var excludeCharacters = FixedWidthExcludeCharacters ?? default_never_fixed_width_characters;
 
         var topTextHeight = ReserveTopTextHeight || TopTexts.Any() ? TopTextFont.Size : 0;
-        var romajiHeight = ReserveRomajiHeight || Romajies.Any() ? RomajiFont.Size : 0;
+        var bottomTextHeight = ReserveBottomTextHeight || BottomTexts.Any() ? BottomTextFont.Size : 0;
         var startOffset = new Vector2(Padding.Left, Padding.Top + topTextHeight);
-        var mainTextSpacing = Spacing + new Vector2(0, topTextHeight + romajiHeight);
+        var mainTextSpacing = Spacing + new Vector2(0, topTextHeight + bottomTextHeight);
 
         float builderMaxWidth = requiresAutoSizedWidth
             ? MaxWidth
@@ -89,13 +89,13 @@ public partial class LyricSpriteText
             new Vector2(), topTextSpacing, null, excludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter);
     }
 
-    protected virtual TextBuilder CreateRomajiTextBuilder(ITexturedGlyphLookupStore store)
+    protected virtual TextBuilder CreateBottomTextBuilder(ITexturedGlyphLookupStore store)
     {
         const int builder_max_width = int.MaxValue;
         var excludeCharacters = FixedWidthExcludeCharacters ?? default_never_fixed_width_characters;
 
-        return new TextBuilder(store, RomajiFont, builder_max_width, UseFullGlyphHeight,
-            new Vector2(), romajiSpacing, null, excludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter);
+        return new TextBuilder(store, BottomTextFont, builder_max_width, UseFullGlyphHeight,
+            new Vector2(), bottomTextSpacing, null, excludeCharacters, FallbackCharacter, FixedWidthReferenceCharacter);
     }
 
     private TextBuilder getTextBuilder()
@@ -114,12 +114,12 @@ public partial class LyricSpriteText
         return topTextBuilderCache.Value;
     }
 
-    private TextBuilder getRomajiTextBuilder()
+    private TextBuilder getBottomTextBuilder()
     {
-        if (!romajiTextBuilderCache.IsValid)
-            romajiTextBuilderCache.Value = CreateRomajiTextBuilder(store);
+        if (!bottomTextBuilderCache.IsValid)
+            bottomTextBuilderCache.Value = CreateBottomTextBuilder(store);
 
-        return romajiTextBuilderCache.Value;
+        return bottomTextBuilderCache.Value;
     }
 
     public float LineBaseHeight
@@ -174,17 +174,17 @@ public partial class LyricSpriteText
     /// <summary>
     /// Glyph list to be passed to <see cref="TextBuilder"/>.
     /// </summary>
-    private readonly Dictionary<PositionText, PositionTextBuilderGlyph[]> romajiCharactersBacking = new();
+    private readonly Dictionary<PositionText, PositionTextBuilderGlyph[]> bottomTextCharactersBacking = new();
 
     /// <summary>
     /// The characters in local space.
     /// </summary>
-    private IReadOnlyDictionary<PositionText, PositionTextBuilderGlyph[]> romajiCharacters
+    private IReadOnlyDictionary<PositionText, PositionTextBuilderGlyph[]> bottomTextCharacters
     {
         get
         {
             computeCharacters();
-            return romajiCharactersBacking;
+            return bottomTextCharactersBacking;
         }
     }
 
@@ -205,7 +205,7 @@ public partial class LyricSpriteText
 
         charactersBacking.Clear();
         topTextCharactersBacking.Clear();
-        romajiCharactersBacking.Clear();
+        bottomTextCharactersBacking.Clear();
 
         // Todo: Re-enable this assert after autosize is split into two passes.
         // Debug.Assert(!isComputingCharacters, "Cyclic invocation of computeCharacters()!");
@@ -230,13 +230,13 @@ public partial class LyricSpriteText
                 topTextCharactersBacking.Add(positionText, topTextFormatter.Calculate(positionText, textBuilderGlyphs));
             }
 
-            // Romaji
-            var romajiTextBuilder = getRomajiTextBuilder();
-            var romajiTextFormatter = new PositionTextFormatter(charactersBacking, RelativePosition.Bottom, romajiAlignment, romajiSpacing, romajiMargin);
+            // Bottom text
+            var bottomTextBuilder = getBottomTextBuilder();
+            var bottomTextFormatter = new PositionTextFormatter(charactersBacking, RelativePosition.Bottom, bottomTextAlignment, bottomTextSpacing, bottomTextMargin);
 
-            foreach (var (positionText, textBuilderGlyphs) in applyPositionTextToBuilder(romajiTextBuilder, displayedText, romajies))
+            foreach (var (positionText, textBuilderGlyphs) in applyPositionTextToBuilder(bottomTextBuilder, displayedText, bottomTexts))
             {
-                romajiCharactersBacking.Add(positionText, romajiTextFormatter.Calculate(positionText, textBuilderGlyphs));
+                bottomTextCharactersBacking.Add(positionText, bottomTextFormatter.Calculate(positionText, textBuilderGlyphs));
             }
 
             textBounds = textBuilder.Bounds;
@@ -248,8 +248,8 @@ public partial class LyricSpriteText
 
             if (requiresAutoSizedHeight)
             {
-                var romajiHeight = ReserveRomajiHeight || Romajies.Any() ? RomajiFont.Size : 0;
-                base.Height = textBounds.Y + romajiHeight + Padding.Bottom;
+                var bottomTextHeight = ReserveBottomTextHeight || BottomTexts.Any() ? BottomTextFont.Size : 0;
+                base.Height = textBounds.Y + bottomTextHeight + Padding.Bottom;
             }
 
             base.Width = Math.Min(base.Width, MaxWidth);
@@ -349,7 +349,7 @@ public partial class LyricSpriteText
 
         var positionCharacters = new List<PositionTextBuilderGlyph>()
                                  .Concat(topCharacters.SelectMany(x => x.Value))
-                                 .Concat(romajiCharacters.SelectMany(x => x.Value));
+                                 .Concat(bottomTextCharacters.SelectMany(x => x.Value));
 
         foreach (var character in positionCharacters)
         {
@@ -399,14 +399,14 @@ public partial class LyricSpriteText
         return getComputeCharacterDrawRectangle(drawRectangle);
     }
 
-    public RectangleF? GetRomajiTagDrawRectangle(PositionText romajiTag, bool drawSizeOnly = false)
+    public RectangleF? GetBottomPositionTextDrawRectangle(PositionText positionText, bool drawSizeOnly = false)
     {
-        var fixedRomajiTag = GetFixedPositionText(romajiTag, displayedText);
-        if (fixedRomajiTag == null)
+        var fixedPositionText = GetFixedPositionText(positionText, displayedText);
+        if (fixedPositionText == null)
             return null;
 
-        if (!romajiCharacters.TryGetValue(fixedRomajiTag.Value, out var glyphs))
-            throw new ArgumentOutOfRangeException(nameof(fixedRomajiTag));
+        if (!bottomTextCharacters.TryGetValue(fixedPositionText.Value, out var glyphs))
+            throw new ArgumentOutOfRangeException(nameof(fixedPositionText));
 
         var drawRectangle = glyphs.Select(x => drawSizeOnly ? x.DrawRectangle : TextBuilderGlyphUtils.GetCharacterSizeRectangle(x))
                                   .Aggregate(RectangleF.Union);

@@ -41,7 +41,7 @@ public partial class TestSceneLyricSpriteTextCharacterPosition : BackgroundGridT
                     Origin = Anchor.Centre,
                     Text = "カラオケyo－",
                     TopTexts = TestCaseTagHelper.ParsePositionTexts(new[] { "[0]:か", "[1]:ら", "[2]:お", "[3]:け", "[6]:－", "[4]:" }),
-                    Romajies = TestCaseTagHelper.ParsePositionTexts(new[] { "[0]:ka", "[1]:ra", "[2]:o", "[3]:ke", "[4,5]:yo", "[4]:" }),
+                    BottomTexts = TestCaseTagHelper.ParsePositionTexts(new[] { "[0]:ka", "[1]:ra", "[2]:o", "[3]:ke", "[4,5]:yo", "[4]:" }),
                 },
             }
         };
@@ -136,7 +136,7 @@ public partial class TestSceneLyricSpriteTextCharacterPosition : BackgroundGridT
     [TestCase("[0]:?", false)]
     public void TestGetRomajiTagDrawRectangle(string romajiTag, bool valid)
     {
-        prepareTestCase(() => lyricSpriteText.GetRomajiTagDrawRectangle(TestCaseTagHelper.ParsePositionText(romajiTag)), valid);
+        prepareTestCase(() => lyricSpriteText.GetBottomPositionTextDrawRectangle(TestCaseTagHelper.ParsePositionText(romajiTag)), valid);
     }
 
     private void prepareTestCase(Func<RectangleF?> func, bool valid)

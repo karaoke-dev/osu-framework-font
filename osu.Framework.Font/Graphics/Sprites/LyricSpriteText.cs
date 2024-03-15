@@ -20,7 +20,7 @@ namespace osu.Framework.Graphics.Sprites;
 /// <summary>
 /// A container for simple text rendering purposes. If more complex text rendering is required, use <see cref="TextFlowContainer"/> instead.
 /// </summary>
-public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, IHasLineBaseHeight, IHasFilterTerms, IFillFlowContainer, IHasCurrentValue<string>, IHasTopText, IHasRomaji
+public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, IHasLineBaseHeight, IHasFilterTerms, IFillFlowContainer, IHasCurrentValue<string>, IHasTopText, IHasBottomText
 {
     private const float default_text_size = 48;
     private static readonly char[] default_never_fixed_width_characters = { '.', ',', ':', ' ' };
@@ -43,7 +43,7 @@ public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, I
         AddLayout(localScreenSpaceCache);
         AddLayout(textBuilderCache);
         AddLayout(topTextBuilderCache);
-        AddLayout(romajiTextBuilderCache);
+        AddLayout(bottomTextBuilderCache);
     }
 
     [BackgroundDependencyLoader]
@@ -166,18 +166,18 @@ public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, I
         }
     }
 
-    private readonly List<PositionText> romajies = new();
+    private readonly List<PositionText> bottomTexts = new();
 
     /// <summary>
-    /// Gets or sets the romaji text to be displayed.
+    /// Gets or sets the bottom text to be displayed.
     /// </summary>
-    public IReadOnlyList<PositionText> Romajies
+    public IReadOnlyList<PositionText> BottomTexts
     {
-        get => romajies;
+        get => bottomTexts;
         set
         {
-            romajies.Clear();
-            romajies.AddRange(value);
+            bottomTexts.Clear();
+            bottomTexts.AddRange(value);
 
             invalidate(true);
         }
@@ -219,17 +219,17 @@ public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, I
         }
     }
 
-    private FontUsage romajiFont = FontUsage.Default;
+    private FontUsage bottomTextFont = FontUsage.Default;
 
     /// <summary>
     /// Contains information on the font used to display the text.
     /// </summary>
-    public FontUsage RomajiFont
+    public FontUsage BottomTextFont
     {
-        get => romajiFont;
+        get => bottomTextFont;
         set
         {
-            romajiFont = value;
+            bottomTextFont = value;
 
             invalidate(true, true);
         }
@@ -302,20 +302,20 @@ public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, I
         }
     }
 
-    private LyricTextAlignment romajiAlignment;
+    private LyricTextAlignment bottomTextAlignment;
 
     /// <summary>
-    /// Gets or sets the romaji alignment.
+    /// Gets or sets the bottom text alignment.
     /// </summary>
-    public LyricTextAlignment RomajiAlignment
+    public LyricTextAlignment BottomTextAlignment
     {
-        get => romajiAlignment;
+        get => bottomTextAlignment;
         set
         {
-            if (romajiAlignment == value)
+            if (bottomTextAlignment == value)
                 return;
 
-            romajiAlignment = value;
+            bottomTextAlignment = value;
             invalidate(true, true);
         }
     }
@@ -501,20 +501,20 @@ public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, I
         }
     }
 
-    private Vector2 romajiSpacing;
+    private Vector2 bottomTextSpacing;
 
     /// <summary>
-    /// Gets or sets the spacing between characters of romaji text.
+    /// Gets or sets the spacing between characters of bottom text.
     /// </summary>
-    public Vector2 RomajiSpacing
+    public Vector2 BottomTextSpacing
     {
-        get => romajiSpacing;
+        get => bottomTextSpacing;
         set
         {
-            if (romajiSpacing == value)
+            if (bottomTextSpacing == value)
                 return;
 
-            romajiSpacing = value;
+            bottomTextSpacing = value;
 
             invalidate(true, true);
         }
@@ -564,20 +564,20 @@ public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, I
         }
     }
 
-    private int romajiMargin;
+    private int bottomTextMargin;
 
     /// <summary>
-    /// Shrinks the space between romaji and main text.
+    /// Shrinks the space between bottom and main text.
     /// </summary>
-    public int RomajiMargin
+    public int BottomTextMargin
     {
-        get => romajiMargin;
+        get => bottomTextMargin;
         set
         {
-            if (romajiMargin == value)
+            if (bottomTextMargin == value)
                 return;
 
-            romajiMargin = value;
+            bottomTextMargin = value;
 
             invalidate(true, true);
         }
@@ -602,20 +602,20 @@ public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, I
         }
     }
 
-    private bool reserveRomajiHeight;
+    private bool reserveBottomTextHeight;
 
     /// <summary>
-    /// Reserve romaji height even contains no romaji.
+    /// Reserve top text height even contains no text.
     /// </summary>
-    public bool ReserveRomajiHeight
+    public bool ReserveBottomTextHeight
     {
-        get => reserveRomajiHeight;
+        get => reserveBottomTextHeight;
         set
         {
-            if (reserveRomajiHeight == value)
+            if (reserveBottomTextHeight == value)
                 return;
 
-            reserveRomajiHeight = value;
+            reserveBottomTextHeight = value;
 
             invalidate(true, true);
         }
