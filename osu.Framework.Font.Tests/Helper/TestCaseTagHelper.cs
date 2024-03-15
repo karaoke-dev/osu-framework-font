@@ -12,12 +12,11 @@ namespace osu.Framework.Font.Tests.Helper;
 public static class TestCaseTagHelper
 {
     /// <summary>
-    /// Process test case ruby/romaji string format into <see cref="PositionText"/>
+    /// Make text with start/end char index to <see cref="PositionText"/>
     /// </summary>
     /// <example>
-    /// [0]:ruby
-    /// [0,1]:ruby
-    /// [0,1]:romaji
+    /// [0]:text
+    /// [0,1]:text
     /// </example>
     /// <param name="str">Position text string format</param>
     /// <returns><see cref="PositionText"/>Position text object</returns>
@@ -26,7 +25,7 @@ public static class TestCaseTagHelper
         if (string.IsNullOrEmpty(str))
             return new PositionText();
 
-        var regex = new Regex("\\[(?<start>[-0-9]+)(?:,(?<end>[-0-9]+))?\\]:(?<ruby>.*$)");
+        var regex = new Regex("\\[(?<start>[-0-9]+)(?:,(?<end>[-0-9]+))?\\]:(?<text>.*$)");
         var result = regex.Match(str);
         if (!result.Success)
             throw new ArgumentException(null, nameof(str));
@@ -36,7 +35,7 @@ public static class TestCaseTagHelper
 
         var startIndex = int.Parse(startValue);
         var endIndex = int.Parse(string.IsNullOrEmpty(endValue) ? startValue : endValue);
-        var text = result.Groups["ruby"].Value;
+        var text = result.Groups["text"].Value;
 
         return new PositionText(text, startIndex, endIndex);
     }
