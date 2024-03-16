@@ -20,7 +20,7 @@ namespace osu.Framework.Graphics.Sprites;
 /// <summary>
 /// A container for simple text rendering purposes. If more complex text rendering is required, use <see cref="TextFlowContainer"/> instead.
 /// </summary>
-public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, IHasLineBaseHeight, IHasFilterTerms, IFillFlowContainer, IHasCurrentValue<string>, IHasRuby, IHasRomaji
+public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, IHasLineBaseHeight, IHasFilterTerms, IFillFlowContainer, IHasCurrentValue<string>, IHasTopText, IHasBottomText
 {
     private const float default_text_size = 48;
     private static readonly char[] default_never_fixed_width_characters = { '.', ',', ':', ' ' };
@@ -42,8 +42,8 @@ public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, I
         AddLayout(parentScreenSpaceCache);
         AddLayout(localScreenSpaceCache);
         AddLayout(textBuilderCache);
-        AddLayout(rubyTextBuilderCache);
-        AddLayout(romajiTextBuilderCache);
+        AddLayout(topTextBuilderCache);
+        AddLayout(bottomTextBuilderCache);
     }
 
     [BackgroundDependencyLoader]
@@ -149,35 +149,35 @@ public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, I
 
     private string displayedText => Text;
 
-    private readonly List<PositionText> rubies = new();
+    private readonly List<PositionText> topTexts = new();
 
     /// <summary>
-    /// Gets or sets the ruby text to be displayed.
+    /// Gets or sets the top text to be displayed.
     /// </summary>
-    public IReadOnlyList<PositionText> Rubies
+    public IReadOnlyList<PositionText> TopTexts
     {
-        get => rubies;
+        get => topTexts;
         set
         {
-            rubies.Clear();
-            rubies.AddRange(value);
+            topTexts.Clear();
+            topTexts.AddRange(value);
 
             invalidate(true);
         }
     }
 
-    private readonly List<PositionText> romajies = new();
+    private readonly List<PositionText> bottomTexts = new();
 
     /// <summary>
-    /// Gets or sets the romaji text to be displayed.
+    /// Gets or sets the bottom text to be displayed.
     /// </summary>
-    public IReadOnlyList<PositionText> Romajies
+    public IReadOnlyList<PositionText> BottomTexts
     {
-        get => romajies;
+        get => bottomTexts;
         set
         {
-            romajies.Clear();
-            romajies.AddRange(value);
+            bottomTexts.Clear();
+            bottomTexts.AddRange(value);
 
             invalidate(true);
         }
@@ -203,33 +203,33 @@ public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, I
         }
     }
 
-    private FontUsage rubyFont = FontUsage.Default;
+    private FontUsage topTextFont = FontUsage.Default;
 
     /// <summary>
     /// Contains information on the font used to display the text.
     /// </summary>
-    public FontUsage RubyFont
+    public FontUsage TopTextFont
     {
-        get => rubyFont;
+        get => topTextFont;
         set
         {
-            rubyFont = value;
+            topTextFont = value;
 
             invalidate(true, true);
         }
     }
 
-    private FontUsage romajiFont = FontUsage.Default;
+    private FontUsage bottomTextFont = FontUsage.Default;
 
     /// <summary>
     /// Contains information on the font used to display the text.
     /// </summary>
-    public FontUsage RomajiFont
+    public FontUsage BottomTextFont
     {
-        get => romajiFont;
+        get => bottomTextFont;
         set
         {
-            romajiFont = value;
+            bottomTextFont = value;
 
             invalidate(true, true);
         }
@@ -284,38 +284,38 @@ public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, I
         }
     }
 
-    private LyricTextAlignment rubyAlignment;
+    private LyricTextAlignment topTextAlignment;
 
     /// <summary>
-    /// Gets or sets the ruby alignment.
+    /// Gets or sets the top text alignment.
     /// </summary>
-    public LyricTextAlignment RubyAlignment
+    public LyricTextAlignment TopTextAlignment
     {
-        get => rubyAlignment;
+        get => topTextAlignment;
         set
         {
-            if (rubyAlignment == value)
+            if (topTextAlignment == value)
                 return;
 
-            rubyAlignment = value;
+            topTextAlignment = value;
             invalidate(true, true);
         }
     }
 
-    private LyricTextAlignment romajiAlignment;
+    private LyricTextAlignment bottomTextAlignment;
 
     /// <summary>
-    /// Gets or sets the romaji alignment.
+    /// Gets or sets the bottom text alignment.
     /// </summary>
-    public LyricTextAlignment RomajiAlignment
+    public LyricTextAlignment BottomTextAlignment
     {
-        get => romajiAlignment;
+        get => bottomTextAlignment;
         set
         {
-            if (romajiAlignment == value)
+            if (bottomTextAlignment == value)
                 return;
 
-            romajiAlignment = value;
+            bottomTextAlignment = value;
             invalidate(true, true);
         }
     }
@@ -482,39 +482,39 @@ public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, I
         }
     }
 
-    private Vector2 rubySpacing;
+    private Vector2 topTextSpacing;
 
     /// <summary>
-    /// Gets or sets the spacing between characters of ruby text.
+    /// Gets or sets the spacing between characters of top text.
     /// </summary>
-    public Vector2 RubySpacing
+    public Vector2 TopTextSpacing
     {
-        get => rubySpacing;
+        get => topTextSpacing;
         set
         {
-            if (rubySpacing == value)
+            if (topTextSpacing == value)
                 return;
 
-            rubySpacing = value;
+            topTextSpacing = value;
 
             invalidate(true, true);
         }
     }
 
-    private Vector2 romajiSpacing;
+    private Vector2 bottomTextSpacing;
 
     /// <summary>
-    /// Gets or sets the spacing between characters of romaji text.
+    /// Gets or sets the spacing between characters of bottom text.
     /// </summary>
-    public Vector2 RomajiSpacing
+    public Vector2 BottomTextSpacing
     {
-        get => romajiSpacing;
+        get => bottomTextSpacing;
         set
         {
-            if (romajiSpacing == value)
+            if (bottomTextSpacing == value)
                 return;
 
-            romajiSpacing = value;
+            bottomTextSpacing = value;
 
             invalidate(true, true);
         }
@@ -545,77 +545,77 @@ public partial class LyricSpriteText : Drawable, IMultiShaderBufferedDrawable, I
         }
     }
 
-    private int rubyMargin;
+    private int topTextMargin;
 
     /// <summary>
-    /// Shrinks the space between ruby and main text.
+    /// Shrinks the space between top and main text.
     /// </summary>
-    public int RubyMargin
+    public int TopTextMargin
     {
-        get => rubyMargin;
+        get => topTextMargin;
         set
         {
-            if (rubyMargin == value)
+            if (topTextMargin == value)
                 return;
 
-            rubyMargin = value;
+            topTextMargin = value;
 
             invalidate(true, true);
         }
     }
 
-    private int romajiMargin;
+    private int bottomTextMargin;
 
     /// <summary>
-    /// Shrinks the space between romaji and main text.
+    /// Shrinks the space between bottom and main text.
     /// </summary>
-    public int RomajiMargin
+    public int BottomTextMargin
     {
-        get => romajiMargin;
+        get => bottomTextMargin;
         set
         {
-            if (romajiMargin == value)
+            if (bottomTextMargin == value)
                 return;
 
-            romajiMargin = value;
+            bottomTextMargin = value;
 
             invalidate(true, true);
         }
     }
 
-    private bool reserveRubyHeight;
+    private bool reserveTopTextHeight;
 
     /// <summary>
-    /// Reserve ruby height even contains no ruby.
+    /// Reserve top text height even contains no text.
     /// </summary>
-    public bool ReserveRubyHeight
+    public bool ReserveTopTextHeight
     {
-        get => reserveRubyHeight;
+        get => reserveTopTextHeight;
         set
         {
-            if (reserveRubyHeight == value)
+            if (reserveTopTextHeight == value)
                 return;
 
-            reserveRubyHeight = value;
+            reserveTopTextHeight = value;
 
             invalidate(true, true);
         }
     }
 
-    private bool reserveRomajiHeight;
+    private bool reserveBottomTextHeight;
 
     /// <summary>
-    /// Reserve romaji height even contains no romaji.
+    /// Reserve top text height even contains no text.
     /// </summary>
-    public bool ReserveRomajiHeight
+    public bool ReserveBottomTextHeight
     {
-        get => reserveRomajiHeight;
+        get => reserveBottomTextHeight;
         set
         {
-            if (reserveRomajiHeight == value)
+            if (reserveBottomTextHeight == value)
                 return;
 
-            reserveRomajiHeight = value;
+            reserveBottomTextHeight = value;
 
             invalidate(true, true);
         }
