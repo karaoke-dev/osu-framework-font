@@ -21,7 +21,7 @@ public class ShadowShaderTest
     {
         var shader = new ShadowShader
         {
-            ShadowOffset = new Vector2(offsetX, offsetY)
+            ShadowOffset = new Vector2(offsetX, offsetY),
         };
 
         var rectangle = shader.ComputeDrawRectangle(new RectangleF(5, 5, 10, 10));

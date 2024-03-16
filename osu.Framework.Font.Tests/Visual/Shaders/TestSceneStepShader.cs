@@ -34,8 +34,8 @@ public partial class TestSceneStepShader : ShaderTestScene
                             shader.OutlineColour = Color4.FromHsl(new Vector4(hue, 0.6f, 0.5f, 1));
 
                             return shader;
-                        }).ToArray()
-                    }
+                        }).ToArray(),
+                    },
                 };
             });
         }
@@ -58,15 +58,15 @@ public partial class TestSceneStepShader : ShaderTestScene
                 {
                     s.Radius = 3;
                     s.OutlineColour = Color4.Red;
-                })
-            }
+                }),
+            },
         };
 
         AddStep("Apply shader", () =>
         {
             ShaderContainer.Shaders = new[]
             {
-                stepShader
+                stepShader,
             };
         });
 
@@ -93,8 +93,8 @@ public partial class TestSceneStepShader : ShaderTestScene
                 {
                     s.Radius = 3;
                     s.OutlineColour = Color4.Yellow;
-                })
-            }
+                }),
+            },
         };
 
         var shadowStepShader = new StepShader
@@ -106,8 +106,8 @@ public partial class TestSceneStepShader : ShaderTestScene
                 {
                     s.ShadowColour = Color4.Red;
                     s.ShadowOffset = new Vector2(10);
-                })
-            }
+                }),
+            },
         };
 
         AddStep("Apply shader", () =>
@@ -115,7 +115,7 @@ public partial class TestSceneStepShader : ShaderTestScene
             ShaderContainer.Shaders = new[]
             {
                 outlineStepShader,
-                shadowStepShader
+                shadowStepShader,
             };
         });
 
@@ -127,7 +127,7 @@ public partial class TestSceneStepShader : ShaderTestScene
             ShaderContainer.Shaders = new[]
             {
                 outlineStepShader,
-                shadowStepShader
+                shadowStepShader,
             };
         });
 
@@ -139,7 +139,7 @@ public partial class TestSceneStepShader : ShaderTestScene
             ShaderContainer.Shaders = new[]
             {
                 outlineStepShader,
-                shadowStepShader
+                shadowStepShader,
             };
         });
     }

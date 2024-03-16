@@ -28,7 +28,7 @@ public partial class TestSceneRepeatMovingBackgroundShader : InternalShaderTestS
                 {
                     s.Texture = textures.Get(textureName);
                     s.TextureDisplaySize = new Vector2(width, height);
-                })
+                }),
             };
         });
     }
@@ -48,7 +48,7 @@ public partial class TestSceneRepeatMovingBackgroundShader : InternalShaderTestS
                     s.Texture = textures.Get(textureName);
                     s.TextureDisplaySize = new Vector2(30);
                     s.TextureDisplayBorder = new Vector2(width, height);
-                })
+                }),
             };
         });
     }
@@ -68,7 +68,7 @@ public partial class TestSceneRepeatMovingBackgroundShader : InternalShaderTestS
                     s.Texture = textures.Get("sample-texture");
                     s.TextureDisplaySize = new Vector2(30);
                     s.Speed = new Vector2(xSpeed, ySpeed);
-                })
+                }),
             };
         });
     }
@@ -90,7 +90,7 @@ public partial class TestSceneRepeatMovingBackgroundShader : InternalShaderTestS
                     s.TextureDisplaySize = new Vector2(30);
                     s.Speed = new Vector2(1);
                     s.Mix = mix;
-                })
+                }),
             };
         });
     }

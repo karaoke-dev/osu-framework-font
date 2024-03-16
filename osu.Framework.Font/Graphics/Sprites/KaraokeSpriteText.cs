@@ -48,14 +48,14 @@ public partial class KaraokeSpriteText<T> : CompositeDrawable, IMultiShaderBuffe
                 {
                     Anchor = Anchor.CentreRight,
                     Origin = Anchor.CentreRight,
-                }
+                },
             },
             leftLyricTextContainer = new Container<T>
             {
                 AutoSizeAxes = Axes.Y,
                 Masking = true,
                 Child = leftLyricText = new T(),
-            }
+            },
         };
     }
 

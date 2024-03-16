@@ -9,5 +9,5 @@ public enum LyricTextAlignment
 
     Center,
 
-    EqualSpace
+    EqualSpace,
 }

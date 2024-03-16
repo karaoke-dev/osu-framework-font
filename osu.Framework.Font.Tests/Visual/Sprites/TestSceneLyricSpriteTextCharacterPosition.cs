@@ -33,7 +33,7 @@ public partial class TestSceneLyricSpriteTextCharacterPosition : BackgroundGridT
             {
                 showSizeBox = new Box
                 {
-                    Colour = Color4.Green
+                    Colour = Color4.Green,
                 },
                 lyricSpriteText = new LyricSpriteText
                 {
@@ -43,7 +43,7 @@ public partial class TestSceneLyricSpriteTextCharacterPosition : BackgroundGridT
                     TopTexts = TestCaseTagHelper.ParsePositionTexts(new[] { "[0]:か", "[1]:ら", "[2]:お", "[3]:け", "[6]:－", "[4]:" }),
                     BottomTexts = TestCaseTagHelper.ParsePositionTexts(new[] { "[0]:ka", "[1]:ra", "[2]:o", "[3]:ke", "[4,5]:yo", "[4]:" }),
                 },
-            }
+            },
         };
 
         AddLabel("Shader");
@@ -61,7 +61,7 @@ public partial class TestSceneLyricSpriteTextCharacterPosition : BackgroundGridT
                 {
                     s.Radius = 3;
                     s.OutlineColour = Color4.Green;
-                })
+                }),
             };
         });
 
@@ -82,9 +82,9 @@ public partial class TestSceneLyricSpriteTextCharacterPosition : BackgroundGridT
                         {
                             s.ShadowOffset = new Vector2(2);
                             s.ShadowColour = Color4.Aqua;
-                        })
-                    }
-                }
+                        }),
+                    },
+                },
             };
         });
     }

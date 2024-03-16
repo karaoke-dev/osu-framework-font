@@ -27,7 +27,7 @@ public partial class TestSceneOutlineShader : InternalShaderTestScene
                 GetShaderByType<OutlineShader>().With(s =>
                 {
                     s.Colour = Color4Extensions.FromHex(colour);
-                })
+                }),
             };
         });
     }
@@ -46,7 +46,7 @@ public partial class TestSceneOutlineShader : InternalShaderTestScene
                 {
                     s.Radius = radius;
                     s.OutlineColour = Color4Extensions.FromHex(colour);
-                })
+                }),
             };
         });
     }

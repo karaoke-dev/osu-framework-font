@@ -45,14 +45,14 @@ public partial class TestSceneKaraokeSpriteText : FrameworkTestScene
                 {
                     transformAmount++;
                     updateTransformerCountText();
-                }
+                },
             },
             transformAmountSpriteText = new SpriteText
             {
                 Anchor = Anchor.Centre,
                 Origin = Anchor.Centre,
-                Y = 100
-            }
+                Y = 100,
+            },
         };
 
         updateTransformerCountText();
@@ -201,7 +201,7 @@ public partial class TestSceneKaraokeSpriteText : FrameworkTestScene
                     s.Radius = 3;
                     s.Colour = Color4Extensions.FromHex("#FFDD77");
                     s.OutlineColour = Color4Extensions.FromHex("#CCA532");
-                })
+                }),
             };
             karaokeSpriteText.RightLyricTextShaders = new[]
             {
@@ -210,7 +210,7 @@ public partial class TestSceneKaraokeSpriteText : FrameworkTestScene
                     s.Radius = 3;
                     s.Colour = Color4Extensions.FromHex("#AA88FF");
                     s.OutlineColour = Color4Extensions.FromHex("#5932CC");
-                })
+                }),
             };
         });
 

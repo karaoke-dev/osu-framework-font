@@ -54,25 +54,25 @@ public partial class TestSceneLyricSpriteText : FrameworkTestScene
         AddStep("Create lyric with text", () => setContents(() => new DefaultLyricSpriteText(false, false)
         {
             AllowMultiline = true,
-            Width = width
+            Width = width,
         }));
 
         AddStep("Create lyric with top text", () => setContents(() => new DefaultLyricSpriteText
         {
             AllowMultiline = true,
-            Width = width
+            Width = width,
         }));
 
         AddStep("Create lyric with bottom text", () => setContents(() => new DefaultLyricSpriteText(false)
         {
             AllowMultiline = true,
-            Width = width
+            Width = width,
         }));
 
         AddStep("Create lyric with top and bottom text.", () => setContents(() => new DefaultLyricSpriteText
         {
             AllowMultiline = true,
-            Width = width
+            Width = width,
         }));
     }
 
@@ -82,22 +82,22 @@ public partial class TestSceneLyricSpriteText : FrameworkTestScene
     {
         AddStep("Create lyric with text", () => setContents(() => new DefaultLyricSpriteText(false, false)
         {
-            UseFullGlyphHeight = use
+            UseFullGlyphHeight = use,
         }));
 
         AddStep("Create lyric with top text", () => setContents(() => new DefaultLyricSpriteText
         {
-            UseFullGlyphHeight = use
+            UseFullGlyphHeight = use,
         }));
 
         AddStep("Create lyric with bottom text", () => setContents(() => new DefaultLyricSpriteText(false)
         {
-            UseFullGlyphHeight = use
+            UseFullGlyphHeight = use,
         }));
 
         AddStep("Create lyric with top and bottom text.", () => setContents(() => new DefaultLyricSpriteText
         {
-            UseFullGlyphHeight = use
+            UseFullGlyphHeight = use,
         }));
     }
 
@@ -122,7 +122,7 @@ public partial class TestSceneLyricSpriteText : FrameworkTestScene
         AddStep("Create lyric", () => setContents(() => new DefaultLyricSpriteText
         {
             TopTextAlignment = topTextAlignment,
-            BottomTextAlignment = bottomTextAlignment
+            BottomTextAlignment = bottomTextAlignment,
         }));
     }
 
@@ -136,7 +136,7 @@ public partial class TestSceneLyricSpriteText : FrameworkTestScene
         {
             AllowMultiline = false,
             Truncate = truncate,
-            EllipsisString = ellipsisString
+            EllipsisString = ellipsisString,
         }));
 
         // Note : it will not hide the text if set truncate to false, and extra text will be force rendered.

@@ -23,13 +23,13 @@ public class StepShaderTest
             {
                 new OutlineShader
                 {
-                    Radius = outline_radius
+                    Radius = outline_radius,
                 },
                 new ShadowShader
                 {
-                    ShadowOffset = new Vector2(shadow_offset_x, shadow_offset_y)
-                }
-            }
+                    ShadowOffset = new Vector2(shadow_offset_x, shadow_offset_y),
+                },
+            },
         };
 
         var rectangle = shader.ComputeCharacterDrawRectangle(new RectangleF(5, 5, 10, 10));
@@ -52,13 +52,13 @@ public class StepShaderTest
             {
                 new OutlineShader
                 {
-                    Radius = outline_radius
+                    Radius = outline_radius,
                 },
                 new ShadowShader
                 {
-                    ShadowOffset = new Vector2(shadow_offset_x, shadow_offset_y)
-                }
-            }
+                    ShadowOffset = new Vector2(shadow_offset_x, shadow_offset_y),
+                },
+            },
         };
 
         var rectangle = shader.ComputeDrawRectangle(new RectangleF(5, 5, 10, 10));
@@ -99,8 +99,8 @@ public class StepShaderTest
         {
             StepShaders = new[]
             {
-                new PixelShader()
-            }
+                new PixelShader(),
+            },
         };
 
         var rectangle = shader.ComputeCharacterDrawRectangle(new RectangleF(5, 5, 10, 10));
@@ -117,8 +117,8 @@ public class StepShaderTest
         {
             StepShaders = new[]
             {
-                new PixelShader()
-            }
+                new PixelShader(),
+            },
         };
 
         var rectangle = shader.ComputeDrawRectangle(new RectangleF(5, 5, 10, 10));

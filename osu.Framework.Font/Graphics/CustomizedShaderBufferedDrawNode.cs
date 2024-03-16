@@ -33,7 +33,7 @@ public abstract class CustomizedShaderBufferedDrawNode : BufferedDrawNode
             sharedQuadBatch!.Add(new SharedVertex
             {
                 Position = v.Position,
-                TexturePosition = v.TexturePosition
+                TexturePosition = v.TexturePosition,
             });
         };
     }
@@ -78,7 +78,7 @@ public abstract class CustomizedShaderBufferedDrawNode : BufferedDrawNode
                 var size = current.Size;
                 sharedParametersBuffer.Data = sharedParametersBuffer.Data with
                 {
-                    TexSize = size
+                    TexSize = size,
                 };
             }
 
@@ -87,7 +87,7 @@ public abstract class CustomizedShaderBufferedDrawNode : BufferedDrawNode
                 var localInflationAmount = DrawInfo.Matrix.ExtractScale().X;
                 sharedParametersBuffer.Data = sharedParametersBuffer.Data with
                 {
-                    InflationPercentage = localInflationAmount
+                    InflationPercentage = localInflationAmount,
                 };
             }
 
@@ -96,7 +96,7 @@ public abstract class CustomizedShaderBufferedDrawNode : BufferedDrawNode
                 var currentTime = (float)(Source.Clock.CurrentTime - loadTime) / 1000;
                 sharedParametersBuffer.Data = sharedParametersBuffer.Data with
                 {
-                    Time = currentTime
+                    Time = currentTime,
                 };
             }
 

@@ -108,7 +108,7 @@ public partial class TestSceneKaraokeSpriteTextTransforms : BackgroundGridTestSc
                     s.Radius = outline_radius;
                     s.Colour = Color4Extensions.FromHex(left_text_color);
                     s.OutlineColour = Color4Extensions.FromHex(left_outline_color);
-                })
+                }),
             };
             karaokeSpriteText.RightLyricTextShaders = new[]
             {
@@ -117,7 +117,7 @@ public partial class TestSceneKaraokeSpriteTextTransforms : BackgroundGridTestSc
                     s.Radius = differentSizing ? outline_radius * 2 : outline_radius;
                     s.Colour = Color4Extensions.FromHex(right_text_color);
                     s.OutlineColour = Color4Extensions.FromHex(right_outline_color);
-                })
+                }),
             };
         });
     }
@@ -136,7 +136,7 @@ public partial class TestSceneKaraokeSpriteTextTransforms : BackgroundGridTestSc
                 {
                     s.ShadowOffset = new Vector2(shadow_sizing);
                     s.ShadowColour = Color4Extensions.FromHex(left_shadow_color);
-                })
+                }),
             };
             karaokeSpriteText.RightLyricTextShaders = new[]
             {
@@ -144,7 +144,7 @@ public partial class TestSceneKaraokeSpriteTextTransforms : BackgroundGridTestSc
                 {
                     s.ShadowOffset = new Vector2(differentSizing ? shadow_sizing * 2 : shadow_sizing);
                     s.ShadowColour = Color4Extensions.FromHex(right_shadow_color);
-                })
+                }),
             };
         });
     }
@@ -173,9 +173,9 @@ public partial class TestSceneKaraokeSpriteTextTransforms : BackgroundGridTestSc
                         {
                             s.ShadowOffset = new Vector2(shadow_sizing);
                             s.ShadowColour = Color4Extensions.FromHex(left_shadow_color);
-                        })
-                    }
-                }
+                        }),
+                    },
+                },
             };
             karaokeSpriteText.RightLyricTextShaders = new[]
             {
@@ -193,9 +193,9 @@ public partial class TestSceneKaraokeSpriteTextTransforms : BackgroundGridTestSc
                         {
                             s.ShadowOffset = new Vector2(differentSizing ? shadow_sizing * 2 : shadow_sizing);
                             s.ShadowColour = Color4Extensions.FromHex(right_shadow_color);
-                        })
-                    }
-                }
+                        }),
+                    },
+                },
             };
         });
     }
