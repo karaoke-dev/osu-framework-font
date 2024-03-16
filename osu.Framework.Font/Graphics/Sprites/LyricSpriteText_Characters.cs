@@ -343,7 +343,7 @@ public partial class LyricSpriteText
             {
                 DrawQuad = ToScreenSpace(character.DrawRectangle.Inflate(inflationAmount)),
                 InflationPercentage = Vector2.Divide(inflationAmount, character.DrawRectangle.Size),
-                Texture = character.Texture
+                Texture = character.Texture,
             });
         }
 
@@ -357,7 +357,7 @@ public partial class LyricSpriteText
             {
                 DrawQuad = ToScreenSpace(character.DrawRectangle.Inflate(inflationAmount)),
                 InflationPercentage = Vector2.Divide(inflationAmount, character.DrawRectangle.Size),
-                Texture = character.Texture
+                Texture = character.Texture,
             });
         }
 

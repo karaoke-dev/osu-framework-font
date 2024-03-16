@@ -39,8 +39,8 @@ public partial class TestSceneLyricSpriteTextWithColour : BackgroundGridTestScen
                     {
                         Anchor = Anchor.Centre,
                         Origin = Anchor.Centre,
-                        Size = new Vector2(30)
-                    }
+                        Size = new Vector2(30),
+                    },
                 },
                 new SpriteText
                 {
@@ -50,8 +50,8 @@ public partial class TestSceneLyricSpriteTextWithColour : BackgroundGridTestScen
                     Text = "カラオケ",
                     Scale = new Vector2(2),
                     Y = -60,
-                }
-            }
+                },
+            },
         };
     }
 

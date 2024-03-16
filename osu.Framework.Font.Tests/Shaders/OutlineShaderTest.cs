@@ -17,7 +17,7 @@ public class OutlineShaderTest
     {
         var shader = new OutlineShader
         {
-            Radius = radius
+            Radius = radius,
         };
 
         var rectangle = shader.ComputeCharacterDrawRectangle(new RectangleF(5, 5, 10, 10));
@@ -34,7 +34,7 @@ public class OutlineShaderTest
     {
         var shader = new OutlineShader
         {
-            Radius = radius
+            Radius = radius,
         };
 
         var rectangle = shader.ComputeDrawRectangle(new RectangleF(5, 5, 10, 10));

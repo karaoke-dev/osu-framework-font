@@ -51,7 +51,7 @@ public partial class TestSceneKaraokeSpriteTextWithShader : BackgroundGridTestSc
             {
                 // Not showing the black background.
                 s.BackgroundColour = new Color4();
-            })
+            }),
         });
 
         AddStep("Clear shader", () => karaokeSpriteText.Shaders = Array.Empty<ICustomizedShader>());
@@ -69,7 +69,7 @@ public partial class TestSceneKaraokeSpriteTextWithShader : BackgroundGridTestSc
                 {
                     s.Radius = 2;
                     s.OutlineColour = Color4.Green;
-                })
+                }),
             };
         });
 
@@ -103,8 +103,8 @@ public partial class TestSceneKaraokeSpriteTextWithShader : BackgroundGridTestSc
                             s.Radius = 3;
                             s.OutlineColour = Color4.White;
                         }),
-                        GetShaderByType<RainbowShader>()
-                    }
+                        GetShaderByType<RainbowShader>(),
+                    },
                 },
             };
         });

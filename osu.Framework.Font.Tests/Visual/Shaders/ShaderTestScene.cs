@@ -49,7 +49,7 @@ public abstract partial class ShaderTestScene : BackgroundGridTestScene
                     Size = new Vector2(50),
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
-                    Colour = Color4Extensions.FromHex(GREEN)
+                    Colour = Color4Extensions.FromHex(GREEN),
                 },
                 new DraggableText
                 {
@@ -64,7 +64,7 @@ public abstract partial class ShaderTestScene : BackgroundGridTestScene
                 createBorderBox("Right up cube", Anchor.TopRight),
                 createBorderBox("Left down cube", Anchor.BottomLeft),
                 createBorderBox("Right down cube", Anchor.BottomRight),
-            }
+            },
         };
 
         static Box createBorderBox(string name, Anchor position)

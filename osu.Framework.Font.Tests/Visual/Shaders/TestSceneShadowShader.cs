@@ -24,7 +24,7 @@ public partial class TestSceneShadowShader : InternalShaderTestScene
                 {
                     s.ShadowColour = Color4Extensions.FromHex(colour);
                     s.ShadowOffset = TestCaseVectorHelper.ParseVector2(offset);
-                })
+                }),
             };
         });
     }

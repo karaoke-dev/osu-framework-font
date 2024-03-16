@@ -28,16 +28,16 @@ public partial class TestSceneMaskingContainer : BackgroundGridTestScene
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
                     Size = new Vector2(250),
-                    Colour = Colour4.Red
+                    Colour = Colour4.Red,
                 },
                 new DraggableCircle
                 {
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
                     Colour = Color4.Blue,
-                    Size = new Vector2(100)
-                }
-            }
+                    Size = new Vector2(100),
+                },
+            },
         };
     }
 

@@ -65,7 +65,7 @@ public class PositionTextFormatter
         {
             RelativePosition.Top => new Vector2(drawXPosition, mainTextRect.Top - margin - baseLine),
             RelativePosition.Bottom => new Vector2(drawXPosition, mainTextRect.Bottom + margin),
-            _ => throw new ArgumentOutOfRangeException(nameof(relativePosition), relativePosition, null)
+            _ => throw new ArgumentOutOfRangeException(nameof(relativePosition), relativePosition, null),
         };
     }
 
@@ -101,5 +101,5 @@ public enum RelativePosition
 {
     Top,
 
-    Bottom
+    Bottom,
 }

@@ -31,7 +31,7 @@ public partial class TestSceneRainbowShader : InternalShaderTestScene
                     s.Brightness = brightness;
                     s.Section = section;
                     s.Mix = mix;
-                })
+                }),
             };
         });
     }

@@ -44,7 +44,7 @@ public class RepeatMovingBackgroundShader : InternalShader, IHasCurrentTime, IHa
             DisplaySize = TextureDisplaySize,
             DisplayBorder = TextureDisplayBorder,
             Speed = Speed,
-            Mix = Math.Clamp(Mix, 0, 1)
+            Mix = Math.Clamp(Mix, 0, 1),
         };
 
         BindUniformBlock("m_RepeatMovingBackgroundParameters", repeatParametersBuffer);

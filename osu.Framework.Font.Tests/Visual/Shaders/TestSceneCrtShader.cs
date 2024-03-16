@@ -17,7 +17,7 @@ public partial class TestSceneCrtShader : InternalShaderTestScene
         {
             ShaderContainer.Shaders = new[]
             {
-                GetShaderByType<CrtShader>()
+                GetShaderByType<CrtShader>(),
             };
         });
     }
@@ -34,7 +34,7 @@ public partial class TestSceneCrtShader : InternalShaderTestScene
         {
             ShaderContainer.Shaders = new[]
             {
-                GetShaderByType<CrtShader>().With(s => s.BackgroundColour = Color4Extensions.FromHex(colour))
+                GetShaderByType<CrtShader>().With(s => s.BackgroundColour = Color4Extensions.FromHex(colour)),
             };
         });
     }

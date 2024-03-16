@@ -55,7 +55,7 @@ public abstract partial class BackgroundGridTestScene : FrameworkTestScene
                     {
                         Colour = Color4.DarkBlue,
                         Size = new Vector2(GRID_SIZE),
-                    }).ToArray()
+                    }).ToArray(),
                 },
                 new DraggableCircle
                 {
@@ -75,9 +75,9 @@ public abstract partial class BackgroundGridTestScene : FrameworkTestScene
                     Size = new Vector2(GRID_SIZE),
                     Anchor = Anchor.BottomRight,
                     Origin = Anchor.BottomRight,
-                    Colour = Color4Extensions.FromHex(GREEN)
+                    Colour = Color4Extensions.FromHex(GREEN),
                 },
-            }
+            },
         });
     }
 

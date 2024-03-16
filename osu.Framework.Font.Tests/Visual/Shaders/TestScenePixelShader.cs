@@ -22,7 +22,7 @@ public partial class TestScenePixelShader : InternalShaderTestScene
                 GetShaderByType<PixelShader>().With(s =>
                 {
                     s.Size = new Vector2(x, y);
-                })
+                }),
             };
         });
     }

@@ -26,7 +26,7 @@ public partial class TestSceneLyricSpriteTextWithShader : BackgroundGridTestScen
             Text = "カラオケ",
             TopTexts = TestCaseTagHelper.ParsePositionTexts(new[] { "[0]:か", "[1]:ら", "[2]:お", "[3]:け" }),
             BottomTexts = TestCaseTagHelper.ParsePositionTexts(new[] { "[0]:ka", "[1]:ra", "[2]:o", "[3]:ke" }),
-            Scale = new Vector2(2)
+            Scale = new Vector2(2),
         };
     }
 
@@ -39,7 +39,7 @@ public partial class TestSceneLyricSpriteTextWithShader : BackgroundGridTestScen
             {
                 s.Radius = 3;
                 s.OutlineColour = Color4.Green;
-            })
+            }),
         });
 
         AddStep("Apply rainbow shader", () => lyricSpriteText.Shaders = new ICustomizedShader[]
@@ -59,8 +59,8 @@ public partial class TestSceneLyricSpriteTextWithShader : BackgroundGridTestScen
                         s.Radius = 3;
                         s.OutlineColour = Color4.White;
                     }),
-                    GetShaderByType<RainbowShader>()
-                }
+                    GetShaderByType<RainbowShader>(),
+                },
             },
         });
 
