@@ -1,7 +1,6 @@
 ﻿// Copyright (c) karaoke.dev <contact@karaoke.dev>. Licensed under the MIT Licence.
 // See the LICENCE file in the repository root for full licence text.
 
-using osu.Framework.Extensions.EnumExtensions;
 using osu.Framework.Graphics.Primitives;
 using osuTK;
 
@@ -24,13 +23,13 @@ public static class RectangleFExtensions
 
         static float getXScale(Anchor origin)
         {
-            if (origin.HasFlagFast(Anchor.x0))
+            if (origin.HasFlag(Anchor.x0))
                 return 0;
 
-            if (origin.HasFlagFast(Anchor.x1))
+            if (origin.HasFlag(Anchor.x1))
                 return 0.5f;
 
-            if (origin.HasFlagFast(Anchor.x2))
+            if (origin.HasFlag(Anchor.x2))
                 return 1f;
 
             return 100;
@@ -38,13 +37,13 @@ public static class RectangleFExtensions
 
         static float getYScale(Anchor origin)
         {
-            if (origin.HasFlagFast(Anchor.y0))
+            if (origin.HasFlag(Anchor.y0))
                 return 0;
 
-            if (origin.HasFlagFast(Anchor.y1))
+            if (origin.HasFlag(Anchor.y1))
                 return 0.5f;
 
-            if (origin.HasFlagFast(Anchor.y2))
+            if (origin.HasFlag(Anchor.y2))
                 return 1f;
 
             return 100;
