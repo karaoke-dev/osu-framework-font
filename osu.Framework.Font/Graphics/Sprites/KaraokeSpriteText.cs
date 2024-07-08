@@ -4,7 +4,6 @@
 using System;
 using System.Collections.Generic;
 using osu.Framework.Allocation;
-using osu.Framework.Extensions.EnumExtensions;
 using osu.Framework.Graphics.Colour;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shaders;
@@ -412,7 +411,7 @@ public partial class KaraokeSpriteText<T> : CompositeDrawable, IMultiShaderBuffe
     {
         var result = base.OnInvalidate(invalidation, source);
 
-        if (!invalidation.HasFlagFast(Invalidation.Layout))
+        if (!invalidation.HasFlag(Invalidation.Layout))
             return result;
 
         Schedule(RefreshStateTransforms);
