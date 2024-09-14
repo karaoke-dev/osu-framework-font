@@ -40,14 +40,14 @@ jobs:
         shell: powershell
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set Artifacts Directory
         id: artifactsPath
         run: echo "::set-output name=NUGET_ARTIFACTS::${{github.workspace}}\artifacts"
 
       - name: Install .NET 8.0.x
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "8.0.x"
           
@@ -58,7 +58,7 @@ jobs:
         run: dotnet pack -c Release osu.Framework.Font /p:Version=${{needs.check-if-tag.outputs.version}} /p:GenerateDocumentationFile=true  -o ${{steps.artifactsPath.outputs.nuget_artifacts}}
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: osu-framework
           path: ${{steps.artifactsPath.outputs.nuget_artifacts}}\*.nupkg
@@ -72,7 +72,7 @@ jobs:
         run: mkdir ${{github.workspace}}/artifacts/
 
       - name: Download Artifacts
-        uses: actions/download-artifact@v4.1.7
+        uses: actions/download-artifact@v4
         with:
           path: ${{github.workspace}}/artifacts/
 
