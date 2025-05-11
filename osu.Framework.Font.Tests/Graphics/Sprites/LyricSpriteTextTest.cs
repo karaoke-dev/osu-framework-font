@@ -24,11 +24,11 @@ public class LyricSpriteTextTest
     [TestCase("カラオケ", "[0]:か", "[0]:か")]
     [TestCase("カラオケ", "[0,1]:から", "[0,1]:から")]
     [TestCase("カラオケ", "[2,3]:おけ", "[2,3]:おけ")]
-    [TestCase("カラオケ", "[-1,1]:--", "[0,1]:--")] // fix out of range issue.
-    [TestCase("カラオケ", "[0,4]:からおけ", "[0,3]:からおけ")]
     [TestCase("カラオケ", "[1,0]:から", "[0,1]:から")] // fix the case that end index is small than start index.
     [TestCase("カラオケ", "[0,1]:", "[0,1]: ")] // for able to get the empty top/bottom position text's char index, will make the empty text with spacing instead.
-    [TestCase("カ", "[-1,1]:か", "[0]:か")] // should give it a fix.
+    [TestCase("カラオケ", "[-1,1]:--", null)] // not render the position text if not in the text range.
+    [TestCase("カ", "[-1,1]:か", null)]
+    [TestCase("カラオケ", "[0,4]:からおけ", null)]
     [TestCase("", "[0]:か", null)] // should remove all the time-tags if string is empty.
     [TestCase("", "[-1,-1]:か", null)]
     public void TestGetFixedPositionText(string lyric, string positionText, string? fixedPositionText)
