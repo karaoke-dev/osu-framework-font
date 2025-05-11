@@ -309,10 +309,16 @@ public partial class LyricSpriteText
         if (string.IsNullOrEmpty(lyricText))
             return null;
 
-        var startIndex = Math.Clamp(positionText.StartIndex, 0, lyricText.Length - 1);
-        var endIndex = Math.Clamp(positionText.EndIndex, 0, lyricText.Length - 1);
+        var startIndex = Math.Min(positionText.StartIndex, positionText.EndIndex);
+        var endIndex = Math.Max(positionText.StartIndex, positionText.EndIndex);
+
+        // should not render the position that are not in the main text range.
+        // maybe due to main text is being truncated.
+        if (startIndex < 0 || endIndex > lyricText.Length - 1)
+            return null;
+
         var text = string.IsNullOrEmpty(positionText.Text) ? " " : positionText.Text;
-        return new PositionText(text, Math.Min(startIndex, endIndex), Math.Max(startIndex, endIndex));
+        return new PositionText(text, startIndex, endIndex);
     }
 
     #endregion
