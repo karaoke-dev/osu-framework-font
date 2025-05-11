@@ -145,7 +145,7 @@ public partial class TestSceneLyricSpriteText : FrameworkTestScene
             AllowMultiline = false,
             Truncate = truncate,
             EllipsisString = ellipsisString,
-            Width = 100,
+            Width = 50,
         }));
     }
 

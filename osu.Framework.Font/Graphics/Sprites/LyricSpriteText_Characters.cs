@@ -221,11 +221,14 @@ public partial class LyricSpriteText
             var textBuilder = getTextBuilder();
             charactersBacking.AddRange(applyTextToBuilder(textBuilder, displayedText));
 
+            // If the main text is being truncated, top and button should not rendered if main text character is not being rendered.
+            string truncatedText = textBuilder is TruncatingTextBuilder truncatingTextBuilder ? getTruncatedMainText(truncatingTextBuilder, displayedText, ellipsisString) : displayedText;
+
             // Top text
             var topTextBuilder = getTopTextBuilder();
             var topTextFormatter = new PositionTextFormatter(charactersBacking, RelativePosition.Top, topTextAlignment, topTextSpacing, topTextMargin);
 
-            foreach (var (positionText, textBuilderGlyphs) in applyPositionTextToBuilder(topTextBuilder, displayedText, topTexts))
+            foreach (var (positionText, textBuilderGlyphs) in applyPositionTextToBuilder(topTextBuilder, truncatedText, topTexts))
             {
                 topTextCharactersBacking.Add(positionText, topTextFormatter.Calculate(positionText, textBuilderGlyphs));
             }
@@ -234,7 +237,7 @@ public partial class LyricSpriteText
             var bottomTextBuilder = getBottomTextBuilder();
             var bottomTextFormatter = new PositionTextFormatter(charactersBacking, RelativePosition.Bottom, bottomTextAlignment, bottomTextSpacing, bottomTextMargin);
 
-            foreach (var (positionText, textBuilderGlyphs) in applyPositionTextToBuilder(bottomTextBuilder, displayedText, bottomTexts))
+            foreach (var (positionText, textBuilderGlyphs) in applyPositionTextToBuilder(bottomTextBuilder, truncatedText, bottomTexts))
             {
                 bottomTextCharactersBacking.Add(positionText, bottomTextFormatter.Calculate(positionText, textBuilderGlyphs));
             }
@@ -258,17 +261,28 @@ public partial class LyricSpriteText
         }
     }
 
-    private static IEnumerable<TextBuilderGlyph> applyTextToBuilder(TextBuilder textBuilder, string text)
+    private static IEnumerable<TextBuilderGlyph> applyTextToBuilder(TextBuilder textBuilder, string mainText)
     {
         textBuilder.Reset();
-        textBuilder.AddText(text);
+        textBuilder.AddText(mainText);
 
         return textBuilder.Characters;
     }
 
-    private static Dictionary<PositionText, TextBuilderGlyph[]> applyPositionTextToBuilder(TextBuilder textBuilder, string text, IEnumerable<PositionText> positionTexts)
+    private static string getTruncatedMainText(TruncatingTextBuilder textBuilder, string mainText, string ellipsisString)
     {
-        var fixedPositionTexts = GetFixedPositionTexts(positionTexts, text);
+        if (!textBuilder.IsTruncated)
+        {
+            return mainText;
+        }
+
+        var charLength = textBuilder.Characters.Count - ellipsisString.Length;
+        return mainText.Substring(0, charLength);
+    }
+
+    private static Dictionary<PositionText, TextBuilderGlyph[]> applyPositionTextToBuilder(TextBuilder textBuilder, string mainText, IEnumerable<PositionText> positionTexts)
+    {
+        var fixedPositionTexts = GetFixedPositionTexts(positionTexts, mainText);
 
         var texts = new Dictionary<PositionText, TextBuilderGlyph[]>();
 
@@ -283,9 +297,9 @@ public partial class LyricSpriteText
         return texts;
     }
 
-    internal static List<PositionText> GetFixedPositionTexts(IEnumerable<PositionText> positionTexts, string lyricText)
+    internal static List<PositionText> GetFixedPositionTexts(IEnumerable<PositionText> positionTexts, string mainText)
         => positionTexts
-           .Select(x => GetFixedPositionText(x, lyricText))
+           .Select(x => GetFixedPositionText(x, mainText))
            .OfType<PositionText>()
            .Distinct()
            .ToList();
@@ -295,10 +309,16 @@ public partial class LyricSpriteText
         if (string.IsNullOrEmpty(lyricText))
             return null;
 
-        var startIndex = Math.Clamp(positionText.StartIndex, 0, lyricText.Length - 1);
-        var endIndex = Math.Clamp(positionText.EndIndex, 0, lyricText.Length - 1);
+        var startIndex = Math.Min(positionText.StartIndex, positionText.EndIndex);
+        var endIndex = Math.Max(positionText.StartIndex, positionText.EndIndex);
+
+        // should not render the position that are not in the main text range.
+        // maybe due to main text is being truncated.
+        if (startIndex < 0 || endIndex > lyricText.Length - 1)
+            return null;
+
         var text = string.IsNullOrEmpty(positionText.Text) ? " " : positionText.Text;
-        return new PositionText(text, Math.Min(startIndex, endIndex), Math.Max(startIndex, endIndex));
+        return new PositionText(text, startIndex, endIndex);
     }
 
     #endregion
