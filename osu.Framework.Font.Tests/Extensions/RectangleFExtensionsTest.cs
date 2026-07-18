@@ -20,9 +20,9 @@ public class RectangleFExtensionsTest
         var rectangle = new RectangleF(10, 10, 20, 10);
         var target = rectangle.Scale(scale, origin);
 
-        Assert.AreEqual(target.X, x);
-        Assert.AreEqual(target.Y, y);
-        Assert.AreEqual(target.Width, width);
-        Assert.AreEqual(target.Height, height);
+        Assert.That(x, Is.EqualTo(target.X));
+        Assert.That(y, Is.EqualTo(target.Y));
+        Assert.That(width, Is.EqualTo(target.Width));
+        Assert.That(height, Is.EqualTo(target.Height));
     }
 }

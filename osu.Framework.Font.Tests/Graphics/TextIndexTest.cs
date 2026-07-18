@@ -14,7 +14,7 @@ public class TextIndexTest
     [TestCase("-1,start")]
     public void TestOperatorEqual(string textIndex1)
     {
-        Assert.AreEqual(TestCaseTextIndexHelper.ParseTextIndex(textIndex1), TestCaseTextIndexHelper.ParseTextIndex(textIndex1));
+        Assert.That(TestCaseTextIndexHelper.ParseTextIndex(textIndex1), Is.EqualTo(TestCaseTextIndexHelper.ParseTextIndex(textIndex1)));
     }
 
     [TestCase("-1,start", "1,start")]
@@ -25,7 +25,7 @@ public class TextIndexTest
     [TestCase("-2,end", "-2,start")]
     public void TestOperatorNotEqual(string textIndex1, string textIndex2)
     {
-        Assert.AreNotEqual(TestCaseTextIndexHelper.ParseTextIndex(textIndex1), TestCaseTextIndexHelper.ParseTextIndex(textIndex2));
+        Assert.That(TestCaseTextIndexHelper.ParseTextIndex(textIndex2), Is.Not.EqualTo(TestCaseTextIndexHelper.ParseTextIndex(textIndex1)));
     }
 
     [TestCase("1,start", "0,start", true)]
@@ -34,7 +34,7 @@ public class TextIndexTest
     [TestCase("1,start", "1,end", false)]
     public void TestOperatorGreater(string textIndex1, string textIndex2, bool match)
     {
-        Assert.AreEqual(TestCaseTextIndexHelper.ParseTextIndex(textIndex1) > TestCaseTextIndexHelper.ParseTextIndex(textIndex2), match);
+        Assert.That(match, Is.EqualTo(TestCaseTextIndexHelper.ParseTextIndex(textIndex1) > TestCaseTextIndexHelper.ParseTextIndex(textIndex2)));
     }
 
     [TestCase("1,start", "0,start", true)]
@@ -43,7 +43,7 @@ public class TextIndexTest
     [TestCase("1,start", "1,end", false)]
     public void TestOperatorGreaterOrEqual(string textIndex1, string textIndex2, bool match)
     {
-        Assert.AreEqual(TestCaseTextIndexHelper.ParseTextIndex(textIndex1) >= TestCaseTextIndexHelper.ParseTextIndex(textIndex2), match);
+        Assert.That(match, Is.EqualTo(TestCaseTextIndexHelper.ParseTextIndex(textIndex1) >= TestCaseTextIndexHelper.ParseTextIndex(textIndex2)));
     }
 
     [TestCase("-1,start", "0,start", true)]
@@ -52,7 +52,7 @@ public class TextIndexTest
     [TestCase("-1,start", "-2,end", false)]
     public void TestOperatorLess(string textIndex1, string textIndex2, bool match)
     {
-        Assert.AreEqual(TestCaseTextIndexHelper.ParseTextIndex(textIndex1) < TestCaseTextIndexHelper.ParseTextIndex(textIndex2), match);
+        Assert.That(match, Is.EqualTo(TestCaseTextIndexHelper.ParseTextIndex(textIndex1) < TestCaseTextIndexHelper.ParseTextIndex(textIndex2)));
     }
 
     [TestCase("-1,start", "0,start", true)]
@@ -61,6 +61,6 @@ public class TextIndexTest
     [TestCase("-1,start", "-2,end", false)]
     public void TestOperatorLessOrEqual(string textIndex1, string textIndex2, bool match)
     {
-        Assert.AreEqual(TestCaseTextIndexHelper.ParseTextIndex(textIndex1) <= TestCaseTextIndexHelper.ParseTextIndex(textIndex2), match);
+        Assert.That(match, Is.EqualTo(TestCaseTextIndexHelper.ParseTextIndex(textIndex1) <= TestCaseTextIndexHelper.ParseTextIndex(textIndex2)));
     }
 }
