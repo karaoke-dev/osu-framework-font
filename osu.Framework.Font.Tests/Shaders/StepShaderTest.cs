@@ -33,10 +33,10 @@ public class StepShaderTest
         };
 
         var rectangle = shader.ComputeCharacterDrawRectangle(new RectangleF(5, 5, 10, 10));
-        Assert.AreEqual(5 - outline_radius, rectangle.X);
-        Assert.AreEqual(5 - outline_radius, rectangle.Y);
-        Assert.AreEqual(10 + outline_radius * 2, rectangle.Width);
-        Assert.AreEqual(10 + outline_radius * 2, rectangle.Height);
+        Assert.That(rectangle.X, Is.EqualTo(5 - outline_radius));
+        Assert.That(rectangle.Y, Is.EqualTo(5 - outline_radius));
+        Assert.That(rectangle.Width, Is.EqualTo(10 + outline_radius * 2));
+        Assert.That(rectangle.Height, Is.EqualTo(10 + outline_radius * 2));
     }
 
     [Test]
@@ -62,10 +62,10 @@ public class StepShaderTest
         };
 
         var rectangle = shader.ComputeDrawRectangle(new RectangleF(5, 5, 10, 10));
-        Assert.AreEqual(5 - outline_radius, rectangle.X);
-        Assert.AreEqual(5 - outline_radius, rectangle.Y);
-        Assert.AreEqual(10 + outline_radius * 2 + shadow_offset_x, rectangle.Width);
-        Assert.AreEqual(10 + outline_radius * 2 + shadow_offset_y, rectangle.Height);
+        Assert.That(rectangle.X, Is.EqualTo(5 - outline_radius));
+        Assert.That(rectangle.Y, Is.EqualTo(5 - outline_radius));
+        Assert.That(rectangle.Width, Is.EqualTo(10 + outline_radius * 2 + shadow_offset_x));
+        Assert.That(rectangle.Height, Is.EqualTo(10 + outline_radius * 2 + shadow_offset_y));
     }
 
     [Test]
@@ -74,10 +74,10 @@ public class StepShaderTest
         var shader = new StepShader();
 
         var rectangle = shader.ComputeCharacterDrawRectangle(new RectangleF(5, 5, 10, 10));
-        Assert.AreEqual(5, rectangle.X);
-        Assert.AreEqual(5, rectangle.Y);
-        Assert.AreEqual(10, rectangle.Width);
-        Assert.AreEqual(10, rectangle.Height);
+        Assert.That(rectangle.X, Is.EqualTo(5));
+        Assert.That(rectangle.Y, Is.EqualTo(5));
+        Assert.That(rectangle.Width, Is.EqualTo(10));
+        Assert.That(rectangle.Height, Is.EqualTo(10));
     }
 
     [Test]
@@ -86,10 +86,10 @@ public class StepShaderTest
         var shader = new StepShader();
 
         var rectangle = shader.ComputeDrawRectangle(new RectangleF(5, 5, 10, 10));
-        Assert.AreEqual(5, rectangle.X);
-        Assert.AreEqual(5, rectangle.Y);
-        Assert.AreEqual(10, rectangle.Width);
-        Assert.AreEqual(10, rectangle.Height);
+        Assert.That(rectangle.X, Is.EqualTo(5));
+        Assert.That(rectangle.Y, Is.EqualTo(5));
+        Assert.That(rectangle.Width, Is.EqualTo(10));
+        Assert.That(rectangle.Height, Is.EqualTo(10));
     }
 
     [Test]
@@ -104,10 +104,10 @@ public class StepShaderTest
         };
 
         var rectangle = shader.ComputeCharacterDrawRectangle(new RectangleF(5, 5, 10, 10));
-        Assert.AreEqual(5, rectangle.X);
-        Assert.AreEqual(5, rectangle.Y);
-        Assert.AreEqual(10, rectangle.Width);
-        Assert.AreEqual(10, rectangle.Height);
+        Assert.That(rectangle.X, Is.EqualTo(5));
+        Assert.That(rectangle.Y, Is.EqualTo(5));
+        Assert.That(rectangle.Width, Is.EqualTo(10));
+        Assert.That(rectangle.Height, Is.EqualTo(10));
     }
 
     [Test]
@@ -122,10 +122,10 @@ public class StepShaderTest
         };
 
         var rectangle = shader.ComputeDrawRectangle(new RectangleF(5, 5, 10, 10));
-        Assert.AreEqual(5, rectangle.X);
-        Assert.AreEqual(5, rectangle.Y);
-        Assert.AreEqual(10, rectangle.Width);
-        Assert.AreEqual(10, rectangle.Height);
+        Assert.That(rectangle.X, Is.EqualTo(5));
+        Assert.That(rectangle.Y, Is.EqualTo(5));
+        Assert.That(rectangle.Width, Is.EqualTo(10));
+        Assert.That(rectangle.Height, Is.EqualTo(10));
     }
 }
 

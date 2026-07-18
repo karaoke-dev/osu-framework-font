@@ -18,7 +18,7 @@ public class LyricSpriteTextTest
     {
         var expected = TestCaseTagHelper.ParsePositionTexts(fixedPositionTexts);
         var actual = LyricSpriteText.GetFixedPositionTexts(TestCaseTagHelper.ParsePositionTexts(positionTexts), lyric);
-        Assert.AreEqual(expected, actual);
+        Assert.That(actual, Is.EqualTo(expected));
     }
 
     [TestCase("カラオケ", "[0]:か", "[0]:か")]
@@ -35,6 +35,6 @@ public class LyricSpriteTextTest
     {
         var expected = fixedPositionText != null ? TestCaseTagHelper.ParsePositionText(fixedPositionText) : default(PositionText?);
         var actual = LyricSpriteText.GetFixedPositionText(TestCaseTagHelper.ParsePositionText(positionText), lyric);
-        Assert.AreEqual(expected, actual);
+        Assert.That(actual, Is.EqualTo(expected));
     }
 }
