@@ -22,11 +22,11 @@ public class TextIndexUtilsTest
         if (actualIndex != null)
         {
             var actualTextIndex = new TextIndex(actualIndex.Value, state);
-            Assert.AreEqual(TextIndexUtils.Clamp(textIndex, minIndex, maxIndex), actualTextIndex);
+            Assert.That(actualTextIndex, Is.EqualTo(TextIndexUtils.Clamp(textIndex, minIndex, maxIndex)));
         }
         else
         {
-            Assert.Throws<ArgumentException>(() => TextIndexUtils.Clamp(textIndex, minIndex, maxIndex));
+            Assert.That((Action)(() => TextIndexUtils.Clamp(textIndex, minIndex, maxIndex)), Throws.TypeOf<ArgumentException>());
         }
     }
 
@@ -39,7 +39,7 @@ public class TextIndexUtilsTest
         var textIndex = new TextIndex(index, state);
 
         int actual = TextIndexUtils.ToStringIndex(textIndex);
-        Assert.AreEqual(expected, actual);
+        Assert.That(actual, Is.EqualTo(expected));
     }
 
     [TestCase(TextIndex.IndexState.Start, TextIndex.IndexState.End)]
@@ -47,7 +47,7 @@ public class TextIndexUtilsTest
     public void TestReverseState(TextIndex.IndexState state, TextIndex.IndexState expected)
     {
         var actual = TextIndexUtils.ReverseState(state);
-        Assert.AreEqual(expected, actual);
+        Assert.That(actual, Is.EqualTo(expected));
     }
 
     [TestCase(1, TextIndex.IndexState.End, 1, TextIndex.IndexState.Start)]
@@ -60,7 +60,7 @@ public class TextIndexUtilsTest
 
         var expected = new TextIndex(expectedIndex, expectedState);
         var actual = TextIndexUtils.GetPreviousIndex(textIndex);
-        Assert.AreEqual(expected, actual);
+        Assert.That(actual, Is.EqualTo(expected));
     }
 
     [TestCase(0, TextIndex.IndexState.Start, 0, TextIndex.IndexState.End)]
@@ -73,6 +73,6 @@ public class TextIndexUtilsTest
 
         var expected = new TextIndex(expectedIndex, expectedState);
         var actual = TextIndexUtils.GetNextIndex(textIndex);
-        Assert.AreEqual(expected, actual);
+        Assert.That(actual, Is.EqualTo(expected));
     }
 }

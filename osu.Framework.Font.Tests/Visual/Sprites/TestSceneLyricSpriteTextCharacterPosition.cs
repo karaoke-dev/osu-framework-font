@@ -153,10 +153,10 @@ public partial class TestSceneLyricSpriteTextCharacterPosition : BackgroundGridT
         {
             AddStep("Oops", () =>
             {
-                Assert.Catch<ArgumentOutOfRangeException>(() =>
+                Assert.That((Action)(() =>
                 {
                     func();
-                });
+                }), Throws.InstanceOf<ArgumentOutOfRangeException>());
             });
         }
 

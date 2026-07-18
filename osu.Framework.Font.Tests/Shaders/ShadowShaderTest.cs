@@ -25,9 +25,9 @@ public class ShadowShaderTest
         };
 
         var rectangle = shader.ComputeDrawRectangle(new RectangleF(5, 5, 10, 10));
-        Assert.AreEqual(expectedX, rectangle.X);
-        Assert.AreEqual(expectedY, rectangle.Y);
-        Assert.AreEqual(expectedWidth, rectangle.Width);
-        Assert.AreEqual(expectedHeight, rectangle.Height);
+        Assert.That(rectangle.X, Is.EqualTo(expectedX));
+        Assert.That(rectangle.Y, Is.EqualTo(expectedY));
+        Assert.That(rectangle.Width, Is.EqualTo(expectedWidth));
+        Assert.That(rectangle.Height, Is.EqualTo(expectedHeight));
     }
 }

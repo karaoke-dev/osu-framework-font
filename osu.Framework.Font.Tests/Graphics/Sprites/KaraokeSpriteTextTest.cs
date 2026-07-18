@@ -18,7 +18,7 @@ public class KaraokeSpriteTextTest
         var expectedInterpolatedTimeTags = TestCaseTagHelper.ParseTimeTags(expectedTimeTags);
         var actualInterpolatedTimeTags = KaraokeSpriteText.GetInTheRangeTimeTags(TestCaseTagHelper.ParseTimeTags(timeTags), "カラオケ");
 
-        Assert.AreEqual(expectedInterpolatedTimeTags, actualInterpolatedTimeTags);
+        Assert.That(actualInterpolatedTimeTags, Is.EqualTo(expectedInterpolatedTimeTags));
     }
 
     [TestCase(new[] { "[0,start]:500", "[0,end]:600" },
@@ -38,7 +38,7 @@ public class KaraokeSpriteTextTest
         var expectedInterpolatedTimeTags = TestCaseTagHelper.ParseTimeTags(expectedTimeTags);
         var actualInterpolatedTimeTags = KaraokeSpriteText.GetNonDuplicatedTimeTags(TestCaseTagHelper.ParseTimeTags(timeTags));
 
-        Assert.AreEqual(expectedInterpolatedTimeTags, actualInterpolatedTimeTags);
+        Assert.That(actualInterpolatedTimeTags, Is.EqualTo(expectedInterpolatedTimeTags));
     }
 
     [TestCase(new[] { "[0,start]:500", "[0,end]:600" },
@@ -68,6 +68,6 @@ public class KaraokeSpriteTextTest
         var expectedInterpolatedTimeTags = TestCaseTagHelper.ParseTimeTags(expectedTimeTags);
         var actualInterpolatedTimeTags = KaraokeSpriteText.GetInterpolatedTimeTags(TestCaseTagHelper.ParseTimeTags(timeTags));
 
-        Assert.AreEqual(expectedInterpolatedTimeTags, actualInterpolatedTimeTags);
+        Assert.That(actualInterpolatedTimeTags, Is.EqualTo(expectedInterpolatedTimeTags));
     }
 }
