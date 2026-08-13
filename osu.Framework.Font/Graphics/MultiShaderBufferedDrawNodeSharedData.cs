@@ -18,7 +18,7 @@ public class MultiShaderBufferedDrawNodeSharedData : BufferedDrawNodeSharedData
     private readonly RenderBufferFormat[]? formats;
 
     public MultiShaderBufferedDrawNodeSharedData(RenderBufferFormat[]? formats = null, bool pixelSnapping = false)
-        : base(0, formats, pixelSnapping)
+        : base(0, TexturePixelFormat.R8G8B8A8Float, formats, pixelSnapping)
     {
         this.formats = formats;
     }
@@ -58,11 +58,11 @@ public class MultiShaderBufferedDrawNodeSharedData : BufferedDrawNodeSharedData
             case IStepShader stepShader:
             {
                 var stepShaderAmount = Math.Min(stepShader.StepShaders.Count, 2);
-                return new BufferedDrawNodeSharedData(stepShaderAmount, formats, PixelSnapping, ClipToRootNode);
+                return new BufferedDrawNodeSharedData(stepShaderAmount, TexturePixelFormat.R8G8B8A8Float, formats, PixelSnapping, ClipToRootNode);
             }
 
             default:
-                return new BufferedDrawNodeSharedData(formats, PixelSnapping, ClipToRootNode);
+                return new BufferedDrawNodeSharedData(TexturePixelFormat.R8G8B8A8Float, formats, PixelSnapping, ClipToRootNode);
         }
     }
 
